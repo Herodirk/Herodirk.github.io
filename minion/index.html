@@ -2,16 +2,138 @@
 <html>
   <head>
       <title>Minion Calculator Manual</title>
+      <link rel="stylesheet" href="../dark_mode.css">
   </head>
   <body>
     <h1>Minion Calculator</h1>
-    <p>The Minion Calculator can calculate the outputs for any minion setup. It does this by calculating the average amount of drops that the setup makes.</p>
+    The Minion Calculator can calculate the outputs for any minion setup. It does this by calculating the average amount of drops that the setup makes.<br>
+<br>
     <p><a href="https://github.com/Herodirk/Minion_Calculator/releases">GitHub releases</a></p>
+
     <h2>Inputs</h2>
-    
+    Inputs are on the left side of the calculator. Input methods are option lists, text boxes or check boxes.<br>
+    Some inputs are hidden until they become relavent, like Inferno Minion Fuel inputs.<br>
+    Inputs are split into 3 categories, Minion options, Player option and Other options.
+
+    <h3>Templates and IDs</h3>
+    <p><span>Relevant inputs: Templates, Load ID</span></p>
+    Templates are lists of freely editable settings that can be automatically set when selecting it from the option list.<br>
+For example, the template "Corrupt" automatically selects a Corrupt Soil as Upgrade 1 and Enchanted Hopper as Hopper.<br>
+The list of templates is at the top of the main file and can be edited by the user.<br>
+<br>
+A Special template is "ID", this template takes the inputted setup ID from the "Load ID" input.<br>
+Setup IDs are a string of characters representing the minion setup in the calculator.<br>
+The first part of an ID is the version of the calculator. The calculator will only accept IDs from calculators of the same version.<br>
+The other part of an ID are all the inputs represented by one character if there are a limited amount of options.<br>
+For real number variables it adds the whole number between exclamation marks.<br>
+When sharing results from the calculator, please include the setup ID.
+
+    <h3>Standard</h3>
+    <p><span>Relevant inputs: Minion, Tier, Amount, Fuel, Upgrade 1, Upgrade 2, Chest, Infusion, Crystal, Mayor, Time span<span></p>
+Input Amount as an integer number.<br>
+Time span is a combination of two input fields, one text box for a float as length and an option list for unit of time.<br>
+Alongside standard units of time there is Harvests, which sets the time span to the time it takes for 1 minion to perform the specified number of harvests.
+
+    <h3>Selling items</h3>
+    <p><span>Relevant inputs: Hopper, Bazaar sell type, Bazaar buy type, Bazaar taxes, Bazaar Flipper</span></p>
+    The input slot for the hopper is for more than the hopper slot in the minion. This variable determines where the items from the minion are sold.<br>
+There are 6 sell options: None, Budget Hopper, Enchanted Hopper, NPC, Bazaar and Best (NPC/Bazaar).<br>
+The "None" option does not sell the items, so no profit from the items is added.<br>
+The hoppers sell to npc at 50%, 90% total price respectively.<br>
+"NPC" sells to npc at full price. "Bazaar" sells to bazaar.<br>
+"Best (NPC/Bazaar)" compares NPC and bazaar prices and sells to the best option.<br>
+<br>
+Bazaar data is pulled from Hypixel's API. The item price for each category (buy and sell) is determined from the top 10% of total volume of that item.<br>
+When selling items, taxes are applied if Bazaar taxes is set to True. This tax can be lowered with Bazaar Flipper perk.<br>
+Bazaar sell type an Bazaar buy type are used to choose insta sell/buy or sell offer/buy order.<br>
+There is also a third option for both sell and buy types called "Custom", this option takes the manual inputted price.<br>
+Users can freely change this price in itemList from minion_data.py. When sharing results that used custom prices, please include the custom prices.<br>
+<br>
+If a price of an item is not available it will fall back to different sell methods in this order: Original method -> NPC -> Custom.<br>If all backup methods fail, it will give 0 as the price and print an error to the terminal.
+
+    <h3>Beacon</h3>
+    <p><span>Relevant inputs: Beacon, Scorched, Constant Beacon, Aquired Beacon</span></p>
+    Scorched, Constant Beacon, Aquired Beacon are hidden if Beacon is set to 0.<br>
+    Inputs Beacon and Scorched work like expected, a list of tiers (with 0 being None) and a toggle for Scorched Power Crystals.<br>
+Constant Beacon is a toggle for the fuel cost of the beacon. If set to True, the beacon fuel cost will be set to 0. This is useful  if you have your beacon fuel coming from somewhere else.<br>
+Aquired Beacon is a toggle for the buy cost of the beacon. If set to True, the cost to buy the beacon will not be added to the setup cost. This is useful if you already have a beacon.
+
+    <h3>AFKing</h3>
+    <p><span>Relevant inputs: AFK, AFK Pet level, Special setup, Potato Talisman</span></p>
+To specify, AFKing minions is the act of leaving an account online 24/7 to keep the private island loaded.<br>
+This is mostly done for giving the minions a speed boost from a pet or a Potato Talisman.<br>
+For example a Magma Cube pet boosting Slime and Magma Cube minions.<br>
+Input AFK Pet level as a pet level, so from 0 to 100.<br>
+<br>
+Some minions behave differently when AFKing, most of the time in beneficial ways. Other minions need a special setup for beneficial behavior.<br>
+For example Cobblestone minions next to a water-lava cobblestone generator.<br>
+Available special setups are in the notes of each minion, which can be viewed in minion_data.py or in the output of a calculation with that minion.
+
+    <h3>Wisdom</h3>
+    <p><span>Relevant inputs: Wisdom</span></p>
+All the types of wisdom are bunched into one list variable. This list can be edited by pressing the edit button next to the list box.<br>
+This will open a new window with text input boxes for each main skill. Click Confirm to apply the new values, click Cancel to keep previous values.<br>
+Input wisdom values as the same value as the in-game stat.
+
+    <h3>Pet Leveling</h3>
+    <p><span>Relevant inputs: Leveling pet, Taming, Pet XP boost, Beastmaster</span></p>
+Taming, Pet XP boost, Beastmaster are hidden when Leveling pet is set to None.<br>
+For Taming input the skill level and for Beastmaster input the percentage as seen on a beastmaster crest.<br>
+So if a beastmaster crest shows 5%, input 5.
+
+    <h3>Inferno Minion Fuel</h3>
+    <p><span>Relevant inputs: Grade, Distilate, Eyedrops</span></p>
+    These inputs are hidden unless the selected Fuel is Inferno Minion Fuel.
+
     <h2>Outputs</h2>
-    
+    Outputs are located at the right side of the calculator.<br>
+Each output has a checkbox next to it, this toggles if the corresponding output value will be included in the output of the output buttons in the controls menu.<br>
+Outputs are split into 2 columns, Setup Outputs and Profit Outputs.<br>
+All numbers are not shortened in the calculator, but they will be shortened and rounded in the printed output.
+
+    <h3>Standard</h3>
+    <p><span>Relevant outputs: Time, Action Time (s), Harvests, Item amounts, XP amounts, Setup cost, Itemtype profits, Total item profit, Fuel cost, Total profit</span></p>
+Action time is shown as seconds.<br>
+Harvests is the combined amount of harvests in the inputed time span by all minions in the setup.<br>
+Wisdom is already applied to the shown XP amounts.
+
+    <h3>Notes</h3>
+    <p><span>Relevant outputs: Notes</span></p>
+The notes will show any special behaviors of the selected minion, including but not limited to special setups, bugs and afk behavior.
+
+    <h3>Bazaar</h3>
+    <p><span>Relevant outputs: Bazaar data, Sell locations</span></p>
+Bazaar data shows the date and time of the used bazaar data. It is recommended to always print this with the output.<br>
+Sell locations will appear when "Best (NPC/bazaar)" is selected as hopper, it will show per item where the best price is.
+
+    <h3>Pet leveling</h3>
+    <p><span>Relevant outputs: Pet XP, Pet profit</span></p>
+These outputs are hidden when Leveling pet is set to None.<br>
+Pet XP shows the total amount of pet xp gained from the xp after all the boosts.<br>
+
+
+    <h2>Controls</h2>
+    The controls menu is the bar at the bottom of the calculator. They are shown as variable labels or as list boxes.<br>
+The first button is the calculate button, this runs the calculation for the inputted values and shows the outputs in the calculator.<br>
+The second and third button are output buttons, these print the selected outputs to the terminal.<br>
+Short Output is a compact way of printing results and Share Output is for sharing on discord.<br>
+The fourth button updates the bazaar data. This is mostly useful when bazaar_auto_update is False.<br>
+At the other side of the controls menu are a link to this website, the version number and a stop button.
+
+    <h2>Settings</h2>
+Calculator settings are in the main file in the third cell labeled Settings.<br>
+These settings include bazaar_auto_update, bazaar_cooldown, templateList and pet_data.<br>
+<br>
+bazaar_auto_update is a toggle for automatically updating bazaar when a calculation is started and the cooldown has passed.<br>
+bazaar_cooldown limits how quickly bazaar can be updated, this is to prevent spamming Hypixel's API.<br>
+<br>
+templateList is the list of templates (see Inputs: Templates and IDs). The structure for this is the name of the template as the first key with a dictionary as value.<br>
+This dictionary consists of the inputs that the template changes with self.variables keys as keys and the input value as value.<br>
+<br>
+pet_data holds information about pets for pet leveling, like pet name, type, required pet xp and cost.<br>
+The calculator is not connected to the auction house, so the cost for items like pets need to be updated by hand.
+
     <h2>FAQ</h2>
-    <p>No one asked any questions yet</p>
+    No one asked any questions yet
   </body>
 </html>
