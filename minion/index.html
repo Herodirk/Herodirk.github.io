@@ -148,7 +148,8 @@
         These inputs are hidden when <span class="code">Leveling Pet</span> is set to <span class="it">None</span>.<br>
         <span class="code">Exp Share pet 2</span> and <span class="code">Exp Share pet 3</span> will remain hidden until <span class="code">Mayor</span> is set to <span class="it">Diana</span>.<br>
         For <span class="code">Taming</span> input the skill level and for <span class="code">Beastmaster</span> input the percentage as seen on a beastmaster crest (so if a beastmaster crest shows 5%, input 5).<br>
-        <span class="code">Battle Experience</span> and <span class="code">Why Not More</span> are the attributes given by the Falcon and Toucan shards, respectively, inputted as attribute level.
+        <span class="code">Battle Experience</span> and <span class="code">Why Not More</span> are the attributes given by the Falcon and Toucan shards, respectively, inputted as attribute level.<br>
+        The profits of pets can be edited in the <a href="#settings">Settings</a>.
 
         <h3 id="time">Time</h3>
         Relevant inputs: <span class="code">Total Time span, Empty Often, Empty Time span</span><br>
@@ -247,7 +248,9 @@
         <span class="code">color_palette</span> is an input for which color palette the calculator uses. The available color palettes are in the <span class="code">Hkinter.py</span> file.<br>
         <span class="code">templateList</span> is the list of templates (see <a href="#template">Template</a>). The structure for this is the name of the template as the first key with a dictionary as value.<br>
         This dictionary consists of the inputs that the template changes with <span class="code">self.variables</span> keys as keys and the input value as value.<br>
-        <span class="code">pet_data</span> holds information about pets for pet leveling, like pet name, type, required pet xp and costs.<br>
+        <span class="code">pet_data</span> holds the costs of pets for pet leveling, inputted as <span class="code">"Pet Name": {"min": ..., "max": ...}</span>.<br>
+        Where <span class="code">min</span> is for the price of a level 1, <span class="code">max</span> is for the price of a max lvl (either 100 or 200).<br>
+        All pets are assumed to be Legendary or Mythic, except Rift Ferret, which is stuck at Epic.<br>
         The calculator is not connected to the auction house, so these costs need to be updated by hand.
 
         <h2 id="addons">Add-ons</h2>
