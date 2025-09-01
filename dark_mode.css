@@ -69,7 +69,8 @@ nav a:hover {
   color: black;
 }
 
-nav a.active {
+nav a:active {
   background-color: #aa0404;
   color: white;
 }
+
