@@ -4,6 +4,10 @@
         <title>Herosite</title>
         <link rel="stylesheet" href="dark_mode.css">
     </head>
+    <nav>
+        <a href="https://herodirk.github.io">Home</a>
+        <a href="https://herodirk.github.io/minion/index.html">Minions</a>
+    </nav>
     <body>
         <h1>Python Guide</h1>
 
@@ -24,6 +28,17 @@
         <br>
         For both methods you need to specify a version of Python, Herodirk uses Python 3.12.4 to make the calculators.<br>
         The differences in Python versions is not that significant for simple programs like calculators, so other versions might work.
+
+        <h3>Apple OS</h3>
+        Apple products might need a few more steps to start working.<br>
+        If the following error occurs when starting the calculator<br>
+        <span class="code">urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1028)</span><br>
+        Then you need to do the following steps:
+        <ol>
+            <li>Open Terminal</li>
+            <li>Run <span class="code">/Applications/Python\ 3.x/Install\ Certificates.command</span>, replace <span class="code">3.x</span> with your Python Version, e.g., <span class="code">3.13</span></li>
+        </ol>
+        Source: <a href="https://stackoverflow.com/a/42334357">Stack Overflow</a>
 
         <h2>Activating calculator</h2>
         Now with Python ready, you can download the files for the calculator you want.<br>
