@@ -50,3 +50,26 @@ a:visited {
 .it {
     font-style: italic;
 }
+
+nav {
+  background-color: #500000;
+  overflow: hidden;
+}
+
+nav a {
+  float: left;
+  color: #808080;
+  text-align: center;
+  padding: 14px 16px;
+  font-size: 17px;
+}
+
+nav a:hover {
+  background-color: #ff8080;
+  color: black;
+}
+
+nav a.active {
+  background-color: #aa0404;
+  color: white;
+}
