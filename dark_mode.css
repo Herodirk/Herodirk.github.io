@@ -27,6 +27,11 @@ ul {
     padding-left: 1.5em;
 }
 
+ol {
+    margin: 0px 0px 0px 0px;
+    padding-left: 1.5em;
+}
+
 a:link {
     color: cyan;
 }
@@ -73,4 +78,5 @@ nav a:active {
   background-color: #aa0404;
   color: white;
 }
+
 
