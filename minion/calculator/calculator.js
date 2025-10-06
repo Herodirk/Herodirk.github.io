@@ -1356,7 +1356,7 @@ class Calculator {
                     };
                 } else {
                     let finalAmount = 0;
-                    for (amount of Object.values(upgrade_drops)) {
+                    for (const amount of Object.values(upgrade_drops)) {
                         finalAmount += spreading_chance * amount;
                     }
                     for (const [item, amount] of Object.entries(md.itemList[upgrade]["upgrade"]["special"]["item"])) {
@@ -2062,4 +2062,5 @@ class Calculator {
         this.pet_costs[this.edit_pet_price_pet]["max"] = this.edit_vars_output["max_price"];
         this.pet_costs[this.edit_pet_price_pet]["min"] = this.edit_vars_output["min_price"];
     };
+
 };
