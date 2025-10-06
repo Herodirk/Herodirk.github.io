@@ -1,0 +1,232 @@
+/* Color Palette */
+
+:root {
+    --background: #000000;
+    --frame_background: #100808;
+    --controls_frame: #662626;
+    --widget_background: #441313;
+    --widget_border: #2C0C0C;
+    --active_background: #2C0C0C;
+    --text: #FFFFFF;
+    --selected_text: #000000;
+    --selection: #DBDBDB;
+}
+
+
+/* Calculator */
+.calculator {
+    background-color: var(--background);
+    width: 100%;
+    height: auto;
+}
+
+.calculator * {
+    color: var(--text);
+}
+
+* ::selection {
+  background: var(--selection);
+  color: var(--selected_text);
+}
+
+.frame {
+    overflow: scroll;
+    display: inline-block;
+    vertical-align: top;
+    background-color: var(--frame_background);
+    margin: 0.3%;
+    padding: 1%;
+    box-sizing: border-box;
+    width: 24.4%;
+    height: 75vh;
+}
+
+.input_grid_frame {
+    grid-template-columns: 33% 40% 19%;
+    align-items: center;
+    display: grid;
+    margin: 0;
+    padding: 0;
+}
+
+.edit_grid_frame {
+    grid-template-columns: 45% 40% 5%;
+    align-items: center;
+    display: grid;
+    margin: 0;
+    padding: 0;
+}
+
+.output_grid_frame {
+    grid-template-columns: 27% 66% 5%;
+    align-items: center;
+    display: grid;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* General Elements */
+.label {
+    text-align: left;
+}
+
+.check {
+    width: 3em;
+    height: 1.2em;
+    background-color: var(--widget_background);
+    accent-color: var(--widget_background);
+}
+
+.button {
+    height: 2em;
+    border-radius: 0;
+    border: 2px solid var(--widget_border);
+    background-color: var(--widget_background);
+}
+
+select {
+    padding: 3%;
+    border: 2px solid var(--widget_border);
+    background-color: var(--widget_background);
+    border-radius: 0;
+}
+
+input[type=text] {
+    border: 2px solid var(--widget_border);
+    background-color: var(--widget_background);
+    border-radius: 0;
+}
+
+input:focus {
+    outline: none;
+}
+
+/* Controls frame */
+.controls_frame {
+    background: var(--controls_frame);
+    align-items: center;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto 40% auto auto auto;
+    width: 100%;
+    height: 5vh;
+    margin: 0;
+    padding: 0;
+}
+
+.control_label {
+    background-color: var(--frame_background);
+    justify-self: center;
+    text-align: center;
+    margin: 0.5%;
+    padding: 1.5%;
+    line-height: normal;
+}
+
+.control_button {
+    border: 2px solid var(--widget_border);
+    background-color: var(--widget_background);
+    height: 60%;
+    margin: 0.5%;
+    border-radius: 0;
+    justify-self: center;
+}
+
+
+/* Special Elements */
+.notes_box {
+    position: absolute;
+    top: 0;
+    left: 10%;
+}
+
+.notes_anchor {
+    position: relative;
+}
+
+.output_list {
+    overflow: scroll;
+    text-wrap-mode: nowrap;
+    background-color: var(--widget_background);
+    border: 2px solid var(--widget_border);
+    border-radius: 0px;
+    line-height: 100%;
+    display: block;
+    list-style-type: none;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+}
+
+.status_div {
+    width: 0.75em;
+    height: 0.75em;
+    border: 2px solid var(--widget_border);
+    justify-self: center;
+}
+
+
+/* Variable Edit Frame */
+.floating_dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0;
+    padding: 0;
+    transform: translate(-50%, -50%);
+    background-color: var(--frame_background);
+    border-width: 7px;
+    border-color: var(--background);
+}
+
+.small_frame {
+    overflow: scroll;
+    display: inline-block;
+    vertical-align: top;
+    background-color: var(--frame_background);
+    margin: 0.9%;
+    padding: 3%;
+    box-sizing: border-box;
+    width: 20vw;
+    height: 30vh;
+}
+
+
+/* Add-ons Frame */
+.add_ons {
+    background-color: var(--background);
+    width: 75%;
+    height: auto;
+}
+
+.add_ons * {
+    color: var(--text);
+}
+
+.add_ons_frame {
+    overflow: scroll;
+    display: inline-block;
+    vertical-align: top;
+    background-color: var(--frame_background);
+    margin: 0.3%;
+    padding: 1%;
+    box-sizing: border-box;
+    width: 49.4%;
+    height: 50vh;
+}
+
+.add_ons_output_grid_frame {
+    grid-template-columns: 77.5% 5% 5%;
+    align-items: center;
+    display: grid;
+    margin: 0;
+    padding: 0;
+}
+
+.add_ons_input_grid_frame {
+    grid-template-columns: 27% 5% 5%;
+    align-items: center;
+    display: grid;
+    margin: 0;
+    padding: 0;
+}
