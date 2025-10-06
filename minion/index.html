@@ -18,7 +18,11 @@
         </p>
         <h4>Content</h4>
         <ul>
-            <li><a href="#general">General</a></li>
+            <li><a href="#general">General</a>
+                <ul>
+                    <li><a href="#py_vs_js">Python versus Javascript</a></li>
+                </ul>
+            </li>
             <li><a href="#setup_id">Setup ID</a></li>
             <li><a href="#inputs">Inputs</a>
                 <ul>
@@ -69,6 +73,21 @@
         Some inputs are conditional on other inputs like in-game, some inputs are unconditional while they should be.<br>
         This means that this calculator can calculate setups that are not possible in-game. More information on these below.
 
+        <h3 id="py_vs_js">Python versus Javascript</h3>
+        The calculator is made in both <a href="https://github.com/Herodirk/Minion_Calculator/releases">Python</a> and <a href="calculator/main.html">Javascript</a>.<br>
+        In terms of standard calculations and official addons, they are the exact same.<br>
+        They thus share the same version number and updates will happen to both.<br>
+        There are a few things that the Python version has/will have that the JS version does not:
+        <ul>
+            <li>Custom Add-on Support</li>
+            <li>Saving Calculations (future feature)</li>
+            <li>Persistent Options (future feature)</li>
+            <li>Minion Visualiser (future official addon)</li>
+        </ul>
+        However, there is one upside to using the JS version: it is fully hosted in a browser, whereas Python needs bit more to get working.<br>
+        <br>
+        This manual is generally for the Python version, any differences for JS version are noted.
+
 
         <h2 id="setup_id">Setup ID</h2>
         A Setup ID is a string of characters representing the minion setup in the calculator.<br>
@@ -86,7 +105,7 @@
         Relevant inputs: <span class="code">Templates, Load ID</span><br>
         A template is a list of automatic inputs.<br>
         For example, the template <span class="it">Corrupt</span> automatically selects <span class="it">Corrupt Soil</span>, <span class="it">Enchanted Hopper</span>, <span class="it">Diamond Spreading</span> as internal upgrades and <span class="it">Hopper</span> as <span class="code">Sell Location</span>.<br>
-        The list of templates is at the top of the main file and can be edited by the user.<br>
+        (Python only) The list of templates is at the top of the main file and can be edited by the user.<br>
         <br>
         There are two special templates named <span class="it">ID</span> and <span class="it">Clean</span>.<br>
         The template <span class="it">ID</span> takes the inputted setup ID from <span class="code">Load ID</span>.<br>
@@ -137,7 +156,7 @@
         Available special layouts and other changes in behaviour while AFK can be found in several places:
         <ul>
             <li>As notes in the output of a calculation with that minion</li>
-            <li>As notes in the minion list in the file <span class="code">HSB_minion_data.py</span></li>
+            <li>As notes in the minion list in the file <span class="code">HSB_minion_data.py</span> (Javascript: <span class="code">minion_data.js</span>)</li>
             <li>In the <span class="code">Minion Mechanic</span> spreadsheet (will be linked later)</li>
         </ul>
 
@@ -153,7 +172,10 @@
         <span class="code">Exp Share pet 2</span> and <span class="code">Exp Share pet 3</span> will remain hidden until <span class="code">Mayor</span> is set to <span class="it">Diana</span>.<br>
         For <span class="code">Taming</span> input the skill level and for <span class="code">Beastmaster</span> input the percentage as seen on a beastmaster crest (so if a beastmaster crest shows 5%, input 5).<br>
         <span class="code">Battle Experience</span> and <span class="code">Why Not More</span> are the attributes given by the Falcon and Toucan shards, respectively, inputted as attribute level.<br>
-        The profits of pets can be edited in the <a href="#settings">Settings</a>.
+        For the Python version the profits of pets can be edited in the <a href="#settings">Settings</a>.<br>
+        For the Javascript version, the pet profits have to be entered through the <span class="code">Edit Pet Prices</span> button in the <a href="#controls">controls</a> menu.<br>
+        A warning for the Javascript version: the inputted pet prices are currently not saved, so reloading the page voids those prices.<br>
+        A general notice, please also share the used pet prices when sharing outputs that used pet levelling, this is not automatic yet.
 
         <h3 id="time">Time</h3>
         Relevant inputs: <span class="code">Total Time span, Empty Often, Empty Time span</span><br>
@@ -180,18 +202,20 @@
         <br>
         <span class="code">Bazaar sell type</span> and <span class="code">Bazaar buy type</span> are used to choose insta sell/buy or sell offer/buy order.<br>
         There is also a third option for both sell and buy types called <span class="it">Custom</span>, this option takes the manual inputted price. This option is currently not great to work with and will be updated later.<br>
-        Users can freely change this price at the variable <span class="code">itemList</span> in the file <span class="code">HSB_minion_data.py</span>. When sharing results that used custom prices, please include the custom prices.<br>
+        (Python only) Users can freely change this price at the variable <span class="code">itemList</span> in the file <span class="code">HSB_minion_data.py</span>. When sharing results that used custom prices, please include the custom prices.<br>
         <br>
         If a price of an item is not available it will fall back to different sell methods in this order: Original method -> <span class="it">NPC</span> -> <span class="it">Custom</span>.<br>
         If all backup methods fail, it will give 0 as the price and will print an error to the terminal which can then be reported.<br>
-        For items only available the auction house it will always fall back to <span class="it">Custom</span> price, and because the calculator is not connected to the auction house API, the auction house prices have to be updated manually.<br>
-        Instructions on how to find and edit the auction house only items can be found at the top of the file <span class="code">HSB_minion_data.py</span>
+        For items only available the auction house it will always fall back to <span class="it">Custom</span> price.<br>
+        Auction House prices are taken from <a href="https://sky.coflnet.com/data">SkyCofl API</a> as the average of the 2 lowest BINs.<br>
+        Currently only <span class="it">Postcard</span> price is taken from there, the other auction house prices have to be updated manually for now.<br>
+        (Python only) Instructions on how to find and edit the auction house only items can be found at the top of the file <span class="code">HSB_minion_data.py</span>.
 
 
 
         <h2 id="outputs">Outputs</h2>
         Outputs are located at the right side of the calculator.<br>
-        Each output has a checkbox next to it, this toggles if the corresponding output value will be included in the output of the output buttons in the controls menu.<br>
+        Each output has a checkbox next to it, this toggles if the corresponding output value will be included in the output of the output buttons in the <a href="#controls">controls</a> menu.<br>
         Outputs are split into 2 columns, Setup Outputs and Profit Outputs.<br>
         All numbers outputs are not shortened in the calculator, but they will be shortened and rounded in the printed outputs.
 
@@ -231,28 +255,40 @@
 
 
         <h2 id="controls">Controls</h2>
-        Relevant buttons: <span class="code">Calculate, Short Output, Share Output, Update Bazaar, Add-ons Menu, Stop</span><br>
+        Relevant buttons in Python version: <span class="code">Calculate, Short Output, Share Output, Update Bazaar, Add-ons Menu, Stop</span><br>
+        In case of Javascript version: <span class="code">Calculate, Short Output, Share Output, Update Bazaar, Edit Pet Prices, Edit Settings</span><br>
         The controls menu is the bar at the bottom of the calculator.<br>
         <span class="code">Calculate</span> runs the calculation for the inputted values and shows the outputs in the calculator.<br>
         <span class="code">Short Output</span> and <span class="code">Share Output</span> print the selected outputs to the terminal.<br>
         <span class="code">Short Output</span> outputs plain and compact text. <span class="code">Share Output</span> outputs markdown text suitable for sharing over Discord.<br>
         <span class="code">Update Bazaar</span> updates the bazaar data. This is mostly useful when the setting <span class="code">bazaar_auto_update</span> is False.<br>
-        <span class="code">Add-ons Menu</span> toggles the Add-ons menu, in this menu the buttons to run the add-ons and the <span class="code">Add-on Outputs</span> are visible.<br>
-        <span class="code">Stop</span> stops the calculator correctly, please use the stop button to close the calculator as the calculator still has some functions to run before closing.<br>
-        Also in the controls menu are a link to this website and the version number.
+        (Python only) <span class="code">Add-ons Menu</span> toggles the Add-ons menu, in this menu the buttons to run the add-ons and the <span class="code">Add-on Outputs</span> are visible.<br>
+        (Python only) <span class="code">Stop</span> stops the calculator correctly, please use the stop button to close the calculator as the calculator still has some functions to run before closing.<br>
+        Also in the controls menu are links to the APIs, a link to this website and the version number.<br>
+        (JS only) <span class="code">Edit Pet Prices</span> shows a menu asking for a pet. After confirming by clicking the <span class="code">Close</span> button, it will show inputs for <span class="code">Level 1 price</span> and <span class="code">Max level price</span>.<br>
+        (JS only) <span class="code">Edit Settings</span> shows a menu with the <a href="#settings">Settings</a>.
 
         <h2 id="settings">Settings</h2>
-        Relevant variables: <span class="code">external_add_ons, bazaar_auto_update, bazaar_cooldown, compact_tolerance, output_to_clipboard, color_palette, templateList, pet_data</span><br>
-        Calculator settings are near the top of the main file under <span class="code">#%% Settings</span>.<br>
-        <span class="code">external_add_ons</span> is a dictionary to import add-on functions, inputted as <span class="code">{"display name": function_reference, ...}</span>.<br>
+        Relevant buttons in Python version: <span class="code">external_add_ons, bazaar_auto_update, bazaar_cooldown, compact_tolerance, output_to_clipboard, color_palette, templateList, pet_data</span><br>
+        In case of Javascript version: <span class="code">Bazaar Auto Update, Bazaar Cooldown (s), Over-Compacting Tolerance (coins), Output to Clipboard, Color Palette</span><br>
+        (Python only) Calculator settings are near the top of the main file under <span class="code">#%% Settings</span>.<br>
+        Calculator settings for Javascript version can be edited with the <span class="code">Edit Settings</span> in the <a href="#controls">controls</a> menu.<br>
+        (Python only) <span class="code">external_add_ons</span> is a dictionary to import add-on functions, inputted as <span class="code">{"display name": function_reference, ...}</span>.<br>
         <span class="code">bazaar_auto_update</span> is a toggle for automatically updating bazaar when a calculation is started and the cooldown has passed.<br>
-        <span class="code">bazaar_cooldown</span>, inputted in seconds, limits how quickly bazaar can be updated, this is to prevent spamming Hypixel's API.<br>
+        <span class="code">bazaar_cooldown</span>, inputted in seconds, limits how quickly bazaar can be updated, this is to prevent spamming the APIs.<br>
         <span class="code">compact_tolerance</span> is the minimum amount of coins lost per compacting action before the calculator warns of over-compacting.<br>
-        <span class="code">output_to_clipboard</span> is a toggle to let the calculator add the output text to your clipboard.<br>
-        <span class="code">color_palette</span> is an input for which color palette the calculator uses. The available color palettes are in the <span class="code">Hkinter.py</span> file.<br>
-        <span class="code">templateList</span> is the list of templates (see <a href="#template">Template</a>). The structure for this is the name of the template as the first key with a dictionary as value.<br>
+        <span class="code">output_to_clipboard</span> is a toggle to let the calculator add the output text to the computer's clipboard.<br>
+        <span class="code">color_palette</span> is an input for which color palette the calculator uses. The standard available color palettes are
+        <ul>
+            <li>Dark (dark)</li>
+            <li>Dark Red (dark_red)</li>
+            <li>Light (light)</li>
+            <li>Gray Text (gray_text)</li>
+        </ul>
+        (Python only) The color palettes can be edited in <span class="code">Hkinter.py</span>.<br>
+        (Python only) <span class="code">templateList</span> is the list of templates (see <a href="#template">Template</a>). The structure for this is the name of the template as the first key with a dictionary as value.<br>
         This dictionary consists of the inputs that the template changes with <span class="code">self.variables</span> keys as keys and the input value as value.<br>
-        <span class="code">pet_data</span> holds the costs of pets for pet leveling, inputted as <span class="code">"Pet Name": {"min": ..., "max": ...}</span>.<br>
+        (Python only) <span class="code">pet_data</span> holds the costs of pets for pet leveling, inputted as <span class="code">"Pet Name": {"min": ..., "max": ...}</span>.<br>
         Where <span class="code">min</span> is for the price of a level 1, <span class="code">max</span> is for the price of a max lvl (either 100 or 200).<br>
         All pets are assumed to be Legendary or Mythic, except Rift Ferret, which is stuck at Epic.<br>
         The calculator is not connected to the auction house, so these costs need to be updated by hand.
@@ -262,24 +298,27 @@
         The functions will be run with <span class="code">calculator=self</span> as only function argument, where <span class="code">self</span> is the root of the calculator class.<br>
         Add-ons can send output to the calculator through <span class="code">calculator.collect_addon_output(output_name="...", output_str="...")</span>. This function puts the output into <span class="code">Add-on Outputs</span>.<br>
         Add-ons can be activated with the button in the <span class="code">Add-ons Menu</span>. There is also a toggle for every add-on that makes the add-on run automatically after every <span class="code">Calculate</span> press.
-        Add-on support is limited and will be improved later.
+        Add-on support is limited and will be improved later.<br>
+        Javascript version only supports the <a href="#official_addons">Official Add-ons</a>. 
 
         <h3 id="official_addons">Official Add-ons</h3>
-        The Official Add-ons are made by Herodirk and are released with the calculator.<br>
+        The Official Add-ons are made by Herodirk and are released with both versions of the calculator.<br>
         This is the current list of them:
         <ul>
-            <li><span class="code">Days to Repay Setup</span>: Calculates how many days until you made your money back, please do not rely on this statistic when choosing a setup.</li>
+            <li><span class="code">Minion Crafting</span>: Outputs what and how many materials are needed to craft the inputted amount of the inputted minion.</li>
+            <li><span class="code">Days to Repay Setup</span>: Calculates how many days until the setup made its cost back, please do not rely on this statistic when choosing a setup.</li>
             <li><span class="code">Basic Minion Loop</span>: For the chosen inputs, loop through all minions and show the top 10 for profit to the terminal.</li>
             <li><span class="code">Bad Luck Inferno</span>: Calculates the profit without Inferno Vertexes, Inferno Apexes and Reaper Peppers, as those vary a lot from day to day.<br>Good for getting the minimum daily profit.</li>
             <li><span class="code">Rising Celsius Override</span>: Forces the Rising Celsius boost to max and runs the calculate function (does not automatically run other Add-ons that were selected for auto-run).<br>Good for Inferno setups that do not sure at least 10 high tier minions.</li>
             <li>
                 <span class="code">Inferno Minion Loop</span>: For the chosen inputs, loops through every combination of tier and amount, then filtered on the setup cost shows the top 10 for Bad Luck Inferno profit to the terminal.<br>
                 <span class="code">Minion</span>, <span class="code">Fuel</span> and <span class="code">Chest</span> are forced to <span class="it">Inferno</span>, <span class="it">Inferno Minion Fuel</span> and <span class="it">XX-Large</span> respectively.<br>
-                The setup cost filter can be editted in the source code of the add-on as the variable <span class="code">cost_filter</span>.
+                (Python only) The setup cost filter can be editted in the source code of the add-on as the variable <span class="code">cost_filter</span>.<br>
+                (JS only) The setup cost filter can be inputted in the menu that pops up when clicking this add-on.
             </li>
         </ul>
         <br>
-        Be careful when downloading add-ons from other places, they are python programs and technically have full access to your computer.
-
+        (Python only) Be careful when downloading add-ons from other places, they are python programs and technically have full access to your computer.<br>
+        <br>
     </body>
 </html>
