@@ -1,20 +1,54 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Minion Calculator</title>
-    <link rel="stylesheet" href="../../dark_mode.css">
-    <script>
-      function calculate() {
-        document.getElementById("output").innerHTML = "I'm working on it";
-      }
-    </script>
-  </head>
-  <body>
-    <h1>Minion Calculator: JS edition</h1>
-
-    <button type="button" onclick="calculate()">Calculate</button>
-
-    <p id="output"></p>
-    
-  </body>
+    <head>
+        <title>Minion Calculator</title>
+        <link rel="stylesheet" href="../../dark_mode.css">
+        <link rel="stylesheet" href="calculator.css">
+        <script src="minion_data.js"></script>
+        <script src="GUI_creator.js"></script>
+        <script src="calculator_add_ons.js"></script>
+        <script src="calculator.js"></script>
+        
+    </head>
+    <nav>
+        <a href="https://herodirk.github.io">Home</a>
+        <a href="https://herodirk.github.io/minion/index.html">Minions</a>
+    </nav>
+    <body>
+        <h1>Minion Calculator: JS edition</h1>
+        <div class="calculator">
+            <div id="inputs_minion" class="frame">
+                <div id="inputs_minion_grid" class="input_grid_frame"></div>
+            </div><div id="inputs_player" class="frame">
+                <div id="inputs_player_grid" class="input_grid_frame"></div>
+            </div><div id="outputs_setup" class="frame">
+                <div id="outputs_setup_grid" class="output_grid_frame"></div>
+            </div><div id="outputs_profit" class="frame">
+                <div id="outputs_profit_grid" class="output_grid_frame"></div>
+            </div>
+            <div id="controls" class="controls_frame"></div>
+            <dialog id="edit_vars_dialog" class="floating_dialog">
+                <div id="edit_vars" class="small_frame">
+                    <div id="edit_vars_grid" class="edit_grid_frame"></div>
+                </div>
+                <div id="edit_vars_controls" class="controls_frame" style="position: absolute; bottom: 0;"></div>
+            </dialog>
+        </div>
+        <br>
+        <div style="display: flex; justify-content: center;">
+            <div class="add_ons">
+                <div id="addons_buttons" class="add_ons_frame">
+                    <div id="addons_buttons_grid" class="add_ons_input_grid_frame"></div>
+                </div><div id="addons_output" class="add_ons_frame">
+                    <div id="addons_output_grid" class="add_ons_output_grid_frame"></div>
+                </div>
+            </div>
+        </div>
+        <script>
+            const md = new minion_data();
+            const GUI = new GUI_creator();
+            const add_ons = new Calc_add_ons();
+            const calc = new Calculator();
+        </script>
+    </body>
 </html>
