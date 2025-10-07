@@ -2037,7 +2037,7 @@ class minion_data {
             'Giraffe': { 'type': 'foraging', 'rarity': 'Legendary' },
             'Glacite Golem': { 'type': 'mining', 'rarity': 'Legendary' },
             'Goblin': { 'type': 'mining', 'rarity': 'Legendary' },
-            'Golden Dragon': { 'type': 'combat', 'rarity': 'Legendary' },
+            'Golden Dragon': { 'type': 'combat', 'rarity': 'Dragon' },
             'Golem': { 'type': 'combat', 'rarity': 'Legendary' },
             'Grandma Wolf': { 'type': 'combat', 'rarity': 'Legendary' },
             'Griffin': { 'type': 'combat', 'rarity': 'Legendary' },
@@ -2047,7 +2047,7 @@ class minion_data {
             'Horse': { 'type': 'combat', 'rarity': 'Legendary' },
             'Hound': { 'type': 'combat', 'rarity': 'Legendary' },
             'Jerry': { 'type': 'combat', 'rarity': 'Legendary' },
-            'Jade Dragon': { 'type': 'foraging', 'rarity': 'Legendary' },
+            'Jade Dragon': { 'type': 'foraging', 'rarity': 'Dragon' },
             'Jellyfish': { 'type': 'alchemy', 'rarity': 'Legendary' },
             'Kuudra': { 'type': 'combat', 'rarity': 'Legendary' },
             'Lion': { 'type': 'foraging', 'rarity': 'Legendary' },
@@ -2092,7 +2092,7 @@ class minion_data {
             'Zombie': { 'type': 'combat', 'rarity': 'Legendary' }
         };
 
-        this.max_lvl_pet_xp_amounts = { "Common": 5624785, "Uncommon": 8644220, "Rare": 12626665, "Epic": 18608500, "Legendary": 25353230 };
+        this.max_lvl_pet_xp_amounts = { "Common": 5624785, "Uncommon": 8644220, "Rare": 12626665, "Epic": 18608500, "Legendary": 25353230, "Dragon": 210255385 };
 
         this.minionList = {
             "Custom": {
@@ -2693,4 +2693,5 @@ class minion_data {
             "EVERBURNING_FLAME": { "PLASMA_BUCKET": 1, "FLAMES": 16, "ENCHANTED_SULPHUR_CUBE": 2, "ENCHANTED_RED_SAND_CUBE": 2 },
         };
     };
+
 };
