@@ -729,9 +729,9 @@ class Calculator {
                 } else if (!(["None", 0, 0.0].includes(wisdom_val))) {
                     wisdoms[list_key] = wisdom_val;
                 };
-                if (Object.keys(wisdoms).length !== 0) {
-                    return this.variables["wisdom"]["display"] + ":\n> " + Array.from(Object.keys(wisdoms), wisdom_type => wisdom_type + ": `" + wisdoms[wisdom_type] + "`").join(", ");
-                };
+            };
+            if (Object.keys(wisdoms).length !== 0) {
+                return this.variables["wisdom"]["display"] + ":\n> " + Array.from(Object.keys(wisdoms), wisdom_type => wisdom_type + ": `" + wisdoms[wisdom_type] + "`").join(", ");
             };
             return null;
         } else if (var_key === "beacon") {
@@ -1909,7 +1909,7 @@ class Calculator {
             };
             this.update_GUI();
             this.statusC.style.background = "green";
-        }
+        };
         return;
     };
 
@@ -1947,10 +1947,10 @@ class Calculator {
             print("ERROR: API call was unsuccessful");
             return;
         };
-        this.bazaar_timer = raw_data["lastUpdated"]
+        this.bazaar_timer = raw_data["lastUpdated"];
         this.variables["bazaar_update_txt"]["var"] = this.format_date(this.bazaar_timer);
-        document.getElementById("bazaar_update_txt").innerHTML = this.variables["bazaar_update_txt"]["var"]
-        let top_percent = 0.1
+        document.getElementById("bazaar_update_txt").innerHTML = this.variables["bazaar_update_txt"]["var"];
+        let top_percent = 0.1;
         for (let [itemtype, item_data] of Object.entries(md.itemList)) {
             if (!(itemtype in raw_data["products"])) {
                 continue;
@@ -1963,7 +1963,7 @@ class Calculator {
                         console.log(`BAZAAR: no ${action} supply for ${itemtype}`);
                     };
                     continue;
-                }
+                };
                 let counter = top_amount;
                 let top_sum = 0;
                 for (let order of raw_data["products"][itemtype][`${action}_summary`]) {
@@ -1979,7 +1979,7 @@ class Calculator {
                         break;
                     };
                 };
-                let top_percent_avg_price = top_sum / top_amount
+                let top_percent_avg_price = top_sum / top_amount;
                 let top_price = raw_data["products"][itemtype][`${action}_summary`][0]["pricePerUnit"];
                 if (top_price / top_percent_avg_price >= 2.5) {
                     item_data["prices"][`${action}Price`] = top_price;
@@ -1989,7 +1989,7 @@ class Calculator {
                 };
             };
         };
-        this.update_AH()
+        this.update_AH();
     };
 
     async update_AH() {
@@ -2024,7 +2024,7 @@ class Calculator {
                 if (this.variables[var_key]["list"] instanceof Array) {
                     for (let val of this.variables[var_key]["list"]) {
                         lines.push(format_function(val));
-                    }
+                    };
                 } else {
                     for (const [key, val] of Object.entries(this.variables[var_key]["list"])) {
                         if (var_key === "pets_levelled" && format_function(key) === "None") {
@@ -2055,8 +2055,8 @@ class Calculator {
         };
         let initial_max = this.pet_costs[this.edit_pet_price_pet]["max"];
         let initial_min = this.pet_costs[this.edit_pet_price_pet]["min"];
-        GUI.edit_vars.bind(this)(this.edit_pet_price_store.bind(this), {"min_price": {"dtype": "number", "display": "Level 1 price", "initial": initial_min, "options": []}, "max_price": {"dtype": "number", "display": "Max level price", "initial": initial_max, "options": []}}, false)
-    }
+        GUI.edit_vars.bind(this)(this.edit_pet_price_store.bind(this), {"min_price": {"dtype": "number", "display": "Level 1 price", "initial": initial_min, "options": []}, "max_price": {"dtype": "number", "display": "Max level price", "initial": initial_max, "options": []}}, false);
+    };
 
     edit_pet_price_store() {
         this.pet_costs[this.edit_pet_price_pet]["max"] = this.edit_vars_output["max_price"];
