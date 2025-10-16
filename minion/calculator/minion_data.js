@@ -1960,7 +1960,7 @@ class minion_data {
         this.hopper_data = {
             "None": 1,
             "Budget Hopper": 0.5,
-            "Enchanted Hopper": 0.9,
+            "Enchanted Hopper": 0.7,
         };
 
         this.affected_by_cole = ['Cobblestone', 'Obsidian', 'Glowstone', 'Gravel', 'Sand', 'Ice', 'Coal', 'Iron', 'Gold', 'Diamond', 'Lapis', 'Redstone', 'Emerald', 'Quartz', 'End Stone', 'Mithril']
