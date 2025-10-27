@@ -1187,16 +1187,34 @@ class Calculator {
             if (afk_toggle) {
                 // chopped trees have 4 blocks of wood, unknown why offline gives 3
                 md.minionList[minion_type]["drops"][md.getID[`${minion_type} Log`]] = 4;
-            } else {   
+            } else {
                 md.minionList[minion_type]["drops"][md.getID[`${minion_type} Log`]] = 3;
+            };
+        };
+        if (minion_type == "Gravel") {
+            if (afk_toggle) {
+                // vanilla minecraft chance for gravel to become flint
+                md.minionList[minion_type]["drops"]["GRAVEL"] = 0.9;
+                md.minionList[minion_type]["drops"]["FLINT"] = 0.1;
+            } else {
+                md.minionList[minion_type]["drops"]["GRAVEL"] = 1;
+                md.minionList[minion_type]["drops"]["FLINT"] = 0;
+            };
+        };
+        if (minion_type == "Pumpkin") {
+            if (afk_toggle) {
+                // it just does this, idk, ask Hypixel
+                md.minionList[minion_type]["drops"]["PUMPKIN"] = 1;
+            } else {
+                md.minionList[minion_type]["drops"]["PUMPKIN"] = 3;
             };
         };
         if (minion_type == "Flower") {
             if (afk_toggle && this.variables["specialLayout"]["var"]) {
-                // tall flows blocked by string
-                md.minionList[minion_type]["drops"] = {"YELLOW_FLOWER": 1 / 10, "RED_ROSE": 1 / 10, "SMALL_FLOWER": 8 / 10};
+                // tall flowers blocked by low ceiling
+                md.minionList[minion_type]["drops"] = { "YELLOW_FLOWER": 0.35, "RED_ROSE": 0.15, "SMALL_FLOWER": 0.5 };
             } else {
-                md.minionList[minion_type]["drops"] = {"YELLOW_FLOWER": 1 / 14, "RED_ROSE": 1 / 14, "SMALL_FLOWER": 8 / 14, "LARGE_FLOWER": 4 / 14};
+                md.minionList[minion_type]["drops"] = { "YELLOW_FLOWER": 0.35, "RED_ROSE": 0.15, "SMALL_FLOWER": 1 / 3, "LARGE_FLOWER": 1 / 6 };
             };
         };
 
@@ -1254,10 +1272,13 @@ class Calculator {
             let upgrade_type = md.itemList[upgrade]["upgrade"]["special"]["type"];
             if (upgrade_type.includes("replace")) {
                 // replacing upgrades are like Auto Smelters
-                // items = list(this.variables["items"]["list"].keys())
                 for (const item of Object.keys(this.variables["items"]["list"])) {
                     if (item in md.itemList[upgrade]["upgrade"]["special"]["list"]) {
-                        this.variables["items"]["list"][md.itemList[upgrade]["upgrade"]["special"]["list"][item]] = this.variables["items"]["list"][item];
+                        let replacement_item = md.itemList[upgrade]["upgrade"]["special"]["list"][item];
+                        if (!(replacement_item in this.variables["items"]["list"])) {
+                            this.variables["items"]["list"][replacement_item] = 0;
+                        };
+                        this.variables["items"]["list"][replacement_item] += this.variables["items"]["list"][item];
                         this.variables["items"]["list"][item] = 0;
                         delete this.variables["items"]["list"][item];
                     };
