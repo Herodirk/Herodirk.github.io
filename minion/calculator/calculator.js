@@ -1751,7 +1751,7 @@ class Calculator {
                             if (cost_type === "COINS") {
                                 continue;
                             };
-                            tiered_extra_cost[tier][GUI.toTitleCase(cost_type.replace('_', ' '))] = amount;
+                            tiered_extra_cost[tier][GUI.toTitleCase(cost_type.replace(/_/g, ' '))] = amount;
                         };
                     };
                 };
