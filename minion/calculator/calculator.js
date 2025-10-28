@@ -624,6 +624,11 @@ class Calculator {
                 string_parts["bazaar_update_txt"] = `Bazaar info: ${this.variables["bazaar_sell_type"]["var"]}, ${this.variables["bazaar_buy_type"]["var"]}, Last updated at ${this.variables["bazaar_update_txt"]["var"]}`
                 continue;
             };
+            if (var_key === "extracost") {
+                if (this.variables["setupcost"]["output_switch"] === false) {
+                    continue;
+                };
+            };
             
             let vtype = this.variables[var_key]["vtype"];
             let display = this.variables[var_key]["display"];
@@ -668,7 +673,7 @@ class Calculator {
                 } else {
                     string_parts[var_key] = `${val}`;
                 };
-            } else if (vtype === "output") {
+            } else {
                 if (dtype === "number") {
                     string_parts[var_key] = `${display}: ${GUI.reduced_number(val)}`;
                 } else {
@@ -749,6 +754,12 @@ class Calculator {
                 val = "`" + this.variables[var_key]['display'] + "`";
             } else {
                 return null;
+            };
+        } else if (var_key === "extracost") {  // special case: setup cost is turned off
+            if (this.variables["setupcost"]["output_switch"] === false) {
+                return null;
+            } else {
+                val = "`" + `${this.variables[var_key]['var']}` + "`";
             };
         } else if (var_key === "ID") {
             val = `||${this.variables[var_key]['var']}||`.replace("\\", "\\\\")
