@@ -157,7 +157,7 @@ class Calculator {
             "foragingWisdom": {"vtype": "input", "noWidget": true, "dtype": "number", "display": "Foraging", "initial": 0.0, "options": []},
             "alchemyWisdom": {"vtype": "input", "noWidget": true, "dtype": "number", "display": "Alchemy", "initial": 0.0, "options": []},
             "wisdom": {"vtype": "list", "display": "Wisdom", "frame": "inputs_player_grid", "w": 20, "h": 6, "list": {}},
-            "mayor": {"vtype": "input", "dtype": "string", "display": "Mayor", "frame": "inputs_player_grid", "initial": "None", "options": ["None", "Aatrox", "Cole", "Diana", "Diaz", "Finnegan", "Foxy", "Marina", "Paul", "Jerry", "Derpy", "Scorpius"], "command": () => this.multiswitch("mayors")},
+            "mayor": {"vtype": "input", "dtype": "string", "display": "Mayor", "frame": "inputs_player_grid", "initial": "None", "options": ["None", "Aatrox", "Cole", "Diana", "Diaz", "Finnegan", "Foxy", "Marina", "Paul", "Jerry", "Derpy", "Scorpius", "Aura"], "command": () => this.multiswitch("mayors")},
             "levelingpet": {"vtype": "input", "dtype": "string", "display": "Leveling pet", "frame": "inputs_player_grid", "initial": "None", "options": Object.keys(md.all_pets), "command": () => this.multiswitch("pet_leveling")},
             "taming": {"vtype": "input", "dtype": "number", "display": "Taming", "frame": "inputs_player_grid", "initial": 0.0, "options": [], "command": null},
             "falcon_attribute": {"vtype": "input", "dtype": "number", "display": "Battle Experience", "frame": "inputs_player_grid", "initial": 0, "options": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "command": null},
@@ -1129,6 +1129,9 @@ class Calculator {
         if (mayor === "Cole" && (afk_toggle || clock_override) && md.affected_by_cole.includes(minion_type)) {
             speedBonus += 25;
         };
+        if (mayor === "Aura") {
+            speedBonus -= 50;
+        };
         let afkpet = this.variables["afkpet"]["var"];
         let afkpet_rarity = this.variables["afkpetrarity"]["var"];
         let afkpet_lvl = this.variables["afkpetlvl"]["var"];
@@ -1600,7 +1603,7 @@ class Calculator {
             };
             this.variables["xp"]["list"][xptype] += amount * value * (1 + this.variables["wisdom"]["list"][xptype] / 100);
         };
-        if (mayor === "Derpy") {
+        if (mayor === "Derpy" || mayor === "Aura") {
             for (const xptype of Object.keys(this.variables["xp"]["list"])) {
                 this.variables["xp"]["list"][xptype] *= 1.5;
             };
