@@ -959,8 +959,11 @@ class Calculator {
                 location = md.bazaar_sell_types[this.variables["bazaar_sell_type"]["var"]];
                 if (this.variables["bazaar_taxes"]["var"]) {
                     let bazaar_tax = 0.0125 - 0.00125 * this.variables["bazaar_flipper"]["var"];
-                    if (this.variables["mayor"]["var"] == "Derpy") {
+                    if (this.variables["mayor"]["var"] === "Derpy") {
                         bazaar_tax *= 4;
+                    };
+                    if (this.variables["mayor"]["var"] === "Aura") {
+                        bazaar_tax *= 2;
                     };
                     multiplier = 1 - bazaar_tax;
                 };
@@ -1130,7 +1133,7 @@ class Calculator {
             speedBonus += 25;
         };
         if (mayor === "Aura") {
-            speedBonus -= 50;
+            speedBonus -= 33;
         };
         let afkpet = this.variables["afkpet"]["var"];
         let afkpet_rarity = this.variables["afkpetrarity"]["var"];
