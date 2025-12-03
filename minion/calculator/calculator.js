@@ -1132,8 +1132,8 @@ class Calculator {
         if (mayor === "Cole" && (afk_toggle || clock_override) && md.affected_by_cole.includes(minion_type)) {
             speedBonus += 25;
         };
-        if (mayor === "Aura" && !(afk_toggle)) {
-            speedBonus -= 33;
+        if (mayor === "Aura" && minion_type === "Potato") {
+            speedBonus += 33;
         };
         let afkpet = this.variables["afkpet"]["var"];
         let afkpet_rarity = this.variables["afkpetrarity"]["var"];
