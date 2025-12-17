@@ -1132,9 +1132,9 @@ class Calculator {
         if (mayor === "Cole" && (afk_toggle || clock_override) && md.affected_by_cole.includes(minion_type)) {
             speedBonus += 25;
         };
-        if (mayor === "Aura" && minion_type === "Potato") {
-            speedBonus += 33;
-        };
+        // if (mayor === "Aura" && minion_type === "Potato") {
+        //     speedBonus += 33;
+        // };
         let afkpet = this.variables["afkpet"]["var"];
         let afkpet_rarity = this.variables["afkpetrarity"]["var"];
         let afkpet_lvl = this.variables["afkpetlvl"]["var"];
@@ -1227,11 +1227,22 @@ class Calculator {
             };
         };
         if (minion_type == "Flower") {
-            if (afk_toggle && this.variables["specialLayout"]["var"]) {
+            if (minion_fuel === "THORNY_VINES") {
+                md.minionList[minion_type]["drops"] = { "WILD_ROSE": 2 };
+            } else if (afk_toggle && this.variables["specialLayout"]["var"]) {
                 // tall flowers blocked by low ceiling
                 md.minionList[minion_type]["drops"] = { "YELLOW_FLOWER": 0.35, "RED_ROSE": 0.15, "SMALL_FLOWER": 0.5 };
             } else {
                 md.minionList[minion_type]["drops"] = { "YELLOW_FLOWER": 0.35, "RED_ROSE": 0.15, "SMALL_FLOWER": 1 / 3, "LARGE_FLOWER": 1 / 6 };
+            };
+        };
+        if (minion_type === "Sunflower") {
+            if (minion_fuel === "DAYSWITCH") {
+                md.minionList[minion]["drops"] = { "DOUBLE_PLANT": 2 };
+            } else if (minion_fuel === "NIGHTSWITCH") {
+                md.minionList[minion]["drops"] = { "MOONFLOWER": 2 };
+            } else {
+                md.minionList[minion]["drops"] = { "DOUBLE_PLANT": 1, "MOONFLOWER": 1 };
             };
         };
 
