@@ -1238,11 +1238,11 @@ class Calculator {
         };
         if (minion_type === "Sunflower") {
             if (minion_fuel === "DAYSWITCH") {
-                md.minionList[minion]["drops"] = { "DOUBLE_PLANT": 2 };
+                md.minionList[minion_type]["drops"] = { "DOUBLE_PLANT": 2 };
             } else if (minion_fuel === "NIGHTSWITCH") {
-                md.minionList[minion]["drops"] = { "MOONFLOWER": 2 };
+                md.minionList[minion_type]["drops"] = { "MOONFLOWER": 2 };
             } else {
-                md.minionList[minion]["drops"] = { "DOUBLE_PLANT": 1, "MOONFLOWER": 1 };
+                md.minionList[minion_type]["drops"] = { "DOUBLE_PLANT": 1, "MOONFLOWER": 1 };
             };
         };
 
