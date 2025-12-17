@@ -104,7 +104,7 @@ class Calculator {
             },
         };
 
-        this.version = 1.1;
+        this.version = 1.2;
         GUI.calc = this;
         this.gui = GUI;
         this.frames = {
