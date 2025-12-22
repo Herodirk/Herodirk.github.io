@@ -560,7 +560,8 @@ class minion_data {
             },
             'ENCHANTED_GOLDEN_CARROT': {
                 'display': 'Enchanted Golden Carrot',
-                "prices": { 'npc': 61440 }  // correct
+                "prices": { 'npc': 76800 },
+                'xp': { 'farming': 0 }
             },
             'POTATO_ITEM': {
                 'display': 'Potato',
@@ -609,12 +610,12 @@ class minion_data {
             },
             'ENCHANTED_HUGE_MUSHROOM_2': {
                 'display': 'Enchanted Red Mushroom Block',
-                "prices": { 'npc': 51200 },
+                "prices": { 'npc': 256000 },
                 'xp': { 'farming': 1536 }
             },
             'ENCHANTED_HUGE_MUSHROOM_1': {
                 'display': 'Enchanted Brown Mushroom Block',
-                "prices": { 'npc': 51200 },
+                "prices": { 'npc': 256000 },
                 'xp': { 'farming': 1536 }
             },
             'CACTUS': {
@@ -649,7 +650,8 @@ class minion_data {
             },
             'ENCHANTED_COOKIE': {
                 'display': 'Enchanted Cookie',
-                "prices": { 'npc': 61500 }  // correct
+                "prices": { 'npc': 76800 },
+                'xp': { 'farming': 0 }
             },
             'SUGAR_CANE': {
                 'display': 'Sugar Cane',
@@ -1913,17 +1915,20 @@ class minion_data {
             'PUMPKIN': { 'makes': 'ENCHANTED_PUMPKIN', 'per': 160 },
             'ENCHANTED_PUMPKIN': { 'makes': 'POLISHED_PUMPKIN', 'per': 160 },
             'CARROT_ITEM': { 'makes': 'ENCHANTED_CARROT', 'per': 160 },
+            'ENCHANTED_CARROT': { 'makes': 'ENCHANTED_GOLDEN_CARROT', 'per': 160 },
             'POTATO_ITEM': { 'makes': 'ENCHANTED_POTATO', 'per': 160 },
             'ENCHANTED_POTATO': { 'makes': 'ENCHANTED_BAKED_POTATO', 'per': 160 },
             'RED_MUSHROOM': { 'makes': 'ENCHANTED_RED_MUSHROOM', 'per': 160 },
             'BROWN_MUSHROOM': { 'makes': 'ENCHANTED_BROWN_MUSHROOM', 'per': 160 },
             'HUGE_MUSHROOM_2': { 'makes': 'ENCHANTED_RED_MUSHROOM', 'amount': 9, 'per': 160 },
             'HUGE_MUSHROOM_1': { 'makes': 'ENCHANTED_BROWN_MUSHROOM', 'amount': 9, 'per': 160 },
-            'ENCHANTED_RED_MUSHROOM': { 'makes': 'ENCHANTED_HUGE_MUSHROOM_2', 'per': 32 },
-            'ENCHANTED_BROWN_MUSHROOM': { 'makes': 'ENCHANTED_HUGE_MUSHROOM_1', 'per': 32 },
+            'ENCHANTED_RED_MUSHROOM': { 'makes': 'ENCHANTED_HUGE_MUSHROOM_2', 'per': 160 },
+            'ENCHANTED_BROWN_MUSHROOM': { 'makes': 'ENCHANTED_HUGE_MUSHROOM_1', 'per': 160 },
             'INK_SACK:2': { 'makes': 'ENCHANTED_CACTUS_GREEN', 'per': 160 },
+            'CACTUS': { 'makes': 'ENCHANTED_CACTUS_GREEN', 'per': 160 },
             'ENCHANTED_CACTUS_GREEN': { 'makes': 'ENCHANTED_CACTUS', 'per': 160 },
             'INK_SACK:3': { 'makes': 'ENCHANTED_COCOA', 'per': 160 },
+            'ENCHANTED_COCOA': { 'makes': 'ENCHANTED_COOKIE', 'per': 160 },
             'SUGAR_CANE': { 'makes': 'ENCHANTED_SUGAR', 'per': 160 },
             'ENCHANTED_SUGAR': { 'makes': 'ENCHANTED_SUGAR_CANE', 'per': 160 },
             'NETHER_STALK': { 'makes': 'ENCHANTED_NETHER_STALK', 'per': 160 },
