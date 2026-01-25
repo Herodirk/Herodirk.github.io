@@ -1240,7 +1240,7 @@ class Calculator {
                 // tall flowers blocked by low ceiling
                 md.minionList[minion_type]["drops"] = { "YELLOW_FLOWER": 0.35, "RED_ROSE": 0.15, "SMALL_FLOWER": 0.5 };
             } else {
-                md.minionList[minion_type]["drops"] = { "YELLOW_FLOWER": 0.35, "RED_ROSE": 0.15, "SMALL_FLOWER": 1 / 3, "LARGE_FLOWER": 1 / 6 };
+                md.minionList[minion_type]["drops"] = { "YELLOW_FLOWER": 0.35, "RED_ROSE": 0.15, "SMALL_FLOWER": 4 / 11, "LARGE_FLOWER": 3 / 22 };
             };
         };
         if (minion_type === "Sunflower") {
