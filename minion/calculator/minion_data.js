@@ -22,435 +22,435 @@ class minion_data {
         this.itemList = {
             "NONE": {
                 'display': "None",  // not in bazaar (doesn't exist)
-                "prices": { "custom": 0 },
+                "prices": { "npc": 0 },
                 "upgrade": { 'speed': 0, 'drop': 1, 'duration': 0, 'special': { "type": "None" } }
             },
             'CUSTOM': {
                 'display': 'Custom',  // not in bazaar (doesn't exist)
-                "prices": { 'custom': 1 },
+                "prices": { 'npc': 1 },
                 'xp': { 'combat': 1 }
             },
             'COMPACTED_CUSTOM': {
                 'display': 'Compacted Custom',  // not in bazaar (doesn't exist)
-                "prices": { 'custom': 4 },
+                "prices": { 'npc': 4 },
                 'xp': { 'combat': 4 }
             },
             'ENCHANTED_CUSTOM': {
                 'display': 'Enchanted Custom',  // not in bazaar (doesn't exist)
-                "prices": { 'custom': 160 },
+                "prices": { 'npc': 160 },
                 'xp': { 'combat': 160 }
             },
             'LUSH_BERBERIS': {
                 'display': 'Lush Berberis',
-                "prices": { 'npc': 3 },
+                "prices": {},
                 'xp': { 'farming': 10 }
             },
             'ENCHANTED_LUSH_BERBERIS': {
                 'display': 'Enchanted Lush Berberis',
-                "prices": { 'npc': 480 },
+                "prices": {},
                 'xp': { 'farming': 1600 }
             },
             'RED_GIFT': {
                 'display': 'Red Gift',
-                "prices": { 'npc': 0 },
+                "prices": {},
                 'xp': { 'mining': 0 }
             },
             'PURPLE_CANDY': {
                 'display': 'Purple Candy',
-                "prices": { 'npc': 0 },
+                "prices": {},
                 'xp': { 'combat': 0 }
             },
             'RAW_SOULFLOW': {
                 'display': 'Raw Soulflow',
-                "prices": { 'npc': 0 },
+                "prices": {},
                 'xp': { 'combat': 0 }
             },
             'SOULFLOW': {
                 'display': 'Soulflow',
-                "prices": { 'npc': 1 },
+                "prices": {},
                 'xp': { 'combat': 0 }
             },
             'SULPHUR_ORE': {
                 'display': 'Sulphur',
-                "prices": { 'npc': 10 },
+                "prices": {},
                 'xp': { 'mining': 0 }
             },
             'ENCHANTED_SULPHUR': {
                 'display': 'Enchanted Sulphur',
-                "prices": { 'npc': 1600 },
+                "prices": {},
                 'xp': { 'mining': 0 }
             },
             'ENCHANTED_SULPHUR_CUBE': {
                 'display': 'Enchanted Sulphur Cube',
-                "prices": { 'npc': 256000 },
+                "prices": {},
                 'xp': { 'mining': 0 }
             },
             'CORRUPTED_FRAGMENT': {
                 'display': 'Corrupted Fragment',
-                "prices": { 'npc': 1 },
+                "prices": {},
                 'xp': { 'mining': 0 }
             },
             'COBBLESTONE': {
                 'display': 'Cobblestone',
-                "prices": { 'npc': 1 },
+                "prices": {},
                 'xp': { 'mining': 0.1 }
             },
             'ENCHANTED_COBBLESTONE': {
                 'display': 'Enchanted Cobblestone',
-                "prices": { 'npc': 160 },
+                "prices": {},
                 'xp': { 'mining': 16 }
             },
             'STONE': {
                 'display': 'Stone',  // not in bazaar
-                "prices": { 'npc': 1 },
+                "prices": {},
                 'xp': { 'mining': 0.1 }
             },
             'OBSIDIAN': {
                 'display': 'Obsidian',
-                "prices": { 'npc': 7 },
+                "prices": {},
                 'xp': { 'mining': 0.4 }
             },
             'ENCHANTED_OBSIDIAN': {
                 'display': 'Enchanted Obsidian',
-                "prices": { 'npc': 1440 },
+                "prices": {},
                 'xp': { 'mining': 64 }
             },
             'GLOWSTONE_DUST': {
                 'display': 'Glowstone Dust',
-                "prices": { 'npc': 2 },
+                "prices": {},
                 'xp': { 'mining': 0.2 }
             },
             'GLOWSTONE': {
                 'display': 'Glowstone',  // not in bazaar
-                "prices": { 'npc': 8 },
+                "prices": {},
                 'xp': { 'mining': 0.8 }
             },
             'ENCHANTED_GLOWSTONE_DUST': {
                 'display': 'Enchanted Glowstone Dust',
-                "prices": { 'npc': 320 },
+                "prices": {},
                 'xp': { 'mining': 32 }
             },
             'ENCHANTED_GLOWSTONE': {
                 'display': 'Enchanted Glowstone',
-                "prices": { 'npc': 51200 },
+                "prices": {},
                 'xp': { 'mining': 6144 }  // correct
             },
             'GRAVEL': {
                 'display': 'Gravel',
-                "prices": { 'npc': 3 },
+                "prices": {},
                 'xp': { 'mining': 0.2 }
             },
             'FLINT': {
                 'display': 'Flint',
-                "prices": { 'npc': 4 },
+                "prices": {},
                 'xp': { 'mining': 0.2 }
             },
             'ENCHANTED_FLINT': {
                 'display': 'Enchanted Flint',
-                "prices": { 'npc': 640 },
+                "prices": {},
                 'xp': { 'mining': 32 }
             },
             'SAND': {
                 'display': 'Sand',
-                "prices": { 'npc': 2 },
+                "prices": {},
                 'xp': { 'mining': 0.2 }
             },
             'ENCHANTED_SAND': {
                 'display': 'Enchanted Sand',
-                "prices": { 'npc': 320 },
+                "prices": {},
                 'xp': { 'mining': 32 }
             },
             'SAND:1': {
                 'display': 'Red Sand',
-                "prices": { 'npc': 5 },
+                "prices": {},
                 'xp': { 'mining': 0.2 }
             },
             'ENCHANTED_RED_SAND': {
                 'display': 'Enchanted Red Sand',
-                "prices": { 'npc': 800 },
+                "prices": {},
                 'xp': { 'mining': 32 }
             },
             'ENCHANTED_RED_SAND_CUBE': {
                 'display': 'Enchanted Red Sand Cube',
-                "prices": { 'npc': 128000 },
+                "prices": {},
                 'xp': { 'mining': 5120 }
             },
             'GLASS': {
                 'display': 'Glass',  // not in bazaar
-                "prices": { 'npc': 2 },
+                "prices": {},
                 'xp': { 'mining': 0 }
             },
             'MYCEL': {
                 'display': 'Mycelium',
-                "prices": { 'npc': 5 },
+                "prices": {},
                 'xp': { 'mining': 0.2 }
             },
             'ENCHANTED_MYCELIUM': {
                 'display': 'Enchanted Mycelium',
-                "prices": { 'npc': 800 },
+                "prices": {},
                 'xp': { 'mining': 32 }
             },
             'ENCHANTED_MYCELIUM_CUBE': {
                 'display': 'Enchanted Mycelium Cube',
-                "prices": { 'npc': 128000 },
+                "prices": {},
                 'xp': { 'mining': 5120 }
             },
             'CLAY_BALL': {
                 'display': 'Clay Ball',
-                "prices": { 'npc': 3 },
+                "prices": {},
                 'xp': { 'fishing': 0.1 }
             },
             'CLAY': {
                 'display': 'Clay',  // not in bazaar
-                "prices": { 'npc': 12 },
+                "prices": {},
                 'xp': { 'fishing': 0.4 }
             },
             'ENCHANTED_CLAY_BALL': {
                 'display': 'Enchanted Clay Ball',
-                "prices": { 'npc': 480 },
+                "prices": {},
                 'xp': { 'fishing': 16 }
             },
             'ENCHANTED_CLAY_BLOCK': {
                 'display': 'Enchanted Clay Block',  // all correct
-                "prices": { 'npc': 76800 },
+                "prices": {},
                 'xp': { 'fishing': 2560 }
             },
             'CLAY_BRICK': {
                 'display': 'Brick',  // not in bazaar
-                "prices": { 'npc': 2 },
+                "prices": {},
                 'xp': { 'mining': 0 }
             },
             'BRICK': {
                 'display': 'Bricks',  // not in bazaar
-                "prices": { 'npc': 3 },
+                "prices": {},
                 'xp': { 'mining': 0 }
             },
             'ICE': {
                 'display': 'Ice',
-                "prices": { 'npc': 0.5 },
+                "prices": {},
                 'xp': { 'mining': 0.5 }
             },
             'PACKED_ICE': {
                 'display': 'Packed Ice',
-                "prices": { 'npc': 4.5 },
+                "prices": {},
                 'xp': { 'mining': 4.5 }
             },
             'ENCHANTED_ICE': {
                 'display': 'Enchanted Ice',
-                "prices": { 'npc': 80 },
+                "prices": {},
                 'xp': { 'mining': 80 }
             },
             'ENCHANTED_PACKED_ICE': {
                 'display': 'Enchanted Packed Ice',
-                "prices": { 'npc': 12800 },
+                "prices": {},
                 'xp': { 'mining': 12800 }
             },
             'SNOW_BALL': {
                 'display': 'Snowball',
-                "prices": { 'npc': 1 },
+                "prices": {},
                 'xp': { 'mining': 0.1 }
             },
             'SNOW_BLOCK': {
                 'display': 'Snow Block',
-                "prices": { 'npc': 4 },
+                "prices": {},
                 'xp': { 'mining': 0.4 }
             },
             'ENCHANTED_SNOW_BLOCK': {
                 'display': 'Enchanted Snow Block',  // correct
-                "prices": { 'npc': 600 },
+                "prices": {},
                 'xp': { 'mining': 64 }
             },
             'COAL': {
                 'display': 'Coal',
-                "prices": { 'npc': 2 },
+                "prices": {},
                 'xp': { 'mining': 0.3 },
                 'upgrade': { 'speed': 5, 'drop': 1, 'duration': 1800 }
             },
             'COAL_BLOCK': {
                 'display': 'Block of Coal',  // not in bazaar
-                "prices": { 'npc': 18 },
+                "prices": {},
                 'xp': { 'mining': 2.7 },
                 'upgrade': { 'speed': 5, 'drop': 1, 'duration': 18000 }
             },
             'ENCHANTED_COAL': {
                 'display': 'Enchanted Coal',
-                "prices": { 'npc': 320 },
+                "prices": {},
                 'xp': { 'mining': 48 },
                 'upgrade': { 'speed': 10, 'drop': 1, 'duration': 86400 }
             },
             'ENCHANTED_COAL_BLOCK': {
                 'display': 'Enchanted Coal Block',
-                "prices": { 'npc': 51000 },  // correct
+                "prices": {},
                 'xp': { 'mining': 7680 }
             },
             'IRON_ORE': {
                 'display': 'Iron Ore',  // not in bazaar
-                "prices": { 'npc': 3 },
+                "prices": {},
                 'xp': { 'mining': 0.3 }
             },
             'IRON_INGOT': {
                 'display': 'Iron Ingot',
-                "prices": { 'npc': 3 },
+                "prices": {},
                 'xp': { 'mining': 0.3 }
             },
             'IRON_BLOCK': {
                 'display': 'Block of Iron',  // not in bazaar
-                "prices": { 'npc': 27 },
+                "prices": {},
                 'xp': { 'mining': 2.7 }
             },
             'ENCHANTED_IRON': {
                 'display': 'Enchanted Iron Ingot',
-                "prices": { 'npc': 480 },
+                "prices": {},
                 'xp': { 'mining': 48 }
             },
             'ENCHANTED_IRON_BLOCK': {
                 'display': 'Enchanted Iron Block',
-                "prices": { 'npc': 76800 },
+                "prices": {},
                 'xp': { 'mining': 7680 }
             },
             'GOLD_ORE': {
                 'display': 'Gold Ore',  // not in bazaar
-                "prices": { 'npc': 3 },
+                "prices": {},
                 'xp': { 'mining': 0.4 }
             },
             'GOLD_INGOT': {
                 'display': 'Gold Ingot',
-                "prices": { 'npc': 4 },
+                "prices": {},
                 'xp': { 'mining': 0.4 }
             },
             'GOLD_BLOCK': {
                 'display': 'Block of Gold',  // not in bazaar
-                "prices": { 'npc': 36 },
+                "prices": {},
                 'xp': { 'mining': 3.6 }
             },
             'ENCHANTED_GOLD': {
                 'display': 'Enchanted Gold Ingot',
-                "prices": { 'npc': 640 },
+                "prices": {},
                 'xp': { 'mining': 64 }
             },
             'ENCHANTED_GOLD_BLOCK': {
                 'display': 'Enchanted Gold Block',
-                "prices": { 'npc': 102000 },  // correct
+                "prices": {},
                 'xp': { 'mining': 10240 }
             },
             'DIAMOND': {
                 'display': 'Diamond',
-                "prices": { 'npc': 8 },
+                "prices": {},
                 'xp': { 'mining': 0.4 }
             },
             'DIAMOND_BLOCK': {
                 'display': 'Block of Diamond',  // not in bazaar
-                "prices": { 'npc': 72 },
+                "prices": {},
                 'xp': { 'mining': 3.6 }
             },
             'ENCHANTED_DIAMOND': {
                 'display': 'Enchanted Diamond',
-                "prices": { 'npc': 1280 },
+                "prices": {},
                 'xp': { 'mining': 64 }
             },
             'ENCHANTED_DIAMOND_BLOCK': {
                 'display': 'Enchanted Diamond Block',
-                "prices": { 'npc': 204800 },
+                "prices": {},
                 'xp': { 'mining': 10240 }
             },
             'INK_SACK:4': {
                 'display': 'Lapis Lazuli',
-                "prices": { 'npc': 1 },
+                "prices": {},
                 'xp': { 'mining': 0.1 }
             },
             'LAPIS_BLOCK': {
                 'display': 'Block of Lapis Lazuli',  // not in bazaar
-                "prices": { 'npc': 9 },
+                "prices": {},
                 'xp': { 'mining': 0.9 }
             },
             'ENCHANTED_LAPIS_LAZULI': {
                 'display': 'Enchanted Lapis Lazuli',
-                "prices": { 'npc': 160 },
+                "prices": {},
                 'xp': { 'mining': 16 }
             },
             'ENCHANTED_LAPIS_LAZULI_BLOCK': {
                 'display': 'Enchanted Lapis Lazuli Block',
-                "prices": { 'npc': 25600 },
+                "prices": {},
                 'xp': { 'mining': 2560 }
             },
             'REDSTONE': {
                 'display': 'Redstone Dust',
-                "prices": { 'npc': 1 },
+                "prices": {},
                 'xp': { 'mining': 0.2 }
             },
             'REDSTONE_BLOCK': {
                 'display': 'Block of Redstone',  // not in bazaar
-                "prices": { 'npc': 9 },
+                "prices": {},
                 'xp': { 'mining': 1.8 }
             },
             'ENCHANTED_REDSTONE': {
                 'display': 'Enchanted Redstone Dust',
-                "prices": { 'npc': 160 },
+                "prices": {},
                 'xp': { 'mining': 32 }
             },
             'ENCHANTED_REDSTONE_BLOCK': {
                 'display': 'Enchanted Redstone Block',
-                "prices": { 'npc': 25600 },
+                "prices": {},
                 'xp': { 'mining': 5120 }
             },
             'EMERALD': {
                 'display': 'Emerald',
-                "prices": { 'npc': 6 },
+                "prices": {},
                 'xp': { 'mining': 0.4 }
             },
             'EMERALD_BLOCK': {
                 'display': 'Block of Emerald',  // not in bazaar
-                "prices": { 'npc': 54 },
+                "prices": {},
                 'xp': { 'mining': 3.6 }
             },
             'ENCHANTED_EMERALD': {
                 'display': 'Enchanted Emerald',
-                "prices": { 'npc': 960 },
+                "prices": {},
                 'xp': { 'mining': 64 }
             },
             'ENCHANTED_EMERALD_BLOCK': {
                 'display': 'Enchanted Emerald Block',
-                "prices": { 'npc': 153600 },
+                "prices": {},
                 'xp': { 'mining': 10240 }
             },
             'QUARTZ': {
                 'display': 'Nether Quartz',
-                "prices": { 'npc': 4 },
+                "prices": {},
                 'xp': { 'mining': 0.3 }
             },
             'QUARTZ_BLOCK': {
                 'display': 'Block of Quartz',  // not in bazaar
-                "prices": { 'npc': 16 },
+                "prices": {},
                 'xp': { 'mining': 1.2 }
             },
             'ENCHANTED_QUARTZ': {
                 'display': 'Enchanted Nether Quartz',
-                "prices": { 'npc': 640 },
+                "prices": {},
                 'xp': { 'mining': 48 }
             },
             'ENCHANTED_QUARTZ_BLOCK': {
                 'display': 'Enchanted Quartz Block',
-                "prices": { 'npc': 102400 },
+                "prices": {},
                 'xp': { 'mining': 7680 }
             },
             'ENDER_STONE': {
                 'display': 'End Stone',
-                "prices": { 'npc': 2 },
+                "prices": {},
                 'xp': { 'mining': 0.4 }
             },
             'ENCHANTED_ENDSTONE': {
                 'display': 'Enchanted End Stone',
-                "prices": { 'npc': 320 },
+                "prices": {},
                 'xp': { 'mining': 64 }  // correct
             },
             'MITHRIL_ORE': {
                 'display': 'Mithril',
-                "prices": { 'npc': 8 },
+                "prices": {},
                 'xp': { 'mining': 0.4 }
             },
             'ENCHANTED_MITHRIL': {
                 'display': 'Enchanted Mithril',
-                "prices": { 'npc': 1280 },
+                "prices": {},
                 'xp': { 'mining': 64 }
             },
             'REFINED_MITHRIL': {
@@ -459,467 +459,467 @@ class minion_data {
             },
             'HARD_STONE': {
                 'display': 'Hard Stone',
-                "prices": { 'npc': 1 },
+                "prices": {},
                 'xp': { 'mining': 0.1 }
             },
             'ENCHANTED_HARD_STONE': {
                 'display': 'Enchanted Hard Stone',
-                "prices": { 'npc': 576 },
+                "prices": {},
                 'xp': { 'mining': 57.6 }
             },
             'CONCENTRATED_STONE': {
                 'display': 'Concentrated Stone',  // correct
-                "prices": { 'npc': 200000 },
+                "prices": {},
                 'xp': { 'mining': 33177.6 }
             },
             'WHEAT': {
                 'display': 'Wheat',
-                "prices": { 'npc': 6 },
+                "prices": {},
                 'xp': { 'farming': 0.2 }
             },
             'HAY_BLOCK': {
                 'display': 'Hay Bale',  // not produced anymore by minions
-                "prices": { 'npc': 54 },
+                "prices": {},
                 'xp': { 'farming': 1.8 }
             },
             'SEEDS': {
                 'display': 'Seeds',
-                "prices": { 'npc': 3 },
+                "prices": {},
                 'xp': { 'farming': 0.1 }
             },
             'ENCHANTED_BREAD': {
                 'display': 'Enchanted Bread',
-                "prices": { 'npc': 60 },  // correct
+                "prices": {},
                 'xp': { 'farming': 1.8 },  // not produced anymore by minions
                 "upgrade": { 'speed': 5, 'drop': 1, 'duration': 43200 }
             },
             'ENCHANTED_WHEAT': {
                 'display': 'Enchanted Wheat',
-                "prices": { 'npc': 960 },
+                "prices": {},
                 'xp': { 'farming': 32 }  // correct
             },
             'ENCHANTED_HAY_BALE': {
                 'display': 'Enchanted Hay Bale',
-                "prices": { 'npc': 153600 },
+                "prices": {},
                 'xp': { 'farming': 5120 }  // correct
             },
             'ENCHANTED_SEEDS': {
                 'display': 'Enchanted Seeds',
-                "prices": { 'npc': 480 },
+                "prices": {},
                 'xp': { 'farming': 16 }
             },
             'BOX_OF_SEEDS': {
                 'display': 'Box of Seeds',
-                "prices": { 'npc': 76800 },
+                "prices": {},
                 'xp': { 'farming': 2560 }
             },
             'MELON': {
                 'display': 'Melon Slice',
-                "prices": { 'npc': 2 },
+                "prices": {},
                 'xp': { 'farming': 0.1 }
             },
             'MELON_BLOCK': {
                 'display': 'Melon',
-                "prices": { 'npc': 18 },
+                "prices": {},
                 'xp': { 'farming': 0.9 }
             },
             'ENCHANTED_MELON': {
                 'display': 'Enchanted Melon Slice',
-                "prices": { 'npc': 320 },
+                "prices": {},
                 'xp': { 'farming': 16 }
             },
             'ENCHANTED_MELON_BLOCK': {
                 'display': 'Enchanted Melon',
-                "prices": { 'npc': 51200 },
+                "prices": {},
                 'xp': { 'farming': 2560 }
             },
             'PUMPKIN': {
                 'display': 'Pumpkin',
-                "prices": { 'npc': 10 },
+                "prices": {},
                 'xp': { 'farming': 0.3 }
             },
             'ENCHANTED_PUMPKIN': {
                 'display': 'Enchanted Pumpkin',
-                "prices": { 'npc': 1600 },
+                "prices": {},
                 'xp': { 'farming': 48 }
             },
             'POLISHED_PUMPKIN': {
                 'display': 'Polished Pumpkin',
-                "prices": { 'npc': 256000 },
+                "prices": {},
                 'xp': { 'farming': 7680 }
             },
             'CARROT_ITEM': {
                 'display': 'Carrot',
-                "prices": { 'npc': 3 },
+                "prices": {},
                 'xp': { 'farming': 0.1 }
             },
             'ENCHANTED_CARROT': {
                 'display': 'Enchanted Carrot',  // correct
-                "prices": { 'npc': 480 },
+                "prices": {},
                 'xp': { 'farming': 16 }
             },
             'ENCHANTED_GOLDEN_CARROT': {
                 'display': 'Enchanted Golden Carrot',
-                "prices": { 'npc': 76800 },
+                "prices": {},
                 'xp': { 'farming': 0 }
             },
             'POTATO_ITEM': {
                 'display': 'Potato',
-                "prices": { 'npc': 3 },
+                "prices": {},
                 'xp': { 'farming': 0.1 }
             },
             'ENCHANTED_POTATO': {
                 'display': 'Enchanted Potato',  // correct
-                "prices": { 'npc': 480 },
+                "prices": {},
                 'xp': { 'farming': 16 }
             },
             'ENCHANTED_BAKED_POTATO': {
                 'display': 'Enchanted Baked Potato',
-                "prices": { 'npc': 76800 },
+                "prices": {},
                 'xp': { 'farming': 2560 }
             },
             'RED_MUSHROOM': {
                 'display': 'Red Mushroom',
-                "prices": { 'npc': 10 },
+                "prices": {},
                 'xp': { 'farming': 0.3 }
             },
             'BROWN_MUSHROOM': {
                 'display': 'Brown Mushroom',
-                "prices": { 'npc': 10 },
+                "prices": {},
                 'xp': { 'farming': 0.3 }
             },
             'HUGE_MUSHROOM_2': {
                 'display': 'Red Mushroom Block',
-                "prices": { 'npc': 10 },  // correct
+                "prices": {},  // correct
                 'xp': { 'farming': 0.3 }  // correct
             },
             'HUGE_MUSHROOM_1': {
                 'display': 'Brown Mushroom Block',
-                "prices": { 'npc': 10 },  // correct
+                "prices": {},  // correct
                 'xp': { 'farming': 0.3 }  // correct
             },
             'ENCHANTED_RED_MUSHROOM': {
                 'display': 'Enchanted Red Mushroom',
-                "prices": { 'npc': 1600 },
+                "prices": {},
                 'xp': { 'farming': 48 }
             },
             'ENCHANTED_BROWN_MUSHROOM': {
                 'display': 'Enchanted Brown Mushroom',
-                "prices": { 'npc': 1600 },
+                "prices": {},
                 'xp': { 'farming': 48 }
             },
             'ENCHANTED_HUGE_MUSHROOM_2': {
                 'display': 'Enchanted Red Mushroom Block',
-                "prices": { 'npc': 256000 },
+                "prices": {},
                 'xp': { 'farming': 1536 }
             },
             'ENCHANTED_HUGE_MUSHROOM_1': {
                 'display': 'Enchanted Brown Mushroom Block',
-                "prices": { 'npc': 256000 },
+                "prices": {},
                 'xp': { 'farming': 1536 }
             },
             'CACTUS': {
                 'display': 'Cactus',
-                "prices": { 'npc': 3 },
+                "prices": {},
                 'xp': { 'farming': 0.2 }
             },
             'INK_SACK:2': {
                 'display': 'Cactus Green',  // not in bazaar
-                "prices": { 'npc': 3 },
+                "prices": {},
                 'xp': { 'farming': 0.2 }
             },
             'ENCHANTED_CACTUS_GREEN': {
                 'display': 'Enchanted Cactus Green',
-                "prices": { 'npc': 480 },
+                "prices": {},
                 'xp': { 'farming': 80 }  // correct
             },
             'ENCHANTED_CACTUS': {
                 'display': 'Enchanted Cactus',
-                "prices": { 'npc': 76800 },
+                "prices": {},
                 'xp': { 'farming': 12800 }  // correct
             },
             'INK_SACK:3': {
                 'display': 'Cocoa Beans',
-                "prices": { 'npc': 3 },
+                "prices": {},
                 'xp': { 'farming': 0.2 }
             },
             'ENCHANTED_COCOA': {
                 'display': 'Enchanted Cocoa Beans',
-                "prices": { 'npc': 480 },
+                "prices": {},
                 'xp': { 'farming': 32 }
             },
             'ENCHANTED_COOKIE': {
                 'display': 'Enchanted Cookie',
-                "prices": { 'npc': 76800 },
+                "prices": {},
                 'xp': { 'farming': 0 }
             },
             'SUGAR_CANE': {
                 'display': 'Sugar Cane',
-                "prices": { 'npc': 4 },
+                "prices": {},
                 'xp': { 'farming': 0.1 }
             },
             'ENCHANTED_SUGAR': {
                 'display': 'Enchanted Sugar',
-                "prices": { 'npc': 640 },
+                "prices": {},
                 'xp': { 'alchemy': 16 }  // correct type
             },
             'ENCHANTED_SUGAR_CANE': {
                 'display': 'Enchanted Sugar Cane',
-                "prices": { 'npc': 102400 },
+                "prices": {},
                 'xp': { 'farming': 2560 }  // correct type
             },
             'NETHER_STALK': {
                 'display': 'Nether Wart',
-                "prices": { 'npc': 4 },
+                "prices": {},
                 'xp': { 'farming': 0.2 }
             },
             'ENCHANTED_NETHER_STALK': {
                 'display': 'Enchanted Nether Wart',  // correct
-                "prices": { 'npc': 640 },
+                "prices": {},
                 'xp': { 'farming': 32 }
             },
             'MUTANT_NETHER_STALK': {
                 'display': 'Mutant Nether Wart',  // correct
-                "prices": { 'npc': 102400 },
+                "prices": {},
                 'xp': { 'farming': 5120 }
             },
             'YELLOW_FLOWER': {
                 'display': 'Dandelion',
-                "prices": { 'npc': 1 },
+                "prices": {},
                 'xp': { 'foraging': 0.1 }
             },
             'RED_ROSE': {
                 'display': 'Poppy',
-                "prices": { 'npc': 1 },
+                "prices": {},
                 'xp': { 'foraging': 0.1 }
             },
             'SMALL_FLOWER': {
                 'display': 'Small Flower',  // not in bazaar
-                "prices": { 'npc': 1 },
+                "prices": {},
                 'xp': { 'foraging': 0.1 }
             },
             'LARGE_FLOWER': {
                 'display': 'Large Flower',  // not in bazaar
-                "prices": { 'npc': 1 },
+                "prices": {},
                 'xp': { 'foraging': 0.2 }
             },
             'ENCHANTED_DANDELION': {
                 'display': 'Enchanted Dandelion',
-                "prices": { 'npc': 160 },
+                "prices": {},
                 'xp': { 'foraging': 16 }
             },
             'ENCHANTED_POPPY': {
                 'display': 'Enchanted Poppy',
-                "prices": { 'npc': 576 },
+                "prices": {},
                 'xp': { 'foraging': 57.6 }
             },
             "WILD_ROSE": {
                 'display': 'Wild Rose',
-                "prices": { 'npc': 4 },
+                "prices": {},
                 'xp': { 'farming': 0.3 }  // correct
             },
             "ENCHANTED_WILD_ROSE": {
                 'display': 'Enchanted Wild Rose',
-                "prices": { 'npc': 640 },
+                "prices": {},
                 'xp': { 'farming': 48 }  // correct
             },
             "COMPACTED_WILD_ROSE": {
                 'display': 'Compacted Wild Rose',
-                "prices": { 'npc': 102400 },
+                "prices": {},
                 'xp': { 'farming': 7680 }
             },
             "DOUBLE_PLANT": {
                 'display': 'Sunflower',
-                "prices": { 'npc': 4 },
+                "prices": {},
                 'xp': { 'farming': 0.3 }  // correct
             },
             "ENCHANTED_SUNFLOWER": {
                 'display': 'Enchanted Sunflower',
-                "prices": { 'npc': 640 },
+                "prices": {},
                 'xp': { 'farming': 48 }  // correct
             },
             "COMPACTED_SUNFLOWER": {
                 'display': 'Compacted Sunflower',
-                "prices": { 'npc': 102400 },
+                "prices": {},
                 'xp': { 'farming': 7680 }
             },
             "MOONFLOWER": {
                 'display': 'Moonflower',
-                "prices": { 'npc': 4 },
+                "prices": {},
                 'xp': { 'farming': 0.3 }  // correct
             },
             "ENCHANTED_MOONFLOWER": {
                 'display': 'Enchanted Moonflower',
-                "prices": { 'npc': 640 },
+                "prices": {},
                 'xp': { 'farming': 48 }  // correct
             },
             "COMPACTED_MOONFLOWER": {
                 'display': 'Compacted Moonflower',
-                "prices": { 'npc': 102400 },
+                "prices": {},
                 'xp': { 'farming': 7680 }
             },
             'RAW_FISH': {
                 'display': 'Raw Cod',
-                "prices": { 'npc': 6 },
+                "prices": {},
                 'xp': { 'fishing': 0.5 }
             },
             'RAW_FISH:1': {
                 'display': 'Raw Salmon',
-                "prices": { 'npc': 10 },
+                "prices": {},
                 'xp': { 'fishing': 0.7 }
             },
             'RAW_FISH:3': {
                 'display': 'Pufferfish',
-                "prices": { 'npc': 15 },
+                "prices": {},
                 'xp': { 'fishing': 1 }
             },
             'RAW_FISH:2': {
                 'display': 'Tropical Fish',
-                "prices": { 'npc': 20 },
+                "prices": {},
                 'xp': { 'fishing': 2 }
             },
             'PRISMARINE_CRYSTALS': {
                 'display': 'Prismarine Crystals',
-                "prices": { 'npc': 5 },
+                "prices": {},
                 'xp': { 'fishing': 0.5 }
             },
             'PRISMARINE_SHARD': {
                 'display': 'Prismarine Shard',
-                "prices": { 'npc': 5 },
+                "prices": {},
                 'xp': { 'fishing': 0.5 }
             },
             'SPONGE': {
                 'display': 'Sponge',
-                "prices": { 'npc': 50 },
+                "prices": {},
                 'xp': { 'fishing': 0.5 }
             },
             'ENCHANTED_RAW_FISH': {
                 'display': 'Enchanted Raw Cod',
-                "prices": { 'npc': 960 },
+                "prices": {},
                 'xp': { 'fishing': 80 }
             },
             'ENCHANTED_RAW_SALMON': {
                 'display': 'Enchanted Raw Salmon',
-                "prices": { 'npc': 1600 },
+                "prices": {},
                 'xp': { 'fishing': 112 }
             },
             'ENCHANTED_PUFFERFISH': {
                 'display': 'Enchanted Pufferfish',
-                "prices": { 'npc': 2400 },
+                "prices": {},
                 'xp': { 'fishing': 160 }
             },
             'ENCHANTED_CLOWNFISH': {
                 'display': 'Enchanted Tropical Fish',
-                "prices": { 'npc': 3200 },
+                "prices": {},
                 'xp': { 'fishing': 320 }
             },
             'ENCHANTED_PRISMARINE_CRYSTALS': {
                 'display': 'Enchanted Prismarine Crystals',
-                "prices": { 'npc': 400 },
+                "prices": {},
                 'xp': { 'fishing': 40 }
             },
             'ENCHANTED_PRISMARINE_SHARD': {
                 'display': 'Enchanted Prismarine Shard',
-                "prices": { 'npc': 400 },
+                "prices": {},
                 'xp': { 'fishing': 40 }
             },
             'ENCHANTED_SPONGE': {
                 'display': 'Enchanted Sponge',
-                "prices": { 'npc': 2000 },
+                "prices": {},
                 'xp': { 'fishing': 20 }
             },
             'ENCHANTED_COOKED_FISH': {
                 'display': 'Enchanted Cooked Cod',  // correct
-                "prices": { 'npc': 150000 },
+                "prices": {},
                 'xp': { 'fishing': 12800 }
             },
             'ENCHANTED_COOKED_SALMON': {
                 'display': 'Enchanted Cooked Salmon',
-                "prices": { 'npc': 256000 },
+                "prices": {},
                 'xp': { 'fishing': 17920 }
             },
             'ENCHANTED_WET_SPONGE': {
                 'display': 'Enchanted Wet Sponge',
-                "prices": { 'npc': 80000 },
+                "prices": {},
                 'xp': { 'fishing': 800 }
             },
             'ROTTEN_FLESH': {
                 'display': 'Rotten Flesh',
-                "prices": { 'npc': 2 },
+                "prices": {},
                 'xp': { 'combat': 0.3 }
             },
             'POISONOUS_POTATO': {
                 'display': 'Poisonous Potato',
-                "prices": { 'npc': 10 },
+                "prices": {},
                 'xp': { 'farming': 0 }
             },
             'ENCHANTED_ROTTEN_FLESH': {
                 'display': 'Enchanted Rotten Flesh',
-                "prices": { 'npc': 320 },
+                "prices": {},
                 'xp': { 'combat': 48 }
             },
             'ENCHANTED_POISONOUS_POTATO': {
                 'display': 'Enchanted Poisonous Potato',
-                "prices": { 'npc': 1600 },
+                "prices": {},
                 'xp': { 'farming': 0 }
             },
             'ENCHANTED_ENDER_PEARL': {
                 'display': 'Enchanted Ender Pearl',
-                "prices": { 'npc': 140 },
+                "prices": {},
                 'xp': { 'combat': 9 }
             },
             'ENCHANTED_EYE_OF_ENDER': {
                 'display': 'Enchanted Eye of Ender',
-                "prices": { "custom": 6500 }
+                "prices": {},
             },
             'DYE_BYZANTIUM': {
                 'display': 'Byzantium Dye',  // not in bazaar (AH), also not used
-                "prices": { 'npc': 0 },
+                "prices": {  },
                 'xp': { 'combat': 0 }
             },
             'ABSOLUTE_ENDER_PEARL': {
                 'display': 'Absolute Ender Pearl',
-                "prices": { 'npc': 11200 },
+                "prices": {},
                 'xp': { 'combat': 720 }  // correct
             },
             'CRUDE_GABAGOOL': {
                 'display': 'Crude Gabagool',
-                "prices": { 'npc': 1 },
+                "prices": {},
                 'xp': { 'combat': 0 }
             },
             'VERY_CRUDE_GABAGOOL': {
                 'display': 'Very Crude Gabagool',
-                "prices": { 'npc': 1 },  // correct
+                "prices": {},  // correct
                 'xp': { 'combat': 0 }
             },
             'DYE_FLAME': {
                 'display': 'Flame Dye',  // not in bazaar (AH), also not used
-                "prices": { 'npc': 0 },
+                "prices": {  },
                 'xp': { 'combat': 0 }
             },
             'CHILI_PEPPER': {
                 'display': 'Chili Pepper',
-                "prices": { 'npc': 5000 },
+                "prices": {},
                 'xp': { 'combat': 0 }
             },
             'STUFFED_CHILI_PEPPER': {
                 'display': 'Stuffed Chili Pepper',
-                "prices": { 'npc': 200000 },  // correct
+                "prices": {},
                 'xp': { 'combat': 0 }
             },
             'INFERNO_VERTEX': {
                 'display': 'Inferno Vertex',
-                "prices": { 'npc': 0, "custom": 6500000 },
+                "prices": {},
                 'xp': { 'combat': 0 }
             },
             'INFERNO_APEX': {
                 'display': 'Inferno Apex',
-                "prices": { 'npc': 0, "custom": 150000000 },
+                "prices": {},
                 'xp': { 'combat': 0 }
             },
             'REAPER_PEPPER': {
                 'display': 'Reaper Pepper',
-                "prices": { 'npc': 0 },
+                "prices": {  },
                 'xp': { 'combat': 0 }
             },
             'GABAGOOL_THE_FISH': {
@@ -929,204 +929,204 @@ class minion_data {
             },
             'HYPERGOLIC_IONIZED_CERAMICS': {
                 'display': 'Hypergolic Ionized Ceramics',
-                "prices": { 'npc': 0 },
+                "prices": {},
                 'xp': { 'combat': 0 }
             },
             'HEMOVIBE': {
                 'display': 'Hemovibe',
-                "prices": { 'npc': 100 },
+                "prices": {},
                 'xp': { 'combat': 5 }
             },
             'HEMOGLASS': {
                 'display': 'Hemoglass',
-                "prices": { 'npc': 16000 },
+                "prices": {},
                 'xp': { 'combat': 800 }  // correct
             },
             'HEMOBOMB': {
                 'display': 'Hemobomb',
-                "prices": { 'npc': 240000 },
+                "prices": {},
                 'xp': { 'combat': 0 }
             },
             'BONE': {
                 'display': 'Bone',
-                "prices": { 'npc': 2 },
+                "prices": {},
                 'xp': { 'combat': 0.2 }
             },
             'ENCHANTED_BONE': {
                 'display': 'Enchanted Bone',
-                "prices": { 'npc': 320 },
+                "prices": {},
                 'xp': { 'combat': 32 }
             },
             'SULPHUR': {
                 'display': 'Gunpowder',
-                "prices": { 'npc': 4 },
+                "prices": {},
                 'xp': { 'combat': 0.3 }
             },
             'ENCHANTED_GUNPOWDER': {
                 'display': 'Enchanted Gunpowder',
-                "prices": { 'npc': 640 },
+                "prices": {},
                 'xp': { 'combat': 48 }
             },
             'ENCHANTED_FIREWORK_ROCKET': {
                 'display': 'Enchanted Firework Rocket',
-                "prices": { 'npc': 41000 }  // correct
+                "prices": {},
             },
             'STRING': {
                 'display': 'String',
-                "prices": { 'npc': 3 },
+                "prices": {},
                 'xp': { 'combat': 0.2 }
             },
             'SPIDER_EYE': {
                 'display': 'Spider Eye',
-                "prices": { 'npc': 3 },
+                "prices": {},
                 'xp': { 'combat': 0.3 }
             },
             'ENCHANTED_STRING': {
                 'display': 'Enchanted String',
-                "prices": { 'npc': 576 },  // correct
+                "prices": {},
                 'xp': { 'combat': 38 }  // correct
             },
             'ENCHANTED_SPIDER_EYE': {
                 'display': 'Enchanted Spider Eye',
-                "prices": { 'npc': 480 },
+                "prices": {},
                 'xp': { 'combat': 48 }
             },
             'ENCHANTED_FERMENTED_SPIDER_EYE': {
                 'display': 'Enchanted Fermented Spider Eye',
-                "prices": { 'npc': 31000 }
+                "prices": {},
             },
             'BLAZE_ROD': {
                 'display': 'Blaze Rod',
-                "prices": { 'npc': 9 },
+                "prices": {},
                 'xp': { 'combat': 0.3 }
             },
             'ENCHANTED_BLAZE_POWDER': {
                 'display': 'Enchanted Blaze Powder',
-                "prices": { 'npc': 1440 },
+                "prices": {},
                 'xp': { 'combat': 48 }
             },
             'ENCHANTED_BLAZE_ROD': {
                 'display': 'Enchanted Blaze Rod',
-                "prices": { 'npc': 230400 },
+                "prices": {},
                 'xp': { 'combat': 7680 }
             },
             'MAGMA_CREAM': {
                 'display': 'Magma Cream',
-                "prices": { 'npc': 8 },
+                "prices": {},
                 'xp': { 'combat': 0.2 }
             },
             'ENCHANTED_MAGMA_CREAM': {
                 'display': 'Enchanted Magma Cream',
-                "prices": { 'npc': 1280 },
+                "prices": {},
                 'xp': { 'combat': 32 }
             },
             'WHIPPED_MAGMA_CREAM': {
                 'display': 'Whipped Magma Cream',
-                "prices": { 'npc': 204800 },
+                "prices": {},
                 'xp': { 'combat': 5120 }
             },
             'ENDER_PEARL': {
                 'display': 'Ender Pearl',
-                "prices": { 'npc': 7 },
+                "prices": {},
                 'xp': { 'combat': 0.3 }
             },
             'GHAST_TEAR': {
                 'display': 'Ghast Tear',
-                "prices": { 'npc': 16 },
+                "prices": {},
                 'xp': { 'combat': 0.5 }
             },
             'ENCHANTED_GHAST_TEAR': {
                 'display': 'Enchanted Ghast Tear',
-                "prices": { 'npc': 80 },
+                "prices": {},
                 'xp': { 'combat': 7.5 }  // correct
             },
             'SILVER_FANG': {
                 'display': 'Silver Fang',  // no xp entry is correct, cannot be made in minion
-                "prices": { 'npc': 2000 }
+                "prices": {},
             },
             'SLIME_BALL': {
                 'display': 'Slimeball',
-                "prices": { 'npc': 5 },
+                "prices": {},
                 'xp': { 'combat': 0.2 }
             },
             'SLIME_BLOCK': {
                 'display': 'Slime Block',  // not in bazaar
-                "prices": { 'npc': 45 },
+                "prices": {},
                 'xp': { 'combat': 1.8 }
             },
             'ENCHANTED_SLIME_BALL': {
                 'display': 'Enchanted Slimeball',
-                "prices": { 'npc': 800 },
+                "prices": {},
                 'xp': { 'combat': 32 }
             },
             'ENCHANTED_SLIME_BLOCK': {
                 'display': 'Enchanted Slime Block',
-                "prices": { 'npc': 128000 },
+                "prices": {},
                 'xp': { 'combat': 5120 }
             },
             'RAW_BEEF': {
                 'display': 'Raw Beef',
-                "prices": { 'npc': 4 },
+                "prices": {},
                 'xp': { 'farming': 0.1 }
             },
             'LEATHER': {
                 'display': 'Leather',
-                "prices": { 'npc': 3 },
+                "prices": {},
                 'xp': { 'farming': 0.2 }
             },
             'ENCHANTED_RAW_BEEF': {
                 'display': 'Enchanted Raw Beef',
-                "prices": { 'npc': 640 },
+                "prices": {},
                 'xp': { 'farming': 16 }
             },
             'ENCHANTED_LEATHER': {
                 'display': 'Enchanted Leather',
-                "prices": { 'npc': 480 },  // correct
+                "prices": {},
                 'xp': { 'farming': 115 }  // correct
             },
             'PORK': {
                 'display': 'Raw Porkchop',  // correct
-                "prices": { 'npc': 5 },
+                "prices": {},
                 'xp': { 'farming': 0.2 }
             },
             'ENCHANTED_PORK': {
                 'display': 'Enchanted Raw Porkchop',  // correct
-                "prices": { 'npc': 800 },
+                "prices": {},
                 'xp': { 'farming': 32 }
             },
             'ENCHANTED_GRILLED_PORK': {
                 'display': 'Enchanted Cooked Porkchop',  // correct
-                "prices": { 'npc': 128000 },
+                "prices": {},
                 'xp': { 'farming': 5120 }
             },
             'RAW_CHICKEN': {
                 'display': 'Raw Chicken',
-                "prices": { 'npc': 4 },
+                "prices": {},
                 'xp': { 'farming': 0.1 }
             },
             'FEATHER': {
                 'display': 'Feather',
-                "prices": { 'npc': 3 },
+                "prices": {},
                 'xp': { 'farming': 0.2 }
             },
             'EGG': {
                 'display': 'Egg',
-                "prices": { 'npc': 3 },
+                "prices": {},
                 'xp': { 'farming': 0.2 }
             },
             'ENCHANTED_RAW_CHICKEN': {
                 'display': 'Enchanted Raw Chicken',
-                "prices": { 'npc': 640 },
+                "prices": {},
                 'xp': { 'farming': 16 }
             },
             'ENCHANTED_FEATHER': {
                 'display': 'Enchanted Feather',
-                "prices": { 'npc': 480 },
+                "prices": {},
                 'xp': { 'farming': 32 }
             },
             'ENCHANTED_EGG': {
                 'display': 'Enchanted Egg',
-                "prices": { 'npc': 432 },  // correct
+                "prices": {},
                 'xp': { 'farming': 115 },  // correct
                 "upgrade": {
                     'speed': 0, 'drop': 1,
@@ -1135,132 +1135,132 @@ class minion_data {
             },
             'SUPER_EGG': {
                 'display': 'Super Enchanted Egg',
-                "prices": { 'npc': 0 },  // correct
+                "prices": {},
                 'xp': { 'farming': 16560 }
             },
             'OMEGA_EGG': {
                 'display': 'Omega Enchanted Egg',
-                "prices": { 'npc': 0 },
+                "prices": {},
                 'xp': { 'farming': 149040 }
             },
             'WOOL': {
                 'display': 'White Wool',
-                "prices": { 'npc': 2 },
+                "prices": {},
                 'xp': { 'farming': 0.1 }
             },
             'MUTTON': {
                 'display': 'Raw Mutton',
-                "prices": { 'npc': 5 },
+                "prices": {},
                 'xp': { 'farming': 0.1 }
             },
             'ENCHANTED_WOOL': {
                 'display': 'Enchanted Wool',
-                "prices": { 'npc': 320 },
+                "prices": {},
                 'xp': { 'farming': 16 }
             },
             'ENCHANTED_MUTTON': {
                 'display': 'Enchanted Raw Mutton',
-                "prices": { 'npc': 800 },
+                "prices": {},
                 'xp': { 'farming': 16 }
             },
             'ENCHANTED_COOKED_MUTTON': {
                 'display': 'Enchanted Cooked Mutton',
-                "prices": { 'npc': 128000 },
+                "prices": {},
                 'xp': { 'farming': 2560 }
             },
             'RABBIT': {
                 'display': 'Raw Rabbit',
-                "prices": { 'npc': 4 },
+                "prices": {},
                 'xp': { 'farming': 0.1 }
             },
             'RABBIT_FOOT': {
                 'display': "Rabbit's Foot",
-                "prices": { 'npc': 5 },
+                "prices": {},
                 'xp': { 'farming': 0.2 }
             },
             'RABBIT_HIDE': {
                 'display': 'Rabbit Hide',
-                "prices": { 'npc': 5 },
+                "prices": {},
                 'xp': { 'farming': 0.2 }
             },
             'ENCHANTED_RABBIT': {
                 'display': 'Enchanted Raw Rabbit',  // both correct
-                "prices": { 'npc': 640 },
+                "prices": {},
                 'xp': { 'farming': 16 }
             },
             'ENCHANTED_COOKED_RABBIT': {
                 'display': 'Enchanted Cooked Rabbit',  // both correct
-                "prices": { 'npc': 102400 },
+                "prices": {},
                 'xp': { 'farming': 2560 }
             },
             'ENCHANTED_RABBIT_FOOT': {
                 'display': 'Enchanted Rabbit Foot',  // both correct
-                "prices": { 'npc': 800 },
+                "prices": {},
                 'xp': { 'farming': 32 }
             },
             'ENCHANTED_RABBIT_HIDE': {
                 'display': 'Enchanted Rabbit Hide',  // both correct
-                "prices": { 'npc': 800 },
+                "prices": {},
                 'xp': { 'farming': 115 }
             },
             'LOG': {
                 'display': 'Oak Log',
-                "prices": { 'npc': 2 },
+                "prices": {},
                 'xp': { 'foraging': 0.1 }
             },
             'LOG:1': {
                 'display': 'Spruce Log',
-                "prices": { 'npc': 2 },
+                "prices": {},
                 'xp': { 'foraging': 0.1 }
             },
             'LOG:2': {
                 'display': 'Birch Log',
-                "prices": { 'npc': 2 },
+                "prices": {},
                 'xp': { 'foraging': 0.1 }
             },
             'LOG_2:1': {
                 'display': 'Dark Oak Log',
-                "prices": { 'npc': 2 },
+                "prices": {},
                 'xp': { 'foraging': 0.1 }
             },
             'LOG_2': {
                 'display': 'Acacia Log',
-                "prices": { 'npc': 2 },
+                "prices": {},
                 'xp': { 'foraging': 0.1 }
             },
             'LOG:3': {
                 'display': 'Jungle Log',
-                "prices": { 'npc': 2 },
+                "prices": {},
                 'xp': { 'foraging': 0.1 }
             },
             'ENCHANTED_OAK_LOG': {
                 'display': 'Enchanted Oak Log',
-                "prices": { 'npc': 320 },
+                "prices": {},
                 'xp': { 'foraging': 16 }
             },
             'ENCHANTED_SPRUCE_LOG': {
                 'display': 'Enchanted Spruce Log',
-                "prices": { 'npc': 320 },
+                "prices": {},
                 'xp': { 'foraging': 16 }
             },
             'ENCHANTED_BIRCH_LOG': {
                 'display': 'Enchanted Birch Log',
-                "prices": { 'npc': 320 },
+                "prices": {},
                 'xp': { 'foraging': 16 }
             },
             'ENCHANTED_DARK_OAK_LOG': {
                 'display': 'Enchanted Dark Oak Log',
-                "prices": { 'npc': 320 },
+                "prices": {},
                 'xp': { 'foraging': 16 }
             },
             'ENCHANTED_ACACIA_LOG': {
                 'display': 'Enchanted Acacia Log',
-                "prices": { 'npc': 320 },
+                "prices": {},
                 'xp': { 'foraging': 16 }
             },
             'ENCHANTED_JUNGLE_LOG': {
                 'display': 'Enchanted Jungle Log',
-                "prices": { 'npc': 320 },
+                "prices": {},
                 'xp': { 'foraging': 16 }
             },
             'ENCHANTED_CHARCOAL': {
@@ -1455,15 +1455,15 @@ class minion_data {
             },
             'ENCHANTED_SHEARS': {
                 'display': 'Enchanted Shears',  // not in bazaar (AH)
-                "prices": { "custom": 1600 },  // = 320 iron from Iron Forger
+                "prices": { "npc": 0, "custom": 1600 },  // = 320 iron from Iron Forger
                 "upgrade": {
                     'speed': 0, 'drop': 1,
-                    'special': { "type": "add", "item": { "WOOL": 2 } }
+                    'special': { "type": "add", "item": { "WOOL": 2 } }  // probably correct, not entirely sure
                 }
-            },  // probably correct, not entirely sure
+            },
             'SLEEPY_HOLLOW': {
                 'display': 'Sleepy Hollow',
-                "prices": {},
+                "prices": { "npc": 0 },
                 "upgrade": {
                     'speed': 0, 'drop': 1,
                     'special': { "type": "generate", "item": { "PURPLE_CANDY": 1 }, "chance": 0.00015 }
@@ -1597,7 +1597,7 @@ class minion_data {
             },
             "PRISMARINE:1": {
                 'display': "Prismarine Bricks",
-                'prices': { 'npc': 5 },
+                'prices': {},
                 'xp': { 'mining': 0 }
             },
             "HUNTER_KNIFE": {
@@ -2020,7 +2020,7 @@ class minion_data {
 
         this.floating_crystals = {
             "None": { 0: [] },
-            "Farm Crystal": { 10: ['Wheat', 'Melon', 'Pumpkin', 'Carrot', 'Potato', 'Cactus', 'Cocoa Beans', 'Sugar Cane', 'Mushroom', 'Nether Wart'] },
+            "Farm Crystal": { 10: ['Wheat', 'Melon', 'Pumpkin', 'Carrot', 'Potato', 'Cactus', 'Cocoa Beans', 'Sugar Cane', 'Mushroom', 'Nether Wart', 'Sunflower'] },
             "Woodcutting Crystal": { 10: ['Oak', 'Spruce', 'Birch', 'Dark Oak', 'Acacia', 'Jungle', "Flower"] },  // flower minion is correct
             "Mithril Crystal": { 10: ['Cobblestone', 'Obsidian', 'Glowstone', 'Gravel', 'Sand', 'Red Sand', 'Mycelium', 'Ice', 'Snow', 'Coal', 'Iron', 'Gold', 'Diamond', 'Lapis', 'Redstone', 'Emerald', 'Quartz', 'End Stone', 'Mithril', 'Hard Stone'] },
             "Winter Crystal": { 5: ["Snow", "Ice"] },
@@ -2063,7 +2063,7 @@ class minion_data {
             },
             "Rabbit": {
                 "Legendary": [0, 0.3], "Mythic": [0, 0.3],
-                "affects": ['Wheat', 'Melon', 'Pumpkin', 'Carrot', 'Potato', 'Cactus', 'Cocoa Beans', 'Sugar Cane', 'Mushroom', 'Nether Wart']
+                "affects": ['Wheat', 'Melon', 'Pumpkin', 'Carrot', 'Potato', 'Cactus', 'Cocoa Beans', 'Sugar Cane', 'Mushroom', 'Nether Wart', 'Sunflower']
             },
             "Snail": {
                 "Common": [0, 0.1], "Uncommon": [0, 0.2],
@@ -2620,7 +2620,7 @@ class minion_data {
             "Enderman": { 1: { "ENDER_PEARL": 64 }, 2: { "ENDER_PEARL": 128 }, 3: { "ENCHANTED_ENDER_PEARL": 8 }, 4: { "ENCHANTED_ENDER_PEARL": 24 }, 5: { "ENCHANTED_ENDER_PEARL": 48 }, 6: { "ENCHANTED_ENDER_PEARL": 96 }, 7: { "ENCHANTED_EYE_OF_ENDER": 8 }, 8: { "ENCHANTED_EYE_OF_ENDER": 24 }, 9: { "ENCHANTED_EYE_OF_ENDER": 48 }, 10: { "ENCHANTED_EYE_OF_ENDER": 96 }, 11: { "ENCHANTED_EYE_OF_ENDER": 192 } },
             "Ghast": { 1: { "GHAST_TEAR": 64 }, 2: { "GHAST_TEAR": 128 }, 3: { "GHAST_TEAR": 256 }, 4: { "GHAST_TEAR": 512 }, 5: { "ENCHANTED_GHAST_TEAR": 256 }, 6: { "ENCHANTED_GHAST_TEAR": 512 }, 7: { "SILVER_FANG": 32 }, 8: { "SILVER_FANG": 64 }, 9: { "SILVER_FANG": 128 }, 10: { "SILVER_FANG": 256 }, 11: { "SILVER_FANG": 512 }, 12: { "SILVER_FANG": 1024 } },
             "Slime": minionCostTypes(["SLIME_BALL", "ENCHANTED_SLIME_BALL", "ENCHANTED_SLIME_BLOCK"], "double enchanted", false),
-            "Cow": { 1: { "RAW_BEEF": 64 }, 2: { "RAW_BEEF": 128 }, 3: { "RAW_BEEF": 256 }, 4: { "RAW_BEEF": 512 }, 5: { "ENCHANTED_RAW_BEEF": 8 }, 6: { "ENCHANTED_RAW_BEEF": 24 }, 7: { "ENCHANTED_RAW_BEEF": 64 }, 8: { "ENCHANTED_RAW_BEEF": 128 }, 9: { "ENCHANTED_RAW_BEEF": 256 }, 10: { "ENCHANTED_RAW_BEEF": 512 }, 11: { "ENCHANTED_LEATHER": 512 }, 12: { "ENCHANTED_LEATHER": 1028 } },  // correct, first launch of 0.23.1 has 1028 instead of the expected 1024
+            "Cow": { 1: { "RAW_BEEF": 64 }, 2: { "RAW_BEEF": 128 }, 3: { "RAW_BEEF": 256 }, 4: { "RAW_BEEF": 512 }, 5: { "ENCHANTED_RAW_BEEF": 8 }, 6: { "ENCHANTED_RAW_BEEF": 24 }, 7: { "ENCHANTED_RAW_BEEF": 64 }, 8: { "ENCHANTED_RAW_BEEF": 128 }, 9: { "ENCHANTED_RAW_BEEF": 256 }, 10: { "ENCHANTED_RAW_BEEF": 512 }, 11: { "ENCHANTED_LEATHER": 512 }, 12: { "ENCHANTED_LEATHER": 1024 } },  // correct
             "Pig": minionCostTypes(["PORK", "ENCHANTED_PORK", "ENCHANTED_GRILLED_PORK"], "double enchanted", true, { 1: { "PORK": 64 }, 2: { "PORK": 128 }, 3: { "PORK": 256 } }),
             "Chicken": minionCostTypes(["RAW_CHICKEN", "ENCHANTED_RAW_CHICKEN"], "single enchanted", true, { 1: { "RAW_CHICKEN": 64 }, 2: { "RAW_CHICKEN": 128 }, 3: { "RAW_CHICKEN": 256 } }),
             "Sheep": minionCostTypes(["MUTTON", "ENCHANTED_MUTTON", "ENCHANTED_COOKED_MUTTON"], "double enchanted", true, { 1: { "MUTTON": 64 }, 2: { "MUTTON": 128 }, 3: { "MUTTON": 256 } }),

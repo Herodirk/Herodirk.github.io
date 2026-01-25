@@ -85,7 +85,7 @@ class Calc_add_ons {
             };
         };
         let output_string = "Minion : profit , setup cost\n";
-        for (let i = 1; i < 10; i++) {
+        for (let i = 1; i <= 10; i++) {
             let top_minion = Object.keys(calculated_setup_profits).reduce((a, b) => calculated_setup_profits[a] > calculated_setup_profits[b] ? a : b);
             output_string += top_minion + " : " + GUI.reduced_number(calculated_setup_profits[top_minion]) + " , " + GUI.reduced_number(calculated_setup_costs[top_minion]) + "\n";
             delete calculated_setup_profits[top_minion];
@@ -166,7 +166,7 @@ class Calc_add_ons {
             return;
         };
         let output_string = "Tier, Amount : bad luck profit , minion cost , true average profit\n";
-        for (let i = 1; i < 10; i++) {
+        for (let i = 1; i <= 10; i++) {
             if (GUI.get_length(calculated_setup_bad_luck_profits) === 0) {
                 break;
             };

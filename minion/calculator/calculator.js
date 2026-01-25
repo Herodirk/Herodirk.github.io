@@ -118,7 +118,7 @@ class Calculator {
         };
         this.variables = {
             "bazaar_auto_update": {"vtype": "setting", "dtype": "boolean", "display": "Bazaar Auto Update", "initial": true, "options": [false, true]},
-            "bazaar_cooldown": {"vtype": "setting", "dtype": "number", "display": "Bazaar Cooldown (s)", "initial": 60, "options": []},
+            "bazaar_cooldown": {"vtype": "setting", "dtype": "number", "display": "Bazaar Cooldown (s)", "initial": 120, "options": []},
             "compact_tolerance": {"vtype": "setting", "dtype": "number", "display": "Over-Compacting Tolerance (coins)", "initial": 10000, "options": []},
             "output_to_clipboard": {"vtype": "setting", "dtype": "boolean", "display": "Output to Clipboard", "initial": true, "options": [false, true]},
             "color_palette": {"vtype": "setting", "dtype": "string", "display": "Color Palette", "initial": "Dark Red", "options": Object.keys(GUI.palette_names)},
@@ -417,7 +417,7 @@ class Calculator {
                             'crystal', 'postcard', 'infusion', 'free_will', 'afk', 'afkpet', 'afkpetrarity', 'afkpetlvl', 'enchanted_clock', 'specialLayout', 'potatoTalisman', 'playerHarvests', "playerLooting",
                             'wisdom', 'mayor', 'levelingpet', 'taming', 'falcon_attribute', 'petxpboost', 'beastmaster', 'toucan_attribute', 'expshareitem', 'expsharepet', 'expsharepetslot2', 'expsharepetslot3',
                             'ID', 'setupcost', 'freewillcost', 'extracost', 'actiontime', 'fuelamount', 'sellLoc', 'bazaar_update_txt', 'bazaar_taxes', 'bazaar_flipper', 'notes',
-                            'time', 'often_empty', 'emptytime', 'harvests', 'used_storage', 'items', 'itemSellLoc',
+                            'emptytime', 'time', 'harvests', 'used_storage', 'items', 'itemSellLoc',
                             'itemProfit', 'itemtypeProfit', 'xp', 'petProfit', 'pets_levelled',
                             'fuelcost', 'totalProfit', 'addons_output_container']
 
@@ -432,7 +432,6 @@ class Calculator {
             "Fuel Info": { "\n> ": ["infernoGrade", "infernoDistillate", "infernoEyedrops"] },
             "afk": { "\n> ": ["afkpet", "afkpetrarity", "afkpetlvl", "enchanted_clock", "specialLayout", "potatoTalisman"] },
             "playerHarvests": { "\n> ": ["playerLooting"] },
-            "often_empty": null,
             "wisdom": null,
             "mayor": null,
             "levelingpet": {
@@ -442,8 +441,8 @@ class Calculator {
             "**Setup Information**": { "!\n> ": ["ID", "setupcost", "freewillcost", "extracost", "actiontime", "fuelamount"] },
             "Bazaar Info": { "\n> ": ["sellLoc", "bazaar_update_txt", "bazaar_sell_type", "bazaar_buy_type", "bazaar_taxes", "bazaar_flipper"] },
             "notes": null,
-            "**Outputs** for ": { "": new Set(["time"]) },
             "emptytime": null,
+            "**Outputs** for ": { "": new Set(["time"]) },
             "harvests": null,
             "used_storage": null,
             "items": null,
@@ -458,8 +457,9 @@ class Calculator {
             "addons_output_container": null
         };
 
-        this.bazaar_timer = 0
-        this.update_bazaar()
+        this.bazaar_timer = 0;
+        this.init_prices();
+        this.update_bazaar();
     };
 
     time_number(time_length, time_amount, secondsPaction=0.0, actionsPerHarvest=1.0) {
@@ -977,10 +977,10 @@ class Calculator {
             } else if (force) {
                 console.log("WARNING:", ID, "no forced cost found");
                 return 0;
-            } else if ("npc" in md.itemList[ID]["prices"]) {
-                return multiplier * md.itemList[ID]["prices"]["npc"];
             } else if ("custom" in md.itemList[ID]["prices"]) {
                 return md.itemList[ID]["prices"]["custom"];
+            } else if ("npc" in md.itemList[ID]["prices"]) {
+                return multiplier * md.itemList[ID]["prices"]["npc"];
             } else {
                 console.log("WARNING:", ID, "no cost found");
                 return 0;
@@ -1226,6 +1226,13 @@ class Calculator {
                 md.minionList[minion_type]["drops"]["PUMPKIN"] = 3;
             };
         };
+        if (minion_type == "Sheep") {
+            if (upgrades.includes("ENCHANTED_SHEARS")) {
+                md.minionList[minion_type]["drops"]["WOOL"] = 0;
+            } else {
+                md.minionList[minion_type]["drops"]["WOOL"] = 1;
+            };
+        };
         if (minion_type == "Flower") {
             if (minion_fuel === "THORNY_VINES") {
                 md.minionList[minion_type]["drops"] = { "WILD_ROSE": 2 };
@@ -1375,11 +1382,6 @@ class Calculator {
                 // Enchanted Eggs make one laid egg and one egg on kill while AFKing
                 // the egg on spawn is affected by drop multipliers
                 upgrade_drops["EGG"] *= 1 + dropMultiplier;
-            };
-        } else {
-            if (upgrades.includes("ENCHANTED_SHEARS")) {
-                // No wool gets added from Enchanted Shears when offline
-                upgrade_drops["WOOL"] = 0;
             };
         };
         if (upgrades.includes("SOULFLOW_ENGINE") && minion_type === "Voidling") {
@@ -1977,6 +1979,43 @@ class Calculator {
         return output_string;
     };
 
+    async init_prices() {
+        /*
+        calls to Hypixel's Item API got get NPC prices.
+
+        Returns
+        -------
+        None
+        */
+        console.log("INFO: Calling Item API");
+        try {
+            const f = await fetch("https://api.hypixel.net/resources/skyblock/items");
+            var raw_item_data = await f.json();
+        } catch(error) {
+            console.log("ERROR: Could not finish Item API call to Hypixel");
+            console.log(error);
+            return;
+        };
+        if (!("success" in raw_item_data) || raw_item_data["success"] === false) {
+            console.log("ERROR: Item API call was unsuccessful");
+            return;
+        };
+        console.log("INFO: Item API call successful");
+        let dict_item_data = {};
+        for (let item_data of raw_item_data["items"]) {
+            dict_item_data[item_data["id"]] = item_data;
+        };
+
+        for (let item_id in md.itemList) {
+            if (item_id in dict_item_data && "npc_sell_price" in dict_item_data[item_id]) {
+                md.itemList[item_id]["prices"]["npc"] = dict_item_data[item_id]["npc_sell_price"];
+            } else if (!("npc" in md.itemList[item_id]["prices"])) {
+                md.itemList[item_id]["prices"]["npc"] = 0;
+            };
+        };
+    };
+
+
     async update_bazaar(cooldown_warning=true) {
         if (Date.now() - this.bazaar_timer < this.variables["bazaar_cooldown"]["var"] * 1000 && this.bazaar_timer !== 0) {
             if (cooldown_warning) {
@@ -1993,7 +2032,7 @@ class Calculator {
             return;
         };
         if (!("success" in raw_data) || raw_data["success"] === false) {
-            print("ERROR: API call was unsuccessful");
+            console.log("ERROR: API call was unsuccessful");
             return;
         };
         this.bazaar_timer = raw_data["lastUpdated"];
