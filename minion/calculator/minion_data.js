@@ -3,6 +3,8 @@ class minion_data {
         this.bazaar_buy_types = { "Buy Order": "sellPrice", "Insta Buy": "buyPrice", "Custom": "custom" }
         this.bazaar_sell_types = { "Sell Offer": "buyPrice", "Insta Sell": "sellPrice", "Custom": "custom" }
 
+        // Smelter List:
+
         this.smelting_data = {
             'COBBLESTONE': 'STONE',
             'SAND': 'GLASS',
@@ -19,27 +21,212 @@ class minion_data {
             'LOG:3': 'COAL'
         };
 
+
+        // Compacting Lists
+
+        this.compactor_list = {
+            'CUSTOM': { 'makes': 'COMPACTED_CUSTOM', 'amount': 2, 'per': 8 },
+            'GLOWSTONE_DUST': { 'makes': 'GLOWSTONE', 'per': 4 },
+            'CLAY_BALL': { 'makes': 'CLAY', 'per': 4 },
+            'CLAY_BRICK': { 'makes': 'BRICK', 'per': 4 },
+            'ICE': { 'makes': 'PACKED_ICE', 'per': 9 },
+            'SNOW_BALL': { 'makes': 'SNOW_BLOCK', 'per': 4 },
+            'COAL': { 'makes': 'COAL_BLOCK', 'per': 9 },
+            'IRON_INGOT': { 'makes': 'IRON_BLOCK', 'per': 9 },
+            'GOLD_INGOT': { 'makes': 'GOLD_BLOCK', 'per': 9 },
+            'DIAMOND': { 'makes': 'DIAMOND_BLOCK', 'per': 9 },
+            'INK_SACK:4': { 'makes': 'LAPIS_BLOCK', 'per': 9 },
+            'REDSTONE': { 'makes': 'REDSTONE_BLOCK', 'per': 9 },
+            'EMERALD': { 'makes': 'EMERALD_BLOCK', 'per': 9 },
+            'QUARTZ': { 'makes': 'QUARTZ_BLOCK', 'per': 4 },
+            // 'WHEAT': {'makes': 'HAY_BLOCK', 'per': 9},  // does not produce it anymore
+            'MELON': { 'makes': 'MELON_BLOCK', 'per': 9 },
+            'RED_MUSHROOM': { 'makes': 'HUGE_MUSHROOM_2', 'per': 9 },
+            'BROWN_MUSHROOM': { 'makes': 'HUGE_MUSHROOM_1', 'per': 9 },
+            'SLIME_BALL': { 'makes': 'SLIME_BLOCK', 'per': 9 }
+        };
+
+        this.super_compactor_list = {
+            'CUSTOM': { 'makes': 'ENCHANTED_CUSTOM', 'amount': 1, 'per': 160 },
+            'COMPACTED_CUSTOM': { 'makes': 'ENCHANTED_CUSTOM', 'amount': 4, 'per': 160 },
+            'LUSH_BERBERIS': { 'makes': 'ENCHANTED_LUSH_BERBERIS', 'per': 160 },
+            'RAW_SOULFLOW': { 'makes': 'SOULFLOW', 'per': 160 },
+            'SULPHUR_ORE': { 'makes': 'ENCHANTED_SULPHUR', 'per': 160 },
+            'ENCHANTED_SULPHUR': { 'makes': 'ENCHANTED_SULPHUR_CUBE', 'per': 160 },
+            'COBBLESTONE': { 'makes': 'ENCHANTED_COBBLESTONE', 'per': 160 },
+            'OBSIDIAN': { 'makes': 'ENCHANTED_OBSIDIAN', 'per': 160 },
+            'GLOWSTONE_DUST': { 'makes': 'ENCHANTED_GLOWSTONE_DUST', 'per': 160 },
+            'GLOWSTONE': { 'makes': 'ENCHANTED_GLOWSTONE_DUST', 'per': 40 },
+            'ENCHANTED_GLOWSTONE_DUST': { 'makes': 'ENCHANTED_GLOWSTONE', 'per': 160 },
+            'FLINT': { 'makes': 'ENCHANTED_FLINT', 'per': 160 },
+            'SAND': { 'makes': 'ENCHANTED_SAND', 'per': 160 },
+            'SAND:1': { 'makes': 'ENCHANTED_RED_SAND', 'per': 160 },
+            'ENCHANTED_RED_SAND': { 'makes': 'ENCHANTED_RED_SAND_CUBE', 'per': 160 },
+            'MYCEL': { 'makes': 'ENCHANTED_MYCELIUM', 'per': 160 },
+            'ENCHANTED_MYCELIUM': { 'makes': 'ENCHANTED_MYCELIUM_CUBE', 'per': 160 },
+            'CLAY_BALL': { 'makes': 'ENCHANTED_CLAY_BALL', 'per': 160 },
+            'ENCHANTED_CLAY_BALL': { 'makes': 'ENCHANTED_CLAY_BLOCK', 'per': 160 },
+            'CLAY': { 'makes': 'ENCHANTED_CLAY_BALL', 'amount': 4, 'per': 160 },
+            'ICE': { 'makes': 'ENCHANTED_ICE', 'per': 160 },
+            'PACKED_ICE': { 'makes': 'ENCHANTED_ICE', 'amount': 9, 'per': 160 },
+            'ENCHANTED_ICE': { 'makes': 'ENCHANTED_PACKED_ICE', 'per': 160 },
+            'SNOW_BALL': { 'makes': 'ENCHANTED_SNOW_BLOCK', 'per': 640 },
+            'SNOW_BLOCK': { 'makes': 'ENCHANTED_SNOW_BLOCK', 'per': 160 },
+            'COAL': { 'makes': 'ENCHANTED_COAL', 'per': 160 },
+            'COAL_BLOCK': { 'makes': 'ENCHANTED_COAL', 'amount': 9, 'per': 160 },
+            'ENCHANTED_COAL': { 'makes': 'ENCHANTED_COAL_BLOCK', 'per': 160 },
+            'IRON_INGOT': { 'makes': 'ENCHANTED_IRON', 'per': 160 },
+            'IRON_BLOCK': { 'makes': 'ENCHANTED_IRON', 'amount': 9, 'per': 160 },
+            'ENCHANTED_IRON': { 'makes': 'ENCHANTED_IRON_BLOCK', 'per': 160 },
+            'GOLD_INGOT': { 'makes': 'ENCHANTED_GOLD', 'per': 160 },
+            'GOLD_BLOCK': { 'makes': 'ENCHANTED_GOLD', 'amount': 9, 'per': 160 },
+            'ENCHANTED_GOLD': { 'makes': 'ENCHANTED_GOLD_BLOCK', 'per': 160 },
+            'DIAMOND': { 'makes': 'ENCHANTED_DIAMOND', 'per': 160 },
+            'DIAMOND_BLOCK': { 'makes': 'ENCHANTED_DIAMOND', 'amount': 9, 'per': 160 },
+            'ENCHANTED_DIAMOND': { 'makes': 'ENCHANTED_DIAMOND_BLOCK', 'per': 160 },
+            'INK_SACK:4': { 'makes': 'ENCHANTED_LAPIS_LAZULI', 'per': 160 },
+            'LAPIS_BLOCK': { 'makes': 'ENCHANTED_LAPIS_LAZULI', 'amount': 9, 'per': 160 },
+            'ENCHANTED_LAPIS_LAZULI': { 'makes': 'ENCHANTED_LAPIS_LAZULI_BLOCK', 'per': 160 },
+            'REDSTONE': { 'makes': 'ENCHANTED_REDSTONE', 'per': 160 },
+            'REDSTONE_BLOCK': { 'makes': 'ENCHANTED_REDSTONE', 'amount': 9, 'per': 160 },
+            'ENCHANTED_REDSTONE': { 'makes': 'ENCHANTED_REDSTONE_BLOCK', 'per': 160 },
+            'EMERALD': { 'makes': 'ENCHANTED_EMERALD', 'per': 160 },
+            'EMERALD_BLOCK': { 'makes': 'ENCHANTED_EMERALD', 'amount': 9, 'per': 160 },
+            'ENCHANTED_EMERALD': { 'makes': 'ENCHANTED_EMERALD_BLOCK', 'per': 160 },
+            'QUARTZ': { 'makes': 'ENCHANTED_QUARTZ', 'per': 160 },
+            'QUARTZ_BLOCK': { 'makes': 'ENCHANTED_QUARTZ', 'amount': 4, 'per': 160 },
+            'ENCHANTED_QUARTZ': { 'makes': 'ENCHANTED_QUARTZ_BLOCK', 'per': 160 },
+            'ENDER_STONE': { 'makes': 'ENCHANTED_ENDSTONE', 'per': 160 },
+            'MITHRIL_ORE': { 'makes': 'ENCHANTED_MITHRIL', 'per': 160 },
+            'HARD_STONE': { 'makes': 'ENCHANTED_HARD_STONE', 'per': 576 },
+            'ENCHANTED_HARD_STONE': { 'makes': 'CONCENTRATED_STONE', 'per': 576 },
+            'WHEAT': { 'makes': 'ENCHANTED_WHEAT', 'per': 160 },
+            // 'WHEAT': {'makes': 'ENCHANTED_BREAD', 'per': 60},  // does not produce it anymore
+            'ENCHANTED_WHEAT': { 'makes': 'ENCHANTED_HAY_BALE', 'per': 160 },
+            'SEEDS': { 'makes': 'ENCHANTED_SEEDS', 'per': 160 },
+            'ENCHANTED_SEEDS': { 'makes': 'BOX_OF_SEEDS', 'per': 160 },
+            'MELON': { 'makes': 'ENCHANTED_MELON', 'per': 160 },
+            'MELON_BLOCK': { 'makes': 'ENCHANTED_MELON', 'amount': 9, 'per': 160 },
+            'ENCHANTED_MELON': { 'makes': 'ENCHANTED_MELON_BLOCK', 'per': 160 },
+            'PUMPKIN': { 'makes': 'ENCHANTED_PUMPKIN', 'per': 160 },
+            'ENCHANTED_PUMPKIN': { 'makes': 'POLISHED_PUMPKIN', 'per': 160 },
+            'CARROT_ITEM': { 'makes': 'ENCHANTED_CARROT', 'per': 160 },
+            'ENCHANTED_CARROT': { 'makes': 'ENCHANTED_GOLDEN_CARROT', 'per': 160 },
+            'POTATO_ITEM': { 'makes': 'ENCHANTED_POTATO', 'per': 160 },
+            'ENCHANTED_POTATO': { 'makes': 'ENCHANTED_BAKED_POTATO', 'per': 160 },
+            'RED_MUSHROOM': { 'makes': 'ENCHANTED_RED_MUSHROOM', 'per': 160 },
+            'BROWN_MUSHROOM': { 'makes': 'ENCHANTED_BROWN_MUSHROOM', 'per': 160 },
+            'HUGE_MUSHROOM_2': { 'makes': 'ENCHANTED_RED_MUSHROOM', 'amount': 9, 'per': 160 },
+            'HUGE_MUSHROOM_1': { 'makes': 'ENCHANTED_BROWN_MUSHROOM', 'amount': 9, 'per': 160 },
+            'ENCHANTED_RED_MUSHROOM': { 'makes': 'ENCHANTED_HUGE_MUSHROOM_2', 'per': 160 },  // correct (2025-12-22)
+            'ENCHANTED_BROWN_MUSHROOM': { 'makes': 'ENCHANTED_HUGE_MUSHROOM_1', 'per': 160 },  // correct (2025-12-22)
+            'INK_SACK:2': { 'makes': 'ENCHANTED_CACTUS_GREEN', 'per': 160 },
+            'CACTUS': { 'makes': 'ENCHANTED_CACTUS_GREEN', 'per': 160 },  // correct (2025-12-17)
+            'ENCHANTED_CACTUS_GREEN': { 'makes': 'ENCHANTED_CACTUS', 'per': 160 },
+            'INK_SACK:3': { 'makes': 'ENCHANTED_COCOA', 'per': 160 },
+            'ENCHANTED_COCOA': { 'makes': 'ENCHANTED_COOKIE', 'per': 160 },  // correct (2025-12-19)
+            'SUGAR_CANE': { 'makes': 'ENCHANTED_SUGAR', 'per': 160 },
+            'ENCHANTED_SUGAR': { 'makes': 'ENCHANTED_SUGAR_CANE', 'per': 160 },
+            'NETHER_STALK': { 'makes': 'ENCHANTED_NETHER_STALK', 'per': 160 },
+            'ENCHANTED_NETHER_STALK': { 'makes': 'MUTANT_NETHER_STALK', 'per': 160 },
+            'YELLOW_FLOWER': { 'makes': 'ENCHANTED_DANDELION', 'per': 160 },
+            'RED_ROSE': { 'makes': 'ENCHANTED_POPPY', 'per': 576 },
+            'WILD_ROSE': { 'makes': 'ENCHANTED_WILD_ROSE', 'per': 160 },
+            'ENCHANTED_WILD_ROSE': { 'makes': 'COMPACTED_WILD_ROSE', 'per': 160 },
+            'DOUBLE_PLANT': { 'makes': 'ENCHANTED_SUNFLOWER', 'per': 160 },
+            'ENCHANTED_SUNFLOWER': { 'makes': 'COMPACTED_SUNFLOWER', 'per': 160 },
+            'MOONFLOWER': { 'makes': 'ENCHANTED_MOONFLOWER', 'per': 160 },
+            'ENCHANTED_MOONFLOWER': { 'makes': 'COMPACTED_MOONFLOWER', 'per': 160 },
+            'RAW_FISH': { 'makes': 'ENCHANTED_RAW_FISH', 'per': 160 },
+            'RAW_FISH:1': { 'makes': 'ENCHANTED_RAW_SALMON', 'per': 160 },
+            'RAW_FISH:3': { 'makes': 'ENCHANTED_PUFFERFISH', 'per': 160 },
+            'RAW_FISH:2': { 'makes': 'ENCHANTED_CLOWNFISH', 'per': 160 },
+            'PRISMARINE_CRYSTALS': { 'makes': 'ENCHANTED_PRISMARINE_CRYSTALS', 'per': 80 },
+            'PRISMARINE_SHARD': { 'makes': 'ENCHANTED_PRISMARINE_SHARD', 'per': 80 },
+            'SPONGE': { 'makes': 'ENCHANTED_SPONGE', 'per': 40 },
+            'ENCHANTED_RAW_FISH': { 'makes': 'ENCHANTED_COOKED_FISH', 'per': 160 },
+            'ENCHANTED_RAW_SALMON': { 'makes': 'ENCHANTED_COOKED_SALMON', 'per': 160 },
+            'ENCHANTED_SPONGE': { 'makes': 'ENCHANTED_WET_SPONGE', 'per': 40 },
+            'ROTTEN_FLESH': { 'makes': 'ENCHANTED_ROTTEN_FLESH', 'per': 160 },
+            'POISONOUS_POTATO': { 'makes': 'ENCHANTED_POISONOUS_POTATO', 'per': 160 },
+            'ENCHANTED_ENDER_PEARL': { 'makes': 'ABSOLUTE_ENDER_PEARL', 'per': 80 },
+            'CRUDE_GABAGOOL': { 'makes': 'VERY_CRUDE_GABAGOOL', 'per': 192 },  // correct
+            // 'CHILI_PEPPER': {'makes': 'STUFFED_CHILI_PEPPER', 'per': 160},  // does not compact
+            'HEMOVIBE': { 'makes': 'HEMOGLASS', 'per': 160 },
+            // 'HEMOGLASS': {'makes': 'HEMOBOMB', 'per': 15},  // does not compact
+            'BONE': { 'makes': 'ENCHANTED_BONE', 'per': 160 },
+            'SULPHUR': { 'makes': 'ENCHANTED_GUNPOWDER', 'per': 160 },
+            'STRING': { 'makes': 'ENCHANTED_STRING', 'per': 160 },
+            'SPIDER_EYE': { 'makes': 'ENCHANTED_SPIDER_EYE', 'per': 160 },
+            'BLAZE_ROD': { 'makes': 'ENCHANTED_BLAZE_POWDER', 'per': 160 },
+            'ENCHANTED_BLAZE_POWDER': { 'makes': 'ENCHANTED_BLAZE_ROD', 'per': 160 },
+            'MAGMA_CREAM': { 'makes': 'ENCHANTED_MAGMA_CREAM', 'per': 160 },
+            'ENCHANTED_MAGMA_CREAM': { 'makes': 'WHIPPED_MAGMA_CREAM', 'per': 160 },
+            'ENDER_PEARL': { 'makes': 'ENCHANTED_ENDER_PEARL', 'per': 20 },
+            'GHAST_TEAR': { 'makes': 'ENCHANTED_GHAST_TEAR', 'per': 5 },
+            'SLIME_BALL': { 'makes': 'ENCHANTED_SLIME_BALL', 'per': 160 },
+            'SLIME_BLOCK': { 'makes': 'ENCHANTED_SLIME_BALL', 'amount': 9, 'per': 160 },
+            'ENCHANTED_SLIME_BALL': { 'makes': 'ENCHANTED_SLIME_BLOCK', 'per': 160 },
+            'RAW_BEEF': { 'makes': 'ENCHANTED_RAW_BEEF', 'per': 160 },
+            'LEATHER': { 'makes': 'ENCHANTED_LEATHER', 'per': 160 },
+            'PORK': { 'makes': 'ENCHANTED_PORK', 'per': 160 },
+            'ENCHANTED_PORK': { 'makes': 'ENCHANTED_GRILLED_PORK', 'per': 160 },
+            'RAW_CHICKEN': { 'makes': 'ENCHANTED_RAW_CHICKEN', 'per': 160 },
+            'FEATHER': { 'makes': 'ENCHANTED_FEATHER', 'per': 160 },
+            'EGG': { 'makes': 'ENCHANTED_EGG', 'per': 144 },
+            'ENCHANTED_EGG': { 'makes': 'SUPER_EGG', 'per': 144 },
+            'SUPER_EGG': { 'makes': 'OMEGA_EGG', 'per': 9 },  // correct
+            'WOOL': { 'makes': 'ENCHANTED_WOOL', 'per': 160 },
+            'MUTTON': { 'makes': 'ENCHANTED_MUTTON', 'per': 160 },
+            'ENCHANTED_MUTTON': { 'makes': 'ENCHANTED_COOKED_MUTTON', 'per': 160 },
+            'RABBIT': { 'makes': 'ENCHANTED_RABBIT', 'per': 160 },
+            'ENCHANTED_RABBIT': { 'makes': 'ENCHANTED_COOKED_RABBIT', 'per': 160 },
+            'RABBIT_FOOT': { 'makes': 'ENCHANTED_RABBIT_FOOT', 'per': 160 },
+            'RABBIT_HIDE': { 'makes': 'ENCHANTED_RABBIT_HIDE', 'per': 160 },
+            'LOG': { 'makes': 'ENCHANTED_OAK_LOG', 'per': 160 },
+            'LOG:1': { 'makes': 'ENCHANTED_SPRUCE_LOG', 'per': 160 },
+            'LOG:2': { 'makes': 'ENCHANTED_BIRCH_LOG', 'per': 160 },
+            'LOG_2:1': { 'makes': 'ENCHANTED_DARK_OAK_LOG', 'per': 160 },
+            'LOG_2': { 'makes': 'ENCHANTED_ACACIA_LOG', 'per': 160 },
+            'LOG:3': { 'makes': 'ENCHANTED_JUNGLE_LOG', 'per': 160 }
+        };
+
+
+        // item list
+
         this.itemList = {
+            // The following items do not exist
             "NONE": {
-                'display': "None",  // not in bazaar (doesn't exist)
-                "prices": { "npc": 0 },
-                "upgrade": { 'speed': 0, 'drop': 1, 'duration': 0, 'special': { "type": "None" } }
+                'display': "None",
+                "rarity": "Common",
+                "hopper_selling_rate": 1,
+                "storage_slots": 0,
+                "exp_boost_type": "all",
+                "exp_boost_amount": 0,
+                "speed_boost": 0,
+                "drop_multiplier": 1,
+                "fuel_duration": -1,
+                "affected_minions": [],
+                "upgrade_special": { "type": "None" },
+                "prices": { "npc": 0, "custom": 0 },
             },
             'CUSTOM': {
-                'display': 'Custom',  // not in bazaar (doesn't exist)
+                'display': 'Custom',
                 "prices": { 'npc': 1 },
                 'xp': { 'combat': 1 }
             },
             'COMPACTED_CUSTOM': {
-                'display': 'Compacted Custom',  // not in bazaar (doesn't exist)
+                'display': 'Compacted Custom',
                 "prices": { 'npc': 4 },
                 'xp': { 'combat': 4 }
             },
             'ENCHANTED_CUSTOM': {
-                'display': 'Enchanted Custom',  // not in bazaar (doesn't exist)
+                'display': 'Enchanted Custom',
                 "prices": { 'npc': 160 },
                 'xp': { 'combat': 160 }
             },
+
+            // Minion Drops
             'LUSH_BERBERIS': {
                 'display': 'Lush Berberis',
                 "prices": {},
@@ -133,7 +320,7 @@ class minion_data {
             'ENCHANTED_GLOWSTONE': {
                 'display': 'Enchanted Glowstone',
                 "prices": {},
-                'xp': { 'mining': 6144 }  // correct
+                'xp': { 'mining': 6144 }  // correct inaccuracy
             },
             'GRAVEL': {
                 'display': 'Gravel',
@@ -211,7 +398,7 @@ class minion_data {
                 'xp': { 'fishing': 16 }
             },
             'ENCHANTED_CLAY_BLOCK': {
-                'display': 'Enchanted Clay Block',  // all correct
+                'display': 'Enchanted Clay Block', // all correct
                 "prices": {},
                 'xp': { 'fishing': 2560 }
             },
@@ -256,27 +443,33 @@ class minion_data {
                 'xp': { 'mining': 0.4 }
             },
             'ENCHANTED_SNOW_BLOCK': {
-                'display': 'Enchanted Snow Block',  // correct
+                'display': 'Enchanted Snow Block',
                 "prices": {},
                 'xp': { 'mining': 64 }
             },
             'COAL': {
                 'display': 'Coal',
+                "speed_boost": 5,
+                "drop_multiplier": 1,
+                "fuel_duration": 1800,
                 "prices": {},
                 'xp': { 'mining': 0.3 },
-                'upgrade': { 'speed': 5, 'drop': 1, 'duration': 1800 }
             },
             'COAL_BLOCK': {
                 'display': 'Block of Coal',  // not in bazaar
+                "speed_boost": 5,
+                "drop_multiplier": 1,
+                "fuel_duration": 18000,
                 "prices": {},
                 'xp': { 'mining': 2.7 },
-                'upgrade': { 'speed': 5, 'drop': 1, 'duration': 18000 }
             },
             'ENCHANTED_COAL': {
                 'display': 'Enchanted Coal',
+                "speed_boost": 10,
+                "drop_multiplier": 1,
+                "fuel_duration": 86400,
                 "prices": {},
                 'xp': { 'mining': 48 },
-                'upgrade': { 'speed': 10, 'drop': 1, 'duration': 86400 }
             },
             'ENCHANTED_COAL_BLOCK': {
                 'display': 'Enchanted Coal Block',
@@ -329,7 +522,7 @@ class minion_data {
                 'xp': { 'mining': 64 }
             },
             'ENCHANTED_GOLD_BLOCK': {
-                'display': 'Enchanted Gold Block',
+                'display': 'Enchanted Gold Block',  // correct
                 "prices": {},
                 'xp': { 'mining': 10240 }
             },
@@ -453,10 +646,6 @@ class minion_data {
                 "prices": {},
                 'xp': { 'mining': 64 }
             },
-            'REFINED_MITHRIL': {
-                'display': 'Refined Mithril',
-                "prices": { 'custom': 650000 }
-            },
             'HARD_STONE': {
                 'display': 'Hard Stone',
                 "prices": {},
@@ -489,9 +678,11 @@ class minion_data {
             },
             'ENCHANTED_BREAD': {
                 'display': 'Enchanted Bread',
+                "speed_boost": 5,
+                "drop_multiplier": 1,
+                "fuel_duration": 43200,
                 "prices": {},
                 'xp': { 'farming': 1.8 },  // not produced anymore by minions
-                "upgrade": { 'speed': 5, 'drop': 1, 'duration': 43200 }
             },
             'ENCHANTED_WHEAT': {
                 'display': 'Enchanted Wheat',
@@ -561,7 +752,7 @@ class minion_data {
             'ENCHANTED_GOLDEN_CARROT': {
                 'display': 'Enchanted Golden Carrot',
                 "prices": {},
-                'xp': { 'farming': 0 }
+                'xp': { 'farming': 0 }  // correct inaccuracy (2025-12-18)
             },
             'POTATO_ITEM': {
                 'display': 'Potato',
@@ -578,6 +769,11 @@ class minion_data {
                 "prices": {},
                 'xp': { 'farming': 2560 }
             },
+            "FRENCH_FRIES": {
+                'display': "French Fries",
+                'prices': { "npc": 1 },  // not in Item API
+                'xp': { 'farming': 0 }
+            },
             'RED_MUSHROOM': {
                 'display': 'Red Mushroom',
                 "prices": {},
@@ -590,13 +786,13 @@ class minion_data {
             },
             'HUGE_MUSHROOM_2': {
                 'display': 'Red Mushroom Block',
-                "prices": {},  // correct
-                'xp': { 'farming': 0.3 }  // correct
+                "prices": {},
+                'xp': { 'farming': 0.3 }  // correct inaccuracy
             },
             'HUGE_MUSHROOM_1': {
                 'display': 'Brown Mushroom Block',
-                "prices": {},  // correct
-                'xp': { 'farming': 0.3 }  // correct
+                "prices": {},
+                'xp': { 'farming': 0.3 }  // correct inaccuracy
             },
             'ENCHANTED_RED_MUSHROOM': {
                 'display': 'Enchanted Red Mushroom',
@@ -611,12 +807,12 @@ class minion_data {
             'ENCHANTED_HUGE_MUSHROOM_2': {
                 'display': 'Enchanted Red Mushroom Block',
                 "prices": {},
-                'xp': { 'farming': 1536 }
+                'xp': { 'farming': 1536 }  // correct inaccuracy (2025-12-22)
             },
             'ENCHANTED_HUGE_MUSHROOM_1': {
                 'display': 'Enchanted Brown Mushroom Block',
                 "prices": {},
-                'xp': { 'farming': 1536 }
+                'xp': { 'farming': 1536 }  // correct inaccuracy (2025-12-22)
             },
             'CACTUS': {
                 'display': 'Cactus',
@@ -631,12 +827,12 @@ class minion_data {
             'ENCHANTED_CACTUS_GREEN': {
                 'display': 'Enchanted Cactus Green',
                 "prices": {},
-                'xp': { 'farming': 80 }  // correct
+                'xp': { 'farming': 80 }  // correct inaccuracy
             },
             'ENCHANTED_CACTUS': {
                 'display': 'Enchanted Cactus',
                 "prices": {},
-                'xp': { 'farming': 12800 }  // correct
+                'xp': { 'farming': 12800 }  // correct inaccuracy
             },
             'INK_SACK:3': {
                 'display': 'Cocoa Beans',
@@ -651,7 +847,7 @@ class minion_data {
             'ENCHANTED_COOKIE': {
                 'display': 'Enchanted Cookie',
                 "prices": {},
-                'xp': { 'farming': 0 }
+                'xp': { 'farming': 0 }  // correct inaccuracy (2025-12-19)
             },
             'SUGAR_CANE': {
                 'display': 'Sugar Cane',
@@ -693,13 +889,58 @@ class minion_data {
                 "prices": {},
                 'xp': { 'foraging': 0.1 }
             },
-            'SMALL_FLOWER': {
-                'display': 'Small Flower',  // not in bazaar
+            'RED_ROSE:1': {
+                'display': 'Blue Orchid',  // not in bazaar
                 "prices": {},
                 'xp': { 'foraging': 0.1 }
             },
-            'LARGE_FLOWER': {
-                'display': 'Large Flower',  // not in bazaar
+            'RED_ROSE:2': {
+                'display': 'Allium',  // not in bazaar
+                "prices": {},
+                'xp': { 'foraging': 0.1 }
+            },
+            'RED_ROSE:3': {
+                'display': 'Azure Bluet',  // not in bazaar
+                "prices": {},
+                'xp': { 'foraging': 0.1 }
+            },
+            'RED_ROSE:4': {
+                'display': 'Red Tulip',  // not in bazaar
+                "prices": {},
+                'xp': { 'foraging': 0.1 }
+            },
+            'RED_ROSE:5': {
+                'display': 'Orange Tulip',  // not in bazaar
+                "prices": {},
+                'xp': { 'foraging': 0.1 }
+            },
+            'RED_ROSE:6': {
+                'display': 'White Tulip',  // not in bazaar
+                "prices": {},
+                'xp': { 'foraging': 0.1 }
+            },
+            'RED_ROSE:7': {
+                'display': 'Pink Tulip',  // not in bazaar
+                "prices": {},
+                'xp': { 'foraging': 0.1 }
+            },
+            'RED_ROSE:8': {
+                'display': 'Oxeye Daisy',  // not in bazaar
+                "prices": {},
+                'xp': { 'foraging': 0.1 }
+            },
+            'DOUBLE_PLANT:1': {
+                'display': 'Lilac',  // not in bazaar
+                "prices": {},
+                'xp': { 'foraging': 0.2 }
+            },
+            'DOUBLE_PLANT:4': {
+                'display': 'Peony',  // not in bazaar
+                "prices": {},
+                'xp': { 'foraging': 0.2 }
+            },
+            'DOUBLE_PLANT:5': {
+                'display': 'Rose Bush',  // not in bazaar
                 "prices": {},
                 'xp': { 'foraging': 0.2 }
             },
@@ -716,47 +957,47 @@ class minion_data {
             "WILD_ROSE": {
                 'display': 'Wild Rose',
                 "prices": {},
-                'xp': { 'farming': 0.3 }  // correct
+                'xp': { 'farming': 0.3 }  // correct (2025-12-17)
             },
             "ENCHANTED_WILD_ROSE": {
                 'display': 'Enchanted Wild Rose',
                 "prices": {},
-                'xp': { 'farming': 48 }  // correct
+                'xp': { 'farming': 48 }  // correct (2025-12-17)
             },
             "COMPACTED_WILD_ROSE": {
                 'display': 'Compacted Wild Rose',
                 "prices": {},
-                'xp': { 'farming': 7680 }
+                'xp': { 'farming': 7680 }  // correct (2025-12-21)
             },
             "DOUBLE_PLANT": {
                 'display': 'Sunflower',
                 "prices": {},
-                'xp': { 'farming': 0.3 }  // correct
+                'xp': { 'farming': 0.3 }  // correct (2025-12-17)
             },
             "ENCHANTED_SUNFLOWER": {
                 'display': 'Enchanted Sunflower',
                 "prices": {},
-                'xp': { 'farming': 48 }  // correct
+                'xp': { 'farming': 48 }  // correct (2025-12-17)
             },
             "COMPACTED_SUNFLOWER": {
                 'display': 'Compacted Sunflower',
                 "prices": {},
-                'xp': { 'farming': 7680 }
+                'xp': { 'farming': 7680 }  // correct (2025-12-21)
             },
             "MOONFLOWER": {
                 'display': 'Moonflower',
                 "prices": {},
-                'xp': { 'farming': 0.3 }  // correct
+                'xp': { 'farming': 0.3 }  // correct (2025-12-17)
             },
             "ENCHANTED_MOONFLOWER": {
                 'display': 'Enchanted Moonflower',
                 "prices": {},
-                'xp': { 'farming': 48 }  // correct
+                'xp': { 'farming': 48 }  // correct (2025-12-17)
             },
             "COMPACTED_MOONFLOWER": {
                 'display': 'Compacted Moonflower',
                 "prices": {},
-                'xp': { 'farming': 7680 }
+                'xp': { 'farming': 7680 }  // correct (2025-12-21)
             },
             'RAW_FISH': {
                 'display': 'Raw Cod',
@@ -851,7 +1092,7 @@ class minion_data {
             'POISONOUS_POTATO': {
                 'display': 'Poisonous Potato',
                 "prices": {},
-                'xp': { 'farming': 0 }
+                'xp': { 'farming': 0 }  // check xp amount
             },
             'ENCHANTED_ROTTEN_FLESH': {
                 'display': 'Enchanted Rotten Flesh',
@@ -859,28 +1100,24 @@ class minion_data {
                 'xp': { 'combat': 48 }
             },
             'ENCHANTED_POISONOUS_POTATO': {
-                'display': 'Enchanted Poisonous Potato',
+                'display': 'Enchanted Poisonous Potato',  // check if possible to compact
                 "prices": {},
-                'xp': { 'farming': 0 }
+                'xp': { 'farming': 0 }  // check xp amount
             },
             'ENCHANTED_ENDER_PEARL': {
                 'display': 'Enchanted Ender Pearl',
                 "prices": {},
-                'xp': { 'combat': 9 }
-            },
-            'ENCHANTED_EYE_OF_ENDER': {
-                'display': 'Enchanted Eye of Ender',
-                "prices": {},
+                'xp': { 'combat': 9 }  // correct inaccuracy
             },
             'DYE_BYZANTIUM': {
                 'display': 'Byzantium Dye',  // not in bazaar (AH), also not used
-                "prices": {  },
+                "prices": {},
                 'xp': { 'combat': 0 }
             },
             'ABSOLUTE_ENDER_PEARL': {
                 'display': 'Absolute Ender Pearl',
                 "prices": {},
-                'xp': { 'combat': 720 }  // correct
+                'xp': { 'combat': 720 }  // correct inaccuracy
             },
             'CRUDE_GABAGOOL': {
                 'display': 'Crude Gabagool',
@@ -889,12 +1126,12 @@ class minion_data {
             },
             'VERY_CRUDE_GABAGOOL': {
                 'display': 'Very Crude Gabagool',
-                "prices": {},  // correct
+                "prices": {},
                 'xp': { 'combat': 0 }
             },
             'DYE_FLAME': {
                 'display': 'Flame Dye',  // not in bazaar (AH), also not used
-                "prices": {  },
+                "prices": {},
                 'xp': { 'combat': 0 }
             },
             'CHILI_PEPPER': {
@@ -919,12 +1156,13 @@ class minion_data {
             },
             'REAPER_PEPPER': {
                 'display': 'Reaper Pepper',
-                "prices": {  },
+                "prices": {},
                 'xp': { 'combat': 0 }
             },
             'GABAGOOL_THE_FISH': {
-                'display': 'Gabagool the Fish',  // not in bazaar (AH)
-                "prices": { "custom": 11000000 },  // 2025-10-6
+                'display': 'Gabagool the Fish',
+                "prices": {},
+                "AH": true,
                 'xp': { 'combat': 0 }  // unsure if correctly implemented
             },
             'HYPERGOLIC_IONIZED_CERAMICS': {
@@ -942,7 +1180,7 @@ class minion_data {
                 "prices": {},
                 'xp': { 'combat': 800 }  // correct
             },
-            'HEMOBOMB': {
+            'HEMOBOMB': {  // not used?
                 'display': 'Hemobomb',
                 "prices": {},
                 'xp': { 'combat': 0 }
@@ -967,10 +1205,6 @@ class minion_data {
                 "prices": {},
                 'xp': { 'combat': 48 }
             },
-            'ENCHANTED_FIREWORK_ROCKET': {
-                'display': 'Enchanted Firework Rocket',
-                "prices": {},
-            },
             'STRING': {
                 'display': 'String',
                 "prices": {},
@@ -984,16 +1218,12 @@ class minion_data {
             'ENCHANTED_STRING': {
                 'display': 'Enchanted String',
                 "prices": {},
-                'xp': { 'combat': 38 }  // correct
+                'xp': { 'combat': 38 }  // correct inaccuracy
             },
             'ENCHANTED_SPIDER_EYE': {
                 'display': 'Enchanted Spider Eye',
                 "prices": {},
                 'xp': { 'combat': 48 }
-            },
-            'ENCHANTED_FERMENTED_SPIDER_EYE': {
-                'display': 'Enchanted Fermented Spider Eye',
-                "prices": {},
             },
             'BLAZE_ROD': {
                 'display': 'Blaze Rod',
@@ -1038,11 +1268,7 @@ class minion_data {
             'ENCHANTED_GHAST_TEAR': {
                 'display': 'Enchanted Ghast Tear',
                 "prices": {},
-                'xp': { 'combat': 7.5 }  // correct
-            },
-            'SILVER_FANG': {
-                'display': 'Silver Fang',  // no xp entry is correct, cannot be made in minion
-                "prices": {},
+                'xp': { 'combat': 7.5 }  // correct inaccuracy
             },
             'SLIME_BALL': {
                 'display': 'Slimeball',
@@ -1082,7 +1308,7 @@ class minion_data {
             'ENCHANTED_LEATHER': {
                 'display': 'Enchanted Leather',
                 "prices": {},
-                'xp': { 'farming': 115 }  // correct
+                'xp': { 'farming': 115 }  // correct inaccuracy
             },
             'PORK': {
                 'display': 'Raw Porkchop',  // correct
@@ -1126,22 +1352,21 @@ class minion_data {
             },
             'ENCHANTED_EGG': {
                 'display': 'Enchanted Egg',
+                "speed_boost": 0,
+                "drop_multiplier": 1,
+                "upgrade_special": { "type": "add", "items": { "EGG": 1 } },
                 "prices": {},
-                'xp': { 'farming': 115 },  // correct
-                "upgrade": {
-                    'speed': 0, 'drop': 1,
-                    'special': { "type": "add", "item": { "EGG": 1 } }
-                }
+                'xp': { 'farming': 115 },  // correct inaccuracy
             },
             'SUPER_EGG': {
                 'display': 'Super Enchanted Egg',
                 "prices": {},
-                'xp': { 'farming': 16560 }
+                'xp': { 'farming': 16560 }  // check xp amount
             },
             'OMEGA_EGG': {
                 'display': 'Omega Enchanted Egg',
                 "prices": {},
-                'xp': { 'farming': 149040 }
+                'xp': { 'farming': 149040 }  // check xp amount
             },
             'WOOL': {
                 'display': 'White Wool',
@@ -1184,24 +1409,24 @@ class minion_data {
                 'xp': { 'farming': 0.2 }
             },
             'ENCHANTED_RABBIT': {
-                'display': 'Enchanted Raw Rabbit',  // both correct
+                'display': 'Enchanted Raw Rabbit',
                 "prices": {},
-                'xp': { 'farming': 16 }
+                'xp': { 'farming': 16 }  // correct
             },
             'ENCHANTED_COOKED_RABBIT': {
-                'display': 'Enchanted Cooked Rabbit',  // both correct
+                'display': 'Enchanted Cooked Rabbit',
                 "prices": {},
-                'xp': { 'farming': 2560 }
+                'xp': { 'farming': 2560 }  // correct
             },
             'ENCHANTED_RABBIT_FOOT': {
-                'display': 'Enchanted Rabbit Foot',  // both correct
+                'display': 'Enchanted Rabbit Foot',
                 "prices": {},
-                'xp': { 'farming': 32 }
+                'xp': { 'farming': 32 }  // correct
             },
             'ENCHANTED_RABBIT_HIDE': {
-                'display': 'Enchanted Rabbit Hide',  // both correct
+                'display': 'Enchanted Rabbit Hide',
                 "prices": {},
-                'xp': { 'farming': 115 }
+                'xp': { 'farming': 115 }  // correct inaccuracy
             },
             'LOG': {
                 'display': 'Oak Log',
@@ -1263,436 +1488,671 @@ class minion_data {
                 "prices": {},
                 'xp': { 'foraging': 16 }
             },
-            'ENCHANTED_CHARCOAL': {
-                'display': 'Enchanted Charcoal',
+
+            // Minion Crafting
+            'REFINED_MITHRIL': {
+                'display': 'Refined Mithril',
+                "prices": {}
+            },
+            'ENCHANTED_EYE_OF_ENDER': {
+                'display': 'Enchanted Eye of Ender',
                 "prices": {},
-                "upgrade": { 'speed': 20, 'drop': 1, 'duration': 129600 }
             },
-            'HAMSTER_WHEEL': {
-                'display': 'Hamster Wheel',
+            'SILVER_FANG': {  // correct: cannot be made in ghast minion
+                'display': 'Silver Fang',
                 "prices": {},
-                "upgrade": { 'speed': 50, 'drop': 1, 'duration': 86400 }
-            },
-            'FOUL_FLESH': {
-                'display': 'Foul Flesh',
-                "prices": {},
-                "upgrade": { 'speed': 90, 'drop': 1, 'duration': 18000 }
-            },
-            'CATALYST': {
-                'display': 'Catalyst',
-                "prices": {},
-                "upgrade": { 'speed': 0, 'drop': 3, 'duration': 10800 }
-            },
-            'HYPER_CATALYST': {
-                'display': 'Hyper Catalyst',
-                "prices": {},
-                "upgrade": { 'speed': 0, 'drop': 4, 'duration': 21600 }
-            },
-            'CHEESE_FUEL': {
-                'display': 'Tasty Cheese',
-                "prices": {},
-                "upgrade": { 'speed': 0, 'drop': 2, 'duration': 3600 }
-            },
-            'SOLAR_PANEL': {
-                'display': 'Solar Panel',
-                "prices": {},
-                "upgrade": { 'speed': 25, 'drop': 1, 'duration': 0 }
-            },
-            'ENCHANTED_LAVA_BUCKET': {
-                'display': 'Enchanted Lava Bucket',
-                "prices": {},
-                "upgrade": { 'speed': 25, 'drop': 1, 'duration': 0 }
-            },
-            'MAGMA_BUCKET': {
-                'display': 'Magma Bucket',
-                "prices": {},
-                "upgrade": { 'speed': 30, 'drop': 1, 'duration': 0 }
-            },
-            'PLASMA_BUCKET': {
-                'display': 'Plasma Bucket',
-                "prices": {},
-                "upgrade": { 'speed': 35, 'drop': 1, 'duration': 0 }
-            },
-            'INFERNO_FUEL': {
-                'display': 'Inferno Minion Fuel',
-                "prices": { "custom": 1 },  // this custom price will be automatically updated by the calculator based on grade and distilate
-                "upgrade": { 'speed': 0, 'drop': 1, 'duration': 86400 }
-            },
-            'THORNY_VINES': {
-                'display': 'Thorny Vines',
-                "prices": {},
-                "upgrade": { 'speed': 20, 'drop': 1, 'duration': 0 }
-            },
-            'DAYSWITCH': {
-                'display': 'Dayswitch',
-                "prices": {},
-                "upgrade": { 'speed': 20, 'drop': 1, 'duration': 0 }
-            },
-            'NIGHTSWITCH': {
-                'display': 'Nightswitch',
-                "prices": {},
-                "upgrade": { 'speed': 20, 'drop': 1, 'duration': 0 }
-            },
-            'BUDGET_HOPPER': {
-                'display': 'Budget Hopper',
-                "prices": { "custom": 10000 }
-            },
-            'ENCHANTED_HOPPER': {
-                'display': 'Enchanted Hopper',
-                "prices": { "custom": 1200000 }
-            },
-            'AUTO_SMELTER': {
-                'display': 'Auto Smelter',
-                "prices": {},
-                "upgrade": {
-                    'speed': 0, 'drop': 1,
-                    'special': { "type": "replace", "list": this.smelting_data }
-                }
-            },
-            'COMPACTOR': {
-                'display': 'Compactor',
-                "prices": {},
-                "upgrade": {
-                    'speed': 0, 'drop': 1,
-                    'special': { "type": "compact" }
-                }
-            },
-            'SUPER_COMPACTOR_3000': {
-                'display': 'Super Compactor 3000',
-                "prices": {},
-                "upgrade": {
-                    'speed': 0, 'drop': 1,
-                    'special': { "type": "enchant" }
-                }
-            },
-            'DWARVEN_COMPACTOR': {
-                'display': 'Dwarven Super Compactor',
-                "prices": {},
-                "upgrade": {
-                    'speed': 0, 'drop': 1,
-                    'special': { "type": "replace, enchant", "list": this.smelting_data }
-                }
-            },
-            'DIAMOND_SPREADING': {
-                'display': 'Diamond Spreading',
-                "prices": {},
-                "upgrade": {
-                    'speed': 0, 'drop': 1,
-                    'special': { "type": "generate", "item": { "DIAMOND": 1 }, "chance": 0.1 }
-                }
-            },
-            'POTATO_SPREADING': {
-                'display': 'Potato Spreading',
-                "prices": {},
-                "upgrade": {
-                    'speed': 0, 'drop': 1,
-                    'special': { "type": "generate", "item": { "POTATO_ITEM": 1 }, "chance": 0.05 }
-                }
-            },
-            'MINION_EXPANDER': {
-                'display': 'Minion Expander',
-                "prices": {},
-                "upgrade": {
-                    'speed': 5, 'drop': 1,
-                    'special': { "type": "expand" }
-                }
-            },
-            'FLINT_SHOVEL': {
-                'display': 'Flint Shovel',  // not in bazaar (AH)
-                "prices": { "custom": 61.25 },  // = two sticks from Lumber Merchant + 10 flint from Pat
-                "upgrade": {
-                    'speed': 0, 'drop': 1,
-                    'special': { "type": "replace", "list": { "GRAVEL": "FLINT" } }
-                }
-            },
-            'FLYCATCHER_UPGRADE': {
-                'display': 'Flycatcher',
-                "prices": {},
-                "upgrade": {
-                    'speed': 20, 'drop': 1,
-                    'special': { "type": "None" }
-                }
-            },
-            'KRAMPUS_HELMET': {
-                'display': 'Krampus Helmet',  // not in bazaar (AH)
-                "prices": { "custom": 500000 },  // 2025-10-6, take this price when Jerry's Workshop is open
-                "upgrade": {
-                    'speed': 0, 'drop': 1,
-                    'special': { "type": "generate", "item": { "RED_GIFT": 1 }, "chance": 0.000045 }
-                }
-            },
-            'LESSER_SOULFLOW_ENGINE': {
-                'display': 'Lesser Soulflow Engine',
-                "prices": {},
-                "upgrade": {
-                    'speed': 0, 'drop': 0.5,
-                    'special': { "type": "timer", "item": { "RAW_SOULFLOW": 1 }, "cooldown": 180 }
-                }
-            },
-            'SOULFLOW_ENGINE': {
-                'display': 'Soulflow Engine',
-                "prices": {},
-                "upgrade": {
-                    'speed': 0, 'drop': 0.5,
-                    'special': { "type": "timer", "item": { "RAW_SOULFLOW": 1 }, "cooldown": 90 }
-                }
-            },
-            'CORRUPT_SOIL': {
-                'display': 'Corrupt Soil',
-                "prices": {},
-                "upgrade": {
-                    'speed': 0, 'drop': 1,
-                    'special': { "type": "add", "item": { "SULPHUR_ORE": 1, "CORRUPTED_FRAGMENT": 1 } }
-                }
-            },
-            'BERBERIS_FUEL_INJECTOR': {
-                'display': 'Berberis Fuel Injector',
-                "prices": {},
-                "upgrade": {
-                    'speed': 15, 'drop': 1,
-                    'special': { "type": "timer", "item": { "LUSH_BERBERIS": 1 }, "cooldown": 300 }
-                }
-            },
-            'ENCHANTED_SHEARS': {
-                'display': 'Enchanted Shears',  // not in bazaar (AH)
-                "prices": { "npc": 0, "custom": 1600 },  // = 320 iron from Iron Forger
-                "upgrade": {
-                    'speed': 0, 'drop': 1,
-                    'special': { "type": "add", "item": { "WOOL": 2 } }  // probably correct, not entirely sure
-                }
-            },
-            'SLEEPY_HOLLOW': {
-                'display': 'Sleepy Hollow',
-                "prices": { "npc": 0 },
-                "upgrade": {
-                    'speed': 0, 'drop': 1,
-                    'special': { "type": "generate", "item": { "PURPLE_CANDY": 1 }, "chance": 0.00015 }
-                }
-            },
-            'INFERNO_FUEL_BLOCK': {
-                'display': 'Inferno Fuel Block',
-                "prices": { "custom": 65000 }
-            },
-            'HYPERGOLIC_GABAGOOL': {
-                'display': 'Hypergolic Gabagool',
-                "prices": { "custom": 5500000 }
-            },
-            'HEAVY_GABAGOOL': {
-                'display': 'Heavy Gabagool',
-                "prices": { "custom": 500000 }
-            },
-            'FUEL_GABAGOOL': {
-                'display': 'Fuel Gabagool',
-                "prices": { "custom": 20000 }
-            },
-            'MAGMA_CREAM_DISTILLATE': {
-                'display': 'Magma Cream Distillate',
-                "prices": { "custom": 5000 }
-            },
-            'BLAZE_ROD_DISTILLATE': {
-                'display': 'Blaze Rod Distillate',
-                "prices": { "custom": 5500 }
-            },
-            'NETHER_STALK_DISTILLATE': {
-                'display': 'Nether Wart Distillate',
-                "prices": { "custom": 5000 }
-            },
-            'GLOWSTONE_DUST_DISTILLATE': {
-                'display': 'Glowstone Distillate',
-                "prices": { "custom": 4900 }
-            },
-            'CRUDE_GABAGOOL_DISTILLATE': {
-                'display': 'Gabagool Distillate',
-                "prices": { "custom": 85000 }
-            },
-            'CAPSAICIN_EYEDROPS_NO_CHARGES': {
-                'display': 'Capsaicin Eyedrops',
-                "prices": { "custom": 1700000 }
-            },
-            "POWER_CRYSTAL": {
-                'display': 'Power Crystal',
-                "prices": { "custom": 600000 },
-                'duration': 172800
-            },
-            "SCORCHED_POWER_CRYSTAL": {
-                'display': 'Scorched Power Crystal',
-                "prices": { "custom": 2000000 },
-                'duration': 172800
-            },
-            "MITHRIL_INFUSION": {
-                'display': "Mithril Infusion",
-                "prices": { "custom": 6500000 }
-            },
-            "STARFALL": {
-                'display': "Starfall",
-                "prices": { "custom": 1500 }
-            },
-            "PLASMA": {
-                'display': "Plasma",
-                "prices": { "custom": 20000 }
             },
             "REVENANT_FLESH": {
                 'display': "Revenant Flesh",
-                "prices": { "custom": 20 }
+                "prices": {},
             },
             "REVENANT_VISCERA": {
                 'display': "Revenant Viscera",
-                "prices": { "custom": 85000 }
-            },
-            "NULL_SPHERE": {
-                'display': "Null Sphere",
-                "prices": { "custom": 10 }
-            },
-            "NULL_OVOID": {
-                'display': "Null Ovoid",
-                "prices": { "custom": 120000 }
-            },
-            "DERELICT_ASHE": {
-                'display': "Derelict Ashe",
-                "prices": { "custom": 900 }
-            },
-            "MOLTEN_POWDER": {
-                'display': "Molten Powder",
-                "prices": { "custom": 250000 }
+                "prices": {},
             },
             "TARANTULA_WEB": {
                 'display': "Tarantula Web",
-                "prices": { "custom": 350 }
+                "prices": {},
             },
             "TARANTULA_SILK": {
                 'display': "Tarantula Silk",
-                "prices": { "custom": 250000 }
+                "prices": {},
+            },
+            "NULL_SPHERE": {
+                'display': "Null Sphere",
+                "prices": {}
+            },
+            "NULL_OVOID": {
+                'display': "Null Ovoid",
+                "prices": {}
+            },
+            "DERELICT_ASHE": {
+                'display': "Derelict Ashe",
+                "prices": {}
+            },
+            "MOLTEN_POWDER": {
+                'display': "Molten Powder",
+                "prices": {}
+            },
+            'ENCHANTED_FIREWORK_ROCKET': {
+                'display': 'Enchanted Firework Rocket',
+                "prices": {},
+            },
+            'ENCHANTED_FERMENTED_SPIDER_EYE': {
+                'display': 'Enchanted Fermented Spider Eye',
+                "prices": {},
+            },
+
+            // Fuels
+            'ENCHANTED_CHARCOAL': {
+                'display': 'Enchanted Charcoal',
+                "speed_boost": 20,
+                "drop_multiplier": 1,
+                "fuel_duration": 129600,
+                "prices": {},
+            },
+            'HAMSTER_WHEEL': {
+                'display': 'Hamster Wheel',
+                "speed_boost": 50,
+                "drop_multiplier": 1,
+                "fuel_duration": 86400,
+                "prices": {},
+            },
+            'FOUL_FLESH': {
+                'display': 'Foul Flesh',
+                "speed_boost": 90,
+                "drop_multiplier": 1,
+                "fuel_duration": 18000,
+                "prices": {},
+            },
+            'CATALYST': {
+                'display': 'Catalyst',
+                "speed_boost": 0,
+                "drop_multiplier": 3,
+                "fuel_duration": 10800,
+                "prices": {},
+            },
+            'HYPER_CATALYST': {
+                'display': 'Hyper Catalyst',
+                "speed_boost": 0,
+                "drop_multiplier": 4,
+                "fuel_duration": 21600,
+                "prices": {},
+            },
+            'CHEESE_FUEL': {
+                'display': 'Tasty Cheese',
+                "speed_boost": 0,
+                "drop_multiplier": 2,
+                "fuel_duration": 3600,
+                "prices": {},
+            },
+            'SOLAR_PANEL': {
+                'display': 'Solar Panel',
+                "speed_boost": 25,
+                "drop_multiplier": 1,
+                "fuel_duration": -1,
+                "prices": {},
+            },
+            'ENCHANTED_LAVA_BUCKET': {
+                'display': 'Enchanted Lava Bucket',
+                "speed_boost": 25,
+                "drop_multiplier": 1,
+                "fuel_duration": -1,
+                "prices": {},
+            },
+            'MAGMA_BUCKET': {
+                'display': 'Magma Bucket',
+                "speed_boost": 30,
+                "drop_multiplier": 1,
+                "fuel_duration": -1,
+                "prices": {},
+            },
+            'PLASMA_BUCKET': {
+                'display': 'Plasma Bucket',
+                "speed_boost": 35,
+                "drop_multiplier": 1,
+                "fuel_duration": -1,
+                "prices": {},
+            },
+            'EVERBURNING_FLAME': {
+                'display': 'Everburning Flame',
+                "speed_boost": 35,
+                "drop_multiplier": 1,
+                "fuel_duration": -1,
+                "upgrade_special": {"type": "speed_bonus", "amount": 5, "affected_minions": ["Zombie", "Revenant", "Voidling", "Inferno", "Vampire", "Skeleton", "Creeper", "Spider", "Tarantula", "Cave Spider", "Blaze", "Magma Cube", "Enderman", "Ghast", "Slime"]},  // TODO: need to check affected minions
+                "prices": {},
+                "recipe": {"PLASMA_BUCKET": 1, "FLAMES": 16, "ENCHANTED_SULPHUR_CUBE": 2, "ENCHANTED_RED_SAND_CUBE": 2},
+            },
+            'INFERNO_FUEL': {  // exact item ID does not exist
+                'display': 'Inferno Minion Fuel',
+                "speed_boost": 0,
+                "drop_multiplier": 1,
+                "fuel_duration": 86400,
+                "prices": { "custom": 1 },  // this custom price will be automatically updated by the calculator based on grade and distilate
+            },
+            'THORNY_VINES': {
+                'display': 'Thorny Vines',
+                "speed_boost": 20,
+                "drop_multiplier": 1,
+                "fuel_duration": -1,
+                "prices": {},
+            },
+            'DAYSWITCH': {
+                'display': 'Dayswitch',
+                "speed_boost": 20,
+                "drop_multiplier": 1,
+                "fuel_duration": -1,
+                "prices": {},
+            },
+            'NIGHTSWITCH': {
+                'display': 'Nightswitch',
+                "speed_boost": 20,
+                "drop_multiplier": 1,
+                "fuel_duration": -1,
+                "prices": {},
+            },
+
+            // Hoppers
+            'BUDGET_HOPPER': {
+                'display': 'Budget Hopper',
+                "hopper_selling_rate": 0.5,
+                "prices": {}
+            },
+            'ENCHANTED_HOPPER': {
+                'display': 'Enchanted Hopper',
+                "hopper_selling_rate": 0.7,
+                "prices": {}
+            },
+
+            // Upgrades
+            'AUTO_SMELTER': {
+                'display': 'Auto Smelter',
+                "speed_boost": 0,
+                "drop_multiplier": 1,
+                "upgrade_special": { "type": "replace", "replacement_list": this.smelting_data },
+                "prices": {},
+            },
+            'COMPACTOR': {
+                'display': 'Compactor',
+                "speed_boost": 0,
+                "drop_multiplier": 1,
+                "upgrade_special": { "type": "compact", "compacting_list": this.compactor_list },
+                "prices": {},
+            },
+            'SUPER_COMPACTOR_3000': {
+                'display': 'Super Compactor 3000',
+                "speed_boost": 0,
+                "drop_multiplier": 1,
+                "upgrade_special": { "type": "compact", "compacting_list": this.super_compactor_list },
+                "prices": {},
+            },
+            'DWARVEN_COMPACTOR': {
+                'display': 'Dwarven Super Compactor',
+                "speed_boost": 0,
+                "drop_multiplier": 1,
+                "upgrade_special": { "type": "replace, compact", "replacement_list": this.smelting_data, "compacting_list": this.super_compactor_list },
+                "prices": {},
+            },
+            'DIAMOND_SPREADING': {
+                'display': 'Diamond Spreading',
+                "speed_boost": 0,
+                "drop_multiplier": 1,
+                "upgrade_special": { "type": "spreading", "items": { "DIAMOND": 0.1 }},
+                "prices": {},
+            },
+            'POTATO_SPREADING': {
+                'display': 'Potato Spreading',
+                "speed_boost": 0,
+                "drop_multiplier": 1,
+                "upgrade_special": { "type": "spreading", "items": { "POTATO_ITEM": 0.05 }},
+                "prices": {},
+            },
+            'MINION_EXPANDER': {
+                'display': 'Minion Expander',
+                "speed_boost": 5,
+                "drop_multiplier": 1,
+                "upgrade_special": { "type": "expand" },
+                "prices": {},
+            },
+            'FLINT_SHOVEL': {
+                'display': 'Flint Shovel',
+                "speed_boost": 0,
+                "drop_multiplier": 1,
+                "upgrade_special": { "type": "replace", "replacement_list": { "GRAVEL": "FLINT" } },
+                "prices": {},
+                "recipe": {"FLINT": 10},  // +/- 2 sticks
+            },
+            'FLYCATCHER_UPGRADE': {
+                'display': 'Flycatcher',
+                "speed_boost": 20,
+                "drop_multiplier": 1,
+                "upgrade_special": { "type": "None" },
+                "prices": {},
+            },
+            'KRAMPUS_HELMET': {
+                'display': 'Krampus Helmet',
+                "speed_boost": 0,
+                "drop_multiplier": 1,
+                "upgrade_special": { "type": "spreading", "items": { "RED_GIFT": 0.000045 }},
+                "prices": {},
+                "AH": true,
+            },
+            'LESSER_SOULFLOW_ENGINE': {
+                'display': 'Lesser Soulflow Engine',
+                "speed_boost": 0,
+                "drop_multiplier": 0.5,
+                "upgrade_special": { "type": "cooldown", "items": { "RAW_SOULFLOW": 1 }, "cooldown": 180, "offline_cooldown": 185 },  // offline cooldown not confirmed
+                "prices": {},
+            },
+            'SOULFLOW_ENGINE': {
+                'display': 'Soulflow Engine',
+                "speed_boost": 0,
+                "drop_multiplier": 0.5,
+                "upgrade_special": { "type": "cooldown", "items": { "RAW_SOULFLOW": 1 }, "cooldown": 90, "offline_cooldown": 105 },  // offline cooldown not confirmed
+                "prices": {},
+            },
+            'CORRUPT_SOIL': {
+                'display': 'Corrupt Soil',
+                "speed_boost": 0,
+                "drop_multiplier": 1,
+                "upgrade_special": { "type": "add", "items": { "SULPHUR_ORE": 1, "CORRUPTED_FRAGMENT": 1 } },
+                "affected_minions": [],
+                "prices": {},
+            },
+            'BERBERIS_FUEL_INJECTOR': {
+                'display': 'Berberis Fuel Injector',
+                "speed_boost": 15,
+                "drop_multiplier": 1,
+                "upgrade_special": { "type": "cooldown", "items": { "LUSH_BERBERIS": 1 }, "cooldown": 300, "offline_cooldown": 300 },  // offline cooldown not confirmed
+                "affected_minions": [],
+                "prices": {},
+            },
+            'ENCHANTED_SHEARS': {
+                'display': 'Enchanted Shears',
+                "speed_boost": 0,
+                "drop_multiplier": 1,
+                "upgrade_special": { "type": "add", "items": { "WOOL": 2 } },  // Base drop wool gets set to 0. For online, its possible that the sheep regrow their wool, making it up to 3 wool per spawn and harvest, needs testing
+                "prices": { "npc": 0 },
+                "recipe": {"ENCHANTED_IRON": 2},
+            },
+            'SLEEPY_HOLLOW': {
+                'display': 'Sleepy Hollow',
+                "speed_boost": 0,
+                "drop_multiplier": 1,
+                "upgrade_special": { "type": "spreading", "items": { "PURPLE_CANDY": 0.00015 }},
+                "prices": { "npc": 0 },
+            },
+            "HUNTER_KNIFE": {
+                'display': "Hunter Knife",
+                "speed_boost": 0,
+                "drop_multiplier": 1,
+                "upgrade_special": { "type": "replace", "replacement_list": { "POTATO_ITEM": "FRENCH_FRIES" } },
+                "prices": { "custom": 500000 },  // 500k from Rusty
+            },
+
+            // Beacons
+            "BEACON_1": {
+                'display': "Beacon I",
+                "speed_boost": 2,
+                'prices': {},
+                "recipe": { "ENCHANTED_MITHRIL": 192, "STARFALL": 64 }
+            },
+            "BEACON_2": {
+                'display': "Beacon II",
+                "speed_boost": 4,
+                'prices': {},
+                "recipe": { "ENCHANTED_MITHRIL": 192, "STARFALL": 64, "REFINED_MITHRIL": 5 }
+            },
+            "BEACON_3": {
+                'display': "Beacon III",
+                "speed_boost": 6,
+                'prices': {},
+                "recipe": { "ENCHANTED_MITHRIL": 192, "STARFALL": 64, "REFINED_MITHRIL": 15 }
+            },
+            "BEACON_4": {
+                'display': "Beacon IV",
+                "speed_boost": 8,
+                'prices': {},
+                "recipe": { "ENCHANTED_MITHRIL": 192, "STARFALL": 64, "REFINED_MITHRIL": 35, "PLASMA": 1 }
+            },
+            "BEACON_5": {
+                'display': "Beacon V",
+                "speed_boost": 10,
+                'prices': {},
+                "recipe": { "ENCHANTED_MITHRIL": 192, "STARFALL": 64, "REFINED_MITHRIL": 75, "PLASMA": 6 }
+            },
+            "POWER_CRYSTAL": {
+                'display': 'Power Crystal',
+                "prices": {},
+                'fuel_duration': 172800
+            },
+            "SCORCHED_POWER_CRYSTAL": {
+                'display': 'Scorched Power Crystal',
+                "speed_boost": 1,
+                "prices": {},
+                'fuel_duration': 172800
+            },
+
+            // Floating Crystals
+            "FARM_CRYSTAL": {
+                'display': "Farm Crystal",
+                "speed_boost": 10,
+                "affected_minions": ['Wheat', 'Melon', 'Pumpkin', 'Carrot', 'Potato', 'Cactus', 'Cocoa Beans', 'Sugar Cane', 'Mushroom', 'Nether Wart', 'Sunflower'],
+                'prices': {},
+                "recipe": { "ENCHANTED_PUMPKIN": 96, "ENCHANTED_QUARTZ": 1 }
+            },
+            "WOODCUTTING_CRYSTAL": {
+                'display': "Woodcutting Crystal",
+                "speed_boost": 10,
+                "affected_minions": ['Oak', 'Spruce', 'Birch', 'Dark Oak', 'Acacia', 'Jungle', "Flower"],  // Flower minion is correct
+                'prices': {},
+                "recipe": { "ENCHANTED_SPRUCE_LOG": 96, "ENCHANTED_QUARTZ": 1 }
+            },
+            "MITHRIL_CRYSTAL": {
+                'display': "Mithril Crystal",
+                "speed_boost": 10,
+                "affected_minions": ['Cobblestone', 'Obsidian', 'Glowstone', 'Gravel', 'Sand', 'Red Sand', 'Mycelium', 'Ice', 'Snow', 'Coal', 'Iron', 'Gold', 'Diamond', 'Lapis', 'Redstone', 'Emerald', 'Quartz', 'End Stone', 'Mithril', 'Hard Stone'],
+                'prices': {},
+                "recipe": { "ENCHANTED_MITHRIL": 16, "ENCHANTED_QUARTZ": 1 }
+            },
+            "WINTER_ISLAND_CRYSTAL": {
+                'display': "Winter Crystal",
+                "speed_boost": 5,
+                "affected_minions": ["Snow", "Ice"],
+                'prices': {},
+                "recipe": { "WINTER_ISLAND": 1 }
+            },
+            "MITHRIL_WINTER_CRYSTAL": {
+                'display': "Mithril + Winter Crystal",  // not a real item
+                "speed_boost": 15,  // correct
+                "affected_minions": ["Snow", "Ice"],
+                'prices': {},
+                "recipe": { "MITHRIL_CRYSTAL": 1, "WINTER_ISLAND_CRYSTAL": 1 }
+            },
+
+            // Chests
+            "SMALL_ENCHANTED_CHEST": {
+                'display': "Small Storage",
+                "storage_slots": 3,
+                'prices': {}
+            },
+            "MEDIUM_ENCHANTED_CHEST": {
+                'display': "Medium Storage",
+                "storage_slots": 9,
+                'prices': {}
+            },
+            "LARGE_ENCHANTED_CHEST": {
+                'display': "Large Storage",
+                "storage_slots": 15,
+                'prices': {}
+            },
+            "XLARGE_ENCHANTED_CHEST": {
+                'display': "X-Large Storage",
+                "storage_slots": 21,
+                'prices': {}
+            },
+            "XXLARGE_ENCHANTED_CHEST": {
+                'display': "XX-Large Storage",
+                "storage_slots": 27,
+                'prices': {}
+            },
+
+            // Other Upgrades
+            "MITHRIL_INFUSION": {
+                'display': "Mithril Infusion",
+                "speed_boost": 10,
+                "prices": {}
+            },
+            'CAPSAICIN_EYEDROPS_NO_CHARGES': {
+                'display': 'Capsaicin Eyedrops',
+                "prices": {}
+            },
+            "FREE_WILL": {
+                'display': "Free Will",
+                "speed_boost": 10,
+                'prices': {}
+            },
+            "POSTCARD": {
+                'display': "Postcard",
+                "speed_boost": 5,
+                'prices': {},
+                "AH": true
+            },
+            "POTATO_TALISMAN": {
+                'display': "Potato Talisman",
+                "speed_boost": 5,
+                "affected_minions": ["Potato"],
+                'prices': {},
+                "AH": true
+            },
+            "POTATO_RING": {
+                'display': "Potato Ring",
+                "speed_boost": 10,
+                "affected_minions": ["Potato"],
+                'prices': {},
+                "AH": true
+            },
+
+            // Other Crafting Materials
+            'INFERNO_FUEL_BLOCK': {
+                'display': 'Inferno Fuel Block',
+                "prices": {}
+            },
+            'HYPERGOLIC_GABAGOOL': {
+                'display': 'Hypergolic Gabagool',
+                "prices": {}
+            },
+            'HEAVY_GABAGOOL': {
+                'display': 'Heavy Gabagool',
+                "prices": {}
+            },
+            'FUEL_GABAGOOL': {
+                'display': 'Fuel Gabagool',
+                "prices": {}
+            },
+            'MAGMA_CREAM_DISTILLATE': {
+                'display': 'Magma Cream Distillate',
+                "prices": {}
+            },
+            'BLAZE_ROD_DISTILLATE': {
+                'display': 'Blaze Rod Distillate',
+                "prices": {}
+            },
+            'NETHER_STALK_DISTILLATE': {
+                'display': 'Nether Wart Distillate',
+                "prices": {}
+            },
+            'GLOWSTONE_DUST_DISTILLATE': {
+                'display': 'Glowstone Distillate',
+                "prices": {}
+            },
+            'CRUDE_GABAGOOL_DISTILLATE': {
+                'display': 'Gabagool Distillate',
+                "prices": {}
+            },
+            "STARFALL": {
+                'display': "Starfall",
+                "prices": {}
+            },
+            "PLASMA": {
+                'display': "Plasma",
+                "prices": {}
             },
             "FLAMES": {
                 'display': "Flames",
                 "prices": {}
             },
-            "FREE_WILL": {
-                'display': "Free Will",
-                'prices': {}
-            },
-            "POTATO_TALISMAN": {
-                'display': "Potato Talisman",  // not in bazaar (AH)
-                'prices': { "custom": 45000000 }
-            },
-            "SMALL_ENCHANTED_CHEST": {
-                'display': "Small Storage",
-                'prices': {}
-            },
-            "MEDIUM_ENCHANTED_CHEST": {
-                'display': "Medium Storage",
-                'prices': {}
-            },
-            "LARGE_ENCHANTED_CHEST": {
-                'display': "Large Storage",
-                'prices': {}
-            },
-            "XLARGE_ENCHANTED_CHEST": {
-                'display': "X-Large Storage",
-                'prices': {}
-            },
-            "XXLARGE_ENCHANTED_CHEST": {
-                'display': "XX-Large Storage",
-                'prices': {}
-            },
-            "PRISMARINE:1": {
+            "PRISMARINE:1": {  // not used?
                 'display': "Prismarine Bricks",
-                'prices': {},
+                "prices": {},
                 'xp': { 'mining': 0 }
-            },
-            "HUNTER_KNIFE": {
-                'display': "Hunter Knife",
-                "prices": { "custom": 500000 },  // 500k from Rusty
-                "upgrade": {
-                    'speed': 0, 'drop': 1,
-                    'special': { "type": "replace", "list": { "POTATO_ITEM": "FRENCH_FRIES" } }
-                }
-            },
-            "FRENCH_FRIES": {
-                'display': "French Fries",
-                'prices': { "npc": 1 },
-                'xp': { 'farming': 0 }
-            },
-            'PET_ITEM_MINING_SKILL_BOOST_COMMON': {
-                'display': 'Common Mining Exp Boost',  // not in bazaar (Zog)
-                'prices': { 'custom': 60000 }
-            },
-            'PET_ITEM_MINING_SKILL_BOOST_UNCOMMON': {
-                'display': 'Uncommon Mining Exp Boost',  // not in bazaar (Zog)
-                'prices': { 'custom': 250000 }
-            },
-            'PET_ITEM_MINING_SKILL_BOOST_RARE': {
-                'display': 'Rare Mining Exp Boost',  // not in bazaar (AH)
-                'prices': { 'custom': 50000 }
-            },
-            'PET_ITEM_FARMING_SKILL_BOOST_COMMON': {
-                'display': 'Common Farming Exp Boost',  // not in bazaar (Zog)
-                'prices': { 'custom': 60000 }
-            },
-            'PET_ITEM_FARMING_SKILL_BOOST_UNCOMMON': {
-                'display': 'Uncommon Farming Exp Boost',  // not in bazaar (AH)
-                'prices': { 'custom': 50000 }
-            },
-            'PET_ITEM_FARMING_SKILL_BOOST_RARE': {
-                'display': 'Rare Farming Exp Boost',  // not in bazaar (Zog)
-                'prices': { 'custom': 500000 }
-            },
-            'PET_ITEM_FARMING_SKILL_BOOST_EPIC': {
-                'display': 'Epic Farming Exp Boost',  // not in bazaar (Duncan)
-                'prices': { 'custom': 1500000 }
-            },
-            'PET_ITEM_FISHING_SKILL_BOOST_COMMON': {
-                'display': 'Common Fishing Exp Boost',  // not in bazaar (Zog)
-                'prices': { 'custom': 60000 }
-            },
-            'PET_ITEM_FISHING_SKILL_BOOST_UNCOMMON': {
-                'display': 'Uncommon Fishing Exp Boost',  // not in bazaar (AH)
-                'prices': { 'custom': 47000 }
-            },
-            'PET_ITEM_FISHING_SKILL_BOOST_RARE': {
-                'display': 'Rare Fishing Exp Boost',  // not in bazaar (AH)
-                'prices': { 'custom': 300000 }
-            },
-            'PET_ITEM_FISHING_SKILL_BOOST_EPIC': {
-                'display': 'Epic Fishing Exp Boost',  // not in bazaar (AH)
-                'prices': { 'custom': 2500000 }  // 2025-10-6
-            },
-            'PET_ITEM_COMBAT_SKILL_BOOST_COMMON': {
-                'display': 'Common Combat Exp Boost',  // not in bazaar (Zog)
-                'prices': { 'custom': 60000 }
-            },
-            'PET_ITEM_COMBAT_SKILL_BOOST_UNCOMMON': {
-                'display': 'Uncommon Combat Exp Boost',  // not in bazaar (AH)
-                'prices': { 'custom': 200000 }
-            },
-            'PET_ITEM_COMBAT_SKILL_BOOST_RARE': {
-                'display': 'Rare Combat Exp Boost',  // not in bazaar (AH)
-                'prices': { 'custom': 2500000 }  // 2025-10-6
-            },
-            'PET_ITEM_COMBAT_SKILL_BOOST_EPIC': {
-                'display': 'Epic Combat Exp Boost',  // not in bazaar (AH)
-                'prices': { 'custom': 9500000 }  // 2025-10-6
-            },
-            'PET_ITEM_FORAGING_SKILL_BOOST_COMMON': {
-                'display': 'Common Foraging Exp Boost',  // not in bazaar (Zog)
-                'prices': { 'custom': 60000 }
-            },
-            'PET_ITEM_FORAGING_SKILL_BOOST_EPIC': {
-                'display': 'Epic Foraging Exp Boost',  // not in bazaar (AH)
-                'prices': { 'custom': 6000000 }  // 2025-10-6
-            },
-            'PET_ITEM_ALL_SKILLS_BOOST_COMMON': {
-                'display': 'All Skills Exp Boost',  // not in bazaar (Zog)
-                'prices': { 'custom': 50000 }
-            },
-            'ALL_SKILLS_SUPER_BOOST': {
-                'display': 'All Skills Exp Super-Boost',  // not in bazaar (AH)
-                'prices': { 'custom': 5000000 }  // 2025-10-6
             },
             "PET_ITEM_EXP_SHARE_DROP": {
                 "display": "Exp Share Core",
                 "prices": {}
             },
+            "WINTER_ISLAND": {
+                "display": "Winter Island",
+                "prices": {},
+                "AH": true
+            },
+
+            // Pet Items
+            'PET_ITEM_MINING_SKILL_BOOST_COMMON': {
+                'display': 'Common Mining Exp Boost',  // not in bazaar (Zog)
+                "rarity": "Common",
+                "exp_boost_type": "mining",
+                "exp_boost_amount": 20,
+                'prices': { 'custom': 60000 }
+            },
+            'PET_ITEM_MINING_SKILL_BOOST_UNCOMMON': {
+                'display': 'Uncommon Mining Exp Boost',  // not in bazaar (Zog)
+                "rarity": "Uncommon",
+                "exp_boost_type": "mining",
+                "exp_boost_amount": 30,
+                'prices': { 'custom': 250000 }
+            },
+            'PET_ITEM_MINING_SKILL_BOOST_RARE': {
+                'display': 'Rare Mining Exp Boost',
+                "rarity": "Rare",
+                "exp_boost_type": "mining",
+                "exp_boost_amount": 40,
+                'prices': {},
+                "AH": true
+            },
+            'PET_ITEM_FARMING_SKILL_BOOST_COMMON': {
+                'display': 'Common Farming Exp Boost',  // not in bazaar (Zog)
+                "rarity": "Common",
+                "exp_boost_type": "farming",
+                "exp_boost_amount": 20,
+                'prices': { 'custom': 60000 }
+            },
+            'PET_ITEM_FARMING_SKILL_BOOST_UNCOMMON': {
+                'display': 'Uncommon Farming Exp Boost',
+                "rarity": "Uncommon",
+                "exp_boost_type": "farming",
+                "exp_boost_amount": 30,
+                'prices': {},
+                "AH": true
+            },
+            'PET_ITEM_FARMING_SKILL_BOOST_RARE': {
+                'display': 'Rare Farming Exp Boost',  // not in bazaar (Zog)
+                "rarity": "Rare",
+                "exp_boost_type": "farming",
+                "exp_boost_amount": 40,
+                'prices': { 'custom': 500000 }
+            },
+            'PET_ITEM_FARMING_SKILL_BOOST_EPIC': {
+                'display': 'Epic Farming Exp Boost',  // not in bazaar (Duncan)
+                "rarity": "Epic",
+                "exp_boost_type": "farming",
+                "exp_boost_amount": 50,
+                'prices': { 'custom': 1500000 }
+            },
+            'PET_ITEM_FISHING_SKILL_BOOST_COMMON': {
+                'display': 'Common Fishing Exp Boost',  // not in bazaar (Zog)
+                "rarity": "Common",
+                "exp_boost_type": "fishing",
+                "exp_boost_amount": 20,
+                'prices': { 'custom': 60000 }
+            },
+            'PET_ITEM_FISHING_SKILL_BOOST_UNCOMMON': {
+                'display': 'Uncommon Fishing Exp Boost',
+                "rarity": "Uncommon",
+                "exp_boost_type": "fishing",
+                "exp_boost_amount": 30,
+                'prices': {},
+                "AH": true
+            },
+            'PET_ITEM_FISHING_SKILL_BOOST_RARE': {
+                'display': 'Rare Fishing Exp Boost',
+                "rarity": "Rare",
+                "exp_boost_type": "fishing",
+                "exp_boost_amount": 40,
+                'prices': {},
+                "AH": true
+            },
+            'PET_ITEM_FISHING_SKILL_BOOST_EPIC': {
+                'display': 'Epic Fishing Exp Boost',
+                "rarity": "Epic",
+                "exp_boost_type": "fishing",
+                "exp_boost_amount": 50,
+                'prices': {},
+                "AH": true
+            },
+            'PET_ITEM_COMBAT_SKILL_BOOST_COMMON': {
+                'display': 'Common Combat Exp Boost',  // not in bazaar (Zog)
+                "rarity": "Common",
+                "exp_boost_type": "combat",
+                "exp_boost_amount": 20,
+                'prices': { 'custom': 60000 }
+            },
+            'PET_ITEM_COMBAT_SKILL_BOOST_UNCOMMON': {
+                'display': 'Uncommon Combat Exp Boost',
+                "rarity": "Uncommon",
+                "exp_boost_type": "combat",
+                "exp_boost_amount": 30,
+                'prices': {},
+                "AH": true
+            },
+            'PET_ITEM_COMBAT_SKILL_BOOST_RARE': {
+                'display': 'Rare Combat Exp Boost',
+                "rarity": "Rare",
+                "exp_boost_type": "combat",
+                "exp_boost_amount": 40,
+                'prices': {},
+                "AH": true
+            },
+            'PET_ITEM_COMBAT_SKILL_BOOST_EPIC': {
+                'display': 'Epic Combat Exp Boost',
+                "rarity": "Epic",
+                "exp_boost_type": "combat",
+                "exp_boost_amount": 50,
+                'prices': {},
+                "AH": true
+            },
+            'PET_ITEM_FORAGING_SKILL_BOOST_COMMON': {
+                'display': 'Common Foraging Exp Boost',  // not in bazaar (Zog)
+                "rarity": "Common",
+                "exp_boost_type": "foraging",
+                "exp_boost_amount": 20,
+                'prices': { 'custom': 60000 }
+            },
+            'PET_ITEM_FORAGING_SKILL_BOOST_EPIC': {
+                'display': 'Epic Foraging Exp Boost',
+                "rarity": "Epic",
+                "exp_boost_type": "foraging",
+                "exp_boost_amount": 50,
+                'prices': {},
+                "AH": true
+            },
+            'PET_ITEM_ALL_SKILLS_BOOST_COMMON': {
+                'display': 'All Skills Exp Boost',  // not in bazaar (Zog)
+                "rarity": "Common",
+                "exp_boost_type": "all",
+                "exp_boost_amount": 10,
+                'prices': { 'custom': 50000 }
+            },
+            'ALL_SKILLS_SUPER_BOOST': {
+                'display': 'All Skills Exp Super-Boost',
+                "rarity": "Uncommon",
+                "exp_boost_type": "all",
+                "exp_boost_amount": 20,
+                'prices': {},
+                "AH": true
+            },
+            "PET_ITEM_EXP_SHARE": {
+                'display': "Exp Share",
+                "rarity": "Epic",
+                'prices': {},
+                'recipe': {"PET_ITEM_EXP_SHARE_DROP": 1, "ENCHANTED_GOLD": 72}
+            },
+            "SUPER_SCRUBBER": {
+                "display": "Super Scrubber",
+                "prices": { "custom": 25000 },  // not in bazaar (Plumber Joe)
+            },
+
+            // Attribute Shards
             "SHARD_TOUCAN": {
                 "display": "Toucan",
                 "prices": {}
@@ -1701,25 +2161,9 @@ class minion_data {
                 "display": "Falcon",
                 "prices": {}
             },
-            // The following items are on the Auction House, but can be created from items from the bazaar
-            // If the custom price of an item here is set to 0, the equivalent price from bazaar will be calculated
-            // Otherwise it will use the inputted number.
-            'EVERBURNING_FLAME': {
-                'display': 'Everburning Flame',  // not in bazaar (AH)
-                "prices": { "custom": 0 },
-                "upgrade": { 'speed': 40, 'drop': 1, 'duration': 0 }
-            },
-            // equivalent bazaar price: 1 Plasma Bucket, 16 Flames, 2 Enchanted Sulphur Cubes, 2 Enchanted Red Sand Cubes
-            "POSTCARD": {
-                'display': "Postcard",  // not in bazaar (AH)
-                'prices': { "custom": 0 }
-            },
-            // equivalent bazaar price: taken from Auction House through https://sky.coflnet.com/api/
-            "PET_ITEM_EXP_SHARE": {
-                'display': "Exp Share",
-                'prices': { "custom": 0 }
-            },
         };
+
+        // Other data
 
         this.infernofuel_data = {
             'grades': { 'HYPERGOLIC_GABAGOOL': 20, 'HEAVY_GABAGOOL': 15, 'FUEL_GABAGOOL': 10 },
@@ -1738,50 +2182,46 @@ class minion_data {
                 'GABAGOOL_THE_FISH': 1 / 3927273
             },
         };
-        
+
         this.getID = {
-            'Hypergolic Gabagool': 'HYPERGOLIC_GABAGOOL',
-            'Heavy Gabagool': 'HEAVY_GABAGOOL',
-            'Fuel Gabagool': 'FUEL_GABAGOOL',
-            'Magma Cream Distillate': 'MAGMA_CREAM_DISTILLATE',
-            'Blaze Rod Distillate': 'BLAZE_ROD_DISTILLATE',
-            'Nether Wart Distillate': 'NETHER_STALK_DISTILLATE',
-            'Glowstone Distillate': 'GLOWSTONE_DUST_DISTILLATE',
-            'Gabagool Distillate': 'CRUDE_GABAGOOL_DISTILLATE',
-            'Capsaicin Eyedrops': 'CAPSAICIN_EYEDROPS_NO_CHARGES',
-            "Budget Hopper": "BUDGET_HOPPER",
-            "Enchanted Hopper": "ENCHANTED_HOPPER",
             'Oak Log': 'LOG',
             'Spruce Log': 'LOG:1',
             'Birch Log': 'LOG:2',
             'Dark Oak Log': 'LOG_2:1',
             'Acacia Log': 'LOG_2',
             'Jungle Log': 'LOG:3',
-            'Small': "SMALL_ENCHANTED_CHEST",
-            'Medium': "MEDIUM_ENCHANTED_CHEST",
-            'Large': "LARGE_ENCHANTED_CHEST",
-            'X-Large': "XLARGE_ENCHANTED_CHEST",
-            'XX-Large': "XXLARGE_ENCHANTED_CHEST",
-            'Common Mining Exp Boost': 'PET_ITEM_MINING_SKILL_BOOST_COMMON',
-            'Uncommon Mining Exp Boost': 'PET_ITEM_MINING_SKILL_BOOST_UNCOMMON',
-            'Rare Mining Exp Boost': 'PET_ITEM_MINING_SKILL_BOOST_RARE',
-            'Common Farming Exp Boost': 'PET_ITEM_FARMING_SKILL_BOOST_COMMON',
-            'Uncommon Farming Exp Boost': 'PET_ITEM_FARMING_SKILL_BOOST_UNCOMMON',
-            'Rare Farming Exp Boost': 'PET_ITEM_FARMING_SKILL_BOOST_RARE',
-            'Epic Farming Exp Boost': 'PET_ITEM_FARMING_SKILL_BOOST_EPIC',
-            'Common Fishing Exp Boost': 'PET_ITEM_FISHING_SKILL_BOOST_COMMON',
-            'Uncommon Fishing Exp Boost': 'PET_ITEM_FISHING_SKILL_BOOST_UNCOMMON',
-            'Rare Fishing Exp Boost': 'PET_ITEM_FISHING_SKILL_BOOST_RARE',
-            'Epic Fishing Exp Boost': 'PET_ITEM_FISHING_SKILL_BOOST_EPIC',
-            'Common Combat Exp Boost': 'PET_ITEM_COMBAT_SKILL_BOOST_COMMON',
-            'Uncommon Combat Exp Boost': 'PET_ITEM_COMBAT_SKILL_BOOST_UNCOMMON',
-            'Rare Combat Exp Boost': 'PET_ITEM_COMBAT_SKILL_BOOST_RARE',
-            'Epic Combat Exp Boost': 'PET_ITEM_COMBAT_SKILL_BOOST_EPIC',
-            'Common Foraging Exp Boost': 'PET_ITEM_FORAGING_SKILL_BOOST_COMMON',
-            'Epic Foraging Exp Boost': 'PET_ITEM_FORAGING_SKILL_BOOST_EPIC',
-            'All Skills Exp Boost': 'PET_ITEM_ALL_SKILLS_BOOST_COMMON',
-            'All Skills Exp Super-Boost': 'ALL_SKILLS_SUPER_BOOST',
         };
+
+        this.standard_storage = { 1: 1, 2: 3, 3: 3, 4: 6, 5: 6, 6: 9, 7: 9, 8: 12, 9: 12, 10: 15, 11: 15, 12: 15 };
+        
+        this.affected_by_cole = ['Cobblestone', 'Obsidian', 'Glowstone', 'Gravel', 'Sand', 'Ice', 'Coal', 'Iron', 'Gold', 'Diamond', 'Lapis', 'Redstone', 'Emerald', 'Quartz', 'End Stone', 'Mithril']
+        
+        this.attribute_shards = {
+            "Common": { 1: 1, 2: 4, 3: 9, 4: 15, 5: 22, 6: 30, 7: 40, 8: 54, 9: 72, 10: 96 },
+            "Uncommon": { 1: 1, 2: 3, 3: 6, 4: 10, 5: 15, 6: 21, 7: 28, 8: 36, 9: 48, 10: 64 },
+            "Rare": { 1: 1, 2: 3, 3: 6, 4: 9, 5: 13, 6: 17, 7: 22, 8: 28, 9: 36, 10: 48 },
+            "Epic": { 1: 1, 2: 2, 3: 4, 4: 6, 5: 9, 6: 12, 7: 16, 8: 20, 9: 25, 10: 32 },
+            "Legendary": { 1: 1, 2: 2, 3: 3, 4: 5, 5: 7, 6: 9, 7: 12, 8: 15, 9: 19, 10: 24 }
+        };
+
+        this.pet_item_scrub_cost = { "Common": 25000, "Uncommon": 50000, "Rare": 100000, "Epic": 250000, "Legendary": 500000, "Mythic": 1000000, "Divine": 2500000 }
+
+
+        // Option Lists
+
+        this.inferno_fuel_grade_options = {
+            'Hypergolic Gabagool': 'HYPERGOLIC_GABAGOOL',
+            'Heavy Gabagool': 'HEAVY_GABAGOOL',
+            'Fuel Gabagool': 'FUEL_GABAGOOL',
+        }
+
+        this.inferno_fuel_distillate_options = {
+            'Magma Cream Distillate': 'MAGMA_CREAM_DISTILLATE',
+            'Blaze Rod Distillate': 'BLAZE_ROD_DISTILLATE',
+            'Nether Wart Distillate': 'NETHER_STALK_DISTILLATE',
+            'Glowstone Distillate': 'GLOWSTONE_DUST_DISTILLATE',
+            'Gabagool Distillate': 'CRUDE_GABAGOOL_DISTILLATE',
+        }
         
         this.fuel_options = {
             "None": "NONE",
@@ -1828,217 +2268,72 @@ class minion_data {
             "Hunter Knife": "HUNTER_KNIFE"
         };
 
-        this.compactorList = {
-            'CUSTOM': { 'makes': 'COMPACTED_CUSTOM', 'amount': 2, 'per': 8 },
-            'GLOWSTONE_DUST': { 'makes': 'GLOWSTONE', 'per': 4 },
-            'CLAY_BALL': { 'makes': 'CLAY', 'per': 4 },
-            'CLAY_BRICK': { 'makes': 'BRICK', 'per': 4 },
-            'ICE': { 'makes': 'PACKED_ICE', 'per': 9 },
-            'SNOW_BALL': { 'makes': 'SNOW_BLOCK', 'per': 4 },
-            'COAL': { 'makes': 'COAL_BLOCK', 'per': 9 },
-            'IRON_INGOT': { 'makes': 'IRON_BLOCK', 'per': 9 },
-            'GOLD_INGOT': { 'makes': 'GOLD_BLOCK', 'per': 9 },
-            'DIAMOND': { 'makes': 'DIAMOND_BLOCK', 'per': 9 },
-            'INK_SACK:4': { 'makes': 'LAPIS_BLOCK', 'per': 9 },
-            'REDSTONE': { 'makes': 'REDSTONE_BLOCK', 'per': 9 },
-            'EMERALD': { 'makes': 'EMERALD_BLOCK', 'per': 9 },
-            'QUARTZ': { 'makes': 'QUARTZ_BLOCK', 'per': 4 },
-            // 'WHEAT': {'makes': 'HAY_BLOCK', 'per': 9},  // does not produce it anymore
-            'MELON': { 'makes': 'MELON_BLOCK', 'per': 9 },
-            'RED_MUSHROOM': { 'makes': 'HUGE_MUSHROOM_2', 'per': 9 },
-            'BROWN_MUSHROOM': { 'makes': 'HUGE_MUSHROOM_1', 'per': 9 },
-            'SLIME_BALL': { 'makes': 'SLIME_BLOCK', 'per': 9 }
-        };
+        this.pet_exp_boost_options = {
+            "None": "NONE",
+            "Common Mining Exp Boost": "PET_ITEM_MINING_SKILL_BOOST_COMMON",
+            "Uncommon Mining Exp Boost": "PET_ITEM_MINING_SKILL_BOOST_UNCOMMON",
+            "Rare Mining Exp Boost": "PET_ITEM_MINING_SKILL_BOOST_RARE",
+            "Common Farming Exp Boost": "PET_ITEM_FARMING_SKILL_BOOST_COMMON",
+            "Uncommon Farming Exp Boost": "PET_ITEM_FARMING_SKILL_BOOST_UNCOMMON",
+            "Rare Farming Exp Boost": "PET_ITEM_FARMING_SKILL_BOOST_RARE",
+            "Epic Farming Exp Boost": "PET_ITEM_FARMING_SKILL_BOOST_EPIC",
+            "Common Fishing Exp Boost": "PET_ITEM_FISHING_SKILL_BOOST_COMMON",
+            "Uncommon Fishing Exp Boost": "PET_ITEM_FISHING_SKILL_BOOST_UNCOMMON",
+            "Rare Fishing Exp Boost": "PET_ITEM_FISHING_SKILL_BOOST_RARE",
+            "Epic Fishing Exp Boost": "PET_ITEM_FISHING_SKILL_BOOST_EPIC",
+            "Common Combat Exp Boost": "PET_ITEM_COMBAT_SKILL_BOOST_COMMON",
+            "Uncommon Combat Exp Boost": "PET_ITEM_COMBAT_SKILL_BOOST_UNCOMMON",
+            "Rare Combat Exp Boost": "PET_ITEM_COMBAT_SKILL_BOOST_RARE",
+            "Epic Combat Exp Boost": "PET_ITEM_COMBAT_SKILL_BOOST_EPIC",
+            "Common Foraging Exp Boost": "PET_ITEM_FORAGING_SKILL_BOOST_COMMON",
+            "Epic Foraging Exp Boost": "PET_ITEM_FORAGING_SKILL_BOOST_EPIC",
+            "All Skills Exp Boost": "PET_ITEM_ALL_SKILLS_BOOST_COMMON",
+            "All Skills Exp Super-Boost": "ALL_SKILLS_SUPER_BOOST",
+        }
 
-        this.enchanterList = {
-            'CUSTOM': { 'makes': 'ENCHANTED_CUSTOM', 'amount': 1, 'per': 160 },
-            'COMPACTED_CUSTOM': { 'makes': 'ENCHANTED_CUSTOM', 'amount': 4, 'per': 160 },
-            'LUSH_BERBERIS': { 'makes': 'ENCHANTED_LUSH_BERBERIS', 'per': 160 },
-            'RAW_SOULFLOW': { 'makes': 'SOULFLOW', 'per': 160 },
-            'SULPHUR_ORE': { 'makes': 'ENCHANTED_SULPHUR', 'per': 160 },
-            'ENCHANTED_SULPHUR': { 'makes': 'ENCHANTED_SULPHUR_CUBE', 'per': 160 },
-            'COBBLESTONE': { 'makes': 'ENCHANTED_COBBLESTONE', 'per': 160 },
-            'OBSIDIAN': { 'makes': 'ENCHANTED_OBSIDIAN', 'per': 160 },
-            'GLOWSTONE_DUST': { 'makes': 'ENCHANTED_GLOWSTONE_DUST', 'per': 160 },
-            'GLOWSTONE': { 'makes': 'ENCHANTED_GLOWSTONE_DUST', 'per': 40 },
-            'ENCHANTED_GLOWSTONE_DUST': { 'makes': 'ENCHANTED_GLOWSTONE', 'per': 160 },
-            'FLINT': { 'makes': 'ENCHANTED_FLINT', 'per': 160 },
-            'SAND': { 'makes': 'ENCHANTED_SAND', 'per': 160 },
-            'SAND:1': { 'makes': 'ENCHANTED_RED_SAND', 'per': 160 },
-            'ENCHANTED_RED_SAND': { 'makes': 'ENCHANTED_RED_SAND_CUBE', 'per': 160 },
-            'MYCEL': { 'makes': 'ENCHANTED_MYCELIUM', 'per': 160 },
-            'ENCHANTED_MYCELIUM': { 'makes': 'ENCHANTED_MYCELIUM_CUBE', 'per': 160 },
-            'CLAY_BALL': { 'makes': 'ENCHANTED_CLAY_BALL', 'per': 160 },
-            'ENCHANTED_CLAY_BALL': { 'makes': 'ENCHANTED_CLAY_BLOCK', 'per': 160 },
-            'CLAY': { 'makes': 'ENCHANTED_CLAY_BALL', 'amount': 4, 'per': 160 },
-            'ICE': { 'makes': 'ENCHANTED_ICE', 'per': 160 },
-            'PACKED_ICE': { 'makes': 'ENCHANTED_ICE', 'amount': 9, 'per': 160 },
-            'ENCHANTED_ICE': { 'makes': 'ENCHANTED_PACKED_ICE', 'per': 160 },
-            'SNOW_BALL': { 'makes': 'ENCHANTED_SNOW_BLOCK', 'per': 640 },
-            'SNOW_BLOCK': { 'makes': 'ENCHANTED_SNOW_BLOCK', 'per': 160 },
-            'COAL': { 'makes': 'ENCHANTED_COAL', 'per': 160 },
-            'COAL_BLOCK': { 'makes': 'ENCHANTED_COAL', 'amount': 9, 'per': 160 },
-            'ENCHANTED_COAL': { 'makes': 'ENCHANTED_COAL_BLOCK', 'per': 160 },
-            'IRON_INGOT': { 'makes': 'ENCHANTED_IRON', 'per': 160 },
-            'IRON_BLOCK': { 'makes': 'ENCHANTED_IRON', 'amount': 9, 'per': 160 },
-            'ENCHANTED_IRON': { 'makes': 'ENCHANTED_IRON_BLOCK', 'per': 160 },
-            'GOLD_INGOT': { 'makes': 'ENCHANTED_GOLD', 'per': 160 },
-            'GOLD_BLOCK': { 'makes': 'ENCHANTED_GOLD', 'amount': 9, 'per': 160 },
-            'ENCHANTED_GOLD': { 'makes': 'ENCHANTED_GOLD_BLOCK', 'per': 160 },
-            'DIAMOND': { 'makes': 'ENCHANTED_DIAMOND', 'per': 160 },
-            'DIAMOND_BLOCK': { 'makes': 'ENCHANTED_DIAMOND', 'amount': 9, 'per': 160 },
-            'ENCHANTED_DIAMOND': { 'makes': 'ENCHANTED_DIAMOND_BLOCK', 'per': 160 },
-            'INK_SACK:4': { 'makes': 'ENCHANTED_LAPIS_LAZULI', 'per': 160 },
-            'LAPIS_BLOCK': { 'makes': 'ENCHANTED_LAPIS_LAZULI', 'amount': 9, 'per': 160 },
-            'ENCHANTED_LAPIS_LAZULI': { 'makes': 'ENCHANTED_LAPIS_LAZULI_BLOCK', 'per': 160 },
-            'REDSTONE': { 'makes': 'ENCHANTED_REDSTONE', 'per': 160 },
-            'REDSTONE_BLOCK': { 'makes': 'ENCHANTED_REDSTONE', 'amount': 9, 'per': 160 },
-            'ENCHANTED_REDSTONE': { 'makes': 'ENCHANTED_REDSTONE_BLOCK', 'per': 160 },
-            'EMERALD': { 'makes': 'ENCHANTED_EMERALD', 'per': 160 },
-            'EMERALD_BLOCK': { 'makes': 'ENCHANTED_EMERALD', 'amount': 9, 'per': 160 },
-            'ENCHANTED_EMERALD': { 'makes': 'ENCHANTED_EMERALD_BLOCK', 'per': 160 },
-            'QUARTZ': { 'makes': 'ENCHANTED_QUARTZ', 'per': 160 },
-            'QUARTZ_BLOCK': { 'makes': 'ENCHANTED_QUARTZ', 'amount': 4, 'per': 160 },
-            'ENCHANTED_QUARTZ': { 'makes': 'ENCHANTED_QUARTZ_BLOCK', 'per': 160 },
-            'ENDER_STONE': { 'makes': 'ENCHANTED_ENDSTONE', 'per': 160 },
-            'MITHRIL_ORE': { 'makes': 'ENCHANTED_MITHRIL', 'per': 160 },
-            'HARD_STONE': { 'makes': 'ENCHANTED_HARD_STONE', 'per': 576 },
-            'ENCHANTED_HARD_STONE': { 'makes': 'CONCENTRATED_STONE', 'per': 576 },
-            'WHEAT': { 'makes': 'ENCHANTED_WHEAT', 'per': 160 },
-            // 'WHEAT': {'makes': 'ENCHANTED_BREAD', 'per': 60},  // does not produce it anymore
-            'ENCHANTED_WHEAT': { 'makes': 'ENCHANTED_HAY_BALE', 'per': 160 },
-            'SEEDS': { 'makes': 'ENCHANTED_SEEDS', 'per': 160 },
-            'ENCHANTED_SEEDS': { 'makes': 'BOX_OF_SEEDS', 'per': 160 },
-            'MELON': { 'makes': 'ENCHANTED_MELON', 'per': 160 },
-            'MELON_BLOCK': { 'makes': 'ENCHANTED_MELON', 'amount': 9, 'per': 160 },
-            'ENCHANTED_MELON': { 'makes': 'ENCHANTED_MELON_BLOCK', 'per': 160 },
-            'PUMPKIN': { 'makes': 'ENCHANTED_PUMPKIN', 'per': 160 },
-            'ENCHANTED_PUMPKIN': { 'makes': 'POLISHED_PUMPKIN', 'per': 160 },
-            'CARROT_ITEM': { 'makes': 'ENCHANTED_CARROT', 'per': 160 },
-            'ENCHANTED_CARROT': { 'makes': 'ENCHANTED_GOLDEN_CARROT', 'per': 160 },
-            'POTATO_ITEM': { 'makes': 'ENCHANTED_POTATO', 'per': 160 },
-            'ENCHANTED_POTATO': { 'makes': 'ENCHANTED_BAKED_POTATO', 'per': 160 },
-            'RED_MUSHROOM': { 'makes': 'ENCHANTED_RED_MUSHROOM', 'per': 160 },
-            'BROWN_MUSHROOM': { 'makes': 'ENCHANTED_BROWN_MUSHROOM', 'per': 160 },
-            'HUGE_MUSHROOM_2': { 'makes': 'ENCHANTED_RED_MUSHROOM', 'amount': 9, 'per': 160 },
-            'HUGE_MUSHROOM_1': { 'makes': 'ENCHANTED_BROWN_MUSHROOM', 'amount': 9, 'per': 160 },
-            'ENCHANTED_RED_MUSHROOM': { 'makes': 'ENCHANTED_HUGE_MUSHROOM_2', 'per': 160 },
-            'ENCHANTED_BROWN_MUSHROOM': { 'makes': 'ENCHANTED_HUGE_MUSHROOM_1', 'per': 160 },
-            'INK_SACK:2': { 'makes': 'ENCHANTED_CACTUS_GREEN', 'per': 160 },
-            'CACTUS': { 'makes': 'ENCHANTED_CACTUS_GREEN', 'per': 160 },
-            'ENCHANTED_CACTUS_GREEN': { 'makes': 'ENCHANTED_CACTUS', 'per': 160 },
-            'INK_SACK:3': { 'makes': 'ENCHANTED_COCOA', 'per': 160 },
-            'ENCHANTED_COCOA': { 'makes': 'ENCHANTED_COOKIE', 'per': 160 },
-            'SUGAR_CANE': { 'makes': 'ENCHANTED_SUGAR', 'per': 160 },
-            'ENCHANTED_SUGAR': { 'makes': 'ENCHANTED_SUGAR_CANE', 'per': 160 },
-            'NETHER_STALK': { 'makes': 'ENCHANTED_NETHER_STALK', 'per': 160 },
-            'ENCHANTED_NETHER_STALK': { 'makes': 'MUTANT_NETHER_STALK', 'per': 160 },
-            'YELLOW_FLOWER': { 'makes': 'ENCHANTED_DANDELION', 'per': 160 },
-            'RED_ROSE': { 'makes': 'ENCHANTED_POPPY', 'per': 576 },
-            'WILD_ROSE': { 'makes': 'ENCHANTED_WILD_ROSE', 'per': 160 },
-            'ENCHANTED_WILD_ROSE': { 'makes': 'COMPACTED_WILD_ROSE', 'per': 160 },
-            'DOUBLE_PLANT': { 'makes': 'ENCHANTED_SUNFLOWER', 'per': 160 },
-            'ENCHANTED_SUNFLOWER': { 'makes': 'COMPACTED_SUNFLOWER', 'per': 160 },
-            'MOONFLOWER': { 'makes': 'ENCHANTED_MOONFLOWER', 'per': 160 },
-            'ENCHANTED_MOONFLOWER': { 'makes': 'COMPACTED_MOONFLOWER', 'per': 160 },
-            'RAW_FISH': { 'makes': 'ENCHANTED_RAW_FISH', 'per': 160 },
-            'RAW_FISH:1': { 'makes': 'ENCHANTED_RAW_SALMON', 'per': 160 },
-            'RAW_FISH:3': { 'makes': 'ENCHANTED_PUFFERFISH', 'per': 160 },
-            'RAW_FISH:2': { 'makes': 'ENCHANTED_CLOWNFISH', 'per': 160 },
-            'PRISMARINE_CRYSTALS': { 'makes': 'ENCHANTED_PRISMARINE_CRYSTALS', 'per': 80 },
-            'PRISMARINE_SHARD': { 'makes': 'ENCHANTED_PRISMARINE_SHARD', 'per': 80 },
-            'SPONGE': { 'makes': 'ENCHANTED_SPONGE', 'per': 40 },
-            'ENCHANTED_RAW_FISH': { 'makes': 'ENCHANTED_COOKED_FISH', 'per': 160 },
-            'ENCHANTED_RAW_SALMON': { 'makes': 'ENCHANTED_COOKED_SALMON', 'per': 160 },
-            'ENCHANTED_SPONGE': { 'makes': 'ENCHANTED_WET_SPONGE', 'per': 40 },
-            'ROTTEN_FLESH': { 'makes': 'ENCHANTED_ROTTEN_FLESH', 'per': 160 },
-            'POISONOUS_POTATO': { 'makes': 'ENCHANTED_POISONOUS_POTATO', 'per': 160 },
-            'ENCHANTED_ENDER_PEARL': { 'makes': 'ABSOLUTE_ENDER_PEARL', 'per': 80 },
-            'CRUDE_GABAGOOL': { 'makes': 'VERY_CRUDE_GABAGOOL', 'per': 192 },  // correct
-            // 'CHILI_PEPPER': {'makes': 'STUFFED_CHILI_PEPPER', 'per': 160},  // does not compact
-            'HEMOVIBE': { 'makes': 'HEMOGLASS', 'per': 160 },
-            // 'HEMOGLASS': {'makes': 'HEMOBOMB', 'per': 15},  // does not compact
-            'BONE': { 'makes': 'ENCHANTED_BONE', 'per': 160 },
-            'SULPHUR': { 'makes': 'ENCHANTED_GUNPOWDER', 'per': 160 },
-            'STRING': { 'makes': 'ENCHANTED_STRING', 'per': 160 },
-            'SPIDER_EYE': { 'makes': 'ENCHANTED_SPIDER_EYE', 'per': 160 },
-            'BLAZE_ROD': { 'makes': 'ENCHANTED_BLAZE_POWDER', 'per': 160 },
-            'ENCHANTED_BLAZE_POWDER': { 'makes': 'ENCHANTED_BLAZE_ROD', 'per': 160 },
-            'MAGMA_CREAM': { 'makes': 'ENCHANTED_MAGMA_CREAM', 'per': 160 },
-            'ENCHANTED_MAGMA_CREAM': { 'makes': 'WHIPPED_MAGMA_CREAM', 'per': 160 },
-            'ENDER_PEARL': { 'makes': 'ENCHANTED_ENDER_PEARL', 'per': 20 },
-            'GHAST_TEAR': { 'makes': 'ENCHANTED_GHAST_TEAR', 'per': 5 },
-            'SLIME_BALL': { 'makes': 'ENCHANTED_SLIME_BALL', 'per': 160 },
-            'SLIME_BLOCK': { 'makes': 'ENCHANTED_SLIME_BALL', 'amount': 9, 'per': 160 },
-            'ENCHANTED_SLIME_BALL': { 'makes': 'ENCHANTED_SLIME_BLOCK', 'per': 160 },
-            'RAW_BEEF': { 'makes': 'ENCHANTED_RAW_BEEF', 'per': 160 },
-            'LEATHER': { 'makes': 'ENCHANTED_LEATHER', 'per': 160 },
-            'PORK': { 'makes': 'ENCHANTED_PORK', 'per': 160 },
-            'ENCHANTED_PORK': { 'makes': 'ENCHANTED_GRILLED_PORK', 'per': 160 },
-            'RAW_CHICKEN': { 'makes': 'ENCHANTED_RAW_CHICKEN', 'per': 160 },
-            'FEATHER': { 'makes': 'ENCHANTED_FEATHER', 'per': 160 },
-            'EGG': { 'makes': 'ENCHANTED_EGG', 'per': 144 },
-            'ENCHANTED_EGG': { 'makes': 'SUPER_EGG', 'per': 144 },
-            'SUPER_EGG': { 'makes': 'OMEGA_EGG', 'per': 9 },  // correct
-            'WOOL': { 'makes': 'ENCHANTED_WOOL', 'per': 160 },
-            'MUTTON': { 'makes': 'ENCHANTED_MUTTON', 'per': 160 },
-            'ENCHANTED_MUTTON': { 'makes': 'ENCHANTED_COOKED_MUTTON', 'per': 160 },
-            'RABBIT': { 'makes': 'ENCHANTED_RABBIT', 'per': 160 },
-            'ENCHANTED_RABBIT': { 'makes': 'ENCHANTED_COOKED_RABBIT', 'per': 160 },
-            'RABBIT_FOOT': { 'makes': 'ENCHANTED_RABBIT_FOOT', 'per': 160 },
-            'RABBIT_HIDE': { 'makes': 'ENCHANTED_RABBIT_HIDE', 'per': 160 },
-            'LOG': { 'makes': 'ENCHANTED_OAK_LOG', 'per': 160 },
-            'LOG:1': { 'makes': 'ENCHANTED_SPRUCE_LOG', 'per': 160 },
-            'LOG:2': { 'makes': 'ENCHANTED_BIRCH_LOG', 'per': 160 },
-            'LOG_2:1': { 'makes': 'ENCHANTED_DARK_OAK_LOG', 'per': 160 },
-            'LOG_2': { 'makes': 'ENCHANTED_ACACIA_LOG', 'per': 160 },
-            'LOG:3': { 'makes': 'ENCHANTED_JUNGLE_LOG', 'per': 160 }
-        };
+        this.floating_crystal_options = {
+            "None": "NONE",
+            "Farm Crystal": "FARM_CRYSTAL",
+            "Woodcutting Crystal": "WOODCUTTING_CRYSTAL",
+            "Mithril Crystal": "MITHRIL_CRYSTAL",
+            "Winter Crystal": "WINTER_ISLAND_CRYSTAL",
+            "Mithril + Winter Crystal": "MITHRIL_WINTER_CRYSTAL"
+        }
 
-        this.pet_xp_boosts = {
-            "None": ["all", 0],
-            'Common Mining Exp Boost': ['mining', 20],
-            'Uncommon Mining Exp Boost': ['mining', 30],
-            'Rare Mining Exp Boost': ['mining', 40],
-            'Common Farming Exp Boost': ['farming', 20],
-            'Uncommon Farming Exp Boost': ['farming', 30],
-            'Rare Farming Exp Boost': ['farming', 40],
-            'Epic Farming Exp Boost': ['farming', 50],
-            'Common Fishing Exp Boost': ['fishing', 20],
-            'Uncommon Fishing Exp Boost': ['fishing', 30],
-            'Rare Fishing Exp Boost': ['fishing', 40],
-            'Epic Fishing Exp Boost': ['fishing', 50],
-            'Common Combat Exp Boost': ['combat', 20],
-            'Uncommon Combat Exp Boost': ['combat', 30],
-            'Rare Combat Exp Boost': ['combat', 40],
-            'Epic Combat Exp Boost': ['combat', 50],
-            'Common Foraging Exp Boost': ['foraging', 20],
-            'Epic Foraging Exp Boost': ['foraging', 50],
-            'All Skills Exp Boost': ['all', 10],
-            'All Skills Exp Super-Boost': ['all', 20],
-        };
+        this.chest_options = {
+            "None": "NONE",
+            "Small Storage": "SMALL_ENCHANTED_CHEST",
+            "Medium Storage": "MEDIUM_ENCHANTED_CHEST",
+            "Large Storage": "LARGE_ENCHANTED_CHEST",
+            "X-Large Storage": "XLARGE_ENCHANTED_CHEST",
+            "XX-Large Storage": "XXLARGE_ENCHANTED_CHEST",
+        }
 
-        this.floating_crystals = {
-            "None": { 0: [] },
-            "Farm Crystal": { 10: ['Wheat', 'Melon', 'Pumpkin', 'Carrot', 'Potato', 'Cactus', 'Cocoa Beans', 'Sugar Cane', 'Mushroom', 'Nether Wart', 'Sunflower'] },
-            "Woodcutting Crystal": { 10: ['Oak', 'Spruce', 'Birch', 'Dark Oak', 'Acacia', 'Jungle', "Flower"] },  // flower minion is correct
-            "Mithril Crystal": { 10: ['Cobblestone', 'Obsidian', 'Glowstone', 'Gravel', 'Sand', 'Red Sand', 'Mycelium', 'Ice', 'Snow', 'Coal', 'Iron', 'Gold', 'Diamond', 'Lapis', 'Redstone', 'Emerald', 'Quartz', 'End Stone', 'Mithril', 'Hard Stone'] },
-            "Winter Crystal": { 5: ["Snow", "Ice"] },
-            "Winter + Mithril Crystal": { 15: ["Snow", "Ice"] }  // correct
-        };
+        this.hopper_options = {
+            "None": "NONE",
+            "Budget Hopper": "BUDGET_HOPPER",
+            "Enchanted Hopper": "ENCHANTED_HOPPER",
+        }
 
-        this.minion_chests = { "None": 0, "Small": 3, "Medium": 9, "Large": 15, "X-Large": 21, "XX-Large": 27 };
+        this.beacon_options = {
+            "None": "NONE",
+            "Beacon I": "BEACON_1",
+            "Beacon II": "BEACON_2",
+            "Beacon III": "BEACON_3",
+            "Beacon IV": "BEACON_4",
+            "Beacon V": "BEACON_5",
+        }
 
-        this.standard_storage = { 1: 1, 2: 3, 3: 3, 4: 6, 5: 6, 6: 9, 7: 9, 8: 12, 9: 12, 10: 15, 11: 15, 12: 15 };
+        this.potato_accessory_options = {
+            "None": "NONE",
+            "Potato Talisman": "POTATO_TALISMAN",
+            "Potato Ring": "POTATO_RING"
+        }
 
-        this.hopper_data = {
-            "None": 1,
-            "Budget Hopper": 0.5,
-            "Enchanted Hopper": 0.7,
-        };
 
-        this.affected_by_cole = ['Cobblestone', 'Obsidian', 'Glowstone', 'Gravel', 'Sand', 'Ice', 'Coal', 'Iron', 'Gold', 'Diamond', 'Lapis', 'Redstone', 'Emerald', 'Quartz', 'End Stone', 'Mithril']
-
+        // Pets
+        
+        // name pet: {valid rarities: [boost base, added boost per level], "affects": [affected minions]}
         this.boost_pets = {
             "None": { "affects": [] },
             // "Chicken": {"Legendary": [0, 0.3], "affects": ["Chicken"]},  // reworked in skyblock 0.23.1
@@ -2076,14 +2371,6 @@ class minion_data {
             }
         };
 
-        this.attribute_shards = {
-            "Common": { 1: 1, 2: 4, 3: 9, 4: 15, 5: 22, 6: 30, 7: 40, 8: 54, 9: 72, 10: 96 },
-            "Uncommon": { 1: 1, 2: 3, 3: 6, 4: 10, 5: 15, 6: 21, 7: 28, 8: 36, 9: 48, 10: 64 },
-            "Rare": { 1: 1, 2: 3, 3: 6, 4: 9, 5: 13, 6: 17, 7: 22, 8: 28, 9: 36, 10: 48 },
-            "Epic": { 1: 1, 2: 2, 3: 4, 4: 6, 5: 9, 6: 12, 7: 16, 8: 20, 9: 25, 10: 32 },
-            "Legendary": { 1: 1, 2: 2, 3: 3, 4: 5, 5: 7, 6: 9, 7: 12, 8: 15, 9: 19, 10: 24 }
-        };
-
         this.all_pets = {
             "None": { 'type': 'all', 'rarity': 'Legendary' },
             "Custom Pet": { 'type': 'farming', 'rarity': 'Legendary' },
@@ -2099,6 +2386,7 @@ class minion_data {
             'Blaze': { 'type': 'combat', 'rarity': 'Legendary' },
             'Blue Whale': { 'type': 'fishing', 'rarity': 'Legendary' },
             'Chicken': { 'type': 'farming', 'rarity': 'Legendary' },
+            'Crow': { 'type': 'combat', 'rarity': 'Legendary' },
             'Dolphin': { 'type': 'fishing', 'rarity': 'Legendary' },
             'Eerie': { 'type': 'combat', 'rarity': 'Legendary' },
             'Elephant': { 'type': 'farming', 'rarity': 'Legendary' },
@@ -2112,6 +2400,7 @@ class minion_data {
             'Glacite Golem': { 'type': 'mining', 'rarity': 'Legendary' },
             'Goblin': { 'type': 'mining', 'rarity': 'Legendary' },
             'Golden Dragon': { 'type': 'combat', 'rarity': 'Dragon' },
+            'Golden Dragon Egg': { 'type': 'combat', 'rarity': 'Legendary' },
             'Golem': { 'type': 'combat', 'rarity': 'Legendary' },
             'Grandma Wolf': { 'type': 'combat', 'rarity': 'Legendary' },
             'Griffin': { 'type': 'combat', 'rarity': 'Legendary' },
@@ -2122,6 +2411,7 @@ class minion_data {
             'Hound': { 'type': 'combat', 'rarity': 'Legendary' },
             'Jerry': { 'type': 'combat', 'rarity': 'Legendary' },
             'Jade Dragon': { 'type': 'foraging', 'rarity': 'Dragon' },
+            'Jade Dragon Egg': { 'type': 'foraging', 'rarity': 'Legendary' },
             'Jellyfish': { 'type': 'alchemy', 'rarity': 'Legendary' },
             'Kuudra': { 'type': 'combat', 'rarity': 'Legendary' },
             'Lion': { 'type': 'foraging', 'rarity': 'Legendary' },
@@ -2140,11 +2430,14 @@ class minion_data {
             'Phoenix': { 'type': 'combat', 'rarity': 'Legendary' },
             'Pig': { 'type': 'farming', 'rarity': 'Legendary' },
             'Pigman': { 'type': 'combat', 'rarity': 'Legendary' },
+            'Precursor Drone': { 'type': 'combat', 'rarity': 'Common' },
             'Rabbit': { 'type': 'farming', 'rarity': 'Legendary' },
             'Rat': { 'type': 'combat', 'rarity': 'Legendary' },
             'Reindeer': { 'type': 'fishing', 'rarity': 'Legendary' },
             'Rift Ferret': { 'type': 'combat', 'rarity': 'Epic' },
             'Rock': { 'type': 'mining', 'rarity': 'Legendary' },
+            'Rose Dragon': { 'type': 'farming', 'rarity': 'Dragon' },
+            'Rose Dragon Egg': { 'type': 'farming', 'rarity': 'Legendary' },
             'Scatha': { 'type': 'mining', 'rarity': 'Legendary' },
             'Sheep': { 'type': 'alchemy', 'rarity': 'Legendary' },
             'Silverfish': { 'type': 'mining', 'rarity': 'Legendary' },
@@ -2168,6 +2461,10 @@ class minion_data {
 
         this.max_lvl_pet_xp_amounts = { "Common": 5624785, "Uncommon": 8644220, "Rare": 12626665, "Epic": 18608500, "Legendary": 25353230, "Dragon": 210255385 };
 
+
+        // Minions
+        // average drop amount from hypixel skyblock fandom wiki or self tested
+
         this.minionList = {
             "Custom": {
                 "drops": {
@@ -2187,7 +2484,7 @@ class minion_data {
                     11: 11,
                     12: 12
                 },
-                "afkcorrupt": 1,
+                "afkcorrupt": 2,
                 "notes": { "Custom": "Custom Minion does not exist", "AFK": "multiple corrupt drops" }
             },
             "Cobblestone": {
@@ -2329,7 +2626,7 @@ class minion_data {
                 "speed": { 1: 50, 2: 50, 3: 47, 4: 47, 5: 44, 6: 44, 7: 41, 8: 41, 9: 38, 10: 38, 11: 32, 12: 27 }
             },
             "Flower": {
-                "drops": { "YELLOW_FLOWER": 0.35, "RED_ROSE": 0.15, "SMALL_FLOWER": 4 / 11, "LARGE_FLOWER": 3 / 22 },
+                "drops": { "YELLOW_FLOWER": 0.35, "RED_ROSE": 0.15, "RED_ROSE:1": 0.5 / 11, "RED_ROSE:2": 0.5 / 11, "RED_ROSE:3": 0.5 / 11, "RED_ROSE:4": 0.5 / 11, "RED_ROSE:5": 0.5 / 11, "RED_ROSE:6": 0.5 / 11, "RED_ROSE:7": 0.5 / 11, "RED_ROSE:8": 0.5 / 11, "DOUBLE_PLANT:1": 0.5 / 11, "DOUBLE_PLANT:4": 0.5 / 11, "DOUBLE_PLANT:5": 0.5 / 11 },  // check
                 "speed": { 1: 30, 2: 29, 3: 28, 4: 27, 5: 26, 6: 25, 7: 24, 8: 23, 9: 22, 10: 20, 11: 18, 12: 15 },
                 "storage": { 1: 15, 2: 15, 3: 15, 4: 15, 5: 15, 6: 15, 7: 15, 8: 15, 9: 15, 10: 15, 11: 15, 12: 15 },
                 "notes": { "Special Layout": "only spawn, no large flowers (water flushing, low roof)" }
@@ -2477,6 +2774,9 @@ class minion_data {
             }
         };
 
+
+        // Minion Cost Functions
+
         function minionCostTypes(materials, upgradetype, twelve=false, edits=null) {
             let base;
             let enchanted;
@@ -2568,8 +2868,25 @@ class minion_data {
             };
             return JSON.parse(JSON.stringify(cost_dict));
         };
+        
+        let minionCosts;
+        function minionCostSum(minion_type, final_tier) {
+            let final_cost = {};
+            for (let tier = 1; tier <= final_tier; tier++) {
+                for (let [item, amount] of Object.entries(minionCosts[minion_type][tier])) {
+                    if (!(item in final_cost)) {
+                        final_cost[item] = 0;
+                    }
+                    final_cost[item] += amount;
+                };
+            };
+            return JSON.parse(JSON.stringify(final_cost));
+        };
 
-        let minionCosts = {
+
+        // Minion Costs
+
+        minionCosts = {
             "Custom": minionCostTypes(["CUSTOM", "ENCHANTED_CUSTOM"], "single enchanted", true),
             "Cobblestone": minionCostTypes(["COBBLESTONE", "ENCHANTED_COBBLESTONE"], "single enchanted", true),
             "Obsidian": minionCostTypes(["OBSIDIAN", "ENCHANTED_OBSIDIAN"], "single enchanted", true),
@@ -2633,24 +2950,6 @@ class minion_data {
             "Jungle": minionCostTypes(["LOG:3", "ENCHANTED_JUNGLE_LOG"], "single enchanted", false)
         };
 
-        function minionCostSum(minion_type, final_tier) {
-            let final_cost = {};
-            let tier_loop = [];
-            for (let i = 1; i <= final_tier; i++) {
-                tier_loop.push(i);
-            };
-            for (let tier of tier_loop) {
-                for (let [item, amount] of Object.entries(minionCosts[minion_type][tier])) {
-                    if (!(item in final_cost)) {
-                        final_cost[item] = 0;
-                    }
-                    final_cost[item] += amount;
-                };
-            };
-            return JSON.parse(JSON.stringify(final_cost));
-        };
-        
-        // the recursive costs
         minionCosts["Revenant"] = {
             1: { "REVENANT_FLESH": 80, "ENCHANTED_ROTTEN_FLESH": 256, "ENCHANTED_DIAMOND": 256 },
             2: { "REVENANT_FLESH": 140, ...minionCostSum("Zombie", 1) },
@@ -2754,24 +3053,5 @@ class minion_data {
             "Sheep": { 12: { "PELTS": 75 } },
             "Rabbit": { 12: { "PELTS": 75 } },
         };
-
-        this.upgrades_material_cost = {
-            "beacon": {
-                1: { "ENCHANTED_MITHRIL": 192, "STARFALL": 64 },
-                2: { "REFINED_MITHRIL": 5 },
-                3: { "REFINED_MITHRIL": 10 },
-                4: { "REFINED_MITHRIL": 20, "PLASMA": 1 },
-                5: { "REFINED_MITHRIL": 40, "PLASMA": 5 },
-            },
-            "crystal": {
-                "Farm Crystal": { "ENCHANTED_PUMPKIN": 96, "ENCHANTED_QUARTZ": 1 },
-                "Woodcutting Crystal": { "ENCHANTED_SPRUCE_LOG": 96, "ENCHANTED_QUARTZ": 1 },
-                "Mithril Crystal": { "ENCHANTED_MITHRIL": 16, "ENCHANTED_QUARTZ": 1 },
-                "Winter Crystal": {},
-                "Winter + Mithril Crystal": { "ENCHANTED_MITHRIL": 16, "ENCHANTED_QUARTZ": 1 },
-            },
-            "EVERBURNING_FLAME": { "PLASMA_BUCKET": 1, "FLAMES": 16, "ENCHANTED_SULPHUR_CUBE": 2, "ENCHANTED_RED_SAND_CUBE": 2 },
-        };
     };
-
 };
