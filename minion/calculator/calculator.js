@@ -105,7 +105,8 @@ class Calculator {
         };
 
         this.version = 1.2;
-        GUI.calc = this;
+        GUI.main = this;
+        this.var_dict = {}
         this.gui = GUI;
         this.frames = {
             "inputs_minion_grid": document.getElementById("inputs_minion_grid"),
@@ -207,20 +208,20 @@ class Calculator {
                 var_data["var"] = var_data["initial"];
             };
             if (var_data["vtype"] == "input" && !("noWidget" in var_data)) {
-                this.variables[var_key]["widget"] = GUI.defVarI(var_key, var_data["dtype"], `${var_data["display"]}: `, var_data["initial"], var_data["options"], var_data["command"]);
+                this.variables[var_key]["widget"] = GUI.def_input_var(var_key, var_data["dtype"], `${var_data["display"]}: `, var_data["initial"], var_data["options"], var_data["command"]);
             } else if (var_data["vtype"] == "output") {
-                this.variables[var_key]["widget"] = GUI.defVarO(var_key, `${var_data["display"]}: `, var_data["initial"]);
+                this.variables[var_key]["widget"] = GUI.def_output_var(var_key, `${var_data["display"]}: `, var_data["initial"]);
             } else if (var_data["vtype"] == "list") {
                 this.variables[var_key]["widget"] = GUI.defListO(var_key, `${var_data["display"]}: `, var_data["h"], var_data["w"]);
             };
             if ("switch_initial" in var_data) {
                 this.variables[var_key]["output_switch"] = this.variables[var_key]["switch_initial"];
-                this.variables[var_key]["widget"].push(GUI.defVarI(`${var_key}_output_switch`, "boolean", null, this.variables[var_key]["switch_initial"]));
+                this.variables[var_key]["widget"].push(GUI.def_input_var(`${var_key}_output_switch`, "boolean", null, this.variables[var_key]["switch_initial"]));
             };
         };
         
-        let templateI = GUI.defVarI("template", "string", "Templates:", "Choose Template", this.templateList, this.load_template.bind(this));
-        let loadIDI = GUI.defVarI("loadID", "string", "Load ID:");
+        let templateI = GUI.def_input_var("template", "string", "Templates:", "Choose Template", this.templateList, this.load_template.bind(this));
+        let loadIDI = GUI.def_input_var("loadID", "string", "Load ID:");
 
 
         this.variables["wisdom"]["list"] = {'combat': 0, 'mining': 0, 'farming': 0, 'fishing': 0, 'foraging': 0, 'alchemy': 0};
@@ -229,12 +230,12 @@ class Calculator {
         
         this.rising_celsius_override = false;
         
-        let emptytimeamountI = GUI.defVarI("emptytimeamount", "number", "Empty Time span:", 1.0);
-        let emptytimelengthI = GUI.defVarI("emptytimelength", "string", "Empty Time Length:", "Days", ["Years", "Weeks", "Days", "Hours", "Minutes", "Seconds", "Harvests"]);
+        let emptytimeamountI = GUI.def_input_var("emptytimeamount", "number", "Empty Time span:", 1.0);
+        let emptytimelengthI = GUI.def_input_var("emptytimelength", "string", "Empty Time Length:", "Days", ["Years", "Weeks", "Days", "Hours", "Minutes", "Seconds", "Harvests"]);
         emptytimeamountI.push(emptytimelengthI[emptytimelengthI.length - 1]);
         
-        let totaltimeamountI = GUI.defVarI("totaltimeamount", "number", "Total Time span:", 1.0);
-        let totaltimelengthI = GUI.defVarI("totaltimelength", "string", "Total Time Length:", "Days", ["Years", "Weeks", "Days", "Hours", "Minutes", "Seconds", "Harvests"]);
+        let totaltimeamountI = GUI.def_input_var("totaltimeamount", "number", "Total Time span:", 1.0);
+        let totaltimelengthI = GUI.def_input_var("totaltimelength", "string", "Total Time Length:", "Days", ["Years", "Weeks", "Days", "Hours", "Minutes", "Seconds", "Harvests"]);
         totaltimeamountI.push(totaltimelengthI[totaltimelengthI.length - 1]);
         
         let notesAnchor = GUI.genLabel("notesAnchor", "");
@@ -392,7 +393,7 @@ class Calculator {
             this.addons_widgets[addon_name] = []
             let button_function = () => addon_function.bind(add_ons)(this)
             this.addons_widgets[addon_name].push(GUI.create_button(addon_name, button_function, false))
-            this.addons_widgets[addon_name].push(GUI.defVarI(`${addon_name}_auto_run`, "boolean", null, false))
+            this.addons_widgets[addon_name].push(GUI.def_input_var(`${addon_name}_auto_run`, "boolean", null, false))
         };
         GUI.fill_grid(Object.entries(this.addons_widgets), this.frames["addons_buttons_grid"]);
         

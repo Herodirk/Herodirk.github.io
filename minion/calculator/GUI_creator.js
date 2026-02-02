@@ -53,9 +53,11 @@ class GUI_creator {
         this.palette_names = {"Dark": "dark", "Dark Red": "dark_red", "Light": "light", "Gray Text": "gray_text"}
     };
 
+
     // Color Palette
+
     update_color_palette() {
-        let new_color_palette = this.palette_names[this.calc.variables["color_palette"]["var"]];
+        let new_color_palette = this.palette_names[this.main.variables["color_palette"]["var"]];
         if (new_color_palette === this.current_color_palette) {
             return;
         };
@@ -66,7 +68,9 @@ class GUI_creator {
         this.current_color_palette = new_color_palette;
     };
 
-    // Label
+
+    // Variable and Widget creation
+
     genLabel(id, text, html=false) {
         let span_elem = document.createElement("span");
         if (id !== null) {
@@ -87,80 +91,7 @@ class GUI_creator {
         return span_elem;
     };
 
-
-    // Variable editing
-    get_value(id) {
-        let value;
-        if (!(["input", "select"].includes(document.getElementById(id).tagName.toLowerCase()))) {
-            return null;
-        };
-        if (document.getElementById(id).type === "checkbox") {
-            value = document.getElementById(id).checked;
-        } else {
-            value = document.getElementById(id).value;
-        };
-        if (typeof value === "string") {
-            if (!isNaN(value) && !isNaN(parseFloat(value))) {
-                return Number(value);
-            };
-        };
-        return value;
-    };
-
-    set_value(id, value) {
-        if (!(["input", "select"].includes(document.getElementById(id).tagName.toLowerCase()))) {
-            return;
-        };
-        if (document.getElementById(id).type === "checkbox") {
-            document.getElementById(id).checked = value;
-        } else {
-            document.getElementById(id).value = value;
-        };
-        return;
-    };
-
-    clear_object(obj) {
-        if (obj instanceof Array) {
-            obj.splice(0, obj.length);
-        } else {
-            Object.keys(obj).forEach(prop => delete obj[prop]);
-        };
-    };
-
-    get_length(obj) {
-        if (obj instanceof Array || obj instanceof String) {
-            return obj.length;
-        } else {
-            return Object.keys(obj).length;
-        };
-    };
-
-    round_number(number, decimal=2) {
-        number *= Math.pow(10, decimal);
-        number = Math.round(number);
-        number /= Math.pow(10, decimal);
-        return number;
-    };
-
-    reduced_number(number, decimal=2) {
-        if (number === 0.0) {
-            return "0";
-        } else if (Math.abs(number) < 1) {
-            return String(this.round_number(number, decimal - 1 + Math.trunc(Math.abs(Math.floor(Math.log10(Math.abs(number)))))));
-        };
-        let highest_reduction = Math.min(Math.trunc(Math.floor(Math.log10(Math.abs(number))) / 3), this.reduced_amounts_length - 1);
-        let reduced = this.round_number((number / (Math.pow(10, 3 * highest_reduction))), decimal);
-        let output_string = `${reduced}${this.reduced_amounts[highest_reduction]}`;
-        return output_string;
-    };
-
-    toTitleCase(str) {
-        // source: https://stackoverflow.com/a/196991
-        return str.replace(/\w\S*/g, text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase());
-    };
-
-    // Inputs
-    defVarI(id, dtype, L_text=null, initial=null, options=[], cmd=null) {
+    def_input_var(id, dtype, L_text=null, initial=null, options=[], cmd=null) {
         let input_elem;
         if (dtype !== "boolean") {
             if (options.length !== 0) {
@@ -225,11 +156,20 @@ class GUI_creator {
     };
     
     // Outputs
-    defVarO(id, L_text=null, initial=null) {
+    def_output_var(id, dtype=null, L_text=null, initial=null, w=null, h=null) {
         let output_elem = document.createElement("span");
-        output_elem.id = id;
-        if (initial !== null){
-            output_elem.innerText = initial;
+        if (dtype === "object") {
+            let list_elem = document.createElement("UL");
+            list_elem.className = "output_list";
+            list_elem.style = `width:${w * 0.5}em; height:${h}em`;
+            list_elem.id = id;
+            output_elem.id = id + "_list_box"
+            output_elem.appendChild(list_elem);
+        } else {
+            output_elem.id = id;
+            if (initial !== null){
+                output_elem.innerText = initial;
+            };
         };
         if (L_text !== null) {
             let label_elem = this.genLabel(id + "_label", L_text);
@@ -238,24 +178,58 @@ class GUI_creator {
             return output_elem;
         };
     };
-    
-    defListO(id, L_text, h, w){
-        let list_box = document.createElement("span");
-        let list_elem = document.createElement("UL");
-        list_elem.className = "output_list";
-        list_elem.style = `width:${w * 0.5}em; height:${h}em`;
-        list_elem.id = id;
-        list_box.id = id + "_list_box"
-        list_box.appendChild(list_elem);
-        if (L_text !== null) {
-            let label_elem = this.genLabel(id + "_label", L_text);
-            return [label_elem, list_box];
-        } else {
-            return list_box;
+
+
+    // Placing Elements
+    fill_list_box(id, lines=[]) {
+        let output_elem = document.getElementById(id);
+        output_elem.innerHTML = "";
+        for (const line of lines) {
+            let list_elem = document.createElement("li");
+            list_elem.appendChild(document.createTextNode(line));
+            output_elem.appendChild(list_elem);
         };
     };
     
-    // Switches
+    create_grid(grid_dict) {
+        let grid_arr = [];
+        for (let [key, val] of grid_dict) {
+            if (val === null) {
+                grid_arr.push(this.main.var_dict[key].widget);
+            } else {
+                grid_arr.push(val);
+            };
+        };
+        return grid_arr
+    };
+    
+    fill_grid(grid_rows, frame) {
+        let filler_column_counter;
+        for (let [row_key, row] of grid_rows) {
+            filler_column_counter = 1;
+            while (row.length < 3) {
+                row.push(this.genLabel(row_key + "_filler_" + String(filler_column_counter), "\n"));
+                filler_column_counter += 1;
+            };
+            for (let column of row) {
+                if (column === null) {
+                    column = this.genLabel(null, "\n");
+                };
+                frame.appendChild(column);
+            };
+        };
+    };
+    
+    fill_arr(objs, frame) {
+        for (let obj of objs) {
+            frame.appendChild(obj);
+        };
+        return;
+    };
+
+
+    // Switch management
+
     defSwitch(ID, obj, control=null, negate=false, initial=true) {
         this.switches[ID] = {"state": initial, "obj": obj, "control": control, "negate": negate};
         let objs;
@@ -336,43 +310,85 @@ class GUI_creator {
         button.style.width = "10em";
         return button;
     };
-    
-    // Placing Elements
-    fill_list_box(id, lines=[]) {
-        let output_elem = document.getElementById(id);
-        output_elem.innerHTML = "";
-        for (const line of lines) {
-            let list_elem = document.createElement("li");
-            list_elem.appendChild(document.createTextNode(line));
-            output_elem.appendChild(list_elem);
+
+
+    // Data requests
+    // missing call_API
+
+
+    // Data management
+    // missing time_number, deepmultiply
+
+    get_value(id) {
+        let value;
+        if (!(["input", "select"].includes(document.getElementById(id).tagName.toLowerCase()))) {
+            return null;
+        };
+        if (document.getElementById(id).type === "checkbox") {
+            value = document.getElementById(id).checked;
+        } else {
+            value = document.getElementById(id).value;
+        };
+        if (typeof value === "string") {
+            if (!isNaN(value) && !isNaN(parseFloat(value))) {
+                return Number(value);
+            };
+        };
+        return value;
+    };
+
+    set_value(id, value) {
+        if (!(["input", "select"].includes(document.getElementById(id).tagName.toLowerCase()))) {
+            return;
+        };
+        if (document.getElementById(id).type === "checkbox") {
+            document.getElementById(id).checked = value;
+        } else {
+            document.getElementById(id).value = value;
+        };
+        return;
+    };
+
+    clear_object(obj) {
+        if (obj instanceof Array) {
+            obj.splice(0, obj.length);
+        } else {
+            Object.keys(obj).forEach(prop => delete obj[prop]);
         };
     };
 
-    fill_arr(objs, frame) {
-        for (let obj of objs) {
-            frame.appendChild(obj);
-        }
-        return
-    }
-
-    fill_grid(grid_rows, frame) {
-        let filler_column_counter;
-        for (let [row_key, row] of grid_rows) {
-            filler_column_counter = 1;
-            while (row.length < 3) {
-                row.push(this.genLabel(row_key + "_filler_" + String(filler_column_counter), "\n"));
-                filler_column_counter += 1;
-            };
-            for (let column of row) {
-                if (column === null) {
-                    column = this.genLabel(null, "\n");
-                };
-                frame.appendChild(column);
-            };
+    get_length(obj) {
+        if (obj instanceof Array || obj instanceof String) {
+            return obj.length;
+        } else {
+            return Object.keys(obj).length;
         };
     };
 
-    // Getting special inputs
+    round_number(number, decimal=2) {
+        number *= Math.pow(10, decimal);
+        number = Math.round(number);
+        number /= Math.pow(10, decimal);
+        return number;
+    };
+
+    reduced_number(number, decimal=2) {
+        if (number === 0.0) {
+            return "0";
+        } else if (Math.abs(number) < 1) {
+            return String(this.round_number(number, decimal - 1 + Math.trunc(Math.abs(Math.floor(Math.log10(Math.abs(number)))))));
+        };
+        let highest_reduction = Math.min(Math.trunc(Math.floor(Math.log10(Math.abs(number))) / 3), this.reduced_amounts_length - 1);
+        let reduced = this.round_number((number / (Math.pow(10, 3 * highest_reduction))), decimal);
+        let output_string = `${reduced}${this.reduced_amounts[highest_reduction]}`;
+        return output_string;
+    };
+
+    toTitleCase(str) {
+        // source: https://stackoverflow.com/a/196991
+        return str.replace(/\w\S*/g, text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase());
+    };
+
     edit_vars(exit_function, variables=[], this_variables=true) {
         // Called as the calculator class
         let dialog_elem = document.getElementById("edit_vars_dialog");
