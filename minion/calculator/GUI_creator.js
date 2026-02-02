@@ -313,11 +313,52 @@ class GUI_creator {
 
 
     // Data requests
-    // missing call_API
+
+    async call_API(api_url, api_name="API"){
+        try {
+            const f = await fetch(api_url);
+            var raw_data = await f.json();
+        } catch(error) {
+            console.log(`ERROR: Could not finish ${api_name} call`);
+            console.log(error);
+            return;
+        };
+        return raw_data;
+    };
 
 
     // Data management
-    // missing time_number, deepmultiply
+    deepmultiply(obj, multiplier) {
+        let keys = Object.keys(obj);
+        for (const key of keys) {
+            if (typeof(obj[key]) === "object") {
+                this.deepmultiply(obj[key], multiplier);
+            } else if (typeof(obj[key]) === "string") {
+                continue;
+            } else {
+                obj[key] *= multiplier;
+            };
+        };
+        return;
+    };
+
+    time_number(time_unit, time_amount, custom_time_unit_seconds=1.0) {
+        if (time_unit === "Years") {
+            return 31536000 * time_amount;
+        } else if (time_unit === "Weeks") {
+            return 604800 * time_amount;
+        } else if (time_unit === "Days") {
+            return 86400 * time_amount;
+        } else if (time_unit === "Hours") {
+            return 3600 * time_amount;
+        } else if (time_unit === "Minutes") {
+            return 60 * time_amount;
+        } else if (time_unit === "Seconds") {
+            return 1 * time_amount;
+        } else {
+            return custom_time_unit_seconds * time_amount;
+        };
+    };
 
     get_value(id) {
         let value;
@@ -440,6 +481,134 @@ class GUI_creator {
         if (exit_function !== null) {
             exit_function();
         };
+        return;
+    };
+};
+
+
+// Hero Variable Manager
+class Hvar {
+    constructor(huim, key, vtype, dtype, display, initial, frame=null, fancy_display=null, widget_width=null, widget_height=null, options=null, command=null, switch_initial=null, checkbox_text=null, tags=null) {
+        this.huim = huim;
+        if (key in this.huim.main.var_dict) {
+            console.log(`${key} already exists in variable dictionary, overwriting it`);
+        };
+        this.huim.main.var_dict[key] = this;
+        // Mandatory data:
+        this.key = key;
+        this.vtype = vtype;
+        this.dtype = dtype;
+        this.name_display = display;
+        this.fancy_name_display = fancy_display;
+        this.frame = frame;
+        this.initial = initial;
+
+        // Optional data:
+        if (this.dtype === "boolean") {
+            this.options = [false, true];
+        } else {
+            this.options = options;
+        };
+        this.command = command;
+        this.switch_initial = switch_initial;
+        this.widget_width = widget_width;
+        this.widget_height = widget_height;
+        this.checkbox_text = checkbox_text;
+        this.tags = tags;
+
+        // Generated data:
+        this.var = null;
+        this.list = null;
+        if (this.dtype === "object") {
+            this.list = this.initial;
+        };
+        this.widget = null;
+        this.translation = null;
+        if (this.options !== null && !(this.options instanceof Array)) {
+            this.translation = this.options;
+            this.options = Object.keys(this.options);
+        };
+
+        if (this.initial !== null) {
+            huim.set_value(this.key, this.initial);
+        };
+        if (this.vtype === "input") {
+            this.widget = huim.def_input_var(this.key, this.dtype, `${this.name_display}: `, this.initial, this.options, this.command);
+        } else if (this.vtype === "output") {
+            this.widget = huim.def_output_var(this.key, this.dtype, `${this.name_display}: `, this.initial, this.widget_width, this.widget_height);
+        } else if (this.vtype === "storage") {
+            this.var = this.initial;
+        };
+        if (this.switch_initial !== null) {
+            this.widget.push(huim.def_input_var(`${this.key}_output_switch`, "boolean", null, this.switch_initial));
+        };
+    };
+
+    get(translate=true) {
+        let val;
+        if (this.vtype === "storage") {
+            val = this.var;
+        } else {
+            val = this.huim.get_value(this.key);
+        };
+        if ((self.translation === null) || (translate === false)) {
+            return val;
+        } else {
+            return this.translation[val];
+        };
+    };
+
+    get_display(fancy=false) {
+        if (fancy === true && this.fancy_name_display !== null) {
+            return this.fancy_name_display;
+        };
+        return this.name_display;
+    };
+
+    get_output_switch() {
+        if (this.switch_initial === null) {
+            return null;
+        };
+        return this.huim.get_value(`${this.key}_output_switch`);
+    };
+
+    has_tag(tag) {
+        if (this.tags === null) {
+            return false;
+        };
+        return (this.tags.includes(tag));
+    };
+
+    set(value) {
+        if (this.vtype === "storage") {
+            this.var = value;
+        } else {
+            this.huim.set_value(this.key, value);
+        };
+        return;
+    };
+
+    update_listbox(key_format_function= x => x, value_format_function= x => x, filter= (key, val) => true) {
+        if (this.dtype !== "object") {
+            return;
+        };
+        let listbox_list = [];
+        if (this.list instanceof Array) {
+            for (const val of this.list) {
+                if (!(filter(null, val))) {
+                    continue;
+                };
+                listbox_list.push(key_format_function(val));
+            };
+        } else {
+            for (const [key, val] of Object.entries(this.list)) {
+                if (!(filter(key, val))) {
+                    continue;
+                };
+                listbox_list.push(`${key_format_function(key)}: ${value_format_function(val)}`);
+            };
+        };
+        this.huim.fill_list_box(this.key, listbox_list);
         return;
     };
 };
