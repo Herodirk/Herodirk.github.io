@@ -209,13 +209,12 @@ class Calculator {
         this.empty_time_amount.widget.push(this.empty_time_unit.widget[this.empty_time_unit.widget.length - 1]);
         this.scaled_time_amount.widget.push(this.scaled_time_unit.widget[this.scaled_time_unit.widget.length - 1]);
 
-        this.wisdom.update_listbox(x => x, x => x.get(), (key, val) => val.get() !== 0.0)
         let wisdomB = GUI.create_button('Edit', () => GUI.edit_vars.bind(this)(this.wisdom.update_listbox.bind(this)(x => x, x => x.get(), (key, val) => val.get() !== 0.0), ["combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom"]));
         this.wisdom.widget.push(wisdomB);
         
         this.notesAnchor = GUI.genLabel("notesAnchor", "");
         this.notesAnchor.className = "notes_anchor";
-
+        
         let calcB = GUI.create_button("Calculate", () => this.calculate.bind(this)(true), true);
         this.statusC = document.createElement("div")
         Object.assign(this.statusC, {innerText: "\n", className: "status_div", id: "status_div", style: "background: green;"});
@@ -370,6 +369,13 @@ class Calculator {
             this.addons_widgets[addon_name].push(GUI.def_input_var(`${addon_name}_auto_run`, "boolean", null, false))
         };
         GUI.fill_grid(Object.entries(this.addons_widgets), this.frames["addons_buttons_grid"]);
+        
+        this.wisdom.update_listbox(x => x, x => x.get(), (key, val) => val.get() !== 0.0)
+        for (const var_key of this.var_dict){
+            if (this.var_dict[var_key].initial !== null) {
+                this.var_dict[var_key].set(this.var_dict[var_key].initial);
+            };
+        };
         
         GUI.def_switch("pet_leveling", ["taming", "petxpboost", "beastmaster", "expsharepet", "expshareitem", "pets_levelled", "pet_profit", "falcon_attribute", "toucan_attribute", "used_pet_prices"], "None", true, false);
         GUI.def_switch("exp_share_diana", ["expsharepetslot2", "expsharepetslot3"], "Dianatrue", false, false);

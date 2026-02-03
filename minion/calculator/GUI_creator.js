@@ -91,10 +91,10 @@ class GUI_creator {
         return span_elem;
     };
 
-    def_input_var(id, dtype, L_text=null, initial=null, options=[], cmd=null) {
+    def_input_var(id, dtype, L_text=null, initial=null, options=null, cmd=null) {
         let input_elem;
         if (dtype !== "boolean") {
-            if (options.length !== 0) {
+            if (options !== null) {
                 input_elem = this.create_dropdownMenu(options);
             } else {
                 input_elem = document.createElement("input");
@@ -492,7 +492,7 @@ class Hvar {
         // asking for one object as functions arguments so they do not need to be ordered when calling
         let defaults = {"frame": null, "fancy_display": null, "widget_width": null, "widget_height": null, "options": null, "command": null, "switch_initial": null, "checkbox_text": null, "tags": null}
         let inputted_data = {...defaults, ...data_input}
-        this.huim = inputted_data[huim];
+        this.huim = inputted_data["huim"];
         this.key = inputted_data["key"];
         if (this.key in this.huim.main.var_dict) {
             console.log(`${this.key} already exists in variable dictionary, overwriting it`);
@@ -532,18 +532,15 @@ class Hvar {
             this.options = Object.keys(this.options);
         };
 
-        if (this.initial !== null) {
-            huim.set_value(this.key, this.initial);
-        };
         if (this.vtype === "input") {
-            this.widget = huim.def_input_var(this.key, this.dtype, `${this.name_display}: `, this.initial, this.options, this.command);
+            this.widget = this.huim.def_input_var(this.key, this.dtype, `${this.name_display}: `, this.initial, this.options, this.command);
         } else if (this.vtype === "output") {
-            this.widget = huim.def_output_var(this.key, this.dtype, `${this.name_display}: `, this.initial, this.widget_width, this.widget_height);
+            this.widget = this.huim.def_output_var(this.key, this.dtype, `${this.name_display}: `, this.initial, this.widget_width, this.widget_height);
         } else if (this.vtype === "storage") {
             this.var = this.initial;
         };
         if (this.switch_initial !== null) {
-            this.widget.push(huim.def_input_var(`${this.key}_output_switch`, "boolean", null, this.switch_initial));
+            this.widget.push(this.huim.def_input_var(`${this.key}_output_switch`, "boolean", null, this.switch_initial));
         };
     };
 
