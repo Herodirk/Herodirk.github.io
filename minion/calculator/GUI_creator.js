@@ -490,8 +490,8 @@ class GUI_creator {
 class Hvar {
     constructor(data_input) {
         // asking for one object as functions arguments so they do not need to be ordered when calling
-        defaults = {"frame": null, "fancy_display": null, "widget_width": null, "widget_height": null, "options": null, "command": null, "switch_initial": null, "checkbox_text": null, "tags": null}
-        inputted_data = {...defaults, ...data_input}
+        let defaults = {"frame": null, "fancy_display": null, "widget_width": null, "widget_height": null, "options": null, "command": null, "switch_initial": null, "checkbox_text": null, "tags": null}
+        let inputted_data = {...defaults, ...data_input}
         this.huim = inputted_data[huim];
         this.key = inputted_data["key"];
         if (this.key in this.huim.main.var_dict) {
