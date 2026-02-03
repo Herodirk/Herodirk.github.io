@@ -230,7 +230,7 @@ class GUI_creator {
 
     // Switch management
 
-    defSwitch(ID, obj, control=null, negate=false, initial=true) {
+    def_switch(ID, obj, control=null, negate=false, initial=true) {
         this.switches[ID] = {"state": initial, "obj": obj, "control": control, "negate": negate};
         let objs;
         if (initial === false) {
@@ -250,7 +250,7 @@ class GUI_creator {
         };
     };
     
-    toggleSwitch(ID, control=null) {
+    toggle_switch(ID, control=null) {
         let state = this.switches[ID]["state"];
         let objs
         if (control !== null) {
@@ -292,18 +292,18 @@ class GUI_creator {
         };
     };
     
-    createSwitchCall(ID, controlvar=null) {
+    create_switch_call(ID, controlvar=null) {
         if (controlvar === null) {
-            return () => this.toggleSwitch(ID, null);
+            return () => this.toggle_switch(ID, null);
         } else {
-            return () => this.toggleSwitch(ID, this.get_value(controlvar));
+            return () => this.toggle_switch(ID, this.get_value(controlvar));
         };
     };
 
-    createShowHideToggle(ID) {
+    create_show_hide_toggle(ID) {
         let button;
         if (typeof ID === "string") {
-            button = this.create_button("Toggle extra options", this.createSwitchCall(ID).bind(this));
+            button = this.create_button("Toggle extra options", this.create_switch_call(ID).bind(this));
         } else if (typeof ID === "function") {
             button = this.create_button("Toggle extra options", ID);
         };
@@ -488,33 +488,36 @@ class GUI_creator {
 
 // Hero Variable Manager
 class Hvar {
-    constructor(huim, key, vtype, dtype, display, initial, frame=null, fancy_display=null, widget_width=null, widget_height=null, options=null, command=null, switch_initial=null, checkbox_text=null, tags=null) {
-        this.huim = huim;
-        if (key in this.huim.main.var_dict) {
-            console.log(`${key} already exists in variable dictionary, overwriting it`);
+    constructor(data_input) {
+        // asking for one object as functions arguments so they do not need to be ordered when calling
+        defaults = {"frame": null, "fancy_display": null, "widget_width": null, "widget_height": null, "options": null, "command": null, "switch_initial": null, "checkbox_text": null, "tags": null}
+        inputted_data = {...defaults, ...data_input}
+        this.huim = inputted_data[huim];
+        this.key = inputted_data["key"];
+        if (this.key in this.huim.main.var_dict) {
+            console.log(`${this.key} already exists in variable dictionary, overwriting it`);
         };
-        this.huim.main.var_dict[key] = this;
+        this.huim.main.var_dict[this.key] = this;
         // Mandatory data:
-        this.key = key;
-        this.vtype = vtype;
-        this.dtype = dtype;
-        this.name_display = display;
-        this.fancy_name_display = fancy_display;
-        this.frame = frame;
-        this.initial = initial;
+        this.vtype = inputted_data["vtype"];
+        this.dtype = inputted_data["dtype"];
+        this.name_display = inputted_data["display"];
+        this.fancy_name_display = inputted_data["fancy_display"];
+        this.frame = inputted_data["frame"];
+        this.initial = inputted_data["initial"];
 
         // Optional data:
         if (this.dtype === "boolean") {
             this.options = [false, true];
         } else {
-            this.options = options;
+            this.options = inputted_data["options"];
         };
-        this.command = command;
-        this.switch_initial = switch_initial;
-        this.widget_width = widget_width;
-        this.widget_height = widget_height;
-        this.checkbox_text = checkbox_text;
-        this.tags = tags;
+        this.command = inputted_data["command"];
+        this.switch_initial = inputted_data["switch_initial"];
+        this.widget_width = inputted_data["widget_width"];
+        this.widget_height = inputted_data["widget_height"];
+        this.checkbox_text = inputted_data["checkbox_text"];
+        this.tags = inputted_data["tags"];
 
         // Generated data:
         this.var = null;

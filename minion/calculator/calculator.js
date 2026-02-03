@@ -14,14 +14,14 @@ class Calculator {
                 "hopper": "Enchanted Hopper",
                 "upgrade1": "Corrupt Soil",
                 "upgrade2": "Diamond Spreading",
-                "sellLoc": "Hopper",
+                "sell_loc": "Hopper",
             },
             "Compact": {
-                "sellLoc": "Best (NPC/Bazaar)",
+                "sell_loc": "Best (NPC/Bazaar)",
                 "upgrade1": "Super Compactor 3000",
             },
             "Compact Corrupt": {
-                "sellLoc": "Best (NPC/Bazaar)",
+                "sell_loc": "Best (NPC/Bazaar)",
                 "hopper": "Enchanted Hopper",
                 "upgrade1": "Super Compactor 3000",
                 "upgrade2": "Corrupt Soil",
@@ -59,22 +59,22 @@ class Calculator {
                 "postcard": true,
             },
             "AFK with pet": {
-                "afkpetlvl": 100,
+                "afkpet_lvl": 100,
                 "afk": true,
             },
             "Solo Wisdom": {
-                "miningWisdom": 83.5,  // max Seasoned Mineman (15), cookie (25), god pot (20), Cavern Wisdom (6.5), Refined Divine drill with Compact X (7 + 10)
-                "combatWisdom": 109,  // max Slayer unique tier kills (6 + 6 + 6 + 12 + 6), Rift Necklace (1), Hunter Ring (5), Bubba Blister (2), Veteran (10), cookie (25), god pot (30)
-                "farmingWisdom": 72.5,  // Fruit Bowl (1), Pelt Belt (1), Zorro's Cape (1), Rift Necklace (1), Agarimoo Artifact (1), Garden Wisdom (6.5) cookie (25), god pot (20), Blessed Mythic farming tool with Cultivating X (6 + 10)
-                "fishingWisdom": 55.5,  // Moby-Duck (1), Future Calories Talisman (1), Agarimoo Artifact (1), Chumming Talisman (1), Sea Wisdom (6.5), cookie (25), god pot (20)
-                "foragingWisdom": 93.82,  // Efficient Forager (15), Foraging Wisdom (6.5), David's Cloak (5), Foraging Wisdom Boosters armor and equipment (4 + 2), cookie (25), god pot (20), Moonglade Legendary Axe with Absorb X, Foraging Wisdom Boosters and essence shop perk Axed I ((5 + 10 + 1) * 1.02)
+                "mining_wisdom": 83.5,  // max Seasoned Mineman (15), cookie (25), god pot (20), Cavern Wisdom (6.5), Refined Divine drill with Compact X (7 + 10)
+                "combat_wisdom": 109,  // max Slayer unique tier kills (6 + 6 + 6 + 12 + 6), Rift Necklace (1), Hunter Ring (5), Bubba Blister (2), Veteran (10), cookie (25), god pot (30)
+                "farming_wisdom": 72.5,  // Fruit Bowl (1), Pelt Belt (1), Zorro's Cape (1), Rift Necklace (1), Agarimoo Artifact (1), Garden Wisdom (6.5) cookie (25), god pot (20), Blessed Mythic farming tool with Cultivating X (6 + 10)
+                "fishing_wisdom": 55.5,  // Moby-Duck (1), Future Calories Talisman (1), Agarimoo Artifact (1), Chumming Talisman (1), Sea Wisdom (6.5), cookie (25), god pot (20)
+                "foraging_wisdom": 93.82,  // Efficient Forager (15), Foraging Wisdom (6.5), David's Cloak (5), Foraging Wisdom Boosters armor and equipment (4 + 2), cookie (25), god pot (20), Moonglade Legendary Axe with Absorb X, Foraging Wisdom Boosters and essence shop perk Axed I ((5 + 10 + 1) * 1.02)
             },
             "Full Coop Wisdom": {  // cookie (25), god pot (20), 8 * (1 + 45 / 100) = 8 + (8 * 45) / 100 =  1 + (700 + 8 * 45) / 100 = 1 + 1060 / 100
-                "miningWisdom": 1060,  
-                "combatWisdom": 1060,
-                "farmingWisdom": 1060,
-                "fishingWisdom": 1060,
-                "foragingWisdom": 1060,
+                "mining_wisdom": 1060,  
+                "combat_wisdom": 1060,
+                "farming_wisdom": 1060,
+                "fishing_wisdom": 1060,
+                "foraging_wisdom": 1060,
             },
             "Combat Pet Leveling": {
                 "expshareitem": true,
@@ -85,12 +85,12 @@ class Calculator {
             },
             "Maxed Inferno Minion": {
                 "minion": "Inferno",
-                "amount": 31,
+                "amount": 32,
                 "fuel": "Inferno Minion Fuel",
-                "infernoGrade": "Hypergolic Gabagool",
-                "infernoDistillate": "Gabagool Distillate",
-                "infernoEyedrops": true,
-                "sellLoc": "Best (NPC/Bazaar)",
+                "inferno_grade": "Hypergolic Gabagool",
+                "inferno_distillate": "Gabagool Distillate",
+                "inferno_eyedrops": true,
+                "sell_loc": "Best (NPC/Bazaar)",
                 "upgrade1": "Super Compactor 3000",
                 "upgrade2": "Flycatcher",
                 "chest": "XX-Large",
@@ -117,138 +117,111 @@ class Calculator {
             "addons_buttons_grid": document.getElementById("addons_buttons_grid"),
             "addons_output_grid": document.getElementById("addons_output_grid"),
         };
-        this.variables = {
-            "bazaar_auto_update": {"vtype": "setting", "dtype": "boolean", "display": "Bazaar Auto Update", "initial": true, "options": [false, true]},
-            "bazaar_cooldown": {"vtype": "setting", "dtype": "number", "display": "Bazaar Cooldown (s)", "initial": 120, "options": []},
-            "compact_tolerance": {"vtype": "setting", "dtype": "number", "display": "Over-Compacting Tolerance (coins)", "initial": 10000, "options": []},
-            "output_to_clipboard": {"vtype": "setting", "dtype": "boolean", "display": "Output to Clipboard", "initial": true, "options": [false, true]},
-            "color_palette": {"vtype": "setting", "dtype": "string", "display": "Color Palette", "initial": "Dark Red", "options": Object.keys(GUI.palette_names)},
-            "minion": {"vtype": "input", "dtype": "string", "display": "Minion", "frame": "inputs_minion_grid", "initial": "Custom", "options": Object.keys(md.minionList), "command": () => this.multiswitch("minion")},
-            "miniontier": {"vtype": "input", "dtype": "number", "display": "Tier", "frame": "inputs_minion_grid", "initial": 12, "options": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "command": () => this.multiswitch("tier")},
-            "amount": {"vtype": "input", "dtype": "number", "display": "Amount", "frame": "inputs_minion_grid", "initial": 1, "options": [], "command": null},
-            "fuel": {"vtype": "input", "dtype": "string", "display": "Fuel", "frame": "inputs_minion_grid", "initial": "None", "options": Object.keys(md.fuel_options), "command": () => this.multiswitch("fuel")},
-            "infernoGrade": {"vtype": "input", "dtype": "string", "display": "Grade", "frame": "inputs_minion_grid", "initial": "Hypergolic Gabagool", "options": Object.keys(md.infernofuel_data["grades"]).map(grade => md.itemList[grade]["display"]), "command": null},
-            "infernoDistillate": {"vtype": "input", "dtype": "string", "display": "Distillate", "frame": "inputs_minion_grid", "initial": "Gabagool Distillate", "options": Object.keys(md.infernofuel_data["distilates"]).map(dist => md.itemList[dist]["display"]), "command": null},
-            "infernoEyedrops": {"vtype": "input", "dtype": "boolean", "display": "Eyedrops", "frame": "inputs_minion_grid", "initial": true, "options": [false, true], "command": null},
-            "hopper": {"vtype": "input", "dtype": "string", "display": "Hopper", "frame": "inputs_minion_grid", "initial": "None", "options": Object.keys(md.hopper_data), "command": null},
-            "upgrade1": {"vtype": "input", "dtype": "string", "display": "Upgrade 1", "frame": "inputs_minion_grid", "initial": "None", "options": Object.keys(md.upgrade_options), "command": null},
-            "upgrade2": {"vtype": "input", "dtype": "string", "display": "Upgrade 2", "frame": "inputs_minion_grid", "initial": "None", "options": Object.keys(md.upgrade_options), "command": null},
-            "chest": {"vtype": "input", "dtype": "string", "display": "Chest", "frame": "inputs_minion_grid", "initial": "None", "options": Object.keys(md.minion_chests), "command": null},
-            "beacon": {"vtype": "input", "dtype": "number", "display": "Beacon", "frame": "inputs_minion_grid", "initial": 0, "options": [0, 1, 2, 3, 4, 5], "command": GUI.createSwitchCall("beacon", "beacon")},
-            "scorched": {"vtype": "input", "dtype": "boolean", "display": "Scorched", "frame": "inputs_minion_grid", "initial": false, "options": [false, true], "command": null},
-            "B_constant": {"vtype": "input", "dtype": "boolean", "display": "Free Fuel Beacon", "frame": "inputs_minion_grid", "initial": false, "options": [false, true], "command": null},
-            "B_acquired": {"vtype": "input", "dtype": "boolean", "display": "Acquired Beacon", "frame": "inputs_minion_grid", "initial": false, "options": [false, true], "command": null},
-            "infusion": {"vtype": "input", "dtype": "boolean", "display": "Infusion", "frame": "inputs_minion_grid", "initial": false, "options": [false, true], "command": null},
-            "crystal": {"vtype": "input", "dtype": "string", "display": "Crystal", "frame": "inputs_minion_grid", "initial": "None", "options": Object.keys(md.floating_crystals), "command": null},
-            "free_will": {"vtype": "input", "dtype": "boolean", "display": "Free Will", "frame": "inputs_minion_grid", "initial": false, "options": [false, true], "command": GUI.createSwitchCall("free_will", "free_will")},
-            "postcard": {"vtype": "input", "dtype": "boolean", "display": "Postcard", "frame": "inputs_minion_grid", "initial": false, "options": [false, true], "command": null},
-            "afk": {"vtype": "input", "dtype": "boolean", "display": "AFK", "frame": "inputs_player_grid", "initial": false, "options": [false, true], "command": () => this.multiswitch("afk")},
-            "afkpet": {"vtype": "input", "dtype": "string", "display": "AFK Pet", "frame": "inputs_player_grid", "initial": "None", "options": Object.keys(md.boost_pets), "command": null},
-            "afkpetrarity": {"vtype": "input", "dtype": "string", "display": "AFK Pet Rarity", "frame": "inputs_player_grid", "initial": "Legendary", "options": ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"], "command": null},
-            "afkpetlvl": {"vtype": "input", "dtype": "number", "display": "AFK Pet level", "frame": "inputs_player_grid", "initial": 0.0, "options": [], "command": null},
-            "enchanted_clock": {"vtype": "input", "dtype": "boolean", "display": "Enchanted Clock", "frame": "inputs_player_grid", "initial": false, "options": [false, true], "command": null},
-            "specialLayout": {"vtype": "input", "dtype": "boolean", "display": "Special Layout", "frame": "inputs_player_grid", "initial": false, "options": [false, true], "command": null},
-            "playerHarvests": {"vtype": "input", "dtype": "boolean", "display": "Player Harvests", "frame": "inputs_player_grid", "initial": false, "options": [false, true], "command": null},
-            "playerLooting": {"vtype": "input", "dtype": "number", "display": "Looting", "frame": "inputs_player_grid", "initial": 0, "options": [0, 1, 2, 3, 4 ,5], "command": null},
-            "potatoTalisman": {"vtype": "input", "dtype": "boolean", "display": "Potato talisman", "frame": "inputs_player_grid", "initial": false, "options": [false, true], "command": null},
-            "combatWisdom": {"vtype": "input", "noWidget": true, "dtype": "number", "display": "Combat", "initial": 0.0, "options": []},
-            "miningWisdom": {"vtype": "input", "noWidget": true, "dtype": "number", "display": "Mining", "initial": 0.0, "options": []},
-            "farmingWisdom": {"vtype": "input", "noWidget": true, "dtype": "number", "display": "Farming", "initial": 0.0, "options": []},
-            "fishingWisdom": {"vtype": "input", "noWidget": true, "dtype": "number", "display": "Fishing", "initial": 0.0, "options": []},
-            "foragingWisdom": {"vtype": "input", "noWidget": true, "dtype": "number", "display": "Foraging", "initial": 0.0, "options": []},
-            "alchemyWisdom": {"vtype": "input", "noWidget": true, "dtype": "number", "display": "Alchemy", "initial": 0.0, "options": []},
-            "wisdom": {"vtype": "list", "display": "Wisdom", "frame": "inputs_player_grid", "w": 20, "h": 6, "list": {}},
-            "mayor": {"vtype": "input", "dtype": "string", "display": "Mayor", "frame": "inputs_player_grid", "initial": "None", "options": ["None", "Aatrox", "Cole", "Diana", "Diaz", "Finnegan", "Foxy", "Marina", "Paul", "Jerry", "Derpy", "Scorpius", "Aura"], "command": () => this.multiswitch("mayors")},
-            "levelingpet": {"vtype": "input", "dtype": "string", "display": "Leveling pet", "frame": "inputs_player_grid", "initial": "None", "options": Object.keys(md.all_pets), "command": () => this.multiswitch("pet_leveling")},
-            "taming": {"vtype": "input", "dtype": "number", "display": "Taming", "frame": "inputs_player_grid", "initial": 0.0, "options": [], "command": null},
-            "falcon_attribute": {"vtype": "input", "dtype": "number", "display": "Battle Experience", "frame": "inputs_player_grid", "initial": 0, "options": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "command": null},
-            "toucan_attribute": {"vtype": "input", "dtype": "number", "display": "Why Not More", "frame": "inputs_player_grid", "initial": 0, "options": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "command": null},
-            "petxpboost": {"vtype": "input", "dtype": "string", "display": "Pet XP boost", "frame": "inputs_player_grid", "initial": "None", "options": Object.keys(md.pet_xp_boosts), "command": null},
-            "beastmaster": {"vtype": "input", "dtype": "number", "display": "Beastmaster", "frame": "inputs_player_grid", "initial": 0.0, "options": [], "command": null},
-            "expsharepet": {"vtype": "input", "dtype": "string", "display": "Exp Share pet", "frame": "inputs_player_grid", "initial": "None", "options": Object.keys(md.all_pets), "command": null},
-            "expsharepetslot2": {"vtype": "input", "dtype": "string", "display": "Exp Share pet 2", "frame": "inputs_player_grid", "initial": "None", "options": Object.keys(md.all_pets), "command": null},
-            "expsharepetslot3": {"vtype": "input", "dtype": "string", "display": "Exp Share pet 3", "frame": "inputs_player_grid", "initial": "None", "options": Object.keys(md.all_pets), "command": null},
-            "expshareitem": {"vtype": "input", "dtype": "boolean", "display": "Exp Share pet item", "frame": "inputs_player_grid", "initial": false, "options": [false, true], "command": null},
-            "often_empty": {"vtype": "input", "dtype": "boolean", "display": "Empty Often", "frame": "inputs_player_grid", "initial": false, "options": [false, true], "command": GUI.createSwitchCall("emptytime", "often_empty")},
-            "sellLoc": {"vtype": "input", "dtype": "string", "display": "Sell Location", "frame": "inputs_player_grid", "initial": "Best (NPC/Bazaar)", "options": ["Best (NPC/Bazaar)", "Bazaar", "Hopper", "NPC"], "command": GUI.createSwitchCall("NPC_Bazaar", "sellLoc")},
-            "bazaar_sell_type": {"vtype": "input", "dtype": "string", "display": "Bazaar sell type", "frame": "inputs_player_grid", "initial": "Sell Offer", "options": Object.keys(md.bazaar_sell_types), "command": null},
-            "bazaar_buy_type": {"vtype": "input", "dtype": "string", "display": "Bazaar buy type", "frame": "inputs_player_grid", "initial": "Buy Order", "options": Object.keys(md.bazaar_buy_types), "command": null},
-            "bazaar_taxes": {"vtype": "input", "dtype": "boolean", "display": "Bazaar taxes", "frame": "inputs_player_grid", "initial": true, "options": [false, true], "command": GUI.createSwitchCall("bazaar_tax", "bazaar_taxes")},
-            "bazaar_flipper": {"vtype": "input", "dtype": "number", "display": "Bazaar Flipper", "frame": "inputs_player_grid", "initial": 1, "options": [0, 1, 2], "command": null},
-            "ID": {"vtype": "output", "dtype": "string", "display": "Setup ID", "frame": "outputs_setup_grid", "initial": "", "switch_initial": true},
-            "ID_container": {"vtype": "list", "display": "ID", "frame": "outputs_setup_grid", "w": 35, "h": 1.6, "list": [], "IDtoDisplay": false},
-            "time": {"vtype": "output", "dtype": "string", "display": "Time", "frame": "outputs_setup_grid", "initial": "1.0 Days", "switch_initial": true},
-            "time_seconds": {"vtype": "storage", "dtype": "number", "initial": 86400.0},
-            "emptytime": {"vtype": "output", "dtype": "string", "display": "Empty Time", "fancy_display": "Empty every", "frame": "outputs_setup_grid", "initial": "1.0 Days", "switch_initial": true},
-            "actiontime": {"vtype": "output", "dtype": "number", "display": "Action time (s)", "frame": "outputs_setup_grid", "initial": 0.0, "switch_initial": false},
-            "harvests": {"vtype": "output", "dtype": "number", "display": "Harvests", "frame": "outputs_setup_grid", "initial": 0.0, "switch_initial": false},
-            "items": {"vtype": "list", "display": "Item amounts", "frame": "outputs_setup_grid", "w": 35, "h": 10, "list": {}, "switch_initial": false, "IDtoDisplay": true},
-            "itemSellLoc": {"vtype": "list", "display": "Sell locations", "frame": "outputs_profit_grid", "w": 35, "h": 10, "list": {}, "switch_initial": false, "IDtoDisplay": true},
-            // "filltime": {"vtype": "output", "dtype": "number", "display": "Fill time", "frame": "outputs_setup_grid", "initial": 0.0, "switch_initial": false},
-            "used_storage": {"vtype": "output", "dtype": "number", "display": "Used Storage", "frame": "outputs_setup_grid", "initial": 0, "switch_initial": false},
-            "itemtypeProfit": {"vtype": "list", "display": "Itemtype profits", "fancy_display": "Profits per item type", "frame": "outputs_profit_grid", "w": 35, "h": 10, "list": {}, "switch_initial": false, "IDtoDisplay": true},
-            "itemProfit": {"vtype": "output", "dtype": "number", "display": "Total item profit", "frame": "outputs_profit_grid", "initial": 0.0, "switch_initial": false},
-            "xp": {"vtype": "list", "display": "XP amounts", "frame": "outputs_setup_grid", "w": 35, "h": 4, "list": {}, "switch_initial": false},
-            "pets_levelled": {"vtype": "list", "display": "Pets Levelled", "frame": "outputs_setup_grid",  "w": 35, "h": 4.6, "list": {}, "switch_initial": false},
-            "petProfit": {"vtype": "output", "dtype": "number", "display": "Pet profit", "frame": "outputs_profit_grid", "initial": 0.0, "switch_initial": false},
-            "fuelcost": {"vtype": "output", "dtype": "number", "display": "Fuel cost", "frame": "outputs_profit_grid", "initial": 0.0, "switch_initial": false},
-            "fuelamount": {"vtype": "output", "dtype": "number", "display": "Fuel amount", "frame": "outputs_setup_grid", "initial": 0.0, "switch_initial": false},
-            "totalProfit": {"vtype": "output", "dtype": "number", "display": "Total profit", "frame": "outputs_profit_grid", "initial": 0.0, "switch_initial": true},
-            "notes": {"vtype": "list", "display": "Notes", "frame": "outputs_setup_grid", "w": 50, "h": 4.2, "list": {}, "switch_initial": false},
-            "bazaar_update_txt": {"vtype": "output", "dtype": "string", "display": "Bazaar data", "frame": "outputs_profit_grid", "initial": "Not Loaded", "switch_initial": true},
-            "setupcost": {"vtype": "output", "dtype": "number", "display": "Setup cost", "frame": "outputs_profit_grid", "initial": 0.0, "switch_initial": true},
-            "freewillcost": {"vtype": "output", "dtype": "number", "display": "Free Will cost", "fancy_display": "+ Average Free Will cost", "frame": "outputs_profit_grid", "initial": 0.0, "switch_initial": true},
-            "extracost": {"vtype": "storage", "dtype": "string", "display": "Extra cost", "fancy_display": "+ Extra cost", "initial": ""},
-            "optimal_tier_free_will": {"vtype": "storage", "dtype": "number", "initial": 1},
-            "available_storage": {"vtype": "storage", "dtype": "number", "initial": 0},
-            "addons_output_container": {"vtype": "list", "display": "Add-on Outputs", "frame": "addons_output_grid", "w": 65, "h": 20, "list": {}, "switch_initial": false, "IDtoDisplay": false},
-            };
-        for (const [var_key, var_data] of Object.entries(this.variables)) {
-            if ("initial" in var_data) {
-                var_data["var"] = var_data["initial"];
-            };
-            if (var_data["vtype"] == "input" && !("noWidget" in var_data)) {
-                this.variables[var_key]["widget"] = GUI.def_input_var(var_key, var_data["dtype"], `${var_data["display"]}: `, var_data["initial"], var_data["options"], var_data["command"]);
-            } else if (var_data["vtype"] == "output") {
-                this.variables[var_key]["widget"] = GUI.def_output_var(var_key, `${var_data["display"]}: `, var_data["initial"]);
-            } else if (var_data["vtype"] == "list") {
-                this.variables[var_key]["widget"] = GUI.defListO(var_key, `${var_data["display"]}: `, var_data["h"], var_data["w"]);
-            };
-            if ("switch_initial" in var_data) {
-                this.variables[var_key]["output_switch"] = this.variables[var_key]["switch_initial"];
-                this.variables[var_key]["widget"].push(GUI.def_input_var(`${var_key}_output_switch`, "boolean", null, this.variables[var_key]["switch_initial"]));
-            };
-        };
-        
-        let templateI = GUI.def_input_var("template", "string", "Templates:", "Choose Template", this.templateList, this.load_template.bind(this));
-        let loadIDI = GUI.def_input_var("loadID", "string", "Load ID:");
 
+        this.template = new Hvar({"huim": this.gui, "key": "template", "vtype": "input", "display": "Templates", "initial": "Choose Template", "dtype": "string", "frame": "inputs_minion_grid", "options": Object.keys(this.templateList), "command": this.load_template});
+        this.load_ID = new Hvar({"huim": this.gui, "key": "load_id", "vtype": "input", "dtype": "string", "frame": "inputs_minion_grid", "display": "Load ID", "initial": ""});
+        this.minion = new Hvar({"huim": this.gui, "key": "minion", "vtype": "input", "dtype": "string", "display": "Minion", "frame": "inputs_minion_grid", "initial": "Custom", "options": Object.keys(md.minionList), "command": () => this.multiswitch('minion')});
+        this.miniontier = new Hvar({"huim": this.gui, "key": "miniontier", "vtype": "input", "dtype": "number", "display": "Tier", "frame": "inputs_minion_grid", "initial": 12, "options": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "command": () => this.multiswitch('tier')});
+        this.amount = new Hvar({"huim": this.gui, "key": "amount", "vtype": "input", "dtype": "number", "display": "Amount", "frame": "inputs_minion_grid", "initial": 1, "options": null});
+        this.fuel = new Hvar({"huim": this.gui, "key": "fuel", "vtype": "input", "dtype": "string", "display": "Fuel", "frame": "inputs_minion_grid", "initial": "None", "options": md.fuel_options, "command": () => this.multiswitch('fuel')});
+        this.inferno_grade = new Hvar({"huim": this.gui, "key": "inferno_grade", "vtype": "input", "dtype": "string", "display": "Grade", "frame": "inputs_minion_grid", "initial": "Hypergolic Gabagool", "options": md.inferno_fuel_grade_options});
+        this.inferno_distillate = new Hvar({"huim": this.gui, "key": "inferno_distillate", "vtype": "input", "dtype": "string", "display": "Distillate", "frame": "inputs_minion_grid", "initial": "Gabagool Distillate", "options": md.inferno_fuel_distillate_options});
+        this.inferno_eyedrops = new Hvar({"huim": this.gui, "key": "inferno_eyedrops", "vtype": "input", "dtype": "boolean", "display": "Eyedrops", "frame": "inputs_minion_grid", "initial": true});
+        this.hopper = new Hvar({"huim": this.gui, "key": "hopper", "vtype": "input", "dtype": "string", "display": "Hopper", "frame": "inputs_minion_grid", "initial": "None", "options": md.hopper_options});
+        this.upgrade1 = new Hvar({"huim": this.gui, "key": "upgrade1", "vtype": "input", "dtype": "string", "display": "Upgrade 1", "frame": "inputs_minion_grid", "initial": "None", "options": md.upgrade_options});
+        this.upgrade2 = new Hvar({"huim": this.gui, "key": "upgrade2", "vtype": "input", "dtype": "string", "display": "Upgrade 2", "frame": "inputs_minion_grid", "initial": "None", "options": md.upgrade_options});
+        this.chest = new Hvar({"huim": this.gui, "key": "chest", "vtype": "input", "dtype": "string", "display": "Chest", "frame": "inputs_minion_grid", "initial": "None", "options": md.chest_options});
+        this.beacon = new Hvar({"huim": this.gui, "key": "beacon", "vtype": "input", "dtype": "string", "display": "Beacon", "frame": "inputs_minion_grid", "initial": "None", "options": md.beacon_options, "command": this.gui.create_switch_call("beacon", "beacon")});
+        this.scorched = new Hvar({"huim": this.gui, "key": "scorched", "vtype": "input", "dtype": "boolean", "display": "Scorched", "frame": "inputs_minion_grid", "initial": false});
+        this.B_constant = new Hvar({"huim": this.gui, "key": "B_constant", "vtype": "input", "dtype": "boolean", "display": "Free Fuel Beacon", "frame": "inputs_minion_grid", "initial": false});
+        this.B_acquired = new Hvar({"huim": this.gui, "key": "B_acquired", "vtype": "input", "dtype": "boolean", "display": "Acquired Beacon", "frame": "inputs_minion_grid", "initial": false});
+        this.infusion = new Hvar({"huim": this.gui, "key": "infusion", "vtype": "input", "dtype": "boolean", "display": "Infusion", "frame": "inputs_minion_grid", "initial": false});
+        this.crystal = new Hvar({"huim": this.gui, "key": "crystal", "vtype": "input", "dtype": "string", "display": "Crystal", "frame": "inputs_minion_grid", "initial": "None", "options": md.floating_crystal_options});
+        this.free_will = new Hvar({"huim": this.gui, "key": "free_will", "vtype": "input", "dtype": "boolean", "display": "Free Will", "frame": "inputs_minion_grid", "initial": false, "command": this.gui.create_switch_call("free_will", "free_will")});
+        this.postcard = new Hvar({"huim": this.gui, "key": "postcard", "vtype": "input", "dtype": "boolean", "display": "Postcard", "frame": "inputs_minion_grid", "initial": false});
+        this.afk = new Hvar({"huim": this.gui, "key": "afk", "vtype": "input", "dtype": "boolean", "display": "AFK", "frame": "inputs_player_grid", "initial": false, "command": () => this.multiswitch("afk")});
+        this.afkpet = new Hvar({"huim": this.gui, "key": "afkpet", "vtype": "input", "dtype": "string", "display": "AFK Pet", "frame": "inputs_player_grid", "initial": "None", "options": Object.keys(md.boost_pets)});
+        this.afkpet_rarity = new Hvar({"huim": this.gui, "key": "afkpet_rarity", "vtype": "input", "dtype": "string", "display": "AFK Pet Rarity", "frame": "inputs_player_grid", "initial": "Legendary", "options": ['Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'Mythic']});
+        this.afkpet_lvl = new Hvar({"huim": this.gui, "key": "afkpet_lvl", "vtype": "input", "dtype": "number", "display": "AFK Pet level", "frame": "inputs_player_grid", "initial": 0.0});
+        this.enchanted_clock = new Hvar({"huim": this.gui, "key": "enchanted_clock", "vtype": "input", "dtype": "boolean", "display": "Enchanted Clock", "frame": "inputs_player_grid", "initial": false});
+        this.special_layout = new Hvar({"huim": this.gui, "key": "special_layout", "vtype": "input", "dtype": "boolean", "display": "Special Layout", "frame": "inputs_player_grid", "initial": false});
+        this.player_harvests = new Hvar({"huim": this.gui, "key": "player_harvests", "vtype": "input", "dtype": "boolean", "display": "Player Harvests", "frame": "inputs_player_grid", "initial": false});
+        this.player_looting = new Hvar({"huim": this.gui, "key": "player_looting", "vtype": "input", "dtype": "number", "display": "Looting", "frame": "inputs_player_grid", "initial": 0, "options": [0, 1, 2, 3, 4, 5]});
+        this.potato_accessory = new Hvar({"huim": this.gui, "key": "potato_accessory", "vtype": "input", "dtype": "string", "display": "Potato Accessory", "frame": "inputs_player_grid", "initial": "None", "options": md.potato_accessory_options});
+        this.combat_wisdom = new Hvar({"huim": this.gui, "key": "combat_wisdom", "vtype": "storage", "dtype": "number", "display": "Combat", "initial": 0.0});
+        this.mining_wisdom = new Hvar({"huim": this.gui, "key": "mining_wisdom", "vtype": "storage", "dtype": "number", "display": "Mining", "initial": 0.0});
+        this.farming_wisdom = new Hvar({"huim": this.gui, "key": "farming_wisdom", "vtype": "storage", "dtype": "number", "display": "Farming", "initial": 0.0});
+        this.fishing_wisdom = new Hvar({"huim": this.gui, "key": "fishing_wisdom", "vtype": "storage", "dtype": "number", "display": "Fishing", "initial": 0.0});
+        this.foraging_wisdom = new Hvar({"huim": this.gui, "key": "foraging_wisdom", "vtype": "storage", "dtype": "number", "display": "Foraging", "initial": 0.0});
+        this.alchemy_wisdom = new Hvar({"huim": this.gui, "key": "alchemy_wisdom", "vtype": "storage", "dtype": "number", "display": "Alchemy", "initial": 0.0});
+        this.wisdom = new Hvar({"huim": this.gui, "key": "wisdom", "vtype": "output", "dtype": "object", "display": "Wisdom", "frame": "inputs_player_grid", "widget_width": null, "widget_height": 6, "initial": {'combat': this.combat_wisdom.var, 'mining': this.mining_wisdom.var, 'farming': this.farming_wisdom.var, 'fishing': this.fishing_wisdom.var, 'foraging': this.foraging_wisdom.var, 'alchemy': this.alchemy_wisdom.var}});
+        this.mayor = new Hvar({"huim": this.gui, "key": "mayor", "vtype": "input", "dtype": "string", "display": "Mayor", "frame": "inputs_player_grid", "initial": "None", "options": ['None', 'Aatrox', 'Cole', 'Diana', 'Diaz', 'Finnegan', 'Foxy', 'Marina', 'Paul', 'Jerry', 'Derpy', 'Scorpius', 'Aura'], "command": () => this.multiswitch("mayors")});
+        this.levelingpet = new Hvar({"huim": this.gui, "key": "levelingpet", "vtype": "input", "dtype": "string", "display": "Leveling pet", "frame": "inputs_player_grid", "initial": "None", "options": Object.keys(md.all_pets), "command": () => this.multiswitch("pet_leveling")});
+        this.taming = new Hvar({"huim": this.gui, "key": "taming", "vtype": "input", "dtype": "number", "display": "Taming", "frame": "inputs_player_grid", "initial": 0.0});
+        this.falcon_attribute = new Hvar({"huim": this.gui, "key": "falcon_attribute", "vtype": "input", "dtype": "number", "display": "Battle Experience", "frame": "inputs_player_grid", "initial": 0, "options": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]});
+        this.toucan_attribute = new Hvar({"huim": this.gui, "key": "toucan_attribute", "vtype": "input", "dtype": "number", "display": "Why Not More", "frame": "inputs_player_grid", "initial": 0, "options": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]});
+        this.petxpboost = new Hvar({"huim": this.gui, "key": "petxpboost", "vtype": "input", "dtype": "string", "display": "Pet XP boost", "frame": "inputs_player_grid", "initial": "None", "options": md.pet_exp_boost_options});
+        this.beastmaster = new Hvar({"huim": this.gui, "key": "beastmaster", "vtype": "input", "dtype": "number", "display": "Beastmaster", "frame": "inputs_player_grid", "initial": 0.0});
+        this.expsharepet = new Hvar({"huim": this.gui, "key": "expsharepet", "vtype": "input", "dtype": "string", "display": "Exp Share pet", "frame": "inputs_player_grid", "initial": "None", "options": Object.keys(md.all_pets)});
+        this.expsharepetslot2 = new Hvar({"huim": this.gui, "key": "expsharepetslot2", "vtype": "input", "dtype": "string", "display": "Exp Share pet 2", "frame": "inputs_player_grid", "initial": "None", "options": Object.keys(md.all_pets)});
+        this.expsharepetslot3 = new Hvar({"huim": this.gui, "key": "expsharepetslot3", "vtype": "input", "dtype": "string", "display": "Exp Share pet 3", "frame": "inputs_player_grid", "initial": "None", "options": Object.keys(md.all_pets)});
+        this.expshareitem = new Hvar({"huim": this.gui, "key": "expshareitem", "vtype": "input", "dtype": "boolean", "display": "Exp Share pet item", "frame": "inputs_player_grid", "initial": false});
+        this.scale_time = new Hvar({"huim": this.gui, "key": "scale_time", "vtype": "input", "dtype": "boolean", "display": "Scale Time", "frame": "inputs_player_grid", "initial": false, "command": this.gui.create_switch_call("scaled_time_switch", "scale_time")});
+        this.sell_loc = new Hvar({"huim": this.gui, "key": "sell_loc", "vtype": "input", "dtype": "string", "display": "Sell Location", "frame": "inputs_player_grid", "initial": "Best (NPC/Bazaar)", "options": ['Best (NPC/Bazaar)', 'Bazaar', 'Hopper', 'NPC'], "command": this.gui.create_switch_call("NPC_Bazaar", "sell_loc")});
+        this.bazaar_sell_type = new Hvar({"huim": this.gui, "key": "bazaar_sell_type", "vtype": "input", "dtype": "string", "display": "Bazaar sell type", "frame": "inputs_player_grid", "initial": "Sell Offer", "options": Object.keys(md.bazaar_sell_types)});
+        this.bazaar_buy_type = new Hvar({"huim": this.gui, "key": "bazaar_buy_type", "vtype": "input", "dtype": "string", "display": "Bazaar buy type", "frame": "inputs_player_grid", "initial": "Buy Order", "options": Object.keys(md.bazaar_buy_types)});
+        this.bazaar_taxes = new Hvar({"huim": this.gui, "key": "bazaar_taxes", "vtype": "input", "dtype": "boolean", "display": "Bazaar taxes", "frame": "inputs_player_grid", "initial": true, "command": this.gui.create_switch_call("bazaar_tax", "bazaar_taxes")});
+        this.bazaar_flipper = new Hvar({"huim": this.gui, "key": "bazaar_flipper", "vtype": "input", "dtype": "number", "display": "Bazaar Flipper", "frame": "inputs_player_grid", "initial": 1, "options": [0, 1, 2]});
+        this.ID = new Hvar({"huim": this.gui, "key": "ID", "vtype": "output", "dtype": "string", "display": "Setup ID", "frame": "outputs_setup_grid", "initial": "", "switch_initial": true});
+        this.ID_container = new Hvar({"huim": this.gui, "key": "ID_container", "vtype": "output", "dtype": "object", "display": "ID", "frame": "outputs_setup_grid", "widget_width": 35, "widget_height": 1, "initial": [], "switch_initial": false});
+        this.scaled_time = new Hvar({"huim": this.gui, "key": "scaled_time", "vtype": "output", "dtype": "string", "display": "Scaled Time", "frame": "outputs_setup_grid", "initial": "1.0 Days", "switch_initial": true});
+        this.time_seconds = new Hvar({"huim": this.gui, "key": "time_seconds", "vtype": "storage", "dtype": "number", "display": "Time (s)", "initial": 86400.0});
+        this.empty_time = new Hvar({"huim": this.gui, "key": "empty_time", "vtype": "output", "dtype": "string", "display": "Empty Time", "fancy_display": "Empty every", "frame": "outputs_setup_grid", "initial": "1.0 Days", "switch_initial": true});
+        this.actiontime = new Hvar({"huim": this.gui, "key": "actiontime", "vtype": "output", "dtype": "number", "display": "Action time (s)", "frame": "outputs_setup_grid", "initial": 0.0, "switch_initial": false});
+        this.harvests = new Hvar({"huim": this.gui, "key": "harvests", "vtype": "output", "dtype": "number", "display": "Harvests", "frame": "outputs_setup_grid", "initial": 0.0, "switch_initial": false});
+        this.items = new Hvar({"huim": this.gui, "key": "items", "vtype": "output", "dtype": "object", "display": "Item amounts", "frame": "outputs_setup_grid", "widget_width": 35, "widget_height": null, "initial": {}, "switch_initial": false, "tags": ["item_ID_to_display"]});
+        this.item_sell_loc = new Hvar({"huim": this.gui, "key": "item_sell_loc", "vtype": "output", "dtype": "object", "display": "Sell locations", "frame": "outputs_profit_grid", "widget_width": 35, "widget_height": null, "initial": {}, "switch_initial": false, "tags": ["item_ID_to_display"]});
+        this.filltime = new Hvar({"huim": this.gui, "key": "filltime", "vtype": "output", "dtype": "number", "display": "Fill time", "frame": "outputs_setup_grid", "initial": 0.0, "switch_initial": false});
+        this.used_storage = new Hvar({"huim": this.gui, "key": "used_storage", "vtype": "output", "dtype": "number", "display": "Used Storage", "frame": "outputs_setup_grid", "initial": 0, "switch_initial": false});
+        this.itemtype_profit = new Hvar({"huim": this.gui, "key": "itemtype_profit", "vtype": "output", "dtype": "object", "display": "Itemtype profits", "fancy_display": "Profits per item type", "frame": "outputs_profit_grid", "widget_width": 35, "widget_height": null, "initial": {}, "switch_initial": false, "tags": ["item_ID_to_display"]});
+        this.item_profit = new Hvar({"huim": this.gui, "key": "item_profit", "vtype": "output", "dtype": "number", "display": "Total item profit", "frame": "outputs_profit_grid", "initial": 0.0, "switch_initial": false});
+        this.xp = new Hvar({"huim": this.gui, "key": "xp", "vtype": "output", "dtype": "object", "display": "XP amounts", "frame": "outputs_setup_grid", "widget_width": 35, "widget_height": 4, "initial": {}, "switch_initial": false});
+        this.pets_levelled = new Hvar({"huim": this.gui, "key": "pets_levelled", "vtype": "output", "dtype": "object", "display": "Pets Levelled", "frame": "outputs_setup_grid", "widget_width": 35, "widget_height": 4, "initial": {}, "switch_initial": false});
+        this.pet_profit = new Hvar({"huim": this.gui, "key": "pet_profit", "vtype": "output", "dtype": "number", "display": "Pet profit", "frame": "outputs_profit_grid", "initial": 0.0, "switch_initial": false});
+        this.fuelcost = new Hvar({"huim": this.gui, "key": "fuelcost", "vtype": "output", "dtype": "number", "display": "Fuel cost", "frame": "outputs_profit_grid", "initial": 0.0, "switch_initial": false});
+        this.fuelamount = new Hvar({"huim": this.gui, "key": "fuelamount", "vtype": "output", "dtype": "number", "display": "Fuel amount", "frame": "outputs_setup_grid", "initial": 0.0, "switch_initial": false});
+        this.total_profit = new Hvar({"huim": this.gui, "key": "total_profit", "vtype": "output", "dtype": "number", "display": "Total profit", "frame": "outputs_profit_grid", "initial": 0.0, "switch_initial": true});
+        this.notes = new Hvar({"huim": this.gui, "key": "notes", "vtype": "output", "dtype": "object", "display": "Notes", "frame": "outputs_setup_grid", "widget_width": 50, "widget_height": 4, "initial": {}, "switch_initial": false});
+        this.bazaar_update_txt = new Hvar({"huim": this.gui, "key": "bazaar_update_txt", "vtype": "output", "dtype": "string", "display": "Bazaar data", "frame": "outputs_profit_grid", "initial": "Not Loaded", "switch_initial": true});
+        this.setupcost = new Hvar({"huim": this.gui, "key": "setupcost", "vtype": "output", "dtype": "number", "display": "Setup cost", "frame": "outputs_profit_grid", "initial": 0.0, "switch_initial": true});
+        this.freewillcost = new Hvar({"huim": this.gui, "key": "freewillcost", "vtype": "output", "dtype": "number", "display": "Free Will cost", "fancy_display": "+ Average Free Will cost", "frame": "outputs_profit_grid", "initial": 0.0, "switch_initial": true});
+        this.extracost = new Hvar({"huim": this.gui, "key": "extracost", "vtype": "storage", "dtype": "string", "display": "Extra cost", "fancy_display": "+ Extra cost", "initial": ""});
+        this.optimal_tier_free_will = new Hvar({"huim": this.gui, "key": "optimal_tier_free_will", "vtype": "storage", "dtype": "number", "display": "Optimal Tier Free Will", "initial": 1});
+        this.available_storage = new Hvar({"huim": this.gui, "key": "available_storage", "vtype": "storage", "dtype": "number", "display": "Available Storage", "initial": 0});
+        this.addons_output_container = new Hvar({"huim": this.gui, "key": "addons_output_container", "vtype": "output", "dtype": "object", "display": "Add-on Outputs", "frame": "addons_output_grid", "widget_width": 65, "widget_height": 20, "initial": {}, "switch_initial": false});
+        this.empty_time_amount = new Hvar({"huim": this.gui, "key": "empty_time_amount", "vtype": "input", "dtype": "number", "display": "Empty Time span", "initial": 1.0, "frame": "inputs_player_grid"});
+        this.empty_time_unit = new Hvar({"huim": this.gui, "key": "empty_time_unit", "vtype": "input", "dtype": "string", "display": "Empty Time unit", "initial": "Days", "frame": "inputs_player_grid", "options": ["Years", "Weeks", "Days", "Hours", "Minutes", "Seconds", "Harvests"]});
+        this.scaled_time_amount = new Hvar({"huim": this.gui, "key": "scaled_time_amount", "vtype": "input", "dtype": "number", "display": "Scaled Time span", "initial": 1.0, "frame": "inputs_player_grid"});
+        this.scaled_time_unit = new Hvar({"huim": this.gui, "key": "scaled_time_unit", "vtype": "input", "dtype": "string", "display": "Scaled Time unit", "initial": "Days", "frame": "inputs_player_grid", "options": ["Years", "Weeks", "Days", "Hours", "Minutes", "Seconds", "Harvests"]});
+        this.rising_celsius_override = new Hvar({"huim": this.gui, "key": "rising_celsius_override", "vtype": "input", "dtype": "boolean", "display": "Force Rising Celsius", "initial": false, "frame": "inputs_minion_grid"});
+        this.used_pet_prices = new Hvar({"huim": this.gui, "key": "used_pet_prices", "vtype": "output", "dtype": "object", "display": "Used Pet Prices", "initial": {}, "frame": "outputs_profit_grid", "widget_width": 35, "widget_height": 4, "switch_initial": true});
 
-        this.variables["wisdom"]["list"] = {'combat': 0, 'mining': 0, 'farming': 0, 'fishing': 0, 'foraging': 0, 'alchemy': 0};
-        let wisdomB = GUI.create_button('Edit', () => GUI.edit_vars.bind(this)(this.update_GUI_wisdom.bind(this), ["combatWisdom", "miningWisdom", "farmingWisdom", "fishingWisdom", "foragingWisdom", "alchemyWisdom"]));
-        this.variables["wisdom"]["widget"].push(wisdomB);
+        this.empty_time_amount.widget.push(this.empty_time_unit.widget[this.empty_time_unit.widget.length - 1]);
+        this.scaled_time_amount.widget.push(this.scaled_time_unit.widget[this.scaled_time_unit.widget.length - 1]);
+
+        this.wisdom.update_listbox(x => x, x => x.get(), (key, val) => val.get() !== 0.0)
+        let wisdomB = GUI.create_button('Edit', () => GUI.edit_vars.bind(this)(this.wisdom.update_listbox.bind(this)(x => x, x => x.get(), (key, val) => val.get() !== 0.0), ["combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom"]));
+        this.wisdom.widget.push(wisdomB);
         
-        this.rising_celsius_override = false;
-        
-        let emptytimeamountI = GUI.def_input_var("emptytimeamount", "number", "Empty Time span:", 1.0);
-        let emptytimelengthI = GUI.def_input_var("emptytimelength", "string", "Empty Time Length:", "Days", ["Years", "Weeks", "Days", "Hours", "Minutes", "Seconds", "Harvests"]);
-        emptytimeamountI.push(emptytimelengthI[emptytimelengthI.length - 1]);
-        
-        let totaltimeamountI = GUI.def_input_var("totaltimeamount", "number", "Total Time span:", 1.0);
-        let totaltimelengthI = GUI.def_input_var("totaltimelength", "string", "Total Time Length:", "Days", ["Years", "Weeks", "Days", "Hours", "Minutes", "Seconds", "Harvests"]);
-        totaltimeamountI.push(totaltimelengthI[totaltimelengthI.length - 1]);
-        
-        let notesAnchor = GUI.genLabel("notesAnchor", "");
-        notesAnchor.className = "notes_anchor";
-        
-        
-        
+        this.notesAnchor = GUI.genLabel("notesAnchor", "");
+        this.notesAnchor.className = "notes_anchor";
+
         let calcB = GUI.create_button("Calculate", () => this.calculate.bind(this)(true), true);
         this.statusC = document.createElement("div")
         Object.assign(this.statusC, {innerText: "\n", className: "status_div", id: "status_div", style: "background: green;"});
         let outputB = GUI.create_button('Short Output', this.output_data.bind(this), true);
-        let fancyoutputB = GUI.create_button('Share Output', this.fancyOutput.bind(this), true);
-        let bazaarB = GUI.create_button("Update Bazaar", this.update_bazaar.bind(this), true);
+        let fancyoutputB = GUI.create_button('Share Output', this.fancy_output.bind(this), true);
+        let bazaarB = GUI.create_button("Update Prices", this.update_prices.bind(this), true);
         let settingsB = GUI.create_button('Edit Settings', () => GUI.edit_vars.bind(this)(GUI.update_color_palette.bind(GUI), ["bazaar_auto_update", "bazaar_cooldown", "compact_tolerance", "output_to_clipboard", "color_palette"]), true);
         let pet_priceB = GUI.create_button('Edit Pet Prices', () => GUI.edit_vars.bind(this)(this.edit_pet_price_redirect.bind(this), {"edit_pet_price_pet": {"dtype": "string", "display": "Pet", "initial": "None", "options": Object.keys(md.all_pets)}}, false), true);
         let emptyspaceLB = GUI.genLabel("control_frame_filler", "")
@@ -276,115 +249,116 @@ class Calculator {
         let addonsprintLB = GUI.genLabel("addonsprintLB", "Share")
         let addonsoutputsLB = GUI.genLabel("addonsoutputsLB", "Add-on Outputs")
         
-        let afk_options_button = GUI.createShowHideToggle("afking");
-        this.variables["afk"]["widget"].push(afk_options_button);
-        let beacon_options_button = GUI.createShowHideToggle("beacon");
-        this.variables["beacon"]["widget"].push(beacon_options_button);
+        let afk_options_button = GUI.create_show_hide_toggle("afking");
+        this.afk.widget.push(afk_options_button);
+        let beacon_options_button = GUI.create_show_hide_toggle("beacon");
+        this.beacon.widget.push(beacon_options_button);
         
         this.grids = {
             "inputs_minion_grid": {
-                "template": templateI,
-                "ID": loadIDI,
+                "template": null,
+                "load_id": null,
                 "minion_label": [null, miniontitleLB],
-                "minion": this.variables["minion"]["widget"],
-                "miniontier": this.variables["miniontier"]["widget"],
-                "amount": this.variables["amount"]["widget"],
-                "fuel": this.variables["fuel"]["widget"],
-                "infernoGrade": this.variables["infernoGrade"]["widget"],
-                "infernoDistillate": this.variables["infernoDistillate"]["widget"],
-                "infernoEyedrops": this.variables["infernoEyedrops"]["widget"],
-                "hopper": this.variables["hopper"]["widget"],
-                "upgrade1": this.variables["upgrade1"]["widget"],
-                "upgrade2": this.variables["upgrade2"]["widget"],
-                "chest": this.variables["chest"]["widget"],
-                "infusion": this.variables["infusion"]["widget"],
-                "free_will": this.variables["free_will"]["widget"],
+                "minion": null,
+                "miniontier": null,
+                "amount": null,
+                "fuel": null,
+                "inferno_grade": null,
+                "inferno_distillate": null,
+                "inferno_eyedrops": null,
+                "rising_celsius_override": null,
+                "hopper": null,
+                "upgrade1": null,
+                "upgrade2": null,
+                "chest": null,
+                "infusion": null,
+                "free_will": null,
                 "island_label": [null, islandtitleLB],
-                "beacon": this.variables["beacon"]["widget"],
-                "scorched": this.variables["scorched"]["widget"],
-                "B_constant": this.variables["B_constant"]["widget"],
-                "B_acquired": this.variables["B_acquired"]["widget"],
-                "crystal": this.variables["crystal"]["widget"],
-                "postcard": this.variables["postcard"]["widget"],
+                "beacon": null,
+                "scorched": null,
+                "B_constant": null,
+                "B_acquired": null,
+                "crystal": null,
+                "postcard": null,
             },
             "inputs_player_grid": {
                 "player_label": [null, playertitleLB],
-                "afk": this.variables["afk"]["widget"],
-                "afkpet": this.variables["afkpet"]["widget"],
-                "afkpetrarity": this.variables["afkpetrarity"]["widget"],
-                "afkpetlvl": this.variables["afkpetlvl"]["widget"],
-                "enchanted_clock": this.variables["enchanted_clock"]["widget"],
-                "specialLayout": this.variables["specialLayout"]["widget"],
-                "playerHarvests": this.variables["playerHarvests"]["widget"],
-                "playerLooting": this.variables["playerLooting"]["widget"],
-                "potatoTalisman": this.variables["potatoTalisman"]["widget"],
-                "wisdom": this.variables["wisdom"]["widget"],
-                "mayor": this.variables["mayor"]["widget"],
-                "levelingpet": this.variables["levelingpet"]["widget"],
-                "toggle_levelingpet_options": [null, GUI.createShowHideToggle(() => this.multiswitch("pet_leveling", true))],
-                "taming": this.variables["taming"]["widget"],
-                "falcon_attribute": this.variables["falcon_attribute"]["widget"],
-                "petxpboost": this.variables["petxpboost"]["widget"],
-                "beastmaster": this.variables["beastmaster"]["widget"],
-                "expsharepet": this.variables["expsharepet"]["widget"],
-                "expsharepetslot2": this.variables["expsharepetslot2"]["widget"],
-                "expsharepetslot3": this.variables["expsharepetslot3"]["widget"],
-                "toucan_attribute": this.variables["toucan_attribute"]["widget"],
-                "expshareitem": this.variables["expshareitem"]["widget"],
+                "afk": null,
+                "afkpet": null,
+                "afkpet_rarity": null,
+                "afkpet_lvl": null,
+                "enchanted_clock": null,
+                "special_layout": null,
+                "player_harvests": null,
+                "player_looting": null,
+                "potato_accessory": null,
+                "wisdom": null,
+                "mayor": null,
+                "levelingpet": null,
+                "toggle_levelingpet_options": [null, GUI.create_show_hide_toggle(() => this.multiswitch("pet_leveling", true))],
+                "taming": null,
+                "falcon_attribute": null,
+                "petxpboost": null,
+                "beastmaster": null,
+                "expsharepet": null,
+                "expsharepetslot2": null,
+                "expsharepetslot3": null,
+                "toucan_attribute": null,
+                "expshareitem": null,
                 "timing_label": [null, timingtitleLB],
-                "totaltime": totaltimeamountI,
-                "often_empty": this.variables["often_empty"]["widget"],
-                "emptytime": emptytimeamountI,
+                "empty_time_amount": null,
+                "scale_time": null,
+                "scaled_time_amount": null,
                 "market_label": [null, markettitleLB],
-                "sellLoc": this.variables["sellLoc"]["widget"],
-                "bazaar_sell_type": this.variables["bazaar_sell_type"]["widget"],
-                "bazaar_buy_type": this.variables["bazaar_buy_type"]["widget"],
-                "bazaar_taxes": this.variables["bazaar_taxes"]["widget"],
-                "bazaar_flipper": this.variables["bazaar_flipper"]["widget"]
+                "sell_loc": null,
+                "bazaar_sell_type": null,
+                "bazaar_buy_type": null,
+                "bazaar_taxes": null,
+                "bazaar_flipper": null
             },
             "outputs_setup_grid": {
                 "labels": [null, setupoutputsLB, setupprintLB],
-                "ID": [this.variables["ID"]["widget"][0], this.variables["ID_container"]["widget"][1], this.variables["ID"]["widget"][2]],
-                "time": this.variables["time"]["widget"],
-                "emptytime": this.variables["emptytime"]["widget"],
-                "actiontime": this.variables["actiontime"]["widget"],
-                "fuelamount": this.variables["fuelamount"]["widget"],
-                "notes": [this.variables["notes"]["widget"][0], null, this.variables["notes"]["widget"][2]],
-                "notes_anchor": [notesAnchor],
+                "ID": [this.ID.widget[0], this.ID_container.widget[1], this.ID.widget[2]],
+                "empty_time": null,
+                "scaled_time": null,
+                "actiontime": null,
+                "fuelamount": null,
+                "notes": [this.notes.widget[0], null, this.notes.widget[2]],
+                "notes_anchor": [this.notesAnchor],
                 "notes_space_1": [null],
                 "notes_space_2": [null],
                 "notes_space_3": [null],
                 "minions_labels": [null, minionoutputsLB, minionprintLB],
-                "harvests": this.variables["harvests"]["widget"],
-                "items": this.variables["items"]["widget"],
-                // "filltime": this.variables["filltime"]["widget"],
-                "used_storage": this.variables["used_storage"]["widget"],
-                "xp": this.variables["xp"]["widget"],
-                "pets_levelled": this.variables["pets_levelled"]["widget"],
+                "harvests": null,
+                "items": null,
+                "used_storage": null,
+                "xp": null,
+                "pets_levelled": null,
             },
             "outputs_profit_grid": {
                 "labels": [null, profitoutputsLB, profitprintLB],
-                "bazaar_update_txt": this.variables["bazaar_update_txt"]["widget"],
-                "setupcost": this.variables["setupcost"]["widget"],
-                "freewillcost": this.variables["freewillcost"]["widget"],
-                "itemSellLoc": this.variables["itemSellLoc"]["widget"],
-                "itemtypeProfit": this.variables["itemtypeProfit"]["widget"],
-                "itemProfit": this.variables["itemProfit"]["widget"],
-                "petProfit": this.variables["petProfit"]["widget"],
-                "fuelcost": this.variables["fuelcost"]["widget"],
-                "totalProfit": this.variables["totalProfit"]["widget"]
+                "bazaar_update_txt": null,
+                "setupcost": null,
+                "freewillcost": null,
+                "item_sell_loc": null,
+                "itemtype_profit": null,
+                "item_profit": null,
+                "used_pet_prices": null,
+                "pet_profit": null,
+                "fuelcost": null,
+                "total_profit": null
             },
             "addons_output_grid": {
                 "labels": [addonsoutputsLB, addonsprintLB],
-                "addons_output_container": [this.variables["addons_output_container"]["widget"][1], this.variables["addons_output_container"]["widget"][2]]
+                "addons_output_container": [this.addons_output_container.widget[1], this.addons_output_container.widget[2]]
             },
         };
         for (let grid_key of Object.keys(this.grids)) {
-            GUI.fill_grid(Object.entries(this.grids[grid_key]), this.frames[grid_key]);
+            GUI.fill_grid(this.gui.create_grid(this.grids[grid_key]), this.frames[grid_key]);
         };
         
-        this.variables["notes"]["widget"][1].className = "notes_box";
-        notesAnchor.appendChild(this.variables["notes"]["widget"][1]);
+        this.notes.widget[1].className = "notes_box";
+        this.notesAnchor.appendChild(this.notes.widget[1]);
         
         // Add-ons buttons
         this.addons_list = {...add_ons.add_ons_package};
@@ -397,30 +371,32 @@ class Calculator {
         };
         GUI.fill_grid(Object.entries(this.addons_widgets), this.frames["addons_buttons_grid"]);
         
-        GUI.defSwitch("pet_leveling", ["taming", "petxpboost", "beastmaster", "expsharepet", "expshareitem", "pets_levelled", "petProfit", "falcon_attribute", "toucan_attribute"], "None", true, false);
-        GUI.defSwitch("exp_share_diana", ["expsharepetslot2", "expsharepetslot3"], "Dianatrue", false, false);
-        GUI.defSwitch("NPC_Bazaar", ["itemSellLoc"], "Best (NPC/Bazaar)", false, true);
-        GUI.defSwitch("infernofuel", ["infernoGrade", "infernoDistillate", "infernoEyedrops"], "Inferno Minion Fuel", false, false);
-        GUI.defSwitch("beacon", ["scorched", "B_constant", "B_acquired"], 0, true, false);
-        GUI.defSwitch("potato", ["potatoTalisman"], "Potatotrue", false, false);
-        GUI.defSwitch("bazaar_tax", ["bazaar_flipper"], true, false, true);
-        GUI.defSwitch("afking", ["afkpet", "afkpetrarity", "afkpetlvl", "enchanted_clock", "specialLayout", "playerHarvests", "playerLooting"], true, false, false);
-        GUI.defSwitch("fuel_amount", ["fuelamount"], 0, true, false);
-        GUI.defSwitch("emptytime", ["emptytimeamount", "emptytimelength", "emptytime"], true, false, false);
-        GUI.defSwitch("free_will", ["freewillcost"], true, false, false);
+        GUI.def_switch("pet_leveling", ["taming", "petxpboost", "beastmaster", "expsharepet", "expshareitem", "pets_levelled", "pet_profit", "falcon_attribute", "toucan_attribute", "used_pet_prices"], "None", true, false);
+        GUI.def_switch("exp_share_diana", ["expsharepetslot2", "expsharepetslot3"], "Dianatrue", false, false);
+        GUI.def_switch("NPC_Bazaar", ["item_sell_loc"], "Best (NPC/Bazaar)", false, true);
+        GUI.def_switch("infernofuel", ["inferno_grade", "inferno_distillate", "inferno_eyedrops"], "Inferno Minion Fuel", false, false);
+        GUI.def_switch("rising_celsius", ["rising_celsius_override"], "Inferno", false, false);
+        GUI.def_switch("beacon", ["scorched", "B_constant", "B_acquired"], 0, true, false);
+        GUI.def_switch("potato_accessory_switch", ["potato_accessory"], "Potatotrue", false, false);
+        GUI.def_switch("bazaar_tax", ["bazaar_flipper"], true, false, true);
+        GUI.def_switch("afking", ["afkpet", "afkpet_rarity", "afkpet_lvl", "enchanted_clock", "special_layout", "player_harvests", "player_looting"], true, false, false);
+        GUI.def_switch("fuel_amount", ["fuelamount"], -1, true, false);
+        GUI.def_switch("scaled_time_switch", ["scaled_time_amount", "scaled_time_unit", "scaled_time"], true, false, false);
+        GUI.def_switch("free_will", ["freewillcost"], true, false, false);
 
 
-        this.dependent_variables = {"afkpetrarity": "afkpet", "afkpetlvl": "afkpet", "playerHarvests": "afk", "emptytime": "often_empty", "freewillcost": "free_will", "expshareitem": "expsharepet"}
+        this.dependent_variables = {"afkpet_rarity": "afkpet", "afkpet_lvl": "afkpet", "player_harvests": "afk", "empty_time": "scale_time", "freewillcost": "free_will", "expshareitem": "expsharepet", "used_pet_prices": "levelingpet", "pet_profit": "levelingpet"}
         this.key_replace_bool = ["infusion", "free_will", "postcard"]
 
-        this.outputOrder = ['fuel', 'hopper', 'upgrade1', 'upgrade2', 'chest',
+        this.outputOrder = ['fuel', "inferno_grade", "inferno_distillate", "inferno_eyedrops", "rising_celsius_override",
+                            'hopper', 'upgrade1', 'upgrade2', 'chest',
                             'beacon', 'scorched', 'B_constant', 'B_acquired',
-                            'crystal', 'postcard', 'infusion', 'free_will', 'afk', 'afkpet', 'afkpetrarity', 'afkpetlvl', 'enchanted_clock', 'specialLayout', 'potatoTalisman', 'playerHarvests', "playerLooting",
+                            'crystal', 'postcard', 'infusion', 'free_will', 'afk', 'afkpet', 'afkpet_rarity', 'afkpet_lvl', 'enchanted_clock', 'special_layout', 'potato_accessory', 'player_harvests', "player_looting",
                             'wisdom', 'mayor', 'levelingpet', 'taming', 'falcon_attribute', 'petxpboost', 'beastmaster', 'toucan_attribute', 'expshareitem', 'expsharepet', 'expsharepetslot2', 'expsharepetslot3',
-                            'ID', 'setupcost', 'freewillcost', 'extracost', 'actiontime', 'fuelamount', 'sellLoc', 'bazaar_update_txt', 'bazaar_taxes', 'bazaar_flipper', 'notes',
-                            'emptytime', 'time', 'harvests', 'used_storage', 'items', 'itemSellLoc',
-                            'itemProfit', 'itemtypeProfit', 'xp', 'petProfit', 'pets_levelled',
-                            'fuelcost', 'totalProfit', 'addons_output_container']
+                            'ID', 'setupcost', 'freewillcost', 'extracost', 'actiontime', 'fuelamount', 'sell_loc', 'bazaar_update_txt', 'bazaar_taxes', 'bazaar_flipper', 'notes',
+                            'empty_time', 'scaled_time', 'harvests', 'used_storage', 'items', 'item_sell_loc',
+                            'item_profit', 'itemtype_profit', 'xp', 'pet_profit', 'pets_levelled', 'used_pet_costs',
+                            'fuelcost', 'total_profit', 'addons_output_container']
 
 
         this.fancyOrder = {
@@ -430,158 +406,128 @@ class Calculator {
                 "\n> Permanent: ": new Set(["infusion", "free_will"])
             },
             "Beacon Info": { "\n> ": ["scorched", "B_constant", "B_acquired"] },
-            "Fuel Info": { "\n> ": ["infernoGrade", "infernoDistillate", "infernoEyedrops"] },
-            "afk": { "\n> ": ["afkpet", "afkpetrarity", "afkpetlvl", "enchanted_clock", "specialLayout", "potatoTalisman"] },
-            "playerHarvests": { "\n> ": ["playerLooting"] },
+            "Inferno Info": { "\n> ": ["inferno_grade", "inferno_distillate", "inferno_eyedrops", "rising_celsius_override"] },
+            "afk": { "\n> ": ["afkpet", "afkpet_rarity", "afkpet_lvl", "enchanted_clock", "special_layout", "potato_accessory"] },
+            "playerHarvests": { "\n> ": ["player_looting"] },
             "wisdom": null,
             "mayor": null,
             "levelingpet": {
                 "\n> ": ["taming", "falcon_attribute", "petxpboost", "beastmaster", "toucan_attribute", "expshareitem"],
                 "\n> Exp Share Pets: ": new Set(["expsharepet", "expsharepetslot2", "expsharepetslot3"])
             },
+            "used_pet_prices": null,
             "**Setup Information**": { "!\n> ": ["ID", "setupcost", "freewillcost", "extracost", "actiontime", "fuelamount"] },
-            "Bazaar Info": { "\n> ": ["sellLoc", "bazaar_update_txt", "bazaar_sell_type", "bazaar_buy_type", "bazaar_taxes", "bazaar_flipper"] },
+            "Bazaar Info": { "\n> ": ["sell_loc", "bazaar_update_txt", "bazaar_sell_type", "bazaar_buy_type", "bazaar_taxes", "bazaar_flipper"] },
             "notes": null,
-            "emptytime": null,
-            "**Outputs** for ": { "": new Set(["time"]) },
+            "empty_time": null,
+            "**Outputs** for ": { "": new Set(["scaled_time"]) },
             "harvests": null,
             "used_storage": null,
             "items": null,
-            "itemSellLoc": null,
-            "itemProfit": null,
-            "itemtypeProfit": null,
+            "item_sell_loc": null,
+            "item_profit": null,
+            "itemtype_profit": null,
             "xp": null,
-            "petProfit": null,
+            "pet_profit": null,
             "pets_levelled": null,
             "fuelcost": null,
-            "totalProfit": null,
+            "total_profit": null,
             "addons_output_container": null
         };
 
-        this.bazaar_timer = 0;
-        this.init_prices();
-        this.update_bazaar();
-    };
+        this.ID_order = [
+            "minion", "miniontier", "amount", "fuel",
+            "hopper", "upgrade1", "upgrade2", "chest", "beacon", "scorched", "B_constant", "B_acquired",
+            "infusion", "crystal", "free_will", "postcard",
+            "inferno_grade", "inferno_distillate", "inferno_eyedrops", "rising_celsius_override",
+            "afk", "afkpet", "afkpet_rarity", "afkpet_lvl", "enchanted_clock", "special_layout",
+            "player_harvests", "player_looting", "potato_accessory",
+            "combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom",
+            "mayor",
+            "levelingpet", "taming", "falcon_attribute", "toucan_attribute", "petxpboost", "beastmaster",
+            "expsharepet", "expsharepetslot2", "expsharepetslot3", "expshareitem",
+            "sell_loc", "bazaar_sell_type", "bazaar_buy_type", "bazaar_taxes", "bazaar_flipper",
+            "empty_time_amount", "empty_time_unit", "scale_time", "scaled_time_amount", "scaled_time_unit",
+        ];
 
-    time_number(time_length, time_amount, secondsPaction=0.0, actionsPerHarvest=1.0) {
-        if (time_length === "Years") {
-            return 31536000 * time_amount;
-        };
-        if (time_length === "Weeks") {
-            return 604800 * time_amount;
-        };
-        if (time_length === "Days") {
-            return 86400 * time_amount;
-        };
-        if (time_length === "Hours") {
-            return 3600 * time_amount;
-        };
-        if (time_length === "Minutes") {
-            return 60 * time_amount;
-        };
-        if (time_length === "Seconds") {
-            return 1 * time_amount;
-        };
-        if (time_length === "Harvests") {
-            return secondsPaction * actionsPerHarvest * time_amount;
-        };
-        return 1 * time_amount;
-    };
-    
-    update_GUI_wisdom() {
-        let display_wisdoms = [];
-        for (let skill in this.variables["wisdom"]["list"]) {
-            let val = this.variables[`${skill}Wisdom`]["var"];
-            this.variables["wisdom"]["list"][skill] = val;
-            if (val !== 0) {
-                display_wisdoms.push(`${skill}: ${val}`);
-            };
-        };
-        GUI.fill_list_box("wisdom", display_wisdoms);
+        this.API_timer = 0;
+        this.bazaar_items = [];
+        this.AH_items = [];
+        this.recipe_items = [];
+        this.init_prices();
+        this.update_prices(false);
     };
 
     multiswitch(multi_ID, force=false) {
         if (multi_ID === "minion") {
-            let minionType = GUI.get_value("minion");
+            let minionType = this.minion.get();
             GUI.set_value("miniontier", Object.keys(md.minionList[minionType]["speed"]).slice(-1));
-            GUI.toggleSwitch("potato", minionType + String(GUI.get_value("afk")));
+            GUI.toggle_switch("potato_accessory_switch", minionType + String(this.afk.get()));
+            GUI.toggle_switch("rising_celsius", minionType);
         } else if (multi_ID === "tier") {
-            let minionType = GUI.get_value("minion");
-            let minionTier = GUI.get_value("miniontier");
+            let minionType = this.minion.get();
+            let minionTier = this.miniontier.get();
             if (!(minionTier in md.minionList[minionType]["speed"])) {
                 GUI.set_value("miniontier", Object.keys(md.minionList[minionType]["speed"]).slice(-1));
             };
         } else if (multi_ID === "fuel") {
-            let control = GUI.get_value("fuel");
-            GUI.toggleSwitch("infernofuel", control);
-            GUI.toggleSwitch("fuel_amount", md.itemList[md.fuel_options[control]]["upgrade"]["duration"]);
+            let control = this.fuel.get();
+            GUI.toggle_switch("infernofuel", control);
+            GUI.toggle_switch("fuel_amount", md.itemList[md.fuel_options[control]]["fuel_duration"]);
         } else if (multi_ID === "afk") {
-            let afkState = GUI.get_value("afk");
-            let minionType = GUI.get_value("minion");
-            GUI.toggleSwitch("afking", afkState);
-            GUI.toggleSwitch("potato", minionType + String(afkState));
+            let afkState = this.afk.get();
+            let minionType = this.minion.get();
+            GUI.toggle_switch("afking", afkState);
+            GUI.toggle_switch("potato_accessory_switch", minionType + String(afkState));
         } else if (multi_ID === "pet_leveling") {
-            let mayor = GUI.get_value("mayor");
+            let mayor = this.mayor.get();
             let pet_leveling_state;
             if (force) {
-                GUI.toggleSwitch("pet_leveling");
+                GUI.toggle_switch("pet_leveling");
                 pet_leveling_state = GUI.switches["pet_leveling"]["state"]
-                GUI.toggleSwitch("exp_share_diana", mayor + String(pet_leveling_state));
+                GUI.toggle_switch("exp_share_diana", mayor + String(pet_leveling_state));
             } else {
-                let control = GUI.get_value("levelingpet");
-                GUI.toggleSwitch("pet_leveling", control);
+                let control = this.levelingpet.get();
+                GUI.toggle_switch("pet_leveling", control);
                 pet_leveling_state = GUI.switches["pet_leveling"]["state"]
-                GUI.toggleSwitch("exp_share_diana", mayor + String(pet_leveling_state));
+                GUI.toggle_switch("exp_share_diana", mayor + String(pet_leveling_state));
             };
         } else if (multi_ID === "mayors") {
-            let mayor = GUI.get_value("mayor");
+            let mayor = this.mayor.get();
             let pet_leveling_state = GUI.switches["pet_leveling"]["state"];
-            GUI.toggleSwitch("exp_share_diana", mayor + String(pet_leveling_state));
+            GUI.toggle_switch("exp_share_diana", mayor + String(pet_leveling_state));
         };
         return;
     };
 
     load_template() {
-        let templateName = GUI.get_value("template");
+        let templateName = this.template.get();
         if (templateName === "Choose Template") {
             return;
         };
-        GUI.set_value("template", "Choose Template");
+        this.template.set("Choose Template")
         let template;
         if (templateName === "ID") {
-            template = this.decodeID(GUI.get_value("loadID"));
+            template = this.decodeID(this.load_ID.get());
         } else if (templateName === "Clean") {
             template = {};
-            for (let var_key in this.variables) {
-                if (this.variables[var_key]["vtype"] === "input" && !(["minion", "miniontier"].includes(var_key))) {
-                    template[var_key] = this.variables[var_key]["initial"];
+            for (let var_key in this.ID_order) {
+                if (!(["minion", "miniontier"].includes(var_key))) {
+                    template[var_key] = this.var_dict[var_key].initial;
                 };
             };
         } else {
             template = this.templateList[templateName];
         };
         for (let [setting, variable] of Object.entries(template)) {
-            if ("noWidget" in this.variables[setting]) {
-                this.variables[setting]["var"] = variable;
-            } else {
-                GUI.set_value(setting, variable);
+            this.var_dict[setting].set(variable);
+            if (this.var_dict[setting].command !== null) {
+                this.var_dict[setting].command();
             };
-            if ("command" in this.variables[setting] && this.variables[setting]["command"] !== null) {
-                this.variables[setting]["command"]();
-            };
-            if (setting.includes("Wisdom")) {
-                this.update_GUI_wisdom();
+            if (setting.includes("_wisdom")) {
+                this.wisdom.update_listbox(x => x, x => x.get(), (key, val) => val.get() !== 0.0);
             };
         };
-    };
-
-    get_output_switches() {
-        for (const [var_key, var_data] of Object.entries(this.variables)) {
-            if ("output_switch" in var_data) {
-                var_data["output_switch"] = GUI.get_value(`${var_key}_output_switch`);
-            };
-        };
-        return;
     };
 
     output_data(toTerminal=true) {
