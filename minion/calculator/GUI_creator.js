@@ -195,9 +195,9 @@ class GUI_creator {
         let grid_arr = [];
         for (let [key, val] of grid_dict) {
             if (val === null) {
-                grid_arr.push(this.main.var_dict[key].widget);
+                grid_arr.push([key, this.main.var_dict[key].widget]);
             } else {
-                grid_arr.push(val);
+                grid_arr.push([key, val]);
             };
         };
         return grid_arr
@@ -430,7 +430,7 @@ class GUI_creator {
         return str.replace(/\w\S*/g, text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase());
     };
 
-    edit_vars(exit_function, variables=[], this_variables=true) {
+    edit_vars(exit_function, variables=[], existing_variables=true) {
         // Called as the calculator class
         let dialog_elem = document.getElementById("edit_vars_dialog");
         if (dialog_elem.hasAttribute("open")) {
@@ -440,13 +440,13 @@ class GUI_creator {
         let grid_frame = document.getElementById("edit_vars_grid");
         grid_frame.innerHTML = "";
         let elements = {}
-        if (this_variables) {
+        if (existing_variables) {
             for (let var_key of variables) {
-                elements[var_key] = this.gui.defVarI(`${var_key}_edit`, this.variables[var_key]["dtype"], `${this.variables[var_key]["display"]}:`, this.variables[var_key]["var"], this.variables[var_key]["options"], null);
+                elements[var_key] = this.gui.def_input_var(`${var_key}_edit`, this.var_dict[var_key].dtype, `${this.var_dict[var_key].get_display()}:`, this.var_dict[var_key].get(false), this.var_dict[var_key].options, null);
             };
         } else {
             for (let [var_key, var_data] of Object.entries(variables)) {
-                elements[var_key] = this.gui.defVarI(`${var_key}_edit`, var_data["dtype"], `${var_data["display"]}:`, var_data["initial"], var_data["options"], null);
+                elements[var_key] = this.gui.def_input_var(`${var_key}_edit`, var_data["dtype"], `${var_data["display"]}:`, var_data["initial"], var_data["options"], null);
             };
         };
         this.gui.fill_grid(Object.entries(elements), grid_frame);
@@ -456,18 +456,18 @@ class GUI_creator {
             confirm_button.id = "edit_confirm_button";
             document.getElementById("edit_vars_controls").appendChild(confirm_button);
         };
-        confirm_button.onclick = () => this.gui.edit_confirm.bind(this)(exit_function, variables, this_variables);
+        confirm_button.onclick = () => this.gui.edit_confirm.bind(this)(exit_function, variables, existing_variables);
         dialog_elem.show();
     };
     
-    edit_confirm(exit_function, variables=[], this_variables=true) {
+    edit_confirm(exit_function, variables=[], existing_variables=true) {
         // Called as the calculator class
         let dialog_elem = document.getElementById("edit_vars_dialog");
         let inputted_value;
-        if (this_variables) {
+        if (existing_variables) {
             for (let var_key of variables) {
                 inputted_value = this.gui.get_value(`${var_key}_edit`)
-                this.variables[var_key]["var"] = inputted_value;
+                this.var_dict[var_key].set(inputted_value);
             };
         } else {
             this.gui.clear_object(this.edit_vars_output);
@@ -502,11 +502,11 @@ class Hvar {
         this.vtype = inputted_data["vtype"];
         this.dtype = inputted_data["dtype"];
         this.name_display = inputted_data["display"];
-        this.fancy_name_display = inputted_data["fancy_display"];
-        this.frame = inputted_data["frame"];
         this.initial = inputted_data["initial"];
 
         // Optional data:
+        this.frame = inputted_data["frame"];
+        this.fancy_name_display = inputted_data["fancy_display"];
         if (this.dtype === "boolean") {
             this.options = [false, true];
         } else {

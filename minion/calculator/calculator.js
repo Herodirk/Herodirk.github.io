@@ -118,6 +118,11 @@ class Calculator {
             "addons_output_grid": document.getElementById("addons_output_grid"),
         };
 
+        this.bazaar_auto_update = new Hvar({"huim": this.gui, "key": "bazaar_auto_update", "vtype": "storage", "dtype": "boolean", "display": "Bazaar Auto Update", "initial": true});
+        this.bazaar_cooldown = new Hvar({"huim": this.gui, "key": "bazaar_cooldown", "vtype": "storage", "dtype": "number", "display": "Bazaar Cooldown (s)", "initial": 120});
+        this.compact_tolerance = new Hvar({"huim": this.gui, "key": "compact_tolerance", "vtype": "storage", "dtype": "number", "display": "Over-Compacting Tolerance (coins)", "initial": 10000});
+        this.output_to_clipboard = new Hvar({"huim": this.gui, "key": "output_to_clipboard", "vtype": "storage", "dtype": "boolean", "display": "Output to Clipboard", "initial": true});
+        this.color_palette = new Hvar({"huim": this.gui, "key": "color_palette", "vtype": "storage", "dtype": "string", "display": "Color Palette", "initial": "Dark Red", "options": Object.keys(this.gui.palette_names)});
         this.template = new Hvar({"huim": this.gui, "key": "template", "vtype": "input", "display": "Templates", "initial": "Choose Template", "dtype": "string", "frame": "inputs_minion_grid", "options": Object.keys(this.templateList), "command": this.load_template});
         this.load_ID = new Hvar({"huim": this.gui, "key": "load_id", "vtype": "input", "dtype": "string", "frame": "inputs_minion_grid", "display": "Load ID", "initial": ""});
         this.minion = new Hvar({"huim": this.gui, "key": "minion", "vtype": "input", "dtype": "string", "display": "Minion", "frame": "inputs_minion_grid", "initial": "Custom", "options": Object.keys(md.minionList), "command": () => this.multiswitch('minion')});
@@ -154,7 +159,7 @@ class Calculator {
         this.fishing_wisdom = new Hvar({"huim": this.gui, "key": "fishing_wisdom", "vtype": "storage", "dtype": "number", "display": "Fishing", "initial": 0.0});
         this.foraging_wisdom = new Hvar({"huim": this.gui, "key": "foraging_wisdom", "vtype": "storage", "dtype": "number", "display": "Foraging", "initial": 0.0});
         this.alchemy_wisdom = new Hvar({"huim": this.gui, "key": "alchemy_wisdom", "vtype": "storage", "dtype": "number", "display": "Alchemy", "initial": 0.0});
-        this.wisdom = new Hvar({"huim": this.gui, "key": "wisdom", "vtype": "output", "dtype": "object", "display": "Wisdom", "frame": "inputs_player_grid", "widget_width": null, "widget_height": 6, "initial": {'combat': this.combat_wisdom.var, 'mining': this.mining_wisdom.var, 'farming': this.farming_wisdom.var, 'fishing': this.fishing_wisdom.var, 'foraging': this.foraging_wisdom.var, 'alchemy': this.alchemy_wisdom.var}});
+        this.wisdom = new Hvar({"huim": this.gui, "key": "wisdom", "vtype": "output", "dtype": "object", "display": "Wisdom", "frame": "inputs_player_grid", "widget_width": null, "widget_height": 6, "initial": {'combat': this.combat_wisdom, 'mining': this.mining_wisdom, 'farming': this.farming_wisdom, 'fishing': this.fishing_wisdom, 'foraging': this.foraging_wisdom, 'alchemy': this.alchemy_wisdom}});
         this.mayor = new Hvar({"huim": this.gui, "key": "mayor", "vtype": "input", "dtype": "string", "display": "Mayor", "frame": "inputs_player_grid", "initial": "None", "options": ['None', 'Aatrox', 'Cole', 'Diana', 'Diaz', 'Finnegan', 'Foxy', 'Marina', 'Paul', 'Jerry', 'Derpy', 'Scorpius', 'Aura'], "command": () => this.multiswitch("mayors")});
         this.levelingpet = new Hvar({"huim": this.gui, "key": "levelingpet", "vtype": "input", "dtype": "string", "display": "Leveling pet", "frame": "inputs_player_grid", "initial": "None", "options": Object.keys(md.all_pets), "command": () => this.multiswitch("pet_leveling")});
         this.taming = new Hvar({"huim": this.gui, "key": "taming", "vtype": "input", "dtype": "number", "display": "Taming", "frame": "inputs_player_grid", "initial": 0.0});
@@ -537,71 +542,68 @@ class Calculator {
     };
 
     output_data(toTerminal=true) {
-        this.get_output_switches();
-        let crafted_string = `${this.variables["amount"]["var"]}x ${this.variables["minion"]["var"]} t${this.variables["miniontier"]["var"]}; `;
+        let crafted_string = `${this.amount.get()}x ${this.minion.get()} t${this.miniontier.get()}; `;
         let string_parts = {};
         for (let var_key of this.outputOrder) {
             if (var_key in this.dependent_variables) {
-                if (["None", "0", "0.0", "", false].includes(this.variables[this.dependent_variables[var_key]]["var"])) {
+                if (["None", "0", "0.0", "", false].includes(this.var_dict[this.dependent_variables[var_key]].get(false))) {
                     continue;
                 };
             } else if (["expsharepetslot2", "expsharepetslot3"].includes(var_key)) {
-                if (this.variables["mayor"]["var"] !== "Diana") {
+                if (this.mayor.get() !== "Diana") {
+                    continue;
+                };
+            } else if (["inferno_grade", "inferno_distillate", "inferno_eyedrops"].includes(var_key)) {
+                if (this.fuel.get(false) !== "Inferno Minion Fuel") {
                     continue;
                 };
             };
-            if ("output_switch" in this.variables[var_key]) {
-                if (this.variables[var_key]["output_switch"] === false) {
-                    if (var_key === "notes" && this.variables["specialLayout"]["var"] === true && "Special Layout" in this.variables["notes"]["list"]) {
-                        string_parts["notes"] = "Notes: Special Layout: " + this.variables['notes']['list']['Special Layout'];
-                    } else {
-                        continue;
-                    };
+            if (this.var_dict[var_key].get_output_switch() === false) {
+                if (var_key === "notes" && this.special_layout.get() && "Special Layout" in this.notes.list) {
+                    string_parts["notes"] = "Notes: Special Layout: " + this.notes.list['Special Layout'];
+                } else {
+                    continue;
                 };
             };
             if (var_key === "wisdom") {
                 let wisdoms = {};
-                for (let [list_key, wisdom_val] of Object.entries(this.variables["wisdom"]["list"])) {
-                    if (!(list_key in this.variables["xp"]["list"])) {
-                        continue;
-                    } else if (!(["None", 0, 0.0].includes(wisdom_val))) {
-                        wisdoms[list_key] = wisdom_val;
+                for (let [list_key, wisdom_var] of Object.entries(this.wisdom.list)) {
+                    if (list_key in this.xp.list && !(["None", 0, 0.0].includes(wisdom_var.get()))) {
+                        wisdoms[list_key] = wisdom_var.get();
                     };
                 };
-                if (Object.keys(wisdoms).length !== 0) {
-                    string_parts["widsom"] = this.variables["wisdom"]["display"] + ": " + Array.from(Object.keys(wisdoms), wisdom_type => wisdom_type + ": " + wisdoms[wisdom_type]).join(", ");
+                if (this.gui.get_length(wisdoms) !== 0) {
+                    string_parts["widsom"] = this.wisdom.get_display() + ": " + Array.from(Object.keys(wisdoms), wisdom_type => wisdom_type + ": " + wisdoms[wisdom_type]).join(", ");
                 };
                 continue;
             };
             if (var_key === "bazaar_update_txt") {
-                string_parts["bazaar_update_txt"] = `Bazaar info: ${this.variables["bazaar_sell_type"]["var"]}, ${this.variables["bazaar_buy_type"]["var"]}, Last updated at ${this.variables["bazaar_update_txt"]["var"]}`
+                string_parts["bazaar_update_txt"] = `Bazaar info: ${this.bazaar_sell_type.get()}, ${this.bazaar_buy_type.get()}, Last updated at ${this.bazaar_update_txt.get()}`
                 continue;
             };
             if (var_key === "extracost") {
-                if (this.variables["setupcost"]["output_switch"] === false) {
+                if (this.setupcost.get_output_switch() === false) {
                     continue;
                 };
             };
             
-            let vtype = this.variables[var_key]["vtype"];
-            let display = this.variables[var_key]["display"];
-            if (vtype == "list") {
-                if (GUI.get_length(this.variables[var_key]["list"]) === 0) {
+            let vtype = this.var_dict[var_key].vtype;
+            let display = this.var_dict[var_key].get_display();
+            let dtype = this.var_dict[var_key].dtype;
+            if (dtype === "object") {
+                if (this.gui.get_length(this.var_dict[var_key].list) === 0) {
                     continue;
                 };
                 let formatted_list = [];
                 let formatting_function = x => x;
-                if ("IDtoDisplay" in this.variables[var_key] && this.variables[var_key]["IDtoDisplay"] === true) {
+                if (this.var_dict[var_key].has_tag("item_ID_to_display")) {
                     formatting_function = x => md.itemList[x]['display'];
                 } else if (var_key === "pets_levelled") {
-                    formatting_function = x => this.variables[x]["var"];
+                    formatting_function = x => this.var_dict[x].get();
                 };
-                for (let [list_key, list_val] of Object.entries(this.variables[var_key]["list"])) {
-                    if (var_key === "pets_levelled" && formatting_function(list_key) === "None") {
-                        continue;
-                    };
+                for (let [list_key, list_val] of Object.entries(this.var_dict[var_key].list)) {
                     if (typeof list_val === "number") {
-                        formatted_list.push(formatting_function(list_key) + ": " + GUI.reduced_number(list_val));
+                        formatted_list.push(formatting_function(list_key) + ": " + this.gui.reduced_number(list_val));
                     } else {
                         formatted_list.push(formatting_function(list_key) + ": " + list_val);
                     };
@@ -610,8 +612,7 @@ class Calculator {
                 continue;
             };
 
-            let dtype = this.variables[var_key]["dtype"];
-            let val = this.variables[var_key]["var"];
+            let val = this.var_dict[var_key].get(False);
             if (vtype === "input") {
                 if (["None", 0, 0.0, false, ""].includes(val)) {
                     continue;
@@ -621,21 +622,19 @@ class Calculator {
                 } else if (dtype === "boolean") {
                     val = `${val}`;
                     string_parts[var_key] = `${display}: ${{"true": "True", "false" : "False"}[val]}`;
-                } else if (val === "Inferno Minion Fuel") {
-                    string_parts[var_key] = `Inferno Minion Fuel (${this.variables["infernoGrade"]["var"]}, ${this.variables["infernoDistillate"]["var"]}, Capcaisin: ${{"true": "True", "false" : "False"}[`${this.variables["infernoEyedrops"]["var"]}`]})`;
                 } else {
                     string_parts[var_key] = `${val}`;
                 };
             } else {
                 if (dtype === "number") {
-                    string_parts[var_key] = `${display}: ${GUI.reduced_number(val)}`;
+                    string_parts[var_key] = `${display}: ${this.gui.reduced_number(val)}`;
                 } else {
                     string_parts[var_key] = `${display}: ${val}`;
                 };
             };
         };
         crafted_string += Object.values(string_parts).join("; ");
-        if (this.variables["output_to_clipboard"]["var"]) {
+        if (this.output_to_clipboard.get()) {
             try {
                 navigator.clipboard.writeText(crafted_string);
             } catch(error) {
@@ -644,7 +643,7 @@ class Calculator {
                 } else {
                     console.log("Unknown Error", error);
                 };
-                console.log(crafted_string);
+                console.log(crafted_string, "\n");
                 toTerminal = false;
             };
         };
@@ -660,104 +659,87 @@ class Calculator {
         let force = false;
         let val;
         if (var_key in this.dependent_variables) {
-            if (["None", "0", "0.0", "", false].includes(this.variables[this.dependent_variables[var_key]]["var"])) {
+            if (["None", "0", "0.0", "", false].includes(this.var_dict[this.dependent_variables[var_key]].get(false))) {
                 return null;
             };
         } else if (["expsharepetslot2", "expsharepetslot3"].includes(var_key)) {
-            if (this.variables["mayor"]["var"] !== "Diana") {
-                return null;
-            };
-        };
-        if ("output_switch" in this.variables[var_key]) {
-            if (this.variables[var_key]["output_switch"] === false) {
-                if (var_key === "notes" && this.variables["specialLayout"]["var"] === true && "Special Layout" in this.variables["notes"]["list"]) {
-                    return "Notes:\n> Special Layout: `" + this.variables['notes']['list']['Special Layout'] + "`";
-                } else {
-                    return null;
-                };
-            } else {
-                force = true;
-            };
-        };
-        if (var_key === "wisdom") {
-            let wisdoms = {};
-            for (let [list_key, wisdom_val] of Object.entries(this.variables["wisdom"]["list"])) {
-                if (!(list_key in this.variables["xp"]["list"])) {
-                    continue;
-                } else if (!(["None", 0, 0.0].includes(wisdom_val))) {
-                    wisdoms[list_key] = wisdom_val;
-                };
-            };
-            if (Object.keys(wisdoms).length !== 0) {
-                return this.variables["wisdom"]["display"] + ":\n> " + Array.from(Object.keys(wisdoms), wisdom_type => wisdom_type + ": `" + wisdoms[wisdom_type] + "`").join(", ");
-            };
-            return null;
-        } else if (var_key === "beacon") {
-            val = {0: "", 1: "`Beacon I`", 2: "`Beacon II`", 3: "`Beacon III`", 4: "`Beacon IV`", 5: "`Beacon V`"}[this.variables[var_key]["var"]];
-        } else if (var_key === "used_storage") {
-            val = "`" + this.variables[var_key]['var'] + "` (out of `" + this.variables['available_storage']['var'] + "`)";
-        } else if (var_key === "chest") {
-            if (this.variables[var_key]["var"] === "None") {
-                val = "";
-            } else {
-                val = "`" + this.variables[var_key]['var'] + " Storage`";
-            };
-        } else if (this.key_replace_bool.includes(var_key)) {
-            if (this.variables[var_key]["var"] === true) {
-                val = "`" + this.variables[var_key]['display'] + "`";
-            } else {
+            if (this.mayor.get() !== "Diana") {
                 return null;
             };
         } else if (var_key === "extracost") {  // special case: setup cost is turned off
-            if (this.variables["setupcost"]["output_switch"] === false) {
+            if (this.setupcost.get_output_switch() === false) {
                 return null;
+            };
+        };
+
+        let output_switch_val = this.var_dict[var_key].get_output_switch()
+        if (output_switch_val === false) {
+            if (var_key === "notes" && this.special_layout.get() === true && "Special Layout" in this.notes.list) {
+                return "Notes:\n> Special Layout: `" + this.notes.list['Special Layout'] + "`";
             } else {
-                val = "`" + `${this.variables[var_key]['var']}` + "`";
+                return null;
+            };
+        } else if (output_switch_val === true) {
+            force = true;
+        };
+
+
+        if (var_key === "wisdom") {
+            let wisdoms = {};
+            for (let [list_key, wisdom_var] of Object.entries(this.wisdom.list)) {
+                if (list_key in this.xp.list && !(["None", 0, 0.0].includes(wisdom_var.get()))) {
+                    wisdoms[list_key] = wisdom_var.get();
+                };
+            };
+            if (this.gui.get_length(wisdoms) !== 0) {
+                return this.wisdom.get_display(true) + ":\n> " + Array.from(Object.keys(wisdoms), wisdom_type => wisdom_type + ": `" + wisdoms[wisdom_type] + "`").join(", ");
+            };
+            return null;
+        } else if (var_key === "used_storage") {
+            val = "`" + this.var_dict[var_key].get() + "` (out of `" + this.available_storage.get() + "`)";
+        } else if (this.key_replace_bool.includes(var_key)) {
+            if (this.var_dict[var_key].get() === true) {
+                val = "`" + this.var_dict[var_key].get_display(true) + "`";
+            } else {
+                return null;
             };
         } else if (var_key === "ID") {
-            val = `||${this.variables[var_key]['var']}||`.replace("\\", "\\\\")
-        } else if (this.variables[var_key]["vtype"] == "list") {
-            if (GUI.get_length(this.variables[var_key]["list"]) === 0) {
+            val = `||${this.var_dict[var_key].get()}||`.replace("\\", "\\\\")
+        } else if (this.var_dict[var_key].dtype === "object") {
+            if (this.gui.get_length(this.var_dict[var_key].list) === 0) {
                 return null;
             };
             let formatted_list = [];
             let formatting_function = x => x;
-            if ("IDtoDisplay" in this.variables[var_key] && this.variables[var_key]["IDtoDisplay"] === true) {
+            if (this.var_dict[var_key].has_tag("item_ID_to_display")) {
                 formatting_function = x => md.itemList[x]['display'];
             } else if (var_key === "pets_levelled") {
-                formatting_function = x => this.variables[x]["var"];
+                formatting_function = x => this.var_dict[x].get();
             };
-            for (let [list_key, list_val] of Object.entries(this.variables[var_key]["list"])) {
-                if (var_key === "pets_levelled" && formatting_function(list_key) === "None") {
-                    continue;
-                };
+            for (let [list_key, list_val] of Object.entries(this.var_dict[var_key].list)) {
                 if (typeof list_val === "number") {
-                    formatted_list.push(formatting_function(list_key) + ": `" + GUI.reduced_number(list_val) + "`");
+                    formatted_list.push(formatting_function(list_key) + ": `" + this.gui.reduced_number(list_val) + "`");
                 } else {
                     formatted_list.push(formatting_function(list_key) + ": `" + list_val + "`");
                 };
             };
             val = "\n> " + formatted_list.join(", ");
-        } else if (this.variables[var_key]["dtype"] === "number") {
-            val = "`" + GUI.reduced_number(this.variables[var_key]['var']) + "`";
-        } else if (this.variables[var_key]["dtype"] === "boolean") {
-            val = "`" + {"true": "True", "false": "False"}[`${this.variables[var_key]['var']}`] + "`";
+        } else if (this.var_dict[var_key].dtype === "number") {
+            val = "`" + this.gui.reduced_number(this.var_dict[var_key].get()) + "`";
+        } else if (this.var_dict[var_key].dtype === "boolean") {
+            val = "`" + {"true": "True", "false": "False"}[`${this.var_dict[var_key].get()}`] + "`";
         } else {
-            val = "`" + this.variables[var_key]['var'] + "`";
+            val = "`" + this.var_dict[var_key].get(false) + "`";
         };
         if (["`None`", "`0`", "`0.0`", "", "``", "`False`"].includes(val) && force === false) {
             return null;
         };
         if (var_key === "freewillcost") {
-            val += ` (optimal: apply on t${this.variables['optimal_tier_free_will']['var']})`
+            val += ` (optimal: apply on t${this.optimal_tier_free_will.get()})`
         };
         let return_str = ""
         if (display) {
-            if ("fancy_display" in this.variables[var_key]) {
-                return_str += `${this.variables[var_key]['fancy_display']}: `;
-            } else {
-                return_str += `${this.variables[var_key]['display']}: `;
-            };
+            return_str += `${this.var_dict[var_key].get_display(true)}: `;
         };
         return_str += `${val}`;
         if (newline) {
@@ -766,15 +748,14 @@ class Calculator {
         return return_str;
     };
     
-    fancyOutput(toTerminal=true) {
-        this.get_output_switches()
-        let crafted_string = `${this.variables["amount"]["var"]}x **${this.variables["minion"]["var"]} t${this.variables["miniontier"]["var"]}**`;
+    fancy_output(toTerminal=true) {
+        let crafted_string = `${this.amount.get()}x **${this.minion.get()} t${this.miniontier.get()}**`;
         for (let key in this.fancyOrder) {
             let line_str = "";
             let header = "";
             let force_line = false;
             let joined_keys;
-            if (key in this.variables) {
+            if (key in this.var_dict) {
                 header = this.prep_fancy_data(key);
                 force_line = true;
             } else {
@@ -783,13 +764,13 @@ class Calculator {
             if (header === null) {
                 continue;
             };
-            if (header === "Beacon Info" && this.variables["beacon"]["var"] === 0) {
+            if (header === "Beacon Info" && this.beacon.get() === 0) {
                 continue;
             };
-            if (header === "Fuel Info" && this.variables["fuel"]["var"] !== "Inferno Minion Fuel") {
+            if (header === "Inferno Info" && this.minion.get() !== "Inferno" && this.fuel.get(false) !== "Inferno Minion Fuel") {
                 continue;
             };
-            if (header === "Bazaar Info" && this.variables["bazaar_update_txt"]["output_switch"] === false) {
+            if (header === "Bazaar Info" && this.bazaar_update_txt.get_output_switch() === false) {
                 continue;
             };
             if (this.fancyOrder[key] instanceof Object) {
@@ -814,7 +795,7 @@ class Calculator {
                 crafted_string += "\n" + header + line_str;
             };
         };
-        if (this.variables["output_to_clipboard"]["var"]) {
+        if (this.output_to_clipboard.get()) {
             try {
                 navigator.clipboard.writeText(crafted_string);
             } catch(error) {
