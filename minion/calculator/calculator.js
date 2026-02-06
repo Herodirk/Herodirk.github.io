@@ -519,7 +519,7 @@ class Calculator {
         this.template.set("Choose Template")
         let template;
         if (templateName === "ID") {
-            template = this.decodeID(this.load_ID.get());
+            template = this.decode_id(this.load_ID.get());
         } else if (templateName === "Clean") {
             template = {};
             for (let var_key in this.ID_order) {
@@ -815,65 +815,117 @@ class Calculator {
             return crafted_string;
         };
     };
-
-    constructID() {
-        let ID = String(this.version) + "!";
-        for (let [key, var_data] of Object.entries(this.variables)) {
-            if (var_data["vtype"] !== "input") {
+    
+    get_from_GUI(var_keys, translate=true) {
+        let var_values = {};
+        for (const var_key of var_keys) {
+            if (!(var_key in this.var_dict)) {
+                console.log(`WARNING: ${var_key} key not in this.var_dict`);
                 continue;
             };
-            let val = var_data["var"];
-            if (var_data["options"].length === 0) {
+            if (this.var_dict[var_key].dtype === "object") {
+                var_values[var_key] = JSON.parse(JSON.stringify(this.var_dict[var_key].list));
+            } else {
+                var_values[var_key] = this.var_dict[var_key].get(translate);
+            };
+        };
+        return var_values;
+    };
+
+    send_to_GUI(outputs) {
+        for (const var_key of Object.keys(outputs)) {
+            if (!(var_key in this.var_dict)) {
+                console.log(`WARNING: Output ${var_key} not found in this.var_dict`);
+                continue;
+            };
+            if (this.var_dict[var_key].dtype === "object") {
+                this.gui.clear_object(this.var_dict[var_key].list);
+                if (this.var_dict[var_key].list instanceof Array) {
+                    this.var_dict[var_key].list.push(...outputs[var_key]);
+                } else {
+                    Object.assign(this.var_dict[var_key].list, outputs[var_key]);
+                };
+            } else {
+                this.var_dict[var_key].set(outputs[var_key]);
+            };
+        };
+        return;
+    };
+    
+    construct_id(setup_data) {
+        let val;
+        let index;
+        let setup_id = String(this.version) + "!";
+        for (const var_key of this.ID_order) {
+            if (!(var_key in setup_data)) {
+                console.log(`WARNING: ${var_key} key not in setup_data, assuming default value`);
+                val = this.var_dict[var_key].initial;
+            } else if (this.var_dict[var_key].translation !== null) {
+                val = md.itemList[setup_data[var_key]]["display"];
+            } else {
+                val = setup_data[var_key];
+            };
+            let var_options = this.var_dict[var_key].options
+            if (var_options !== null) {
                 if (parseInt(val) === val) {
                     val = parseInt(val);
                 };
-                ID += "!" + String(val) + "!";
+                setup_id += "!" + String(val) + "!";
+            } else if (this.gui.get_length(var_options) > 79) {
+                index = var_options.indexOf(val);
+                setup_id += "!" + String(index) + "!";
             } else {
-                let index = var_data["options"].indexOf(val);
-                ID += String.fromCharCode(48 + index);
+                index = var_options.indexOf(val);
+                setup_id += String.fromCharCode(48 + index);
             };
         };
-        return ID;
+        return setup_id;
     };
 
-    decodeID(ID) {
+    decode_id(ID) {
         if (!(ID instanceof String)) {
             ID = String(ID);
         };
-        let template = {};
+        let setup_data = {};
         let end_ver = ID.indexOf("!");
         let ID_version;
         let end_val;
         if (end_ver === -1) {
             console.log("WARNING: Invalid ID, could not find version number");
-            return template;
+            return setup_data;
         };
         try {
             ID_version = Number(ID.slice(0, end_ver));
         } catch(Exception) {
             console.log("WARNING: Invalid ID, could not find version number");
-            return template;
+            return setup_data;
         };
         let ID_index = end_ver + 1;
         if (ID_version !== this.version) {
             console.log("WARNING: Invalid ID, Incompatible version");
-            return template;
+            return setup_data;
         };
         try {
-            for (let [key, var_data] of Object.entries(this.variables)) {
-                if (var_data["vtype"] !== "input") {
-                    continue;
-                };
-                if (var_data["options"].length === 0) {
+            for (const var_key of this.ID_order) {
+                let var_options = this.var_dict[var_key].options
+                if (var_options === null) {
                     if (ID[ID_index] !== "!") {
-                        console.log(`WARNING: did not find ${key}`);
+                        console.log(`WARNING: did not find ${var_key}`);
                         return {};
                     };
                     end_val = ID.indexOf("!", ID_index + 1);
-                    template[key] = {"string": String, "number": Number, "boolean": Boolean}[var_data["dtype"]](ID.slice(ID_index + 1, end_val));
+                    setup_data[var_key] = {"string": String, "number": Number, "boolean": Boolean}[this.var_dict[var_key].dtype](ID.slice(ID_index + 1, end_val));
+                    ID_index = end_val + 1;
+                } else if (this.gui.get_length(var_options) > 79) {
+                    if (ID[ID_index] !== "!") {
+                        console.log(`WARNING: did not find ${var_key}`);
+                        return {};
+                    };
+                    end_val = ID.indexOf("!", ID_index + 1);
+                    setup_data[var_key] = var_options[Number(ID.slice(ID_index + 1, end_val))];
                     ID_index = end_val + 1;
                 } else {
-                    template[key] = var_data["options"][ID.charCodeAt(ID_index) - 48];
+                    setup_data[var_key] = var_options[ID.charCodeAt(ID_index) - 48];
                     ID_index += 1;
                 };
             };
@@ -881,22 +933,22 @@ class Calculator {
             console.log("WARNING: Invalid ID, ID incomplete");
             return {};
         };
-        return template;
+        return setup_data;
     };
 
-    getPrice(ID, action="buy", location="bazaar", force=false) {
+    get_price(ID, setup_data, action="buy", location="bazaar", force=false) {
         let multiplier = 1;
         if (location === "bazaar") {
             if (action === "buy") {
-                location = md.bazaar_buy_types[this.variables["bazaar_buy_type"]["var"]];
+                location = md.bazaar_buy_types[setup_data["bazaar_buy_type"]];
             } else if (action === "sell") {
-                location = md.bazaar_sell_types[this.variables["bazaar_sell_type"]["var"]];
-                if (this.variables["bazaar_taxes"]["var"]) {
-                    let bazaar_tax = 0.0125 - 0.00125 * this.variables["bazaar_flipper"]["var"];
-                    if (this.variables["mayor"]["var"] === "Derpy") {
+                location = md.bazaar_sell_types[setup_data["bazaar_sell_type"]];
+                if (setup_data["bazaar_taxes"]) {
+                    let bazaar_tax = 0.0125 - 0.00125 * setup_data["bazaar_flipper"];
+                    if (setup_data["mayor"] === "Derpy") {
                         bazaar_tax *= 4;
                     };
-                    if (this.variables["mayor"]["var"] === "Aura") {
+                    if (setup_data["mayor"] === "Aura") {
                         bazaar_tax *= 2;
                     };
                     multiplier = 1 - bazaar_tax;
@@ -925,7 +977,486 @@ class Calculator {
         };
     };
 
-    getPetXPBoosts(pet, xp_type, exp_share=false) {
+    get_speed_boosts(minion, minion_fuel_id, upgrade_ids, afk_toggle, clock_override, setup_data) {
+        let speed_boost = 0;
+        speed_boost += md.itemList[minion_fuel_id]["speed_boost"];
+        speed_boost += md.itemList[upgrade_ids[0]]["speed_boost"] + md.itemList[upgrade_ids[1]]["speed_boost"];
+        speed_boost += md.itemList[setup_data["beacon"]]["speed_boost"] + md.itemList["MITHRIL_INFUSION"]["speed_boost"] * setup_data["infusion"];
+        speed_boost += md.itemList["FREE_WILL"]["speed_boost"] * setup_data["free_will"] + md.itemList["POSTCARD"]["speed_boost"] * setup_data["postcard"];
+        if (setup_data["potato_accessory"] !== "NONE" && (afk_toggle || clock_override) && (md.itemList[setup_data["potato_accessory"]]["affected_minions"].includes(minion))) {
+            speed_boost += md.itemList[setup_data["potato_accessory"]]["speed_boost"];
+        };
+        if (setup_data["crystal"] !== "NONE") {
+            if (md.itemList[setup_data["crystal"]]["affected_minions"].includes(minion)) {
+                speed_boost += md.itemList[setup_data["crystal"]]["speed_boost"];
+            };
+        };
+        if (setup_data["beacon"] !== "NONE" && setup_data["scorched"]) {
+            speed_boost += md.itemList["SCORCHED_POWER_CRYSTAL"]["speed_boost"];
+        };
+        if (minion == "Inferno") {
+            if (setup_data["rising_celsius_override"]) {
+                speed_boost += 180;
+            } else {
+                speed_boost += 18 * min(10, setup_data["amount"]);
+            };
+        };
+        if (setup_data["mayor"] === "Cole" && (afk_toggle || clock_override) && md.affected_by_cole.includes(minion)) {
+            speed_boost += 25;
+        };
+        if (minion_fuel_id === "EVERBURNING_FLAME" && md.itemList[minion_fuel_id]["upgrade_special"]["affected_minions"].includes(minion)) {
+            speed_boost += md.itemList[minion_fuel_id]["upgrade_special"]["amount"];
+        };
+        const afkpet = setup_data["afkpet"];
+        const afkpet_rarity = setup_data["afkpet_rarity"];
+        const afkpet_lvl = setup_data["afkpet_lvl"];
+        if ((afk_toggle || clock_override) && md.boost_pets[afkpet]["affects"].includes(minion) && afkpet_rarity in md.boost_pets[afkpet]) {
+            speed_boost += md.boost_pets[afkpet][afkpet_rarity][0] + afkpet_lvl * md.boost_pets[afkpet][afkpet_rarity][1];
+        };
+        return speed_boost;
+    };
+
+    
+    get_drop_multiplier(minion, minion_fuel_id, upgrade_ids, afk_toggle, setup_data) {
+        let drop_multiplier = 1;
+        if (afk_toggle && setup_data["player_harvests"] && !(["Fishing", "Pumpkin", "Melon"].includes(minion))) {
+            if (["Zombie", "Revenant", "Voidling", "Inferno", "Vampire", "Skeleton", "Creeper", "Spider", "Tarantula", "Cave Spider", "Blaze", "Magma Cube", "Enderman", "Ghast", "Slime", "Cow", "Pig", "Chicken", "Sheep", "Rabbit"].includes(minion)) {
+                drop_multiplier *= 1 + 15 * setup_data["player_looting"] / 100;
+            };
+            return drop_multiplier;
+        };
+        drop_multiplier *= md.itemList[minion_fuel_id]["drop_multiplier"];
+        drop_multiplier *= md.itemList[upgrade_ids[0]]["drop_multiplier"];
+        if (afk_toggle && drop_multiplier > 1) {
+            // drop multiplier greater than 1 is rounded down while online
+            drop_multiplier = int(drop_multiplier);
+        };
+        drop_multiplier *= md.itemList[upgrade_ids[1]]["drop_multiplier"];
+        if (afk_toggle && drop_multiplier > 1) {
+            drop_multiplier = int(drop_multiplier);
+        };
+        if (setup_data["mayor"] == "Derpy") {
+            drop_multiplier *= 2;
+        };
+        return drop_multiplier;
+    };
+    
+    get_actions_per_harvest(minion, upgrade_ids, afk_toggle, setup_data, setup_notes) {
+        let actions_per_harvest = 2;
+        if (minion === "Fishing") {
+            // only has harvests actions
+            actions_per_harvest = 1;
+        };
+        if (afk_toggle) {
+            if (["Pumpkin", "Melon"].includes(minion)) {
+                // pumpkins and melons are forced to regrow for minion to harvest
+                actions_per_harvest = 1;
+            };
+            if (setup_data["player_harvests"]) {
+                if (["Fishing", "Pumpkin", "Melon"].includes(minion)) {
+                    setup_notes["Player Harvests"] = "Player Harvesting does not work with this minion";
+                } else {
+                    actions_per_harvest = 1;
+                    if (minion === "Gravel") {
+                        upgrade_ids.push("FLINT_SHOVEL");
+                        setup_notes["Player Tools"] = "Assuming Player is using Flint Shovel";
+                    };
+                    if (minion === "Ice") {
+                        setup_notes["Player Tools"] = "Assuming Player is using Silk Touch";
+                    };
+                };
+            } else if (setup_data["special_layout"]) {
+                if (["Cobblestone", "Mycelium", "Ice"].includes(minion)) {
+                    // cobblestone generator, regrowing mycelium, freezing water
+                    actions_per_harvest = 1;
+                };
+                if (["Flower", "Sand", "Red Sand", "Gravel"].includes(minion)) {
+                    // harvests through natural means: water flushing, gravity
+                    actions_per_harvest = 1;
+                    // speedBonus -= 10  # only spawning has 10% action speed reduction, not confirmed yet.
+                };
+            };
+        };
+        return actions_per_harvest;
+    };
+
+    update_loot_table(minion, minion_fuel_id, upgrades, afk_toggle, setup_data) {
+        if (['Oak', 'Spruce', 'Birch', 'Dark Oak', 'Acacia', 'Jungle'].includes(minion)) {
+            if (afk_toggle) {
+                // chopped trees have 4 blocks of wood, unknown why offline gives 3
+                md.minionList[minion]["drops"][md.getID[`${minion} Log`]] = 4;
+            } else {
+                md.minionList[minion]["drops"][md.getID[`${minion} Log`]] = 3;
+            };
+        } else if (minion == "Gravel") {
+            if (afk_toggle) {
+                // vanilla minecraft chance for gravel to become flint
+                md.minionList[minion]["drops"]["GRAVEL"] = 0.9;
+                md.minionList[minion]["drops"]["FLINT"] = 0.1;
+            } else {
+                md.minionList[minion]["drops"]["GRAVEL"] = 1;
+                md.minionList[minion]["drops"]["FLINT"] = 0;
+            };
+        } else if (minion == "Pumpkin") {
+            if (afk_toggle) {
+                // it just does this, idk, ask Hypixel
+                md.minionList[minion]["drops"]["PUMPKIN"] = 1;
+            } else {
+                md.minionList[minion]["drops"]["PUMPKIN"] = 3;
+            };
+        } else if (minion == "Sheep") {
+            if (upgrades.includes("ENCHANTED_SHEARS")) {
+                md.minionList[minion]["drops"]["WOOL"] = 0;
+            } else {
+                md.minionList[minion]["drops"]["WOOL"] = 1;
+            };
+        } else if (minion == "Flower") {
+            if (minion_fuel_id == "THORNY_VINES") {
+                md.minionList[minion]["drops"] = { "WILD_ROSE": 2 };
+            } else if (afk_toggle && setup_data["special_layout"]) {
+                // tall flowers blocked by low ceiling
+                md.minionList[minion]["drops"] = { "YELLOW_FLOWER": 0.35, "RED_ROSE": 0.15, "RED_ROSE:1": 0.5 / 8, "RED_ROSE:2": 0.5 / 8, "RED_ROSE:3": 0.5 / 8, "RED_ROSE:4": 0.5 / 8, "RED_ROSE:5": 0.5 / 8, "RED_ROSE:6": 0.5 / 8, "RED_ROSE:7": 0.5 / 8, "RED_ROSE:8": 0.5 / 8 };
+            } else {
+                md.minionList[minion]["drops"] = { "YELLOW_FLOWER": 0.35, "RED_ROSE": 0.15, "RED_ROSE:1": 0.5 / 11, "RED_ROSE:2": 0.5 / 11, "RED_ROSE:3": 0.5 / 11, "RED_ROSE:4": 0.5 / 11, "RED_ROSE:5": 0.5 / 11, "RED_ROSE:6": 0.5 / 11, "RED_ROSE:7": 0.5 / 11, "RED_ROSE:8": 0.5 / 11, "DOUBLE_PLANT:1": 0.5 / 11, "DOUBLE_PLANT:4": 0.5 / 11, "DOUBLE_PLANT:5": 0.5 / 11 };
+            };
+        } else if (minion == "Sunflower") {
+            if (minion_fuel_id == "DAYSWITCH") {
+                md.minionList[minion]["drops"] = { "DOUBLE_PLANT": 2 };
+            } else if (minion_fuel_id == "NIGHTSWITCH") {
+                md.minionList[minion]["drops"] = { "MOONFLOWER": 2 };
+            } else {
+                md.minionList[minion]["drops"] = { "DOUBLE_PLANT": 1, "MOONFLOWER": 1 };
+            };
+        };
+        return;
+    };
+
+    get_seconds_per_action(minion, minion_tier, minion_fuel_id, speed_boost, setup_data) {
+        let base_speed = md.minionList[minion]["speed"][minion_tier];
+        let secondsPaction = base_speed / (1 + speed_boost / 100);
+        if (minion_fuel_id == "INFERNO_FUEL") {
+            secondsPaction /= 1 + md.inferno_fuel_data["grades"][setup_data["inferno_grade"]];
+        };
+        return secondsPaction;
+    };
+
+    get_time_constants(seconds_per_action, actions_per_harvest, setup_data) {
+        let empty_time_seconds = this.gui.time_number(setup_data["empty_time_unit"], setup_data["empty_time_amount"], seconds_per_action * actions_per_harvest);
+        let empty_time_str = scaled_time_str = `"${setup_data["empty_time_amount"]} ${setup_data["empty_time_unit"]}"`;
+        let timeratio = 1;
+        if (setup_data["scale_time"]) {
+            scaled_time_seconds = this.gui.time_number(setup_data["scaled_time_unit"], setup_data["scaled_time_amount"], seconds_per_action * actions_per_harvest);
+            scaled_time_str = `${setup_data["scaled_time_amount"]} ${setup_data["scaled_time_unit"]}`;
+            timeratio = scaled_time_seconds / empty_time_seconds;
+        };
+        return [empty_time_seconds, timeratio, empty_time_str, scaled_time_str];
+    };
+
+    get_harvests_per_time(empty_time_seconds, actions_per_harvest, seconds_per_action, afk_toggle, drop_multiplier, setup_data) {
+        let harvests_per_time;
+        if (setup_data["empty_time_unit"] == "Harvests") {
+            harvests_per_time = setup_data["empty_time_amount"];
+        } else {
+            harvests_per_time = empty_time_seconds / (actions_per_harvest * seconds_per_action);
+        };
+        
+        // drop multiplier online/offline mode
+        if (!(afk_toggle)) {
+            harvests_per_time *= drop_multiplier;
+            drop_multiplier = 1;
+        };
+        return [harvests_per_time, drop_multiplier];
+    };
+
+    get_upgrade_info(upgrade_ids, drops_list) {
+        let spreading_info = {};
+        let replace_info = {};
+        for (const upgrade of upgrade_ids) {
+            upgrade_type = md.itemList[upgrade]["upgrade_special"]["type"];
+            if (upgrade_type.includes("spreading")) {
+                for (let [item, amount] of Object.entries(md.itemList[upgrade]["upgrade_special"]["items"])) {
+                    spreading_info[item] = amount;
+                    drops_list[item] = 0;
+                };
+            };
+            if (upgrade_type.includes("replace")) {
+                Object.assign(replace_info, md.itemList[upgrade]["upgrade_special"]["replacement_list"]);
+            };
+        };
+        return spreading_info, replace_info;
+    };
+
+    add_drops(item, amount, drops_list, spreading_info=null, replace_info=null) {
+        if (replace_info !== null && item in replace_info) {
+            item = replace_info[item];
+        };
+        if (!(item in drops_list)) {
+            drops_list[item] = 0;
+        };
+        drops_list[item] += amount;
+        if (spreading_info !== null) {
+            for (let [spreading_item, spreading_average] of Object.entries(spreading_info)) {
+                drops_list[spreading_item] += amount * spreading_average;
+            };
+        };
+        return;
+    };
+
+    get_base_drops(drops_list, spreading_info, replace_info, minion, harvests_per_time, drop_multiplier) {
+        for (let [item, amount] of Object.entries(md.minionList[minion]["drops"])) {
+            this.add_drops(item, harvests_per_time * amount * drop_multiplier, drops_list, spreading_info, replace_info);
+        };
+        return;
+    };
+
+    get_upgrade_drops(drops_list, spreading_info, minion, minion_tier, drop_multiplier, upgrade_ids, harvests_per_time, afk_toggle, empty_time_seconds, seconds_per_action) {
+        for (const upgrade of upgrade_ids) {
+            let upgrade_type = md.itemList[upgrade]["upgrade_special"]["type"];
+            let specific_multiplier = 1;
+            let effective_cooldown;
+            if (upgrade_type == "add") {
+                // adding upgrades are like Corrupt Soils
+                if (afk_toggle) {
+                    if ("CORRUPT_SOIL" == upgrade) {
+                        if ("afkcorrupt" in md.minionList[minion]) {
+                            // Certain mob minions get more corrupt drops when afking
+                            // It is not a constant multiplier, it is equivalent in chance to the main drops of the minion
+                            specific_multiplier = md.minionList[minion]["afkcorrupt"];
+                        };
+                        if (minion == "Chicken" && !(upgrade_ids.includes("ENCHANTED_EGG"))) {
+                            // Online Chicken minion without Enchanted Egg does not make corrupt drops
+                            specific_multiplier = 0;
+                        };
+                    };
+                    if ("ENCHANTED_EGG" == upgrade) {
+                        // Enchanted Eggs make one laid egg and one egg on kill while AFKing
+                        // the egg on spawn is affected by drop multipliers and spreadings
+                        this.add_drops("EGG", harvests_per_time * drop_multiplier, drops_list, spreading_info);
+                    };
+                    for (let [item, amount] of Object.entries(md.itemList[upgrade]["upgrade_special"]["items"])) {
+                        this.add_drops(item, harvests_per_time * amount * specific_multiplier, drops_list);
+                    };
+                } else {
+                    for (let [item, amount] of Object.entries(md.itemList[upgrade]["upgrade_special"]["items"])) {
+                        this.add_drops(item, harvests_per_time * amount * specific_multiplier, drops_list, spreading_info);
+                    };
+                };
+            } else if (upgrade_type == "cooldown") {
+                // cooldown upgrades are like Soulflow Engines
+                // formula for effective_cooldown still in research
+                if (afk_toggle && upgrade == "LESSER_SOULFLOW_ENGINE" && upgrade_ids.includes("SOULFLOW_ENGINE")) {
+                    continue;  // Soulflow Engine overrides Lesser Soulflow Engine while online
+                };
+                if (afk_toggle) {
+                    effective_cooldown = 2 * seconds_per_action * (1 + Math.floor(Math.ceil(md.itemList[upgrade]["upgrade_special"]["cooldown"] / seconds_per_action) / 2));
+                } else {
+                    effective_cooldown = md.itemList[upgrade]["upgrade_special"]["offline_cooldown"];
+                };
+                if ("SOULFLOW_ENGINE" == upgrade && minion == "Voidling") {
+                    specific_multiplier = 1 + 0.03 * minion_tier;  // correct most likely, needs testing
+                };
+                for (let [cooldown_item, cooldown_amount] of Object.entries(md.itemList[upgrade]["upgrade_special"]["items"])) {
+                    this.add_drops(cooldown_item, specific_multiplier * cooldown_amount * empty_time_seconds / effective_cooldown, drops_list);
+                };
+            };
+        };
+        return;
+    };
+
+    get_inferno_drops(drops_list, spreading_info, replace_info, minion, minion_tier, minion_fuel, drop_multiplier, harvests_per_time, empty_time_seconds, afk_toggle, setup_data) {
+        if (minion_fuel != "INFERNO_FUEL") {
+            return;
+        };
+        // distilate drops
+        const distilate = setup_data["inferno_distillate"];
+        const distilate_item = md.inferno_fuel_data["distilates"][distilate][0];
+        const amount_per = md.inferno_fuel_data["distilates"][distilate][1];
+        const distillate_harvests = (harvests_per_time * 4) / 5;
+        if (afk_toggle) {
+            this.get_base_drops(drops_list, spreading_info, replace_info, minion, - distillate_harvests, drop_multiplier);
+        } else {
+            this.get_base_drops(drops_list, None, replace_info, minion, - distillate_harvests, drop_multiplier);
+        };
+        this.add_drops(distilate_item, distillate_harvests * amount_per, drops_list);
+
+        // Hypergolic drops
+        if (setup_data["inferno_grade"] == "HYPERGOLIC_GABAGOOL") { // hypergolic fuel stuff
+            let multiplier = 1;
+            if (setup_data["inferno_eyedrops"] === true) {  // Capsaicin Eyedrops
+                multiplier = 1.3;
+            };
+            for (let [item, chance] of Object.entries(md.inferno_fuel_data["drops"])) {
+                if (item == "INFERNO_APEX" && minion_tier >= 10) {  // Apex Minion perk
+                    chance *= 2;
+                };
+                this.add_drops(item, multiplier * chance * harvests_per_time, drops_list);
+            };
+            this.add_drops("HYPERGOLIC_IONIZED_CERAMICS", empty_time_seconds / md.itemList[minion_fuel]["fuel_duration"], drops_list);
+        };
+        
+        // calculate fuel cost
+        let infernofuel_components = {
+            "INFERNO_FUEL_BLOCK": 2,  // 2 inferno fuel blocks
+            "CAPSAICIN_EYEDROPS_NO_CHARGES": Number(setup_data["inferno_eyedrops"])  // capsaicin eyedrops
+        };
+        infernofuel_components[distilate] = 6;  // 6 times distilate item
+        infernofuel_components[setup_data["inferno_grade"]] = 1;  // 1 gabagool core
+        let costPerInfernofuel = 0;
+        for (let [component_ID, amount] of Object.entries(infernofuel_components)) {
+            costPerInfernofuel += amount * this.get_price(component_ID, setup_data, "buy", "bazaar");
+        };
+        md.itemList["INFERNO_FUEL"]["prices"]["custom"] = costPerInfernofuel;
+        // the fuel cost is put into the item data to be used later in the general fuel cost calculator
+        return;
+    };
+
+    apply_compactor(drops_list, compacting_list) {
+        let compacted_items = [];
+        let compactables = Object.keys(drops_list);
+        let item, amount, per_compacted, compacted_name, compacted_amount, left_over;
+        while (compactables.length) {
+            item = compactables.pop();
+            if (!(item in compacting_list)) {
+                continue;
+            };
+            amount = drops_list[item];
+            per_compacted = compacting_list[item]["per"];
+            if (amount < per_compacted) {
+                continue;
+            };
+            compacted_name = compacting_list[item]["makes"];
+            compacted_amount = Math.floor(amount / per_compacted);
+            if ("amount" in compacting_list[item]) {
+                compacted_amount *= compacting_list[item]["amount"];
+            };
+            left_over = amount % per_compacted;
+            drops_list[item] = left_over;
+            drops_list[compacted_name] = compacted_amount;
+            compacted_items.push({"from": item, ...compacting_list[item]});
+            if (compacted_name in compacting_list) {
+                compactables.push(compacted_name);
+            };
+        };
+        return compacted_items;
+    };
+
+    get_compacted_drops(drops_list, upgrades) {
+        let compacted_items = [];
+        for (let upgrade of upgrades) {
+            if (md.itemList[upgrade]["upgrade_special"]["type"].includes("compact")) {
+                compacted_items.push(...this.apply_compactor(drops_list, md.itemList[upgrade]["upgrade_special"]["compacting_list"]));
+            };
+        };
+        return compacted_items;
+    }
+
+    get_available_storage(minion, minion_tier, setup_data) {
+        let available_storage = md.itemList[setup_data["chest"]]["storage_slots"];
+        if ("storage" in md.minionList[minion] && minion_tier in md.minionList[minion]["storage"]) {
+            available_storage += md.minionList[minion]["storage"][minion_tier];
+        } else {
+            available_storage += md.standard_storage[minion_tier];
+        };
+        return available_storage;
+    };
+
+    get_used_storage(drops_list) {
+        let used_storage_slots = 0;
+        for (amount of Object.values(drops_list)) {
+            used_storage_slots += Math.ceil(amount / 64);  // hypixel does not care about smaller max stack sizes
+        };
+        return used_storage_slots;
+    };
+
+    get_fill_time(minion, available_storage) {
+        // WIP
+        return;
+    };
+
+    get_sell_location(setup_data) {
+        let sellto = "NPC";
+        let hopper_multiplier = 1;
+        let minion_sell_loc = setup_data["sell_loc"];
+        if (minion_sell_loc == "Bazaar") {
+            sellto = "bazaar";
+        } else if (minion_sell_loc == "Best (NPC/Bazaar)") {
+            sellto = "best";
+        } else if (minion_sell_loc == "Hopper") {
+            hopper_multiplier = md.itemList[setup_data["hopper"]]["hopper_selling_rate"];
+        };
+        return [sellto, hopper_multiplier];
+    };
+
+    get_item_profit(sell_location, hopper_multiplier, drops_list, setup_data) {
+        let item_profit = 0.0;
+        let per_item_profit = {};
+        let per_item_sell_location = {};
+        let item_prices = {};
+        for (let [itemtype, amount] of Object.entries(drops_list)) {
+            this.gui.clear_object(item_prices);
+            item_prices["NPC"] = this.get_price(itemtype, setup_data, "sell", "npc");
+            item_prices["bazaar"] = this.get_price(itemtype, setup_data, "sell", "bazaar");
+            // item_prices["custom"] = this.get_price(itemtype, setup_data, "sell", "custom", true)  // might use later
+            if (sell_location in item_prices) {
+                per_item_sell_location[itemtype] = sell_location;
+            } else {
+                per_item_sell_location[itemtype] = Object.keys(item_prices).reduce((a, b) => item_prices[a] > item_prices[b] ? a : b);  // https://stackoverflow.com/a/27376421
+            };
+            let final_price = item_prices[per_item_sell_location[itemtype]];
+            per_item_profit[itemtype] = amount * final_price * hopper_multiplier;
+            item_profit += amount * final_price;
+        };
+        item_profit *= hopper_multiplier;
+        return [item_profit, per_item_profit, per_item_sell_location];
+    };
+    
+    get_skill_xp(afk_toggle, mayor, drops_list, setup_data) {
+        let skill_xp = {};
+        for (let [itemtype, amount] of Object.entries(drops_list)) {
+            let [xptype, value] = Object.entries(md.itemList[itemtype]["xp"])[0];
+            if (value == 0) {
+                continue;
+            };
+            if (!(xptype in skill_xp)) {
+                skill_xp[xptype] = 0;
+            };
+            skill_xp[xptype] += amount * value * (1 + setup_data[xptype + "_wisdom"] / 100);
+        };
+        if (["Derpy", "Aura"].includes(mayor)) {
+            this.gui.deepmultiply(skill_xp, 1.5);
+        };
+        if (afk_toggle && setup_data["player_harvests"] && "combat" in skill_xp) {
+            delete skill_xp["combat"];
+        };
+        return skill_xp;
+    };
+
+    get_over_compacting(sell_location, compacted_items, per_item_sell_location, setup_notes, setup_data) {
+        if (!(["best", "bazaar"].includes(sell_location))) {
+            return;
+        };
+        let over_compacting = [];
+        for (let item_data of compacted_items) {
+            let item = item_data["from"];
+            let compact_item = item_data["makes"];
+            let per_compact = item_data["per"];
+            let compact_amount = 1;
+            if ("amount" in item_data) {
+                compact_amount = item_data["amount"];
+            };
+            let cost = this.get_price(item, setup_data, "sell", per_item_sell_location[item]) * per_compact;
+            let compact_cost = this.get_price(compact_item, setup_data, "sell", per_item_sell_location[compact_item]) * compact_amount;
+            if (cost - compact_cost > compact_tolerance) {
+                over_compacting.push(md.itemList[item]['display']);
+            };
+        };
+        if (this.gui.get_length(over_compacting) != 0) {
+            setup_notes["Over-compacting"] = ', '.join(over_compacting);
+        };
+        return;
+    };
+
+    get_pet_xp_boosts(pet, xp_type, setup_data, exp_share=False) {
         let non_matching = 1
         if (md.all_pets[pet]["type"] !== "all" && md.all_pets[pet]["type"] !== xp_type) {
             if (["alchemy", "enchanting"].includes(xp_type)) {
@@ -937,14 +1468,14 @@ class Calculator {
         if (exp_share) {
             return non_matching;
         };
-        let petxpbonus = (1 + this.variables["taming"]["var"] / 100) * (1 + this.variables["beastmaster"]["var"] / 100) * non_matching;
+        let petxpbonus = (1 + setup_data["taming"] / 100) * (1 + setup_data["beastmaster"] / 100) * non_matching;
         let pet_item;
-        if ([xp_type, "all"].includes(md.pet_xp_boosts[this.variables["petxpboost"]["var"]][0])) {
-            pet_item = 1 + md.pet_xp_boosts[this.variables["petxpboost"]["var"]][1] / 100;
+        if ([xp_type, "all"].includes(md.itemList[setup_data["petxpboost"]]["exp_boost_type"])) {
+            pet_item = 1 + md.itemList[setup_data["petxpboost"]]["exp_boost_amount"] / 100;
         } else {
             pet_item = 1;
         };
-        if (this.variables["mayor"]["var"] === "Diana") {
+        if (setup_data["mayor"] === "Diana") {
             petxpbonus *= 1.35;
         };
         if (["mining", "fishing"].includes(xp_type)) {
@@ -953,8 +1484,8 @@ class Calculator {
         if (pet === "Reindeer") {
             petxpbonus *= 2;
         };
-        if (xp_type === "combat" && this.variables["falcon_attribute"]["var"] !== 0) {
-            petxpbonus *= (1 + this.variables["falcon_attribute"]["var"] / 100);
+        if (xp_type === "combat" && setup_data["falcon_attribute"] !== 0) {
+            petxpbonus *= (1 + setup_data["falcon_attribute"] / 100);
         };
         return [petxpbonus, pet_item];
     };
@@ -980,721 +1511,114 @@ class Calculator {
         gained_pet_xp += left_over_pet_xp;
         return [gained_pet_xp, left_over_pet_xp];
     };
-    
-    get_inputs() {
-        for (const [var_key, var_data] of Object.entries(this.variables)) {
-            if (var_data["vtype"] === "input" && !("noWidget" in var_data)) {
-                var_data["var"] = GUI.get_value(var_key);
-            };
-        };
-        return 0;
-    };
-    
-    async calculate(inGUI=false) {
-        if (inGUI === true) {
-            this.statusC.style.background = "yellow";
-            this.get_inputs();
 
-            // auto update bazaar
-            if (this.variables["bazaar_auto_update"]["var"]) {
-                await this.update_bazaar(false);
-            };
-        };
-
-
-        // clear list outputs from previous calculation
-        for (let [var_key, var_data] of Object.entries(this.variables)) {
-            if (var_data["vtype"] === "list"){
-                if (var_key === "wisdom") {
-                    continue;
-                };
-                GUI.clear_object(var_data["list"]);
-            };
-        };
-
-        // extracting often used minion constants
-        let minion_type = this.variables["minion"]["var"];
-        let minion_tier = this.variables["miniontier"]["var"];
-        let minion_amount = this.variables["amount"]["var"];
-        let minion_fuel = md.fuel_options[this.variables["fuel"]["var"]];
-        let minion_beacon = this.variables["beacon"]["var"];
-        let mayor = this.variables["mayor"]["var"];
-
-        // Enchanted Clock uses offline calculations, but you can be on the island when using it to apply boosts that require a loaded island.
-        // This clock_override replaces afk_toggle for these boosts
-        let afk_toggle = this.variables["afk"]["var"];
-        let clock_toggle = this.variables["enchanted_clock"]["var"];
-        let clock_override = false;
-        if (clock_toggle && afk_toggle) {
-            afk_toggle = false;
-            clock_override = true;
-        };
-
-        // list upgrades types
-        let upgrades = [md.upgrade_options[this.variables["upgrade1"]["var"]], md.upgrade_options[this.variables["upgrade2"]["var"]]];
-        let upgrades_types = [];
-        for (let upgrade of upgrades) {
-            for (let temp_type of md.itemList[upgrade]["upgrade"]["special"]["type"].split(", ")) {
-                upgrades_types.push(temp_type);
-            };
-        };
-
-
-        // adding up minion speed bonus
-        // uses the fact that booleans can be seen as 0 or 1 or false and true resp.
-        let speedBonus = 0;
-        speedBonus += md.itemList[minion_fuel]["upgrade"]["speed"];
-        speedBonus += md.itemList[upgrades[0]]["upgrade"]["speed"] + md.itemList[upgrades[1]]["upgrade"]["speed"];
-        speedBonus += 2 * minion_beacon + 10 * this.variables["infusion"]["var"];
-        speedBonus += 10 * this.variables["free_will"]["var"] + 5 * this.variables["postcard"]["var"];
-        speedBonus += 5 * this.variables["potatoTalisman"]["var"] * (afk_toggle || clock_override) * (minion_type === "Potato");
-        if (this.variables["crystal"]["var"] !== "None") {
-            if (Object.values(md.floating_crystals[this.variables["crystal"]["var"]])[0].includes(minion_type)) {
-                speedBonus += Number(Object.keys(md.floating_crystals[this.variables["crystal"]["var"]])[0]);
-            };
-        };
-        if (minion_beacon !== 0) {
-            speedBonus += 1 * this.variables["scorched"]["var"];
-        };
-        if (minion_type === "Inferno") {
-            if (this.rising_celsius_override) {
-                speedBonus += 180;
-            } else {
-                speedBonus += 18 * Math.min(10, minion_amount);
-            };
-        };
-        if (mayor === "Cole" && (afk_toggle || clock_override) && md.affected_by_cole.includes(minion_type)) {
-            speedBonus += 25;
-        };
-        // if (mayor === "Aura" && minion_type === "Potato") {
-        //     speedBonus += 33;
-        // };
-        let afkpet = this.variables["afkpet"]["var"];
-        let afkpet_rarity = this.variables["afkpetrarity"]["var"];
-        let afkpet_lvl = this.variables["afkpetlvl"]["var"];
-        if ((afk_toggle || clock_override) && md.boost_pets[afkpet]["affects"].includes(minion_type) && afkpet_rarity in md.boost_pets[afkpet]) {
-            speedBonus += md.boost_pets[afkpet][afkpet_rarity][0] + afkpet_lvl * md.boost_pets[afkpet][afkpet_rarity][1];
-        };
-
-        // multiply up minion drop bonus
-        let dropMultiplier = 1;
-        dropMultiplier *= md.itemList[minion_fuel]["upgrade"]["drop"];
-        dropMultiplier *= md.itemList[upgrades[0]]["upgrade"]["drop"];
-        if (afk_toggle && (dropMultiplier > 1)) {
-            // drop multiplier greater than 1 is rounded down while online
-            dropMultiplier = Math.floor(dropMultiplier);
-        };
-        dropMultiplier *= md.itemList[upgrades[1]]["upgrade"]["drop"];
-        if (afk_toggle && (dropMultiplier > 1)) {
-            dropMultiplier = Math.floor(dropMultiplier);
-        };
-        if (mayor === "Derpy") {
-            dropMultiplier *= 2;
-        };
-
-        // AFKing, Special Layouts and Player Harvests influences
-        let actionsPerHarvest = 2;
-        if (minion_type === "Fishing") {
-            // only has harvests actions
-            actionsPerHarvest = 1;
-        };
-        if (afk_toggle) {
-            if (["Pumpkin", "Melon"].includes(minion_type)) {
-                // pumpkins and melons are forced to regrow for minion to harvest
-                actionsPerHarvest = 1;
-            };
-            if (this.variables["playerHarvests"]["var"]) {
-                if (["Fishing", "Pumpkin", "Melon"].includes(minion_type)) {
-                    this.variables["notes"]["list"]["Player Harvests"] = "Player Harvesting does not work with this minion";
-                } else {
-                    actionsPerHarvest = 1;
-                    dropMultiplier = 1;
-                    if (minion_type === "Gravel") {
-                        upgrades.push("FLINT_SHOVEL");
-                        this.variables["notes"]["list"]["Player Tools"] = "Assuming Player is using Flint Shovel";
-                    };
-                    if (minion_type === "Ice") {
-                        this.variables["notes"]["list"]["Player Tools"] = "Assuming Player is using Silk Touch";
-                    };
-                    if (["Zombie", "Revenant", "Voidling", "Inferno", "Vampire", "Skeleton", "Creeper", "Spider", "Tarantula", "Cave Spider", "Blaze", "Magma Cube", "Enderman", "Ghast", "Slime", "Cow", "Pig", "Chicken", "Sheep", "Rabbit"].includes(minion_type)) {
-                        dropMultiplier *= 1 + 15 * this.variables["playerLooting"]["var"] / 100;
-                    };
-                };
-            } else if (this.variables["specialLayout"]["var"]) {
-                if (["Cobblestone", "Mycelium", "Ice"].includes(minion_type)) {
-                    // cobblestone generator, regrowing mycelium, freezing water
-                    actionsPerHarvest = 1;
-                };
-                if (["Flower", "Sand", "Red Sand", "Gravel"].includes(minion_type)) {
-                    // harvests through natural means: water flushing, gravity
-                    actionsPerHarvest = 1;
-                    // speedBonus -= 10  // only spawning has 10% action speed reduction, not confirmed yet.
-                };
-            };
-        };
-
-        // AFK loot table changes
-        if (['Oak', 'Spruce', 'Birch', 'Dark Oak', 'Acacia', 'Jungle'].includes(minion_type)) {
-            if (afk_toggle) {
-                // chopped trees have 4 blocks of wood, unknown why offline gives 3
-                md.minionList[minion_type]["drops"][md.getID[`${minion_type} Log`]] = 4;
-            } else {
-                md.minionList[minion_type]["drops"][md.getID[`${minion_type} Log`]] = 3;
-            };
-        };
-        if (minion_type == "Gravel") {
-            if (afk_toggle) {
-                // vanilla minecraft chance for gravel to become flint
-                md.minionList[minion_type]["drops"]["GRAVEL"] = 0.9;
-                md.minionList[minion_type]["drops"]["FLINT"] = 0.1;
-            } else {
-                md.minionList[minion_type]["drops"]["GRAVEL"] = 1;
-                md.minionList[minion_type]["drops"]["FLINT"] = 0;
-            };
-        };
-        if (minion_type == "Pumpkin") {
-            if (afk_toggle) {
-                // it just does this, idk, ask Hypixel
-                md.minionList[minion_type]["drops"]["PUMPKIN"] = 1;
-            } else {
-                md.minionList[minion_type]["drops"]["PUMPKIN"] = 3;
-            };
-        };
-        if (minion_type == "Sheep") {
-            if (upgrades.includes("ENCHANTED_SHEARS")) {
-                md.minionList[minion_type]["drops"]["WOOL"] = 0;
-            } else {
-                md.minionList[minion_type]["drops"]["WOOL"] = 1;
-            };
-        };
-        if (minion_type == "Flower") {
-            if (minion_fuel === "THORNY_VINES") {
-                md.minionList[minion_type]["drops"] = { "WILD_ROSE": 2 };
-            } else if (afk_toggle && this.variables["specialLayout"]["var"]) {
-                // tall flowers blocked by low ceiling
-                md.minionList[minion_type]["drops"] = { "YELLOW_FLOWER": 0.35, "RED_ROSE": 0.15, "SMALL_FLOWER": 0.5 };
-            } else {
-                md.minionList[minion_type]["drops"] = { "YELLOW_FLOWER": 0.35, "RED_ROSE": 0.15, "SMALL_FLOWER": 4 / 11, "LARGE_FLOWER": 3 / 22 };
-            };
-        };
-        if (minion_type === "Sunflower") {
-            if (minion_fuel === "DAYSWITCH") {
-                md.minionList[minion_type]["drops"] = { "DOUBLE_PLANT": 2 };
-            } else if (minion_fuel === "NIGHTSWITCH") {
-                md.minionList[minion_type]["drops"] = { "MOONFLOWER": 2 };
-            } else {
-                md.minionList[minion_type]["drops"] = { "DOUBLE_PLANT": 1, "MOONFLOWER": 1 };
-            };
-        };
-
-        // calculate final minion speed
-        let base_speed = md.minionList[minion_type]["speed"][minion_tier];
-        let secondsPaction = base_speed / (1 + speedBonus / 100);
-        if (minion_fuel == "INFERNO_FUEL") {
-            secondsPaction /= 1 + md.infernofuel_data["grades"][md.getID[this.variables["infernoGrade"]["var"]]];
-        };
-
-        // time calculations
-        let emptytimeNumber;
-        let timeratio;
-        let emptytimeamount = GUI.get_value("emptytimeamount");
-        let emptytimelength = GUI.get_value("emptytimelength");
-        let totaltimelength = GUI.get_value("totaltimelength");
-        let totaltimeamount = GUI.get_value("totaltimeamount");
-        if (this.variables["often_empty"]["var"]) {
-            emptytimeNumber = this.time_number(emptytimelength, emptytimeamount, secondsPaction, actionsPerHarvest);
-            let timeNumber = this.time_number(totaltimelength, totaltimeamount, secondsPaction, actionsPerHarvest);
-            timeratio = timeNumber / emptytimeNumber;
-            this.variables["emptytime"]["var"] = (`${emptytimeamount} ${emptytimelength}`);
+    get_pet_profit(skill_xp, mayor, setup_data) {
+        let pet_profit = 0.0
+        let main_pet = setup_data["levelingpet"]
+        if (main_pet == "None") {
+            return [0, {}, {}]
+        }
+        let setup_pets = { "levelingpet": { "pet": main_pet, "pet_xp": {}, "levelled_pets": 0.0 } }
+        for (var_key of ["expsharepet", "expsharepetslot2", "expsharepetslot3"]) {
+            if (setup_data[var_key] == "None" || (mayor != "Diana" && ["expsharepetslot2", "expsharepetslot3"].includes(var_key))) {
+                continue
+            }
+            setup_pets[var_key] = { "pet": setup_data[var_key], "pet_xp": { "exp_share": 0.0 }, "levelled_pets": 0.0 }
+        }
+        let pet_prices = {}
+        let main_pet_xp = setup_pets["levelingpet"]["pet_xp"]
+        let pet_xp_boost, xp_boost_pet_item, left_over_pet_xp, exp_share_pet, equiv_pet_xp_boost, equiv_xp_boost_pet_item, non_matching, dragon_xp_outputs
+        if (md.all_pets[main_pet]["rarity"].includes("Dragon")) {
+            left_over_pet_xp = 0.0
+            for (let [skill, amount] of Object.entries(skill_xp)) {
+                [pet_xp_boost, xp_boost_pet_item] = this.get_pet_xp_boosts(main_pet, skill, setup_data)
+                dragon_xp_outputs = this.dragon_xp(amount, left_over_pet_xp, pet_xp_boost, xp_boost_pet_item)
+                main_pet_xp[skill] = dragon_xp_outputs[0];
+                left_over_pet_xp = dragon_xp_outputs[1];
+            }
         } else {
-            emptytimeNumber = this.time_number(totaltimelength, totaltimeamount, secondsPaction, actionsPerHarvest);
-            timeratio = 1;
-        };
-        this.variables["time"]["var"] = `${totaltimeamount} ${totaltimelength}`;
-        let harvestsPerTime;
-        if (emptytimelength == "Harvests") {
-            harvestsPerTime = emptytimeamount;
-        } else {
-            harvestsPerTime = emptytimeNumber / (actionsPerHarvest * secondsPaction);
-        };
-        this.variables["actiontime"]["var"] = secondsPaction;
-        this.variables["harvests"]["var"] = minion_amount * harvestsPerTime * timeratio;
-
-        // drop multiplier online/offline mode
-        if (!(afk_toggle)) {
-            harvestsPerTime *= dropMultiplier;
-            dropMultiplier = 1;
-        };
-
-        // base drops
-        for (const [item, amount] of Object.entries(md.minionList[minion_type]["drops"])) {
-            this.variables["items"]["list"][item] = harvestsPerTime * amount * dropMultiplier;
-        };
-
-        // upgrade drops
-        // create seperate dict to keep it separate from the main drops
-        // because some upgrades use main drops to generate something
-        let upgrade_drops = {};
-        let spreading_drops = {};
-        let cooldown_drops = {};
-        for (let upgrade of upgrades) {
-            let upgrade_type = md.itemList[upgrade]["upgrade"]["special"]["type"];
-            if (upgrade_type.includes("replace")) {
-                // replacing upgrades are like Auto Smelters
-                for (const item of Object.keys(this.variables["items"]["list"])) {
-                    if (item in md.itemList[upgrade]["upgrade"]["special"]["list"]) {
-                        let replacement_item = md.itemList[upgrade]["upgrade"]["special"]["list"][item];
-                        if (!(replacement_item in this.variables["items"]["list"])) {
-                            this.variables["items"]["list"][replacement_item] = 0;
-                        };
-                        this.variables["items"]["list"][replacement_item] += this.variables["items"]["list"][item];
-                        this.variables["items"]["list"][item] = 0;
-                        delete this.variables["items"]["list"][item];
-                    };
-                };
-            };
-            if (upgrade_type === "generate") {
-                // generating upgrades are like Diamond Spreadings
-                let finalAmount = 0;
-                let spreading_chance = md.itemList[upgrade]["upgrade"]["special"]["chance"];
-                for (const amount of Object.values(this.variables["items"]["list"])) {
-                    finalAmount += spreading_chance * amount;
-                };
-                if (minion_fuel === "INFERNO_FUEL" && afk_toggle) {
-                    finalAmount /= 5;
-                };
-                for (const [item, amount] of Object.entries(md.itemList[upgrade]["upgrade"]["special"]["item"])) {
-                    if (!(item in spreading_drops)) {
-                        spreading_drops[item] = 0;
-                    };
-                    spreading_drops[item] += finalAmount * amount;
-                };
-            } else if (upgrade_type === "add") {
-                // adding upgrades are like Corrupt Soils
-                for (const [item, amount] of Object.entries(md.itemList[upgrade]["upgrade"]["special"]["item"])) {
-                    if (!(item in upgrade_drops)) {
-                        upgrade_drops[item] = 0;
-                    };
-                    upgrade_drops[item] += harvestsPerTime * amount;
-                };
-            } else if (upgrade_type === "timer") {
-                // timer upgrades are like Soulflow Engines
-                // formula for effective_cooldown still in research
-                // if afk_toggle:
-                //     effective_cooldown = 2 * secondsPaction * (1 + np.floor(np.ceil(md.itemList[upgrade]["upgrade"]["special"]["cooldown"] / secondsPaction) / 2))
-                // else:
-                //     effective_cooldown = ???
-                if (afk_toggle && upgrade == "LESSER_SOULFLOW_ENGINE" && upgrades.includes("SOULFLOW_ENGINE")) {
-                    continue;  // Soulflow Engine overrides Lesser Soulflow Engine while online
-                };
-                let effective_cooldown = md.itemList[upgrade]["upgrade"]["special"]["cooldown"];
-                for (const [item, amount] of Object.entries(md.itemList[upgrade]["upgrade"]["special"]["item"])) {
-                    if (!(item in cooldown_drops)) {
-                        cooldown_drops[item] = 0;
-                    }
-                    cooldown_drops[item] += amount * emptytimeNumber / effective_cooldown;
-                };
-            };
-        };
-
-        // other upgrades behaviours
-        if (afk_toggle) {
-            if (upgrades.includes("CORRUPT_SOIL")) {
-                if ("afkcorrupt" in md.minionList[minion_type]) {
-                    // Certain mob minions get more corrupt drops when afking
-                    // It is not a constant multiplier, it is equivalent in chance to the main drops of the minion
-                    upgrade_drops["SULPHUR_ORE"] *= md.minionList[minion_type]["afkcorrupt"];
-                    upgrade_drops["CORRUPTED_FRAGMENT"] *= md.minionList[minion_type]["afkcorrupt"];
-                };
-                if (minion_type === "Chicken" && !(upgrades.includes("ENCHANTED_EGG"))) {
-                    // Online Chicken minion without Enchanted Egg does not make corrupt drops
-                    upgrade_drops["SULPHUR_ORE"] = 0;
-                    upgrade_drops["CORRUPTED_FRAGMENT"] = 0;
-                };
-            };
-            if (upgrades.includes("ENCHANTED_EGG")) {
-                // Enchanted Eggs make one laid egg and one egg on kill while AFKing
-                // the egg on spawn is affected by drop multipliers
-                upgrade_drops["EGG"] *= 1 + dropMultiplier;
-            };
-        };
-        if (upgrades.includes("SOULFLOW_ENGINE") && minion_type === "Voidling") {
-            cooldown_drops["RAW_SOULFLOW"] *= 1 + 0.03 * minion_tier;  // correct most likely, needs testing
-        };
-
-        // spreading upgrades triggering from some upgrade drops
-        for (let upgrade of upgrades) {
-            let upgrade_type = md.itemList[upgrade]["upgrade"]["special"]["type"];
-            if (upgrade_type !== "generate") {
-                continue;
-            } else {
-                let spreading_chance = md.itemList[upgrade]["upgrade"]["special"]["chance"];
-                if (afk_toggle) {
-                    if (upgrades.includes("ENCHANTED_EGG")) {
-                        // the egg on spawn triggers spreadings
-                        for (const [item, amount] of Object.entries(md.itemList[upgrade]["upgrade"]["special"]["item"])) {
-                            if (!(item in spreading_drops)) {
-                                spreading_drops[item] = 0;
-                            };
-                            spreading_drops[item] += harvestsPerTime * dropMultiplier * spreading_chance * amount;
-                        };
-                    };
-                } else {
-                    let finalAmount = 0;
-                    for (const amount of Object.values(upgrade_drops)) {
-                        finalAmount += spreading_chance * amount;
-                    }
-                    for (const [item, amount] of Object.entries(md.itemList[upgrade]["upgrade"]["special"]["item"])) {
-                        if (!(item in spreading_drops)) {
-                                spreading_drops[item] = 0;
-                            };
-                        spreading_drops[item] += finalAmount * amount;
-                    };
-                };
-            };
-        };
-
-        // Inferno minion fuel drops
-        // https://wiki.hypixel.net/Inferno_Minion_Fuel
-        if (minion_fuel === "INFERNO_FUEL") {
-            // distilate drops
-            let distilate = md.getID[this.variables["infernoDistillate"]["var"]]
-            let distilate_item = md.infernofuel_data["distilates"][distilate][0]
-            let amount_per = md.infernofuel_data["distilates"][distilate][1]
-            let distillate_harvests = (harvestsPerTime * 4) / 5
-            upgrade_drops[distilate_item] = distillate_harvests * amount_per
-            for (const item of Object.keys(this.variables["items"]["list"])) {  // replacing main drops with distilate drops
-                this.variables["items"]["list"][item] /= 5;
-            };
-
-            // Hypergolic drops
-            if (this.variables["infernoGrade"]["var"] === "Hypergolic Gabagool") {  // hypergolic fuel stuff
-                let multiplier = 1;
-                if (this.variables["infernoEyedrops"]["var"] === true) {  // Capsaicin Eyedrops
-                    multiplier = 1.3;
-                };
-                for (let [item, chance] of Object.entries(md.infernofuel_data["drops"])) {
-                    upgrade_drops[item] = 0;
-                    if (item === "INFERNO_APEX" && minion_tier >= 10) {  // Apex Minion perk
-                        chance *= 2;
-                    };
-                    upgrade_drops[item] += multiplier * chance * harvestsPerTime;
-                };
-                upgrade_drops["HYPERGOLIC_IONIZED_CERAMICS"] = emptytimeNumber / md.itemList[minion_fuel]["upgrade"]["duration"];
-            };
-
-            // calculate fuel cost
-            let infernofuel_components = {
-                "INFERNO_FUEL_BLOCK": 2,  // 2 inferno fuel blocks
-                "CAPSAICIN_EYEDROPS_NO_CHARGES": Number(this.variables["infernoEyedrops"]["var"])  // capsaicin eyedrops
-            };
-            infernofuel_components[distilate] = 6;  // 6 times distilate item
-            infernofuel_components[md.getID[this.variables["infernoGrade"]["var"]]] = 1;  // 1 gabagool core
-            let costPerInfernofuel = 0;
-            for (const [component_ID, amount] of Object.entries(infernofuel_components)) {
-                costPerInfernofuel += amount * this.getPrice(component_ID, "buy", "bazaar");
-            };
-            md.itemList["INFERNO_FUEL"]["prices"]["custom"] = costPerInfernofuel;
-            // the fuel cost is put into the item data to be used later in the general fuel cost calculator
-        };
-
-        // add upgrade drops to main item list
-        for (const [item, amount] of Object.entries({...upgrade_drops, ...spreading_drops, ...cooldown_drops})) {
-            if (!(item in this.variables["items"]["list"])) {
-                this.variables["items"]["list"][item] = 0;
-            };
-            this.variables["items"]["list"][item] += amount;
-        };
-
-        // (Super) Compactor logic at the end because it applies to all drops
-        // for both compactor types it floors the ratio between items and needed items for one compacted
-        // multiplies the floored ratio if the action creates multiple compacted item
-        // uses modulo to find the left over amount
-        // keeps track of which items have been compacted to check for loss of profit
-        // saves per item the following dict
-        // {"from": item, "makes": compact item, "amount": amount of compacted, "per": amount of item needed}
-        let compacted_items = [];
-        // Compactors
-        // loops once through item list because there are no double normal compacted items
-        if (upgrades_types.includes("compact")) {
-            for (const [item, amount] of Object.entries(this.variables["items"]["list"])) {
-                if (item in md.compactorList) {
-                    let compact_name = md.compactorList[item]["makes"];
-                    let percompact = md.compactorList[item]["per"];
-                    let compact_amount = Math.floor(amount / percompact);
-                    if (compact_amount === 0) {
-                        continue;
-                    };
-                    if ("amount" in md.compactorList[item]) {
-                        compact_amount *= md.compactorList[item]["amount"];
-                    };
-                    let left_over = amount % percompact;
-                    if (left_over === 0) {  // floating point error may cause extremely small numbers that should have been 0 too not trigger this
-                        delete this.variables["items"]["list"][item];
-                    } else {
-                        this.variables["items"]["list"][item] = left_over;
-                    };
-                    this.variables["items"]["list"][compact_name] = compact_amount;
-                    compacted_items.push({"from": item, ...md.compactorList[item]});
-                };
-            };
-        };
-
-        // Super compactor
-        // loops continously through the item list until is cannot find something to compact
-        if (upgrades_types.includes("enchant")) {
-            let found_enchantable = true
-            let safety_lock = 0;
-            while (found_enchantable === true) {
-                safety_lock += 1;
-                if (safety_lock >= 10) {  // safety to prevent an infinite while loop
-                    console.log("While-loop overflow, super compactor 3000");
-                    break;
-                };
-                found_enchantable = false;
-                // static_items = list(this.variables["items"]["list"].items())
-                for (const [item, amount] of Object.entries(this.variables["items"]["list"])) {
-                    if (item in md.enchanterList) {
-                        let enchanted_name = md.enchanterList[item]["makes"];
-                        let perenchanted = md.enchanterList[item]["per"];
-                        let enchanted_amount = Math.floor(amount / perenchanted);
-                        if (enchanted_amount === 0) {
-                            continue;
-                        };
-                        if ("amount" in md.enchanterList[item]) {
-                            enchanted_amount *= md.enchanterList[item]["amount"];
-                        };
-                        let left_over = amount % perenchanted;
-                        if (left_over == 0.0) {
-                            delete this.variables["items"]["list"][item];
-                        } else {
-                            this.variables["items"]["list"][item] = left_over;
-                        };
-                        this.variables["items"]["list"][enchanted_name] = enchanted_amount;
-                        compacted_items.push({"from": item, ...md.enchanterList[item]});
-                        if (enchanted_name in md.enchanterList) {
-                            found_enchantable = true;
-                        };
-                    };
-                };
-            };
-        };
-
-        // storage calculations
-        // amount of storage measured in slots
-        let available_storage = md.minion_chests[this.variables["chest"]["var"]];
-        if ("storage" in md.minionList[minion_type] && minion_tier in md.minionList[minion_type]["storage"]) {
-            available_storage += md.minionList[minion_type]["storage"][minion_tier];
-        } else {
-            available_storage += md.standard_storage[minion_tier];
-        };
-
-        // WARNING: calculation for fill_time does not work with compactors and is not accurate for setup with multiple drops
-        // used_storage_slots calculations work fine.
-        let used_storage = 0;
-        let used_storage_slots = 0;
-        for (const [itemtype, amount] of Object.entries(this.variables["items"]["list"])) {
-            used_storage += amount / 64;  // hypixel does not care about smaller max stack sizes
-            used_storage_slots += Math.ceil(amount / 64);
-        };
-        let fill_time = (emptytimeNumber * available_storage) / used_storage;
-        // this.variables["filltime"]["var"] = fill_time;
-        this.variables["used_storage"]["var"] = used_storage_slots;
-        this.variables["available_storage"]["var"] = available_storage;
-        
-        // multiply drops by minion amount
-        // all processes as calculated above should be linear with minion amount
-        for (const itemtype of Object.keys(this.variables["items"]["list"])) {
-            this.variables["items"]["list"][itemtype] *= minion_amount;
-        };
-
-        // convert items into coins and xp
-        // while keeping track where items get sold
-        // it makes a list of all prices and takes the one that matches the choice of sellLoc
-        let minion_hopper = this.variables["hopper"]["var"];
-        let minion_sellLoc = this.variables["sellLoc"]["var"];
-        let coinsPerTime = 0.0;
-        let sellto = "NPC";
-        let hopper_multiplier = 1;
-        if (minion_sellLoc === "Bazaar") {
-            sellto = "bazaar";
-        } else if (minion_sellLoc === "Best (NPC/Bazaar)") {
-            sellto = "best";
-        } else if (minion_sellLoc === "Hopper") {
-            hopper_multiplier = md.hopper_data[minion_hopper];
-        };
-        let prices = {};
-        // Coins
-        if (minion_sellLoc !== "None") {
-            for (const [itemtype, amount] of Object.entries(this.variables["items"]["list"])) {
-                GUI.clear_object(prices);
-                prices["bazaar"] = this.getPrice(itemtype, "sell", "bazaar");
-                prices["NPC"] = this.getPrice(itemtype, "sell", "npc");
-                let final_price;
-                if (sellto in prices) {
-                    this.variables["itemSellLoc"]["list"][itemtype] = sellto;
-                    final_price = prices[sellto];
-                } else {
-                    this.variables["itemSellLoc"]["list"][itemtype] = Object.keys(prices).reduce((a, b) => prices[a] > prices[b] ? a : b);
-                    final_price = prices[this.variables["itemSellLoc"]["list"][itemtype]];
-                };
-                this.variables["itemtypeProfit"]["list"][itemtype] = amount * final_price * hopper_multiplier;
-                coinsPerTime += amount * final_price;
-            };
-        };
-        // XP
-        for (const [itemtype, amount] of Object.entries(this.variables["items"]["list"])) {
-            let [xptype, value] = Object.entries(md.itemList[itemtype]["xp"])[0];
-            if (value === 0) {
-                continue;
-            };
-            if (!(xptype in this.variables["xp"]["list"])) {
-                this.variables["xp"]["list"][xptype] = 0;
-            };
-            this.variables["xp"]["list"][xptype] += amount * value * (1 + this.variables["wisdom"]["list"][xptype] / 100);
-        };
-        if (mayor === "Derpy" || mayor === "Aura") {
-            for (const xptype of Object.keys(this.variables["xp"]["list"])) {
-                this.variables["xp"]["list"][xptype] *= 1.5;
-            };
-        };
-        coinsPerTime *= hopper_multiplier;
-        this.variables["itemProfit"]["var"] = coinsPerTime * timeratio;
-        if (afk_toggle && this.variables["playerHarvests"]["var"] && "combat" in this.variables["xp"]["list"]) {
-            delete this.variables["xp"]["list"]["combat"];
-        };
-
-        // Check for over-compacting
-        if (["best", "bazaar"].includes(sellto)) {
-            let overcompacting = [];
-            for (const data of compacted_items) {
-                let item = data["from"];
-                let compact_item = data["makes"];
-                let per_compact = data["per"];
-                let compact_amount = 1;
-                if ("amount" in data) {
-                    compact_amount = data["amount"];
-                };
-                let cost = this.getPrice(item, "sell", "bazaar") * per_compact;
-                let compact_cost = this.getPrice(compact_item, "sell", "bazaar") * compact_amount;
-                if (cost - compact_cost > this.variables["compact_tolerance"]["var"]) {
-                    overcompacting.push(md.itemList[item]['display']);
-                };
-            };
-            if (GUI.get_length(overcompacting) !== 0) {
-                this.variables["notes"]["list"]["Over-compacting"] = overcompacting.join(', ');
-            };
-        };
-
-        // Pet leveling calculations
-        // https://wiki.hypixel.net/Pets#Leveling
-        // for Golden Dragon: special algorithm taking into account that pet items cannot be applied to Golden Dragon Eggs
-        // the pet costs are manually added in pet_data
-        let petProfitPerTime = 0.0;
-        let all_pets = {
-            "levelingpet": {"pet": this.variables["levelingpet"]["var"], "pet_xp": {}, "levelled_pets": 0.0},
-            "expsharepet": {"pet": this.variables["expsharepet"]["var"], "pet_xp": {"exp_share": 0.0}, "levelled_pets": 0.0},
-            "expsharepetslot2": {"pet": this.variables["expsharepetslot2"]["var"], "pet_xp": {"exp_share": 0.0}, "levelled_pets": 0.0},
-            "expsharepetslot3": {"pet": this.variables["expsharepetslot3"]["var"], "pet_xp": {"exp_share": 0.0}, "levelled_pets": 0.0}
-        };
-        let main_pet = this.variables["levelingpet"]["var"];
-        let main_pet_xp = all_pets["levelingpet"]["pet_xp"];
-        let left_over_pet_xp;
-        if (main_pet !== "None") {
-            if (["Golden Dragon", "Jade Dragon"].includes(main_pet)) {
-                left_over_pet_xp = 0.0;
-                for (const [skill, amount] of Object.entries(this.variables["xp"]["list"])) {
-                    let [pet_xp_boost, xp_boost_pet_item] = this.getPetXPBoosts(main_pet, skill);
-                    let dragon_xp_outputs = this.dragon_xp(amount, left_over_pet_xp, pet_xp_boost, xp_boost_pet_item);
-                    main_pet_xp[skill] = dragon_xp_outputs[0];
+            for (let [skill, amount] of Object.entries(skill_xp)) {
+                [pet_xp_boost, xp_boost_pet_item] = this.get_pet_xp_boosts(main_pet, skill, setup_data)
+                main_pet_xp[skill] = amount * pet_xp_boost * xp_boost_pet_item
+            }
+        }
+        let exp_share_boost = 0.2 * setup_data["taming"] + 10 * (mayor == "Diana") + setup_data["toucan_attribute"]
+        let exp_share_item = 15 * setup_data["expshareitem"]
+        for (let [pet_slot, pet_info] of Object.entries(setup_pets)) {
+            if (pet_slot == "levelingpet") {
+                continue
+            }
+            exp_share_pet = pet_info["pet"]
+            if (md.all_pets[main_pet]["rarity"].includes("Dragon")) {
+                if (exp_share_boost == 0) {
+                    continue
+                }
+                left_over_pet_xp = 0.0
+                for (let [skill, amount] of Object.entries(main_pet_xp)) {
+                    non_matching = this.get_pet_xp_boosts(exp_share_pet, skill, setup_data, true)
+                    equiv_pet_xp_boost = non_matching * (exp_share_boost / 100)
+                    equiv_xp_boost_pet_item = 1 + exp_share_item / exp_share_boost
+                    dragon_xp_outputs = this.dragon_xp(amount, left_over_pet_xp, equiv_pet_xp_boost, equiv_xp_boost_pet_item)
+                    pet_info["pet_xp"]["exp_share"] += dragon_xp_outputs[0]
                     left_over_pet_xp = dragon_xp_outputs[1];
-                };
+                }
             } else {
-                for (const [skill, amount] of Object.entries(this.variables["xp"]["list"])) {
-                    let [pet_xp_boost, xp_boost_pet_item] = this.getPetXPBoosts(main_pet, skill);
-                    main_pet_xp[skill] = amount * pet_xp_boost * xp_boost_pet_item;
+                for (let [skill, amount] of Object.entries(main_pet_xp)) {
+                    non_matching = this.get_pet_xp_boosts(exp_share_pet, skill, setup_data, true);
+                    pet_info["pet_xp"]["exp_share"] += amount * ((exp_share_boost + exp_share_item) / 100) * non_matching;
                 };
-            };
-            const exp_share_boost = 0.2 * this.variables["taming"]["var"] + 10 * (this.variables["mayor"]["var"] === "Diana") + this.variables["toucan_attribute"]["var"];
-            const exp_share_item = 15 * this.variables["expshareitem"]["var"];
-            let exp_share_pet;
-            let non_matching;
-            for (let [pet_slot, pet_info] of Object.entries(all_pets)) {
-                if (pet_slot === "levelingpet") {
-                    continue;
-                };
-                exp_share_pet = pet_info["pet"];
-                if (exp_share_pet !== "None") {
-                    if (["Golden Dragon", "Jade Dragon"].includes(exp_share_pet)) {
-                        if (exp_share_boost === 0) {
-                            continue;
-                        };
-                        left_over_pet_xp = 0.0;
-                        for (const [skill, amount] of Object.entries(main_pet_xp)) {
-                            non_matching = this.getPetXPBoosts(exp_share_pet, skill, true);
-                            let equiv_pet_xp_boost = non_matching * (exp_share_boost / 100);
-                            let equiv_xp_boost_pet_item = 1 + exp_share_item / exp_share_boost;
-                            let dragon_xp_outputs = this.dragon_xp(amount, left_over_pet_xp, equiv_pet_xp_boost, equiv_xp_boost_pet_item);
-                            pet_info["pet_xp"]["exp_share"] += dragon_xp_outputs[0];
-                            left_over_pet_xp = dragon_xp_outputs[1];
-                        };
-                    } else {
-                        for (const [skill, amount] of Object.entries(main_pet_xp)) {
-                            non_matching = this.getPetXPBoosts(exp_share_pet, skill, true);
-                            pet_info["pet_xp"]["exp_share"] += amount * ((exp_share_boost + exp_share_item) / 100) * non_matching;
-                        };
-                    };
-                };
-                if (mayor !== "Diana") {
-                    break;
-                };
-            };
-            let exp_share_price = this.getPrice("PET_ITEM_EXP_SHARE", "buy", "custom", true);
-            if (exp_share_price === 0) {
-                exp_share_price = this.getPrice("PET_ITEM_EXP_SHARE_DROP", "buy", "bazaar") + 72 * this.getPrice("ENCHANTED_GOLD", "buy", "bazaar");
-            };
-            for (let [pet_slot, pet_info] of Object.entries(all_pets)) {
-                this.variables["pets_levelled"]["list"][pet_slot] = Object.values(pet_info["pet_xp"]).reduce((partialSum, a) => partialSum + a, 0) / md.max_lvl_pet_xp_amounts[md.all_pets[pet_info["pet"]]["rarity"]];
-                if (!(pet_info["pet"] in this.pet_costs)) {
-                    this.variables["notes"]["list"]["Pet Costs"] = `${pet_info['pet']} is not in pet_costs.`;
-                } else {
-                    petProfitPerTime += this.variables["pets_levelled"]["list"][pet_slot] * (this.pet_costs[pet_info["pet"]]["max"] - this.pet_costs[pet_info["pet"]]["min"]);
-                };
-                let main_pet_item = this.variables["petxpboost"]["var"];
-                if (pet_slot === "levelingpet" && main_pet_item !== "None") {
-                    petProfitPerTime -= this.variables["pets_levelled"]["list"][pet_slot] * this.getPrice(md.getID[main_pet_item], "buy", "custom", true);
-                } else if (this.variables["expshareitem"]["var"]) {
-                    petProfitPerTime -= this.variables["pets_levelled"]["list"][pet_slot] * exp_share_price;
-                };
-                this.variables["pets_levelled"]["list"][pet_slot] *= timeratio;
             };
         };
+        let super_scrubber_price = this.get_price("SUPER_SCRUBBER", setup_data, "buy", "custom", true);
+        let pets_levelled;
+        for (let [pet_slot, pet_info] of Object.entries(setup_pets)) {
+            pets_levelled = Object.values(pet_info["pet_xp"]).reduce((partialSum, a) => partialSum + a, 0) / md.max_lvl_pet_xp_amounts[md.all_pets[pet_info["pet"]]["rarity"]];
+            setup_pets[pet_slot]["levelled_pets"] = pets_levelled;
+            if (!(pet_info["pet"] in this.pet_costs)) {
+                if (!(pet_info["pet"] in pet_prices)) {
+                    pet_prices[pet_info["pet"]] = `Price for ${pet_info['pet']} not found`;
+                };
+            } else {
+                pet_profit += pets_levelled * (this.pet_costs[pet_info["pet"]]["max"] - this.pet_costs[pet_info["pet"]]["min"]);
+                if (!(pet_info["pet"] in pet_prices)) {
+                    pet_prices[pet_info["pet"]] = `${this.gui.reduced_number(this.pet_costs[pet_info["pet"]]["min"])} - ${this.gui.reduced_number(this.pet_costs[pet_info["pet"]]["max"])}`;
+                };
+            };
+            if (pet_slot == "levelingpet" && setup_data["petxpboost"] != "NONE") {
+                pet_profit -= pets_levelled * (md.pet_item_scrub_cost[md.itemList[setup_data["petxpboost"]]["rarity"]] + super_scrubber_price);
+            };
+            if (pet_slot != "levelingpet" && setup_data["expshareitem"]) {
+                pet_profit -= pets_levelled * (md.pet_item_scrub_cost[md.itemList["PET_ITEM_EXP_SHARE"]["rarity"]] + super_scrubber_price);
+            };
+        };
+        return [pet_profit, setup_pets, pet_prices];
+    };
 
-        this.variables["petProfit"]["var"] = petProfitPerTime * timeratio;
-
-        // calculating beacon and limited fuel cost
-        let fuelCostPerTime = 0.0;
-        let neededFuelPerTime = 0.0;
-        if (minion_beacon !== 0) {
-            let beacon_fuel_ID;
-            if (this.variables["scorched"]["var"]) {
+    get_finite_fuel_cost(minion_amount, minion_fuel, empty_time_seconds, setup_data) {
+        let fuel_cost = 0.0;
+        let needed_fuel = 0.0;
+        let beacon_fuel_ID;
+        if (setup_data["beacon"] != "NONE") {
+            if (setup_data["scorched"]) {
                 beacon_fuel_ID = "SCORCHED_POWER_CRYSTAL";
             } else {
                 beacon_fuel_ID = "POWER_CRYSTAL";
             };
-            let costPerCrystal = this.getPrice(beacon_fuel_ID, "buy", "bazaar");
-            fuelCostPerTime += emptytimeNumber * costPerCrystal / md.itemList[beacon_fuel_ID]["duration"] * Number(!(this.variables["B_constant"]["var"]));
+            let cost_per_crystal = this.get_price(beacon_fuel_ID, setup_data, "buy", "bazaar");
+            fuel_cost += empty_time_seconds * cost_per_crystal / md.itemList[beacon_fuel_ID]["fuel_duration"] * Number(!(setup_data["B_constant"]));
         };
-        if (md.itemList[minion_fuel]["upgrade"]["duration"] !== 0) {
-            let costPerFuel = this.getPrice(minion_fuel, "buy", "bazaar");
-            neededFuelPerTime = minion_amount * emptytimeNumber / md.itemList[minion_fuel]["upgrade"]["duration"];
-            fuelCostPerTime += neededFuelPerTime * costPerFuel;
+        if (md.itemList[minion_fuel]["fuel_duration"] != -1) {
+            let cost_per_fuel = this.get_price(minion_fuel, setup_data, "buy", "bazaar");
+            needed_fuel = minion_amount * empty_time_seconds / md.itemList[minion_fuel]["fuel_duration"];
+            fuel_cost += needed_fuel * cost_per_fuel;
         };
-        this.variables["fuelcost"]["var"] = fuelCostPerTime * timeratio;
-        this.variables["fuelamount"]["var"] = Math.max(neededFuelPerTime * timeratio, minion_amount);
+        return [fuel_cost, needed_fuel];
+    };
 
-        // Setup cost
-        let total_cost = 0.0;
+    get_setup_cost(minion_type, minion_tier, minion_amount, minion_fuel, upgrades, setup_pets, setup_notes, setup_data) {
+        let cost_per_part = {};
+        let extra_cost = "";
+
         // Single minion cost
         let cost_cache = {};
         let tiered_coin_cost = {};
@@ -1707,33 +1631,33 @@ class Calculator {
                     if ("COINS" in md.extraMinionCosts[minion_type][tier]) {
                         tiered_coin_cost[tier] += md.extraMinionCosts[minion_type][tier]["COINS"];
                     };
-                    if (GUI.get_length(md.extraMinionCosts[minion_type][tier]) > 1 || !("COINS" in md.extraMinionCosts[minion_type][tier])) {
+                    if (this.gui.get_length(md.extraMinionCosts[minion_type][tier]) > 1 || !("COINS" in md.extraMinionCosts[minion_type][tier])) {
                         if (!(tier in tiered_extra_cost)) {
-                            tiered_extra_cost[tier] = {}
-                        }
+                            tiered_extra_cost[tier] = {};
+                        };
                         for (const [cost_type, amount] of Object.entries(md.extraMinionCosts[minion_type][tier])) {
                             if (cost_type === "COINS") {
                                 continue;
                             };
-                            tiered_extra_cost[tier][GUI.toTitleCase(cost_type.replace(/_/g, ' '))] = amount;
+                            tiered_extra_cost[tier][this.gui.toTitleCase(cost_type.replace(/_/g, ' '))] = amount;
                         };
                     };
                 };
             };
-            for (const [item, amount] of Object.entries(md.minionCosts[minion_type][tier])) {
+            for (let [item, amount] of Object.entries(md.minionCosts[minion_type][tier])) {
                 if (!(item in cost_cache)) {
-                    cost_cache[item] = this.getPrice(item, "buy", "bazaar");
+                    cost_cache[item] = this.get_price(item, setup_data, "buy", "bazaar");
                 };
                 tiered_coin_cost[tier] += amount * cost_cache[item];
             };
-            if (tier !== 1) {
+            if (tier != 1) {
                 tiered_coin_cost[tier] += tiered_coin_cost[tier - 1];
             };
             if (tier - 1 in tiered_extra_cost) {
                 if (!(tier in tiered_extra_cost)) {
                     tiered_extra_cost[tier] = {};
                 };
-                for (const [material, amount] of Object.entries(tiered_extra_cost[tier - 1])) {
+                for (let [material, amount] of Object.entries(tiered_extra_cost[tier - 1])) {
                     if (!(material in tiered_extra_cost[tier])) {
                         tiered_extra_cost[tier][material] = 0;
                     };
@@ -1741,64 +1665,44 @@ class Calculator {
                 };
             };
         };
-        if (GUI.get_length(tiered_extra_cost) != 0) {
-            this.variables["notes"]["list"]["Extra cost"] = Array.from(Object.keys(tiered_extra_cost[minion_tier]), material => `${tiered_extra_cost[minion_tier][material]} ${material}`).join(", ") + " per minion";
-            this.variables["extracost"]["var"] = Array.from(Object.keys(tiered_extra_cost[minion_tier]), material => `${tiered_extra_cost[minion_tier][material] * minion_amount} ${material}`).join(", ");
-        } else {
-            this.variables["extracost"]["var"] = "";
+        if (this.gui.get_length(tiered_extra_cost) != 0) {
+            setup_notes["Extra cost"] = Array.from(Object.keys(tiered_extra_cost[minion_tier]), material => `${tiered_extra_cost[minion_tier][material]} ${material}`).join(", ") + " per minion";
+            extra_cost = Array.from(Object.keys(tiered_extra_cost[minion_tier]), material => `${tiered_extra_cost[minion_tier][material] * minion_amount} ${material}`).join(", ");
         };
-        total_cost += tiered_coin_cost[minion_tier];
+        cost_per_part["minion"] = tiered_coin_cost[minion_tier];
 
         // Infinite fuel cost
-        if (minion_fuel !== "NONE" && md.itemList[minion_fuel]["upgrade"]["duration"] === 0) {
-            if (minion_fuel === "EVERBURNING_FLAME" && this.getPrice("EVERBURNING_FLAME", "buy", "custom", true) === 0) {
-                for (const [item_ID, amount] of Object.entries(md.upgrades_material_cost["EVERBURNING_FLAME"])) {
-                    total_cost += amount * this.getPrice(item_ID, "buy", "bazaar");
-                };
-            } else {
-                total_cost += this.getPrice(minion_fuel, "buy", "bazaar");
-            };
+        if (minion_fuel != "NONE" && md.itemList[minion_fuel]["fuel_duration"] == -1) {
+            cost_per_part["fuel"] = this.get_price(minion_fuel, setup_data, "buy", "bazaar");
         };
 
         // Hopper cost
-        if (["Budget Hopper", "Enchanted Hopper"].includes(minion_hopper)) {
-            let hopper_ID = md.getID[minion_hopper];
-            total_cost += this.getPrice(hopper_ID, "buy", "bazaar");
+        if (setup_data["hopper"] != "NONE") {
+            cost_per_part["hopper"] = this.get_price(setup_data["hopper"], setup_data, "buy", "bazaar");
         };
 
         // Internal minion upgrades cost
-        for (const upgrade of upgrades) {
-            if (upgrade !== "NONE") {
-                total_cost += this.getPrice(upgrade, "buy", "bazaar");
+        for (let [i, upgrade] of Object.entries(upgrades)) {
+            if (upgrade != "NONE") {
+                cost_per_part[`upgrade${i + 1}`] = this.get_price(upgrade, setup_data, "buy", "bazaar");
             };
         };
 
         // Infusion cost
-        if (this.variables["infusion"]["var"] === true) {
-            total_cost += this.getPrice("MITHRIL_INFUSION", "buy", "bazaar");
+        if (setup_data["infusion"]) {
+            cost_per_part["infusion"] = this.get_price("MITHRIL_INFUSION", setup_data, "buy", "bazaar");
         };
 
         // Free Will costs
-        /*
-        Amount of Free Wills needed per minion:
-        Let p be the chance to get a loyal minion.
-        Let X be a r.v. denoting the amount of Free Wills needed.
-        Using first step analysis we get
-        E(X) = (1- p)(E(X) + 1) + p * 1
-        E(X) = (1- p)E(X) + 1 - p + p
-        E(X) = E(X)- pE(X) + 1
-        E(X)= 1/p
-        */
-        let free_will_price = this.getPrice("FREE_WILL", "buy", "bazaar");
-        let postcard_price = this.getPrice("POSTCARD", "buy", "custom", true);
-        let final_postcard_cost;
-        if (postcard_price === 0) {
-            // # If no price found, use the free will price
+        let free_will_price = this.get_price("FREE_WILL", setup_data, "buy", "bazaar");
+        let postcard_price = this.get_price("POSTCARD", setup_data, "buy", "custom", true);
+        if (postcard_price == 0) {
+            // If no price found, use the free will price
             final_postcard_cost = free_will_price;
         } else {
             final_postcard_cost = postcard_price;
         };
-        if (this.variables["free_will"]["var"] === true) {
+        if (setup_data["free_will"]) {
             let tiered_free_will = {};
             for (const tier of tier_loop) {
                 let free_wills_needed = 1 / (0.5 + 0.04 * (tier - 1));
@@ -1808,92 +1712,229 @@ class Calculator {
                 tiered_free_will[tier] = free_wills_failed * (tiered_coin_cost[tier] - final_postcard_cost) + free_wills_needed * free_will_price;
             };
             let optimal = Number(Object.keys(tiered_free_will).reduce((a, b) => tiered_free_will[a] < tiered_free_will[b] ? a : b));
-            this.variables["optimal_tier_free_will"]["var"] = optimal;
-            this.variables["notes"]["list"]["Free Will"] = `per minion, apply ${GUI.round_number(1 / (0.5 + 0.04 * (optimal - 1)))} Free Wills on Tier ${optimal}`;
-            this.variables["freewillcost"]["var"] = tiered_free_will[optimal] * minion_amount;
+            this.optimal_tier_free_will.set(optimal);
+            setup_notes["Free Will"] = `per minion, apply ${this.gui.round_number(1 / (0.5 + 0.04 * (optimal - 1)))} Free Wills on Tier ${optimal}`;
+            cost_per_part["free_will"] = tiered_free_will[optimal];
+            this.freewillcost.set(cost_per_part["free_will"]);
         };
 
         // Storage Chest cost
-        if (this.variables["chest"]["var"] !== "None") {
-            let chest_ID = md.getID[this.variables["chest"]["var"]];
-            total_cost += this.getPrice(chest_ID, "buy", "bazaar");
+        if (setup_data["chest"] != "NONE") {
+            cost_per_part["chest"] = this.get_price(setup_data["chest"], setup_data, "buy", "bazaar");
         };
-
+        
         // multiply by minion amount
-        total_cost *= minion_amount;
+        this.gui.deepmultiply(cost_per_part, minion_amount);
 
         // Beacon cost
-        if (minion_beacon !== 0 && !(this.variables["B_acquired"]["var"])) {
-            for (const i of [...Array(minion_beacon).keys()].map(x => x + 1)) {
-                for (const [item_ID, amount] of Object.entries(md.upgrades_material_cost["beacon"][i])) {
-                    total_cost += amount * this.getPrice(item_ID, "buy", "bazaar");
-                };
-            };
+        if (setup_data["beacon"] != "NONE" && !(setup_data["B_acquired"])) {
+            cost_per_part["beacon"] = this.get_price(setup_data["beacon"], setup_data, "buy", "bazaar");
         };
 
         // Floating Crystal cost
-        if (this.variables["crystal"]["var"] !== "None") {
-            for (const [item_ID, amount] of Object.entries(md.upgrades_material_cost["crystal"][this.variables["crystal"]["var"]])) {
-                total_cost += amount * this.getPrice(item_ID, "buy", "bazaar");
-            };
+        if (setup_data["crystal"] != "NONE") {
+            cost_per_part["crystal"] = this.get_price(setup_data["crystal"], setup_data, "buy", "bazaar");
         };
 
         // Postcard cost
-        if (this.variables["postcard"]["var"]) {
-            total_cost += final_postcard_cost;
+        if (setup_data["postcard"]) {
+            cost_per_part["postcard"] = final_postcard_cost;
         };
 
         // Potato Talisman cost
-        if (this.variables["potatoTalisman"]["var"]) {
-            total_cost += this.getPrice("POTATO_TALISMAN", "buy", "custom", true);
+        if (setup_data["potato_accessory"] != "NONE") {
+            cost_per_part["potato_accessory"] = this.get_price(setup_data["potato_accessory"], setup_data, "buy", "custom", true);
+        };
+
+        // Pet Item costs
+        for (pet_slot of Object.keys(setup_pets)) {
+            if (pet_slot == "levelingpet") {
+                cost_per_part["petxpboost"] = this.get_price(setup_data["petxpboost"], setup_data, "buy", "custom", true);
+            } else if (setup_data["expshareitem"]) {
+                if (!("expshareitem" in cost_per_part)) {
+                    cost_per_part["expshareitem"] = 0;
+                };
+                cost_per_part["expshareitem"] += this.get_price("PET_ITEM_EXP_SHARE", setup_data, "buy", "bazaar");
+            };
         };
 
         // Attribute costs
-        if (this.variables["toucan_attribute"]["var"] !== 0) {
-            total_cost += md.attribute_shards["Epic"][this.variables["toucan_attribute"]["var"]] * this.getPrice("SHARD_TOUCAN", "buy", "bazaar");
+        if (setup_data["toucan_attribute"] != 0) {
+            cost_per_part["toucan_attribute"] = md.attribute_shards["Epic"][setup_data["toucan_attribute"]] * this.get_price("SHARD_TOUCAN", setup_data, "buy", "bazaar");
         };
-        if (this.variables["falcon_attribute"]["var"] !== 0) {
-            total_cost += md.attribute_shards["Rare"][this.variables["falcon_attribute"]["var"]] * this.getPrice("SHARD_FALCON", "buy", "bazaar");
+        if (setup_data["falcon_attribute"] != 0) {
+            cost_per_part["falcon_attribute"] = md.attribute_shards["Rare"][setup_data["falcon_attribute"]] * this.get_price("SHARD_FALCON", setup_data, "buy", "bazaar");
         };
 
-        // Sending results to this.variables
-        this.variables["setupcost"]["var"] = total_cost;
-        this.variables["totalProfit"]["var"] = this.variables["itemProfit"]["var"] + this.variables["petProfit"]["var"] - this.variables["fuelcost"]["var"];
 
-        // multiply final lists by timeratio
-        for (const loop_key of ["items", "itemtypeProfit", "xp"]) {
-            for (const item of Object.keys(this.variables[loop_key]["list"])) {
-                this.variables[loop_key]["list"][item] *= timeratio;
+        total_cost = Object.values(cost_per_part).reduce((partialSum, a) => partialSum + a, 0);
+        return [total_cost, extra_cost, cost_per_part];
+    };
+
+    async calculate(inGUI=false, setup_data=null, return_outputs=false) {
+        if (inGUI === true) {
+            this.statusC.style.background = "yellow";
+
+            // auto update bazaar
+            if (this.bazaar_auto_update.get()) {
+                await this.update_prices(false);
             };
         };
 
+        if (setup_data === null) {
+            setup_data = this.get_from_GUI(this.ID_order);
+        };
+
+        // extracting often used minion constants
+        let minion_type = setup_data["minion"];
+        let minion_tier = setup_data["miniontier"];
+        let minion_amount = setup_data["amount"];
+        let minion_fuel = setup_data["fuel"];
+        let mayor = setup_data["mayor"];
+        let afk_toggle = setup_data["afk"];
+
+        // create shared lists
+        let setup_notes = {};
+        let drops_list = {};
+
+        // Enchanted Clock uses offline calculations, but you can be on the island when using it to apply boosts that require a loaded island.
+        // This clock_override replaces afk_toggle for these boosts
+        let clock_override = false;
+        if (setup_data["enchanted_clock"] && afk_toggle) {
+            afk_toggle = false;
+            clock_override = true;
+        };
+
+        // list upgrades types
+        let upgrades = [setup_data["upgrade1"], setup_data["upgrade2"]];
+
+        // adding up minion speed bonus
+        let speed_boost = this.get_speed_boosts(minion_type, minion_fuel, upgrades, afk_toggle, clock_override, setup_data);
+
+        // multiply up minion drop bonus
+        let drop_multiplier = this.get_drop_multiplier(minion_type, minion_fuel, upgrades, afk_toggle, setup_data);
+
+        // AFKing, Special Layouts and Player Harvests influences
+        let actions_per_harvest = this.get_actions_per_harvest(minion_type, upgrades, afk_toggle, setup_data, setup_notes);
+
+        // AFK loot table changes
+        this.update_loot_table(minion_type, minion_fuel, upgrades, afk_toggle, setup_data);
+
+        // calculate final minion speed
+        let seconds_per_action = this.get_seconds_per_action(minion_type, minion_tier, minion_fuel, speed_boost, setup_data);
+
+        // time calculations
+        let [empty_time_seconds, timeratio, empty_time_str, scaled_time_str] = this.get_time_constants(seconds_per_action, actions_per_harvest, setup_data);
+
+        // harvests per time
+        let harvests_per_time;
+        [harvests_per_time, drop_multiplier] = this.get_harvests_per_time(empty_time_seconds, actions_per_harvest, seconds_per_action, afk_toggle, drop_multiplier, setup_data);
+
+        // initialise drops list and get upgrade info
+        let [spreading_info, replace_info] = this.get_upgrade_info(upgrades, drops_list);
+
+        // base drops
+        this.get_base_drops(drops_list, spreading_info, replace_info, minion_type, harvests_per_time, drop_multiplier);
+
+        // upgrade drops
+        this.get_upgrade_drops(drops_list, spreading_info, minion_type, minion_tier, drop_multiplier, upgrades, harvests_per_time, afk_toggle, empty_time_seconds, seconds_per_action);
+
+        // Inferno minion fuel drops
+        this.get_inferno_drops(drops_list, spreading_info, replace_info, minion_type, minion_tier, minion_fuel, drop_multiplier, harvests_per_time, empty_time_seconds, afk_toggle, setup_data);
+
+        // Apply compactors
+        let compacted_items = this.get_compacted_drops(drops_list, upgrades);
+
+        // storage calculations
+        let available_storage = this.get_available_storage(minion_type, minion_tier, setup_data);
+        let used_storage = this.get_used_storage(drops_list);
+        let fill_time = this.get_fill_time(minion_type, available_storage);
+        
+        // multiply drops by minion amount
+        // all processes as calculated above should be linear with minion amount
+        this.gui.deepmultiply(drops_list, minion_amount);
+
+        // convert items into coins and xp
+        // while keeping track where items get sold
+        // it makes a list of all prices and takes the one that matches the choice of sellLoc
+        let [sell_location, hopper_multiplier] = this.get_sell_location(setup_data);
+        // Coins
+        let [item_profit, per_item_profit, per_item_sell_location] = this.get_item_profit(sell_location, hopper_multiplier, drops_list, setup_data);
+        // XP
+        let skill_xp = this.get_skill_xp(afk_toggle, mayor, drops_list, setup_data);
+
+        // Check for over-compacting
+        this.get_over_compacting(sell_location, compacted_items, per_item_sell_location, setup_notes, setup_data);
+
+        // Pet leveling calculations
+        let [pet_profit, setup_pets, pet_prices] = this.get_pet_profit(skill_xp, mayor, setup_data);
+
+        // calculating beacon and limited fuel cost
+        let [fuel_cost, needed_fuel] = this.get_finite_fuel_cost(minion_amount, minion_fuel, empty_time_seconds, setup_data);
+
+        // total profit
+        let total_profit = item_profit + pet_profit - fuel_cost;
+
+        // Setup cost
+        let [total_cost, extra_cost, cost_per_part] = this.get_setup_cost(minion_type, minion_tier, minion_amount, minion_fuel, upgrades, setup_pets, setup_notes, setup_data);
+
         // Construct ID
-        let setup_ID = this.constructID();
-        this.variables["ID"]["var"] = setup_ID;
-        this.variables["ID_container"]["list"].push(setup_ID);
+        let setup_ID = this.construct_id(setup_data);
 
         // Get minion notes
         if ("notes" in md.minionList[minion_type]) {
-            for (const [note_name, note_text] of Object.entries(md.minionList[minion_type]["notes"])) {
-                this.variables["notes"]["list"][note_name] = note_text;
-            };
+            Object.assign(setup_notes, md.minionList[minion_type]["notes"]);
         };
 
-        // Update listboxes
+        // collect outputs
+        let outputs = {
+            "pet_profit": pet_profit,
+            "harvests": minion_amount * harvests_per_time,
+            "itemtype_profit": per_item_profit,
+            "items": drops_list,
+            "item_profit": item_profit,
+            "xp": skill_xp,
+            "fuelcost": fuel_cost,
+            "total_profit": total_profit,
+            "fuelamount": needed_fuel,
+            "pets_levelled": {}
+        };
+        for (pet_slot in Object.keys(setup_pets)) {
+            outputs["pets_levelled"][pet_slot] = setup_pets[pet_slot]["levelled_pets"];
+        };
+
+        this.gui.deepmultiply(outputs, timeratio);
+        outputs["fuelamount"] = Math.ceil(outputs["fuelamount"] / minion_amount) * minion_amount;
+        Object.assign(outputs, {
+            "available_storage": available_storage,
+            "item_sell_loc": per_item_sell_location,
+            "ID_container": [setup_ID],
+            "ID": setup_ID,
+            "extracost": extra_cost,
+            "setupcost": total_cost,
+            "filltime": fill_time,
+            "used_storage": used_storage,
+            "empty_time": empty_time_str,
+            "scaled_time": scaled_time_str,
+            "actiontime": seconds_per_action,
+            "notes": setup_notes,
+            "used_pet_prices": pet_prices,
+        });
+
+        // Update GUI
         if (inGUI === true) {
-            if (GUI.get_value("Rising Celsius Override_auto_run")) {
-                    this.addons_list["Rising Celsius Override"].bind(add_ons)(this);
-                };
+            this.send_to_GUI(outputs);
+            this.gui.clear_object(this.addons_output_container.list);
             for (let addon_name of Object.keys(this.addons_list)) {
-                if (addon_name === "Rising Celsius Override") {
-                    continue;
-                };
-                if (GUI.get_value(`${addon_name}_auto_run`)) {
+                if (this.gui.get_value(`${addon_name}_auto_run`)) {
                     this.addons_list[addon_name].bind(add_ons)(this);
                 };
             };
-            this.update_GUI();
+            this.update_listboxes();
             this.statusC.style.background = "green";
+        };
+        if (return_outputs) {
+            return outputs;
         };
         return;
     };
