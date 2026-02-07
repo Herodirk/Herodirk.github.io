@@ -89,7 +89,7 @@ class Calculator {
                 "fuel": "Inferno Minion Fuel",
                 "inferno_grade": "Hypergolic Gabagool",
                 "inferno_distillate": "Gabagool Distillate",
-                "inferno_eyedrops": true,
+                "inferno_eyedrops": false,
                 "sell_loc": "Best (NPC/Bazaar)",
                 "upgrade1": "Super Compactor 3000",
                 "upgrade2": "Flycatcher",
@@ -611,7 +611,7 @@ class Calculator {
                 continue;
             };
 
-            let val = this.var_dict[var_key].get(False);
+            let val = this.var_dict[var_key].get(false);
             if (vtype === "input") {
                 if (["None", 0, 0.0, false, ""].includes(val)) {
                     continue;
@@ -1145,7 +1145,7 @@ class Calculator {
         let scaled_time_str = `${setup_data["empty_time_amount"]} ${setup_data["empty_time_unit"]}`;
         let timeratio = 1;
         if (setup_data["scale_time"]) {
-            scaled_time_seconds = this.gui.time_number(setup_data["scaled_time_unit"], setup_data["scaled_time_amount"], seconds_per_action * actions_per_harvest);
+            let scaled_time_seconds = this.gui.time_number(setup_data["scaled_time_unit"], setup_data["scaled_time_amount"], seconds_per_action * actions_per_harvest);
             scaled_time_str = `${setup_data["scaled_time_amount"]} ${setup_data["scaled_time_unit"]}`;
             timeratio = scaled_time_seconds / empty_time_seconds;
         };
@@ -1362,7 +1362,7 @@ class Calculator {
 
     get_used_storage(drops_list) {
         let used_storage_slots = 0;
-        for (amount of Object.values(drops_list)) {
+        for (let amount of Object.values(drops_list)) {
             used_storage_slots += Math.ceil(amount / 64);  // hypixel does not care about smaller max stack sizes
         };
         return used_storage_slots;
@@ -1451,12 +1451,12 @@ class Calculator {
             };
         };
         if (this.gui.get_length(over_compacting) != 0) {
-            setup_notes["Over-compacting"] = ', '.join(over_compacting);
+            setup_notes["Over-compacting"] = over_compacting.join(', ');
         };
         return;
     };
 
-    get_pet_xp_boosts(pet, xp_type, setup_data, exp_share=False) {
+    get_pet_xp_boosts(pet, xp_type, setup_data, exp_share=false) {
         let non_matching = 1
         if (md.all_pets[pet]["type"] !== "all" && md.all_pets[pet]["type"] !== xp_type) {
             if (["alchemy", "enchanting"].includes(xp_type)) {
@@ -1513,55 +1513,55 @@ class Calculator {
     };
 
     get_pet_profit(skill_xp, mayor, setup_data) {
-        let pet_profit = 0.0
-        let main_pet = setup_data["levelingpet"]
+        let pet_profit = 0.0;
+        let main_pet = setup_data["levelingpet"];
         if (main_pet == "None") {
-            return [0, {}, {}]
-        }
-        let setup_pets = { "levelingpet": { "pet": main_pet, "pet_xp": {}, "levelled_pets": 0.0 } }
-        for (var_key of ["expsharepet", "expsharepetslot2", "expsharepetslot3"]) {
+            return [0, {}, {}];
+        };
+        let setup_pets = { "levelingpet": { "pet": main_pet, "pet_xp": {}, "levelled_pets": 0.0 } };
+        for (const var_key of ["expsharepet", "expsharepetslot2", "expsharepetslot3"]) {
             if (setup_data[var_key] == "None" || (mayor != "Diana" && ["expsharepetslot2", "expsharepetslot3"].includes(var_key))) {
-                continue
-            }
-            setup_pets[var_key] = { "pet": setup_data[var_key], "pet_xp": { "exp_share": 0.0 }, "levelled_pets": 0.0 }
-        }
-        let pet_prices = {}
-        let main_pet_xp = setup_pets["levelingpet"]["pet_xp"]
-        let pet_xp_boost, xp_boost_pet_item, left_over_pet_xp, exp_share_pet, equiv_pet_xp_boost, equiv_xp_boost_pet_item, non_matching, dragon_xp_outputs
+                continue;
+            };
+            setup_pets[var_key] = { "pet": setup_data[var_key], "pet_xp": { "exp_share": 0.0 }, "levelled_pets": 0.0 };
+        };
+        let pet_prices = {};
+        let main_pet_xp = setup_pets["levelingpet"]["pet_xp"];
+        let pet_xp_boost, xp_boost_pet_item, left_over_pet_xp, exp_share_pet, equiv_pet_xp_boost, equiv_xp_boost_pet_item, non_matching, dragon_xp_outputs;
         if (md.all_pets[main_pet]["rarity"].includes("Dragon")) {
-            left_over_pet_xp = 0.0
+            left_over_pet_xp = 0.0;
             for (let [skill, amount] of Object.entries(skill_xp)) {
-                [pet_xp_boost, xp_boost_pet_item] = this.get_pet_xp_boosts(main_pet, skill, setup_data)
-                dragon_xp_outputs = this.dragon_xp(amount, left_over_pet_xp, pet_xp_boost, xp_boost_pet_item)
+                [pet_xp_boost, xp_boost_pet_item] = this.get_pet_xp_boosts(main_pet, skill, setup_data);
+                dragon_xp_outputs = this.dragon_xp(amount, left_over_pet_xp, pet_xp_boost, xp_boost_pet_item);
                 main_pet_xp[skill] = dragon_xp_outputs[0];
                 left_over_pet_xp = dragon_xp_outputs[1];
-            }
+            };
         } else {
             for (let [skill, amount] of Object.entries(skill_xp)) {
-                [pet_xp_boost, xp_boost_pet_item] = this.get_pet_xp_boosts(main_pet, skill, setup_data)
-                main_pet_xp[skill] = amount * pet_xp_boost * xp_boost_pet_item
-            }
-        }
-        let exp_share_boost = 0.2 * setup_data["taming"] + 10 * (mayor == "Diana") + setup_data["toucan_attribute"]
-        let exp_share_item = 15 * setup_data["expshareitem"]
+                [pet_xp_boost, xp_boost_pet_item] = this.get_pet_xp_boosts(main_pet, skill, setup_data);
+                main_pet_xp[skill] = amount * pet_xp_boost * xp_boost_pet_item;
+            };
+        };
+        let exp_share_boost = 0.2 * setup_data["taming"] + 10 * (mayor == "Diana") + setup_data["toucan_attribute"];
+        let exp_share_item = 15 * setup_data["expshareitem"];
         for (let [pet_slot, pet_info] of Object.entries(setup_pets)) {
             if (pet_slot == "levelingpet") {
-                continue
-            }
-            exp_share_pet = pet_info["pet"]
+                continue;
+            };
+            exp_share_pet = pet_info["pet"];
             if (md.all_pets[main_pet]["rarity"].includes("Dragon")) {
                 if (exp_share_boost == 0) {
-                    continue
-                }
-                left_over_pet_xp = 0.0
+                    continue;
+                };
+                left_over_pet_xp = 0.0;
                 for (let [skill, amount] of Object.entries(main_pet_xp)) {
-                    non_matching = this.get_pet_xp_boosts(exp_share_pet, skill, setup_data, true)
-                    equiv_pet_xp_boost = non_matching * (exp_share_boost / 100)
-                    equiv_xp_boost_pet_item = 1 + exp_share_item / exp_share_boost
-                    dragon_xp_outputs = this.dragon_xp(amount, left_over_pet_xp, equiv_pet_xp_boost, equiv_xp_boost_pet_item)
-                    pet_info["pet_xp"]["exp_share"] += dragon_xp_outputs[0]
+                    non_matching = this.get_pet_xp_boosts(exp_share_pet, skill, setup_data, true);
+                    equiv_pet_xp_boost = non_matching * (exp_share_boost / 100);
+                    equiv_xp_boost_pet_item = 1 + exp_share_item / exp_share_boost;
+                    dragon_xp_outputs = this.dragon_xp(amount, left_over_pet_xp, equiv_pet_xp_boost, equiv_xp_boost_pet_item);
+                    pet_info["pet_xp"]["exp_share"] += dragon_xp_outputs[0];
                     left_over_pet_xp = dragon_xp_outputs[1];
-                }
+                };
             } else {
                 for (let [skill, amount] of Object.entries(main_pet_xp)) {
                     non_matching = this.get_pet_xp_boosts(exp_share_pet, skill, setup_data, true);
@@ -1748,7 +1748,7 @@ class Calculator {
         };
 
         // Pet Item costs
-        for (pet_slot of Object.keys(setup_pets)) {
+        for (let pet_slot of Object.keys(setup_pets)) {
             if (pet_slot == "levelingpet") {
                 cost_per_part["petxpboost"] = this.get_price(setup_data["petxpboost"], setup_data, "buy", "custom", true);
             } else if (setup_data["expshareitem"]) {
@@ -1900,7 +1900,7 @@ class Calculator {
             "fuelamount": needed_fuel,
             "pets_levelled": {}
         };
-        for (pet_slot in Object.keys(setup_pets)) {
+        for (let pet_slot of Object.keys(setup_pets)) {
             outputs["pets_levelled"][pet_slot] = setup_pets[pet_slot]["levelled_pets"];
         };
 
@@ -2104,7 +2104,7 @@ class Calculator {
         };
         let initial_max = this.pet_costs[this.edit_pet_price_pet]["max"];
         let initial_min = this.pet_costs[this.edit_pet_price_pet]["min"];
-        GUI.edit_vars.bind(this)(this.edit_pet_price_store.bind(this), {"min_price": {"dtype": "number", "display": "Level 1 price", "initial": initial_min, "options": []}, "max_price": {"dtype": "number", "display": "Max level price", "initial": initial_max, "options": []}}, false);
+        GUI.edit_vars.bind(this)(this.edit_pet_price_store.bind(this), {"min_price": {"dtype": "number", "display": "Level 1 price", "initial": initial_min, "options": null}, "max_price": {"dtype": "number", "display": "Max level price", "initial": initial_max, "options": null}}, false);
     };
 
     edit_pet_price_store() {
