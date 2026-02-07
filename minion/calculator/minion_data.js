@@ -2165,7 +2165,7 @@ class minion_data {
 
         // Other data
 
-        this.infernofuel_data = {
+        this.inferno_fuel_data = {
             'grades': { 'HYPERGOLIC_GABAGOOL': 20, 'HEAVY_GABAGOOL': 15, 'FUEL_GABAGOOL': 10 },
             'distilates': {
                 'MAGMA_CREAM_DISTILLATE': ["MAGMA_CREAM", 2],

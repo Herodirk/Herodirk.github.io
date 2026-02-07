@@ -193,7 +193,7 @@ class GUI_creator {
     
     create_grid(grid_dict) {
         let grid_arr = [];
-        for (let [key, val] of grid_dict) {
+        for (let [key, val] of Object.entries(grid_dict)) {
             if (val === null) {
                 grid_arr.push([key, this.main.var_dict[key].widget]);
             } else {
@@ -361,14 +361,18 @@ class GUI_creator {
     };
 
     get_value(id) {
+        let html_element = document.getElementById(id);
         let value;
-        if (!(["input", "select"].includes(document.getElementById(id).tagName.toLowerCase()))) {
-            return null;
+        if (html_element === null) {
+            console.log(`ERROR: Could not find HTML element with id ${id}`)
+            return;
         };
-        if (document.getElementById(id).type === "checkbox") {
-            value = document.getElementById(id).checked;
+        if (html_element.type === "checkbox") {
+            value = html_element.checked;
+        } else if (html_element.tagName === "SPAN") {
+            value = html_element.innerText;
         } else {
-            value = document.getElementById(id).value;
+            value = html_element.value;
         };
         if (typeof value === "string") {
             if (!isNaN(value) && !isNaN(parseFloat(value))) {
@@ -379,13 +383,17 @@ class GUI_creator {
     };
 
     set_value(id, value) {
-        if (!(["input", "select"].includes(document.getElementById(id).tagName.toLowerCase()))) {
+        let html_element = document.getElementById(id);
+        if (html_element === null) {
+            console.log(`ERROR: Could not find HTML element with id ${id}`)
             return;
         };
-        if (document.getElementById(id).type === "checkbox") {
-            document.getElementById(id).checked = value;
+        if (html_element.type === "checkbox") {
+            html_element.checked = value;
+        } else if (html_element.tagName === "SPAN") {
+            html_element.innerText = value;
         } else {
-            document.getElementById(id).value = value;
+            html_element.value = value;
         };
         return;
     };
@@ -428,6 +436,21 @@ class GUI_creator {
     toTitleCase(str) {
         // source: https://stackoverflow.com/a/196991
         return str.replace(/\w\S*/g, text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase());
+    };
+
+    format_date(ms_time) {
+        const d = new Date(ms_time);
+        let timezone_minutes = d.getTimezoneOffset();
+        let timezone_sign = "-";
+        if (timezone_minutes < 0) {
+            timezone_sign = "+";
+            timezone_minutes = Math.abs(timezone_minutes);
+        };
+        let timezone_hours = Math.floor(timezone_minutes / 60);
+        timezone_minutes = timezone_minutes % 60;
+        let formatter = x => (x < 10) ? `0${x}` : `${x}`;
+        let output_string = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()} ${formatter(d.getHours())}:${formatter(d.getMinutes())}:${formatter(d.getSeconds())} UTC${timezone_sign}${formatter(timezone_hours)}${formatter(timezone_minutes)}`;
+        return output_string;
     };
 
     edit_vars(exit_function, variables=[], existing_variables=true) {
@@ -546,12 +569,12 @@ class Hvar {
 
     get(translate=true) {
         let val;
-        if (this.vtype === "storage") {
+        if (this.vtype === "storage" || document.getElementById(this.key) === null) {
             val = this.var;
         } else {
             val = this.huim.get_value(this.key);
         };
-        if ((self.translation === null) || (translate === false)) {
+        if ((this.translation === null) || (translate === false)) {
             return val;
         } else {
             return this.translation[val];
@@ -580,7 +603,7 @@ class Hvar {
     };
 
     set(value) {
-        if (this.vtype === "storage") {
+        if (this.vtype === "storage" || document.getElementById(this.key) === null) {
             this.var = value;
         } else {
             this.huim.set_value(this.key, value);

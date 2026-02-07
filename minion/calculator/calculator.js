@@ -29,7 +29,7 @@ class Calculator {
             "Cheap speed": {
                 "fuel": "Enchanted Lava Bucket",
                 "upgrade2": "Diamond Spreading",
-                "beacon": 0,
+                "beacon": "None",
                 "infusion": false,
                 "free_will": false,
                 "postcard": true,
@@ -37,7 +37,7 @@ class Calculator {
             "No permanent speed": {
                 "fuel": "Plasma Bucket",
                 "upgrade2": "Flycatcher",
-                "beacon": 5,
+                "beacon": "Beacon V",
                 "infusion": false,
                 "free_will": false,
                 "postcard": true,
@@ -45,7 +45,7 @@ class Calculator {
             "Max speed": {
                 "fuel": "Plasma Bucket",
                 "upgrade2": "Flycatcher",
-                "beacon": 5,
+                "beacon": "Beacon V",
                 "infusion": true,
                 "free_will": true,
                 "postcard": true,
@@ -53,7 +53,7 @@ class Calculator {
             "Hyper speed": {
                 "fuel": "Hyper Catalyst",
                 "upgrade2": "Flycatcher",
-                "beacon": 5,
+                "beacon": "Beacon V",
                 "infusion": true,
                 "free_will": true,
                 "postcard": true,
@@ -93,8 +93,8 @@ class Calculator {
                 "sell_loc": "Best (NPC/Bazaar)",
                 "upgrade1": "Super Compactor 3000",
                 "upgrade2": "Flycatcher",
-                "chest": "XX-Large",
-                "beacon": 5,
+                "chest": "XX-Large Storage",
+                "beacon": "Beacon V",
                 "scorched": true,
                 "infusion": true,
                 "free_will": true,
@@ -119,11 +119,11 @@ class Calculator {
         };
 
         this.bazaar_auto_update = new Hvar({"huim": this.gui, "key": "bazaar_auto_update", "vtype": "storage", "dtype": "boolean", "display": "Bazaar Auto Update", "initial": true});
-        this.bazaar_cooldown = new Hvar({"huim": this.gui, "key": "bazaar_cooldown", "vtype": "storage", "dtype": "number", "display": "Bazaar Cooldown (s)", "initial": 120});
+        this.API_cooldown = new Hvar({"huim": this.gui, "key": "API_cooldown", "vtype": "storage", "dtype": "number", "display": "API Cooldown (s)", "initial": 120});
         this.compact_tolerance = new Hvar({"huim": this.gui, "key": "compact_tolerance", "vtype": "storage", "dtype": "number", "display": "Over-Compacting Tolerance (coins)", "initial": 10000});
         this.output_to_clipboard = new Hvar({"huim": this.gui, "key": "output_to_clipboard", "vtype": "storage", "dtype": "boolean", "display": "Output to Clipboard", "initial": true});
         this.color_palette = new Hvar({"huim": this.gui, "key": "color_palette", "vtype": "storage", "dtype": "string", "display": "Color Palette", "initial": "Dark Red", "options": Object.keys(this.gui.palette_names)});
-        this.template = new Hvar({"huim": this.gui, "key": "template", "vtype": "input", "display": "Templates", "initial": "Choose Template", "dtype": "string", "frame": "inputs_minion_grid", "options": Object.keys(this.templateList), "command": this.load_template});
+        this.template = new Hvar({"huim": this.gui, "key": "template", "vtype": "input", "display": "Templates", "initial": "Choose Template", "dtype": "string", "frame": "inputs_minion_grid", "options": Object.keys(this.templateList), "command": this.load_template.bind(this)});
         this.load_ID = new Hvar({"huim": this.gui, "key": "load_id", "vtype": "input", "dtype": "string", "frame": "inputs_minion_grid", "display": "Load ID", "initial": ""});
         this.minion = new Hvar({"huim": this.gui, "key": "minion", "vtype": "input", "dtype": "string", "display": "Minion", "frame": "inputs_minion_grid", "initial": "Custom", "options": Object.keys(md.minionList), "command": () => this.multiswitch('minion')});
         this.miniontier = new Hvar({"huim": this.gui, "key": "miniontier", "vtype": "input", "dtype": "number", "display": "Tier", "frame": "inputs_minion_grid", "initial": 12, "options": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "command": () => this.multiswitch('tier')});
@@ -159,7 +159,7 @@ class Calculator {
         this.fishing_wisdom = new Hvar({"huim": this.gui, "key": "fishing_wisdom", "vtype": "storage", "dtype": "number", "display": "Fishing", "initial": 0.0});
         this.foraging_wisdom = new Hvar({"huim": this.gui, "key": "foraging_wisdom", "vtype": "storage", "dtype": "number", "display": "Foraging", "initial": 0.0});
         this.alchemy_wisdom = new Hvar({"huim": this.gui, "key": "alchemy_wisdom", "vtype": "storage", "dtype": "number", "display": "Alchemy", "initial": 0.0});
-        this.wisdom = new Hvar({"huim": this.gui, "key": "wisdom", "vtype": "output", "dtype": "object", "display": "Wisdom", "frame": "inputs_player_grid", "widget_width": null, "widget_height": 6, "initial": {'combat': this.combat_wisdom, 'mining': this.mining_wisdom, 'farming': this.farming_wisdom, 'fishing': this.fishing_wisdom, 'foraging': this.foraging_wisdom, 'alchemy': this.alchemy_wisdom}});
+        this.wisdom = new Hvar({"huim": this.gui, "key": "wisdom", "vtype": "output", "dtype": "object", "display": "Wisdom", "frame": "inputs_player_grid", "widget_width": 20, "widget_height": 6, "initial": {'combat': this.combat_wisdom, 'mining': this.mining_wisdom, 'farming': this.farming_wisdom, 'fishing': this.fishing_wisdom, 'foraging': this.foraging_wisdom, 'alchemy': this.alchemy_wisdom}});
         this.mayor = new Hvar({"huim": this.gui, "key": "mayor", "vtype": "input", "dtype": "string", "display": "Mayor", "frame": "inputs_player_grid", "initial": "None", "options": ['None', 'Aatrox', 'Cole', 'Diana', 'Diaz', 'Finnegan', 'Foxy', 'Marina', 'Paul', 'Jerry', 'Derpy', 'Scorpius', 'Aura'], "command": () => this.multiswitch("mayors")});
         this.levelingpet = new Hvar({"huim": this.gui, "key": "levelingpet", "vtype": "input", "dtype": "string", "display": "Leveling pet", "frame": "inputs_player_grid", "initial": "None", "options": Object.keys(md.all_pets), "command": () => this.multiswitch("pet_leveling")});
         this.taming = new Hvar({"huim": this.gui, "key": "taming", "vtype": "input", "dtype": "number", "display": "Taming", "frame": "inputs_player_grid", "initial": 0.0});
@@ -184,11 +184,11 @@ class Calculator {
         this.empty_time = new Hvar({"huim": this.gui, "key": "empty_time", "vtype": "output", "dtype": "string", "display": "Empty Time", "fancy_display": "Empty every", "frame": "outputs_setup_grid", "initial": "1.0 Days", "switch_initial": true});
         this.actiontime = new Hvar({"huim": this.gui, "key": "actiontime", "vtype": "output", "dtype": "number", "display": "Action time (s)", "frame": "outputs_setup_grid", "initial": 0.0, "switch_initial": false});
         this.harvests = new Hvar({"huim": this.gui, "key": "harvests", "vtype": "output", "dtype": "number", "display": "Harvests", "frame": "outputs_setup_grid", "initial": 0.0, "switch_initial": false});
-        this.items = new Hvar({"huim": this.gui, "key": "items", "vtype": "output", "dtype": "object", "display": "Item amounts", "frame": "outputs_setup_grid", "widget_width": 35, "widget_height": null, "initial": {}, "switch_initial": false, "tags": ["item_ID_to_display"]});
-        this.item_sell_loc = new Hvar({"huim": this.gui, "key": "item_sell_loc", "vtype": "output", "dtype": "object", "display": "Sell locations", "frame": "outputs_profit_grid", "widget_width": 35, "widget_height": null, "initial": {}, "switch_initial": false, "tags": ["item_ID_to_display"]});
+        this.items = new Hvar({"huim": this.gui, "key": "items", "vtype": "output", "dtype": "object", "display": "Item amounts", "frame": "outputs_setup_grid", "widget_width": 35, "widget_height": 10, "initial": {}, "switch_initial": false, "tags": ["item_ID_to_display"]});
+        this.item_sell_loc = new Hvar({"huim": this.gui, "key": "item_sell_loc", "vtype": "output", "dtype": "object", "display": "Sell locations", "frame": "outputs_profit_grid", "widget_width": 35, "widget_height": 10, "initial": {}, "switch_initial": false, "tags": ["item_ID_to_display"]});
         this.filltime = new Hvar({"huim": this.gui, "key": "filltime", "vtype": "output", "dtype": "number", "display": "Fill time", "frame": "outputs_setup_grid", "initial": 0.0, "switch_initial": false});
         this.used_storage = new Hvar({"huim": this.gui, "key": "used_storage", "vtype": "output", "dtype": "number", "display": "Used Storage", "frame": "outputs_setup_grid", "initial": 0, "switch_initial": false});
-        this.itemtype_profit = new Hvar({"huim": this.gui, "key": "itemtype_profit", "vtype": "output", "dtype": "object", "display": "Itemtype profits", "fancy_display": "Profits per item type", "frame": "outputs_profit_grid", "widget_width": 35, "widget_height": null, "initial": {}, "switch_initial": false, "tags": ["item_ID_to_display"]});
+        this.itemtype_profit = new Hvar({"huim": this.gui, "key": "itemtype_profit", "vtype": "output", "dtype": "object", "display": "Itemtype profits", "fancy_display": "Profits per item type", "frame": "outputs_profit_grid", "widget_width": 35, "widget_height": 10, "initial": {}, "switch_initial": false, "tags": ["item_ID_to_display"]});
         this.item_profit = new Hvar({"huim": this.gui, "key": "item_profit", "vtype": "output", "dtype": "number", "display": "Total item profit", "frame": "outputs_profit_grid", "initial": 0.0, "switch_initial": false});
         this.xp = new Hvar({"huim": this.gui, "key": "xp", "vtype": "output", "dtype": "object", "display": "XP amounts", "frame": "outputs_setup_grid", "widget_width": 35, "widget_height": 4, "initial": {}, "switch_initial": false});
         this.pets_levelled = new Hvar({"huim": this.gui, "key": "pets_levelled", "vtype": "output", "dtype": "object", "display": "Pets Levelled", "frame": "outputs_setup_grid", "widget_width": 35, "widget_height": 4, "initial": {}, "switch_initial": false});
@@ -214,7 +214,7 @@ class Calculator {
         this.empty_time_amount.widget.push(this.empty_time_unit.widget[this.empty_time_unit.widget.length - 1]);
         this.scaled_time_amount.widget.push(this.scaled_time_unit.widget[this.scaled_time_unit.widget.length - 1]);
 
-        let wisdomB = GUI.create_button('Edit', () => GUI.edit_vars.bind(this)(this.wisdom.update_listbox.bind(this)(x => x, x => x.get(), (key, val) => val.get() !== 0.0), ["combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom"]));
+        let wisdomB = GUI.create_button('Edit', () => GUI.edit_vars.bind(this)(() => this.wisdom.update_listbox.bind(this.wisdom)(x => x, x => x.get(), (key, val) => val.get() !== 0.0), ["combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom"]));
         this.wisdom.widget.push(wisdomB);
         
         this.notesAnchor = GUI.genLabel("notesAnchor", "");
@@ -226,7 +226,7 @@ class Calculator {
         let outputB = GUI.create_button('Short Output', this.output_data.bind(this), true);
         let fancyoutputB = GUI.create_button('Share Output', this.fancy_output.bind(this), true);
         let bazaarB = GUI.create_button("Update Prices", this.update_prices.bind(this), true);
-        let settingsB = GUI.create_button('Edit Settings', () => GUI.edit_vars.bind(this)(GUI.update_color_palette.bind(GUI), ["bazaar_auto_update", "bazaar_cooldown", "compact_tolerance", "output_to_clipboard", "color_palette"]), true);
+        let settingsB = GUI.create_button('Edit Settings', () => GUI.edit_vars.bind(this)(GUI.update_color_palette.bind(GUI), ["bazaar_auto_update", "API_cooldown", "compact_tolerance", "output_to_clipboard", "color_palette"]), true);
         let pet_priceB = GUI.create_button('Edit Pet Prices', () => GUI.edit_vars.bind(this)(this.edit_pet_price_redirect.bind(this), {"edit_pet_price_pet": {"dtype": "string", "display": "Pet", "initial": "None", "options": Object.keys(md.all_pets)}}, false), true);
         let emptyspaceLB = GUI.genLabel("control_frame_filler", "")
         let creditLB = GUI.genLabel("credit_label", `Minion Calculator V${this.version}\nMade by Herodirk`);
@@ -375,8 +375,8 @@ class Calculator {
         };
         GUI.fill_grid(Object.entries(this.addons_widgets), this.frames["addons_buttons_grid"]);
         
-        this.wisdom.update_listbox(x => x, x => x.get(), (key, val) => val.get() !== 0.0)
-        for (const var_key of this.var_dict){
+        this.wisdom.update_listbox(x => x, x => x.get(), (key, val) => val.get() !== 0.0);
+        for (const var_key of Object.keys(this.var_dict)) {
             if (this.var_dict[var_key].initial !== null) {
                 this.var_dict[var_key].set(this.var_dict[var_key].initial);
             };
@@ -396,8 +396,8 @@ class Calculator {
         GUI.def_switch("free_will", ["freewillcost"], true, false, false);
 
 
-        this.dependent_variables = {"afkpet_rarity": "afkpet", "afkpet_lvl": "afkpet", "player_harvests": "afk", "empty_time": "scale_time", "freewillcost": "free_will", "expshareitem": "expsharepet", "used_pet_prices": "levelingpet", "pet_profit": "levelingpet"}
-        this.key_replace_bool = ["infusion", "free_will", "postcard"]
+        this.dependent_variables = {"afkpet_rarity": "afkpet", "afkpet_lvl": "afkpet", "player_harvests": "afk", "empty_time": "scale_time", "freewillcost": "free_will", "expshareitem": "expsharepet", "used_pet_prices": "levelingpet", "pet_profit": "levelingpet"};
+        this.key_replace_bool = ["infusion", "free_will", "postcard"];
 
         this.outputOrder = ['fuel', "inferno_grade", "inferno_distillate", "inferno_eyedrops", "rising_celsius_override",
                             'hopper', 'upgrade1', 'upgrade2', 'chest',
@@ -406,8 +406,8 @@ class Calculator {
                             'wisdom', 'mayor', 'levelingpet', 'taming', 'falcon_attribute', 'petxpboost', 'beastmaster', 'toucan_attribute', 'expshareitem', 'expsharepet', 'expsharepetslot2', 'expsharepetslot3',
                             'ID', 'setupcost', 'freewillcost', 'extracost', 'actiontime', 'fuelamount', 'sell_loc', 'bazaar_update_txt', 'bazaar_taxes', 'bazaar_flipper', 'notes',
                             'empty_time', 'scaled_time', 'harvests', 'used_storage', 'items', 'item_sell_loc',
-                            'item_profit', 'itemtype_profit', 'xp', 'pet_profit', 'pets_levelled', 'used_pet_costs',
-                            'fuelcost', 'total_profit', 'addons_output_container']
+                            'item_profit', 'itemtype_profit', 'xp', 'pet_profit', 'pets_levelled', 'used_pet_prices',
+                            'fuelcost', 'total_profit', 'addons_output_container'];
 
 
         this.fancyOrder = {
@@ -466,45 +466,44 @@ class Calculator {
         this.AH_items = [];
         this.recipe_items = [];
         this.init_prices();
-        this.update_prices(false);
     };
 
     multiswitch(multi_ID, force=false) {
         if (multi_ID === "minion") {
-            let minionType = this.minion.get();
+            let minionType = this.minion.get(false);
             GUI.set_value("miniontier", Object.keys(md.minionList[minionType]["speed"]).slice(-1));
-            GUI.toggle_switch("potato_accessory_switch", minionType + String(this.afk.get()));
+            GUI.toggle_switch("potato_accessory_switch", minionType + String(this.afk.get(false)));
             GUI.toggle_switch("rising_celsius", minionType);
         } else if (multi_ID === "tier") {
-            let minionType = this.minion.get();
-            let minionTier = this.miniontier.get();
+            let minionType = this.minion.get(false);
+            let minionTier = this.miniontier.get(false);
             if (!(minionTier in md.minionList[minionType]["speed"])) {
                 GUI.set_value("miniontier", Object.keys(md.minionList[minionType]["speed"]).slice(-1));
             };
         } else if (multi_ID === "fuel") {
-            let control = this.fuel.get();
+            let control = this.fuel.get(false);
             GUI.toggle_switch("infernofuel", control);
             GUI.toggle_switch("fuel_amount", md.itemList[md.fuel_options[control]]["fuel_duration"]);
         } else if (multi_ID === "afk") {
-            let afkState = this.afk.get();
-            let minionType = this.minion.get();
+            let afkState = this.afk.get(false);
+            let minionType = this.minion.get(false);
             GUI.toggle_switch("afking", afkState);
             GUI.toggle_switch("potato_accessory_switch", minionType + String(afkState));
         } else if (multi_ID === "pet_leveling") {
-            let mayor = this.mayor.get();
+            let mayor = this.mayor.get(false);
             let pet_leveling_state;
             if (force) {
                 GUI.toggle_switch("pet_leveling");
                 pet_leveling_state = GUI.switches["pet_leveling"]["state"]
                 GUI.toggle_switch("exp_share_diana", mayor + String(pet_leveling_state));
             } else {
-                let control = this.levelingpet.get();
+                let control = this.levelingpet.get(false);
                 GUI.toggle_switch("pet_leveling", control);
                 pet_leveling_state = GUI.switches["pet_leveling"]["state"]
                 GUI.toggle_switch("exp_share_diana", mayor + String(pet_leveling_state));
             };
         } else if (multi_ID === "mayors") {
-            let mayor = this.mayor.get();
+            let mayor = this.mayor.get(false);
             let pet_leveling_state = GUI.switches["pet_leveling"]["state"];
             GUI.toggle_switch("exp_share_diana", mayor + String(pet_leveling_state));
         };
@@ -522,7 +521,7 @@ class Calculator {
             template = this.decode_id(this.load_ID.get());
         } else if (templateName === "Clean") {
             template = {};
-            for (let var_key in this.ID_order) {
+            for (let var_key of this.ID_order) {
                 if (!(["minion", "miniontier"].includes(var_key))) {
                     template[var_key] = this.var_dict[var_key].initial;
                 };
@@ -750,7 +749,7 @@ class Calculator {
     
     fancy_output(toTerminal=true) {
         let crafted_string = `${this.amount.get()}x **${this.minion.get()} t${this.miniontier.get()}**`;
-        for (let key in this.fancyOrder) {
+        for (let key of Object.keys(this.fancyOrder)) {
             let line_str = "";
             let header = "";
             let force_line = false;
@@ -866,7 +865,7 @@ class Calculator {
                 val = setup_data[var_key];
             };
             let var_options = this.var_dict[var_key].options
-            if (var_options !== null) {
+            if (var_options === null) {
                 if (parseInt(val) === val) {
                     val = parseInt(val);
                 };
@@ -998,7 +997,7 @@ class Calculator {
             if (setup_data["rising_celsius_override"]) {
                 speed_boost += 180;
             } else {
-                speed_boost += 18 * min(10, setup_data["amount"]);
+                speed_boost += 18 * Math.min(10, setup_data["amount"]);
             };
         };
         if (setup_data["mayor"] === "Cole" && (afk_toggle || clock_override) && md.affected_by_cole.includes(minion)) {
@@ -1142,7 +1141,8 @@ class Calculator {
 
     get_time_constants(seconds_per_action, actions_per_harvest, setup_data) {
         let empty_time_seconds = this.gui.time_number(setup_data["empty_time_unit"], setup_data["empty_time_amount"], seconds_per_action * actions_per_harvest);
-        let empty_time_str = scaled_time_str = `"${setup_data["empty_time_amount"]} ${setup_data["empty_time_unit"]}"`;
+        let empty_time_str = `${setup_data["empty_time_amount"]} ${setup_data["empty_time_unit"]}`; 
+        let scaled_time_str = `${setup_data["empty_time_amount"]} ${setup_data["empty_time_unit"]}`;
         let timeratio = 1;
         if (setup_data["scale_time"]) {
             scaled_time_seconds = this.gui.time_number(setup_data["scaled_time_unit"], setup_data["scaled_time_amount"], seconds_per_action * actions_per_harvest);
@@ -1172,7 +1172,7 @@ class Calculator {
         let spreading_info = {};
         let replace_info = {};
         for (const upgrade of upgrade_ids) {
-            upgrade_type = md.itemList[upgrade]["upgrade_special"]["type"];
+            let upgrade_type = md.itemList[upgrade]["upgrade_special"]["type"];
             if (upgrade_type.includes("spreading")) {
                 for (let [item, amount] of Object.entries(md.itemList[upgrade]["upgrade_special"]["items"])) {
                     spreading_info[item] = amount;
@@ -1183,7 +1183,7 @@ class Calculator {
                 Object.assign(replace_info, md.itemList[upgrade]["upgrade_special"]["replacement_list"]);
             };
         };
-        return spreading_info, replace_info;
+        return [spreading_info, replace_info];
     };
 
     add_drops(item, amount, drops_list, spreading_info=null, replace_info=null) {
@@ -1275,7 +1275,7 @@ class Calculator {
         if (afk_toggle) {
             this.get_base_drops(drops_list, spreading_info, replace_info, minion, - distillate_harvests, drop_multiplier);
         } else {
-            this.get_base_drops(drops_list, None, replace_info, minion, - distillate_harvests, drop_multiplier);
+            this.get_base_drops(drops_list, null, replace_info, minion, - distillate_harvests, drop_multiplier);
         };
         this.add_drops(distilate_item, distillate_harvests * amount_per, drops_list);
 
@@ -1446,7 +1446,7 @@ class Calculator {
             };
             let cost = this.get_price(item, setup_data, "sell", per_item_sell_location[item]) * per_compact;
             let compact_cost = this.get_price(compact_item, setup_data, "sell", per_item_sell_location[compact_item]) * compact_amount;
-            if (cost - compact_cost > compact_tolerance) {
+            if (cost - compact_cost > this.compact_tolerance.get()) {
                 over_compacting.push(md.itemList[item]['display']);
             };
         };
@@ -1696,6 +1696,7 @@ class Calculator {
         // Free Will costs
         let free_will_price = this.get_price("FREE_WILL", setup_data, "buy", "bazaar");
         let postcard_price = this.get_price("POSTCARD", setup_data, "buy", "custom", true);
+        let final_postcard_cost;
         if (postcard_price == 0) {
             // If no price found, use the free will price
             final_postcard_cost = free_will_price;
@@ -1767,7 +1768,7 @@ class Calculator {
         };
 
 
-        total_cost = Object.values(cost_per_part).reduce((partialSum, a) => partialSum + a, 0);
+        let total_cost = Object.values(cost_per_part).reduce((partialSum, a) => partialSum + a, 0);
         return [total_cost, extra_cost, cost_per_part];
     };
 
@@ -1939,43 +1940,18 @@ class Calculator {
         return;
     };
 
-    format_date(ms_time) {
-        const d = new Date(ms_time);
-        let timezone_minutes = d.getTimezoneOffset();
-        let timezone_sign = "-";
-        if (timezone_minutes < 0) {
-            timezone_sign = "+";
-            timezone_minutes = Math.abs(timezone_minutes);
-        };
-        let timezone_hours = Math.floor(timezone_minutes / 60);
-        timezone_minutes = timezone_minutes % 60;
-        let formatter = x => (x < 10) ? `0${x}` : `${x}`;
-        let output_string = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()} ${formatter(d.getHours())}:${formatter(d.getMinutes())}:${formatter(d.getSeconds())} UTC${timezone_sign}${formatter(timezone_hours)}${formatter(timezone_minutes)}`;
-        return output_string;
-    };
-
     async init_prices() {
-        /*
-        calls to Hypixel's Item API got get NPC prices.
+        let raw_bazaar_data = await this.gui.call_API("https://api.hypixel.net/v2/skyblock/bazaar", "Hypixel Bazaar API");
+        if (!("success" in raw_bazaar_data) || raw_bazaar_data["success"] === false) {
+            console.log("ERROR: Hypixel Bazaar API call was unsuccessful");
+            return;
+        };
 
-        Returns
-        -------
-        None
-        */
-        console.log("INFO: Calling Item API");
-        try {
-            const f = await fetch("https://api.hypixel.net/resources/skyblock/items");
-            var raw_item_data = await f.json();
-        } catch(error) {
-            console.log("ERROR: Could not finish Item API call to Hypixel");
-            console.log(error);
+        let raw_item_data = await this.gui.call_API("https://api.hypixel.net/resources/skyblock/items", "Hypixel Item API");
+        if (!("success" in raw_bazaar_data) || raw_bazaar_data["success"] === false) {
+            console.log("ERROR: Hypixel Item API call was unsuccessful");
             return;
         };
-        if (!("success" in raw_item_data) || raw_item_data["success"] === false) {
-            console.log("ERROR: Item API call was unsuccessful");
-            return;
-        };
-        console.log("INFO: Item API call successful");
         let dict_item_data = {};
         for (let item_data of raw_item_data["items"]) {
             dict_item_data[item_data["id"]] = item_data;
@@ -1987,49 +1963,43 @@ class Calculator {
             } else if (!("npc" in md.itemList[item_id]["prices"])) {
                 md.itemList[item_id]["prices"]["npc"] = 0;
             };
+            if (item_id in raw_bazaar_data["products"]) {
+                this.bazaar_items.push(item_id);
+            } else if ("recipe" in md.itemList[item_id]) {
+                this.recipe_items.push(item_id);
+            } else if ("AH" in md.itemList[item_id] && md.itemList[item_id]["AH"]) {
+                this.AH_items.push(item_id);
+            };
         };
+        await this.update_prices(false);
     };
 
-
-    async update_bazaar(cooldown_warning=true) {
-        if (Date.now() - this.bazaar_timer < this.variables["bazaar_cooldown"]["var"] * 1000 && this.bazaar_timer !== 0) {
-            if (cooldown_warning) {
-                console.log("BAZAAR: Bazaar is on cooldown");
-            };
+    async call_bazaar() {
+        let raw_bazaar_data = await this.gui.call_API("https://api.hypixel.net/v2/skyblock/bazaar", "Hypixel Bazaar API");
+        if (!("success" in raw_bazaar_data) || raw_bazaar_data["success"] === false) {
+            console.log("ERROR: Hypixel Bazaar API call was unsuccessful");
             return;
         };
-        try {
-            const f = await fetch("https://api.hypixel.net/v2/skyblock/bazaar");
-            var raw_data = await f.json();
-        } catch(error) {
-            console.log("ERROR: Could not finish API call to Hypixel");
-            console.log(error);
-            return;
-        };
-        if (!("success" in raw_data) || raw_data["success"] === false) {
-            console.log("ERROR: API call was unsuccessful");
-            return;
-        };
-        this.bazaar_timer = raw_data["lastUpdated"];
-        this.variables["bazaar_update_txt"]["var"] = this.format_date(this.bazaar_timer);
-        document.getElementById("bazaar_update_txt").innerHTML = this.variables["bazaar_update_txt"]["var"];
+        this.API_timer = raw_bazaar_data["lastUpdated"];
+        this.bazaar_update_txt.set(this.gui.format_date(this.API_timer));
+        // document.getElementById("bazaar_update_txt").innerHTML = this.variables["bazaar_update_txt"]["var"];
         let top_percent = 0.1;
-        for (let [itemtype, item_data] of Object.entries(md.itemList)) {
-            if (!(itemtype in raw_data["products"])) {
+        for (const item_id of this.bazaar_items) {
+            if (!(item_id in raw_bazaar_data["products"])) {
                 continue;
             };
             for (let action of ["buy", "sell"]) {
-                let top_amount = top_percent * raw_data["products"][itemtype][`${action}_summary`].map(x => x["amount"]).reduce((partialSum, a) => partialSum + a, 0);
+                let top_amount = top_percent * raw_bazaar_data["products"][item_id][`${action}_summary`].map(x => x["amount"]).reduce((partialSum, a) => partialSum + a, 0);
                 if (top_amount === 0) {
-                    item_data["prices"][`${action}Price`] = 0;
-                    if (!("npc" in item_data["prices"])) {
-                        console.log(`BAZAAR: no ${action} supply for ${itemtype}`);
+                    md.itemList[item_id]["prices"][`${action}Price`] = 0;
+                    if (!("npc" in md.itemList[item_id]["prices"])) {
+                        console.log(`BAZAAR: no ${action} supply for ${item_id}`);
                     };
                     continue;
                 };
                 let counter = top_amount;
                 let top_sum = 0;
-                for (let order of raw_data["products"][itemtype][`${action}_summary`]) {
+                for (let order of raw_bazaar_data["products"][item_id][`${action}_summary`]) {
                     if (counter <= 0) {
                         break;
                     };
@@ -2043,71 +2013,87 @@ class Calculator {
                     };
                 };
                 let top_percent_avg_price = top_sum / top_amount;
-                let top_price = raw_data["products"][itemtype][`${action}_summary`][0]["pricePerUnit"];
+                let top_price = raw_bazaar_data["products"][item_id][`${action}_summary`][0]["pricePerUnit"];
                 if (top_price / top_percent_avg_price >= 2.5) {
-                    item_data["prices"][`${action}Price`] = top_price;
-                    console.log(`BAZAAR: bottom heavy ${action} supply for ${itemtype}, taking top order price`);
+                    md.itemList[item_id]["prices"][`${action}Price`] = top_price;
+                    console.log(`BAZAAR: bottom heavy ${action} supply for ${item_id}, taking top order price`);
                 } else {
-                    item_data["prices"][`${action}Price`] = top_percent_avg_price;
+                    md.itemList[item_id]["prices"][`${action}Price`] = top_percent_avg_price;
                 };
             };
         };
-        this.update_AH();
     };
 
-    async update_AH() {
-        try {
-            let postcard_url = "https://sky.coflnet.com/api/item/price/POSTCARD/bin";
-            const f = await fetch(postcard_url);
-            var raw_data = await f.json();
-        } catch(error) {
-            console.log("ERROR: Could not finish API call to Coflnet");
-            console.log(error);
+    async call_auction_house(item_id) {
+        let raw_auction_data = await this.gui.call_API("https://sky.coflnet.com/api/item/price/" + item_id + "/bin", "SkyCofl AH API")
+        return (raw_auction_data["lowest"] + raw_auction_data["secondLowest"]) / 2;
+    };
+
+    update_recipe_price(item_id) {
+        if (!(item_id in md.itemList)) {
+            console.log(`ERROR: ${item_id} not in md.itemList`);
             return;
         };
-        md.itemList["POSTCARD"]["prices"]["custom"] = (raw_data["lowest"] + raw_data["secondLowest"]) / 2;
+        if (!("recipe" in md.itemList[item_id])) {
+            console.log(`ERROR: ${item_id} is not a recipe item`);
+            return;
+        };
+        md.itemList[item_id]["prices"]["buyPrice"] = 0;
+        md.itemList[item_id]["prices"]["sellPrice"] = 0;
+        for (let [material_id, amount] of Object.entries(md.itemList[item_id]["recipe"])) {
+            if ("AH" in md.itemList[material_id]) {
+                md.itemList[item_id]["prices"]["buyPrice"] += amount * md.itemList[material_id]["prices"]["custom"];
+                md.itemList[item_id]["prices"]["sellPrice"] += amount * md.itemList[material_id]["prices"]["custom"];
+                continue;
+            };
+            md.itemList[item_id]["prices"]["buyPrice"] += amount * md.itemList[material_id]["prices"]["buyPrice"];
+            md.itemList[item_id]["prices"]["sellPrice"] += amount * md.itemList[material_id]["prices"]["sellPrice"];
+        };
         return;
     };
 
-    update_GUI() {
-        for (const [var_key, var_data] of Object.entries(this.variables)) {
-            let var_vtype = this.variables[var_key]["vtype"];
-            if (var_vtype === "output" && document.getElementById(var_key) !== null) {
-                document.getElementById(var_key).innerHTML = this.variables[var_key]["var"];
-            } else if (var_vtype === "list" && var_key !== "wisdom") {
-                let lines = [];
+    async update_prices(cooldown_warning=true) {
+        if (Date.now() - this.API_timer < this.API_cooldown.get() * 1000 && this.API_timer !== 0) {
+            if (cooldown_warning) {
+                console.log("API: API is on cooldown");
+            };
+            return;
+        };
+        console.log("API: Updating Bazaar prices");
+        await this.call_bazaar();
+        console.log("API: Updating Auction House prices");
+        for (const item_id of this.AH_items) {
+            md.itemList[item_id]["prices"]["custom"] = await this.call_auction_house(item_id);
+        };
+        console.log("API: Updating Recipe prices");
+        for (const item_id of this.recipe_items) {
+            this.update_recipe_price(item_id);
+        };
+        return;
+    };
 
+    update_listboxes() {
+        for (const var_key of Object.keys(this.var_dict)) {
+            if (this.var_dict[var_key].dtype === "object") {
+                if (var_key == "wisdom") {
+                    continue;
+                };
+                if (var_key == "pets_levelled") {
+                    this.pets_levelled.update_listbox(x => this.var_dict[x].get());
+                    continue;
+                };
                 let format_function = x => x;
-                if ("IDtoDisplay" in var_data && var_data["IDtoDisplay"] === true) {
+                if (this.var_dict[var_key].has_tag("item_ID_to_display")) {
                     format_function = x => md.itemList[x]["display"];
-                } else if (var_key === "pets_levelled") {
-                    format_function = x => this.variables[x]["var"];
                 };
-
-                if (this.variables[var_key]["list"] instanceof Array) {
-                    for (let val of this.variables[var_key]["list"]) {
-                        lines.push(format_function(val));
-                    };
-                } else {
-                    for (const [key, val] of Object.entries(this.variables[var_key]["list"])) {
-                        if (var_key === "pets_levelled" && format_function(key) === "None") {
-                            continue;
-                        };
-                        lines.push(`${format_function(key)}: ${val}`);
-                    };
-                };
-                GUI.fill_list_box(var_key, lines);
+                this.var_dict[var_key].update_listbox(format_function);
             };
         };
     };
 
     collect_addon_output(output_name, output_str) {
-        this.variables["addons_output_container"]["list"][output_name] = output_str;
-        let listbox_list = [];
-        for (const [key, val] of Object.entries(this.variables["addons_output_container"]["list"])) {
-            listbox_list.push(`${key}: ${val}`);
-        };
-        GUI.fill_list_box("addons_output_container", listbox_list);
+        this.addons_output_container.list[output_name] = output_str;
+        this.addons_output_container.update_listbox();
         return;
     };
 
