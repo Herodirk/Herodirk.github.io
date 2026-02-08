@@ -312,7 +312,7 @@ class GUI_creator {
     };
 
 
-    // Data requests
+    // Data logistics
 
     async call_API(api_url, api_name="API"){
         try {
@@ -326,8 +326,45 @@ class GUI_creator {
         return raw_data;
     };
 
+    get_from_GUI(var_keys, translate=true) {
+        let var_values = {};
+        for (const var_key of var_keys) {
+            if (!(var_key in this.main.var_dict)) {
+                console.log(`WARNING: ${var_key} key not in this.var_dict`);
+                continue;
+            };
+            if (this.main.var_dict[var_key].dtype === "object") {
+                var_values[var_key] = JSON.parse(JSON.stringify(this.main.var_dict[var_key].list));
+            } else {
+                var_values[var_key] = this.main.var_dict[var_key].get(translate);
+            };
+        };
+        return var_values;
+    };
 
-    // Data management
+    send_to_GUI(outputs) {
+        for (const var_key of Object.keys(outputs)) {
+            if (!(var_key in this.main.var_dict)) {
+                console.log(`WARNING: Output ${var_key} not found in this.var_dict`);
+                continue;
+            };
+            if (this.main.var_dict[var_key].dtype === "object") {
+                this.clear_object(this.main.var_dict[var_key].list);
+                if (this.main.var_dict[var_key].list instanceof Array) {
+                    this.main.var_dict[var_key].list.push(...outputs[var_key]);
+                } else {
+                    Object.assign(this.main.var_dict[var_key].list, outputs[var_key]);
+                };
+            } else {
+                this.main.var_dict[var_key].set(outputs[var_key]);
+            };
+        };
+        return;
+    };
+
+
+    // Data editing
+
     deepmultiply(obj, multiplier) {
         let keys = Object.keys(obj);
         for (const key of keys) {

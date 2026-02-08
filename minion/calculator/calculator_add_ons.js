@@ -5,7 +5,7 @@ class Calc_add_ons {
     };
 
     craft_material_amount(calculator) {
-        let setup_data = calculator.get_from_GUI(["minion", "miniontier", "amount", "extracost"]);
+        let setup_data = calculator.gui.get_from_GUI(["minion", "miniontier", "amount", "extracost"]);
         const materials = md.minionCostSum(setup_data["minion"], setup_data["miniontier"]);
         const extra_costs_string = setup_data["extracost"]
         let materials_string = Object.keys(materials).map(material => `${materials[material] * setup_data["amount"]} ${md.itemList[material]["display"]}`).join(", ");
@@ -18,7 +18,7 @@ class Calc_add_ons {
 
     setup_repay_time(calculator) {
         // Outputs the time (in days) it take for a setup to repay itself
-        let setup_data = calculator.get_from_GUI(["time_seconds", "setupcost", "free_will", "freewillcost", "total_profit"]);
+        let setup_data = calculator.gui.get_from_GUI(["time_seconds", "setupcost", "free_will", "freewillcost", "total_profit"]);
         let setupcost = setup_data["setupcost"];
         // if (setup_data["free_will"]) {
         //     setupcost += setup_data["freewillcost"];
@@ -40,7 +40,7 @@ class Calc_add_ons {
     };
 
     async basic_minion_loop(calculator) {
-        let setup_data = calculator.get_from_GUI(calculator.ID_order);
+        let setup_data = calculator.gui.get_from_GUI(calculator.ID_order);
         let calculated_setup_profits = {};
         let calculated_setup_costs = {};
         const loop_minion_options = Object.keys(md.minionList);
@@ -95,8 +95,8 @@ class Calc_add_ons {
     bad_luck_inferno(calculator, setup_data=null, outputs=null, return_value=false) {
         // Outputs the profit of the common Hypergolic drops and the price per Inferno Vertex
         if (setup_data === null) {
-            setup_data = calculator.get_from_GUI(["fuel", "inferno_grade", "bazaar_buy_type", "bazaar_sell_type", "bazaar_taxes", "bazaar_flipper", "mayor"]);
-            outputs = calculator.get_from_GUI(["total_profit", "itemtype_profit"]);
+            setup_data = calculator.gui.get_from_GUI(["fuel", "inferno_grade", "bazaar_buy_type", "bazaar_sell_type", "bazaar_taxes", "bazaar_flipper", "mayor"]);
+            outputs = calculator.gui.get_from_GUI(["total_profit", "itemtype_profit"]);
         };
         if (setup_data["fuel"] != "INFERNO_FUEL") {
             calculator.collect_addon_output("Bad Luck Inferno", "No Inferno Minion Fuel Found");
@@ -118,7 +118,7 @@ class Calc_add_ons {
     };
 
     async inferno_minion_loop(calculator) {
-        let setup_data = calculator.get_from_GUI(calculator.ID_order);
+        let setup_data = calculator.gui.get_from_GUI(calculator.ID_order);
         let calculated_setup_profits = {};
         let calculated_setup_bad_luck_profits = {};
         let calculated_setup_costs = {};

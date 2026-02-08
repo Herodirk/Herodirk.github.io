@@ -815,42 +815,6 @@ class Calculator {
         };
     };
     
-    get_from_GUI(var_keys, translate=true) {
-        let var_values = {};
-        for (const var_key of var_keys) {
-            if (!(var_key in this.var_dict)) {
-                console.log(`WARNING: ${var_key} key not in this.var_dict`);
-                continue;
-            };
-            if (this.var_dict[var_key].dtype === "object") {
-                var_values[var_key] = JSON.parse(JSON.stringify(this.var_dict[var_key].list));
-            } else {
-                var_values[var_key] = this.var_dict[var_key].get(translate);
-            };
-        };
-        return var_values;
-    };
-
-    send_to_GUI(outputs) {
-        for (const var_key of Object.keys(outputs)) {
-            if (!(var_key in this.var_dict)) {
-                console.log(`WARNING: Output ${var_key} not found in this.var_dict`);
-                continue;
-            };
-            if (this.var_dict[var_key].dtype === "object") {
-                this.gui.clear_object(this.var_dict[var_key].list);
-                if (this.var_dict[var_key].list instanceof Array) {
-                    this.var_dict[var_key].list.push(...outputs[var_key]);
-                } else {
-                    Object.assign(this.var_dict[var_key].list, outputs[var_key]);
-                };
-            } else {
-                this.var_dict[var_key].set(outputs[var_key]);
-            };
-        };
-        return;
-    };
-    
     construct_id(setup_data) {
         let val;
         let index;
@@ -1028,11 +992,11 @@ class Calculator {
         drop_multiplier *= md.itemList[upgrade_ids[0]]["drop_multiplier"];
         if (afk_toggle && drop_multiplier > 1) {
             // drop multiplier greater than 1 is rounded down while online
-            drop_multiplier = int(drop_multiplier);
+            drop_multiplier = Math.floor(drop_multiplier);
         };
         drop_multiplier *= md.itemList[upgrade_ids[1]]["drop_multiplier"];
         if (afk_toggle && drop_multiplier > 1) {
-            drop_multiplier = int(drop_multiplier);
+            drop_multiplier = Math.floor(drop_multiplier);
         };
         if (setup_data["mayor"] == "Derpy") {
             drop_multiplier *= 2;
@@ -1783,7 +1747,7 @@ class Calculator {
         };
 
         if (setup_data === null) {
-            setup_data = this.get_from_GUI(this.ID_order);
+            setup_data = this.gui.get_from_GUI(this.ID_order);
         };
 
         // extracting often used minion constants
@@ -1924,7 +1888,7 @@ class Calculator {
 
         // Update GUI
         if (inGUI === true) {
-            this.send_to_GUI(outputs);
+            this.gui.send_to_GUI(outputs);
             this.gui.clear_object(this.addons_output_container.list);
             for (let addon_name of Object.keys(this.addons_list)) {
                 if (this.gui.get_value(`${addon_name}_auto_run`)) {
