@@ -80,7 +80,6 @@ class Calc_add_ons {
             // if (calculator.variables["free_will"]["var"]) {
             //     calculated_setup_costs[loop_minion] += calculator.variables["freewillcost"]["var"];
             // };
-            console.log(outputs)
         };
         let output_string = "Minion : profit , setup cost\n";
         for (let i = 1; i <= 10; i++) {
@@ -131,7 +130,7 @@ class Calc_add_ons {
         setup_data["rising_celsius_override"] = true
     
         const loop_tiers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-        const loop_amounts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
+        const loop_amounts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
         for (const loop_tier of loop_tiers) {
             setup_data["miniontier"] = loop_tier;
             for (const loop_amount of loop_amounts) {

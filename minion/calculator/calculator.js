@@ -118,7 +118,7 @@ class Calculator {
             "addons_output_grid": document.getElementById("addons_output_grid"),
         };
 
-        this.bazaar_auto_update = new Hvar({"huim": this.gui, "key": "bazaar_auto_update", "vtype": "storage", "dtype": "boolean", "display": "Bazaar Auto Update", "initial": true});
+        this.API_auto_update = new Hvar({"huim": this.gui, "key": "API_auto_update", "vtype": "storage", "dtype": "boolean", "display": "API Auto Update", "initial": true});
         this.API_cooldown = new Hvar({"huim": this.gui, "key": "API_cooldown", "vtype": "storage", "dtype": "number", "display": "API Cooldown (s)", "initial": 120});
         this.compact_tolerance = new Hvar({"huim": this.gui, "key": "compact_tolerance", "vtype": "storage", "dtype": "number", "display": "Over-Compacting Tolerance (coins)", "initial": 10000});
         this.output_to_clipboard = new Hvar({"huim": this.gui, "key": "output_to_clipboard", "vtype": "storage", "dtype": "boolean", "display": "Output to Clipboard", "initial": true});
@@ -226,7 +226,7 @@ class Calculator {
         let outputB = GUI.create_button('Short Output', this.output_data.bind(this), true);
         let fancyoutputB = GUI.create_button('Share Output', this.fancy_output.bind(this), true);
         let bazaarB = GUI.create_button("Update Prices", this.update_prices.bind(this), true);
-        let settingsB = GUI.create_button('Edit Settings', () => GUI.edit_vars.bind(this)(GUI.update_color_palette.bind(GUI), ["bazaar_auto_update", "API_cooldown", "compact_tolerance", "output_to_clipboard", "color_palette"]), true);
+        let settingsB = GUI.create_button('Edit Settings', () => GUI.edit_vars.bind(this)(GUI.update_color_palette.bind(GUI), ["API_auto_update", "API_cooldown", "compact_tolerance", "output_to_clipboard", "color_palette"]), true);
         let pet_priceB = GUI.create_button('Edit Pet Prices', () => GUI.edit_vars.bind(this)(this.edit_pet_price_redirect.bind(this), {"edit_pet_price_pet": {"dtype": "string", "display": "Pet", "initial": "None", "options": Object.keys(md.all_pets)}}, false), true);
         let emptyspaceLB = GUI.genLabel("control_frame_filler", "")
         let creditLB = GUI.genLabel("credit_label", `Minion Calculator V${this.version}\nMade by Herodirk`);
@@ -387,7 +387,7 @@ class Calculator {
         GUI.def_switch("NPC_Bazaar", ["item_sell_loc"], "Best (NPC/Bazaar)", false, true);
         GUI.def_switch("infernofuel", ["inferno_grade", "inferno_distillate", "inferno_eyedrops"], "Inferno Minion Fuel", false, false);
         GUI.def_switch("rising_celsius", ["rising_celsius_override"], "Inferno", false, false);
-        GUI.def_switch("beacon", ["scorched", "B_constant", "B_acquired"], 0, true, false);
+        GUI.def_switch("beacon", ["scorched", "B_constant", "B_acquired"], "None", true, false);
         GUI.def_switch("potato_accessory_switch", ["potato_accessory"], "Potatotrue", false, false);
         GUI.def_switch("bazaar_tax", ["bazaar_flipper"], true, false, true);
         GUI.def_switch("afking", ["afkpet", "afkpet_rarity", "afkpet_lvl", "enchanted_clock", "special_layout", "player_harvests", "player_looting"], true, false, false);
@@ -1777,7 +1777,7 @@ class Calculator {
             this.statusC.style.background = "yellow";
 
             // auto update bazaar
-            if (this.bazaar_auto_update.get()) {
+            if (this.API_auto_update.get()) {
                 await this.update_prices(false);
             };
         };
