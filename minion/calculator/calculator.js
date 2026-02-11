@@ -125,7 +125,7 @@ class Calculator {
         this.color_palette = new Hvar({"huim": this.gui, "key": "color_palette", "vtype": "storage", "dtype": "string", "display": "Color Palette", "initial": "Dark Red", "options": Object.keys(this.gui.palette_names)});
         this.template = new Hvar({"huim": this.gui, "key": "template", "vtype": "input", "display": "Templates", "initial": "Choose Template", "dtype": "string", "frame": "inputs_minion_grid", "options": Object.keys(this.templateList), "command": this.load_template.bind(this)});
         this.load_ID = new Hvar({"huim": this.gui, "key": "load_id", "vtype": "input", "dtype": "string", "frame": "inputs_minion_grid", "display": "Load ID", "initial": ""});
-        this.minion = new Hvar({"huim": this.gui, "key": "minion", "vtype": "input", "dtype": "string", "display": "Minion", "frame": "inputs_minion_grid", "initial": "Custom", "options": Object.keys(md.minionList), "command": () => this.multiswitch('minion')});
+        this.minion = new Hvar({"huim": this.gui, "key": "minion", "vtype": "input", "dtype": "string", "display": "Minion", "frame": "inputs_minion_grid", "initial": "Custom", "options": md.minion_options, "command": () => this.multiswitch('minion')});
         this.miniontier = new Hvar({"huim": this.gui, "key": "miniontier", "vtype": "input", "dtype": "number", "display": "Tier", "frame": "inputs_minion_grid", "initial": 12, "options": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "command": () => this.multiswitch('tier')});
         this.amount = new Hvar({"huim": this.gui, "key": "amount", "vtype": "input", "dtype": "number", "display": "Amount", "frame": "inputs_minion_grid", "initial": 1, "options": null});
         this.fuel = new Hvar({"huim": this.gui, "key": "fuel", "vtype": "input", "dtype": "string", "display": "Fuel", "frame": "inputs_minion_grid", "initial": "None", "options": md.fuel_options, "command": () => this.multiswitch('fuel')});
@@ -471,19 +471,19 @@ class Calculator {
     multiswitch(multi_ID, force=false) {
         if (multi_ID === "minion") {
             let minionType = this.minion.get(false);
-            GUI.set_value("miniontier", Object.keys(md.minionList[minionType]["speed"]).slice(-1));
+            GUI.set_value("miniontier", Object.keys(md.calculator_data[md.minion_options[minionType]]["speed"]).slice(-1));
             GUI.toggle_switch("potato_accessory_switch", minionType + String(this.afk.get(false)));
             GUI.toggle_switch("rising_celsius", minionType);
         } else if (multi_ID === "tier") {
-            let minionType = this.minion.get(false);
+            let minionType = this.minion.get(true);
             let minionTier = this.miniontier.get(false);
-            if (!(minionTier in md.minionList[minionType]["speed"])) {
-                GUI.set_value("miniontier", Object.keys(md.minionList[minionType]["speed"]).slice(-1));
+            if (!(minionTier in md.calculator_data[minionType]["speed"])) {
+                GUI.set_value("miniontier", Object.keys(md.calculator_data[minionType]["speed"]).slice(-1));
             };
         } else if (multi_ID === "fuel") {
             let control = this.fuel.get(false);
             GUI.toggle_switch("infernofuel", control);
-            GUI.toggle_switch("fuel_amount", md.itemList[md.fuel_options[control]]["fuel_duration"]);
+            GUI.toggle_switch("fuel_amount", md.calculator_data[md.fuel_options[control]]["fuel_duration"]);
         } else if (multi_ID === "afk") {
             let afkState = this.afk.get(false);
             let minionType = this.minion.get(false);
@@ -541,7 +541,7 @@ class Calculator {
     };
 
     output_data(toTerminal=true) {
-        let crafted_string = `${this.amount.get()}x ${this.minion.get()} t${this.miniontier.get()}; `;
+        let crafted_string = `${this.amount.get()}x ${this.minion.get(false)} t${this.miniontier.get()}; `;
         let string_parts = {};
         for (let var_key of this.outputOrder) {
             if (var_key in this.dependent_variables) {
@@ -596,7 +596,7 @@ class Calculator {
                 let formatted_list = [];
                 let formatting_function = x => x;
                 if (this.var_dict[var_key].has_tag("item_ID_to_display")) {
-                    formatting_function = x => md.itemList[x]['display'];
+                    formatting_function = x => md.calculator_data[x]['display'];
                 } else if (var_key === "pets_levelled") {
                     formatting_function = x => this.var_dict[x].get();
                 };
@@ -665,6 +665,14 @@ class Calculator {
             if (this.mayor.get() !== "Diana") {
                 return null;
             };
+        } else if (["inferno_grade", "inferno_distillate", "inferno_eyedrops"].includes(var_key)) {  // special case: fuel attributes only relevant for Inferno Minion Fuel
+            if (this.fuel.get(false) != "Inferno Minion Fuel") {
+                return null;
+            };
+        } else if (var_key === "rising_celsius_override") {  // special case: Rising Celsius only applies to Inferno minions
+            if (this.minion.get(false) != "Inferno") {
+                return null;
+            };
         } else if (var_key === "extracost") {  // special case: setup cost is turned off
             if (this.setupcost.get_output_switch() === false) {
                 return null;
@@ -711,7 +719,7 @@ class Calculator {
             let formatted_list = [];
             let formatting_function = x => x;
             if (this.var_dict[var_key].has_tag("item_ID_to_display")) {
-                formatting_function = x => md.itemList[x]['display'];
+                formatting_function = x => md.calculator_data[x]['display'];
             } else if (var_key === "pets_levelled") {
                 formatting_function = x => this.var_dict[x].get();
             };
@@ -748,7 +756,7 @@ class Calculator {
     };
     
     fancy_output(toTerminal=true) {
-        let crafted_string = `${this.amount.get()}x **${this.minion.get()} t${this.miniontier.get()}**`;
+        let crafted_string = `${this.amount.get()}x **${this.minion.get(false)} t${this.miniontier.get()}**`;
         for (let key of Object.keys(this.fancyOrder)) {
             let line_str = "";
             let header = "";
@@ -766,7 +774,7 @@ class Calculator {
             if (header === "Beacon Info" && this.beacon.get() === 0) {
                 continue;
             };
-            if (header === "Inferno Info" && this.minion.get() !== "Inferno" && this.fuel.get(false) !== "Inferno Minion Fuel") {
+            if (header === "Inferno Info" && this.minion.get(false) !== "Inferno" && this.fuel.get(false) !== "Inferno Minion Fuel") {
                 continue;
             };
             if (header === "Bazaar Info" && this.bazaar_update_txt.get_output_switch() === false) {
@@ -824,7 +832,7 @@ class Calculator {
                 console.log(`WARNING: ${var_key} key not in setup_data, assuming default value`);
                 val = this.var_dict[var_key].initial;
             } else if (this.var_dict[var_key].translation !== null) {
-                val = md.itemList[setup_data[var_key]]["display"];
+                val = md.calculator_data[setup_data[var_key]]["display"];
             } else {
                 val = setup_data[var_key];
             };
@@ -920,60 +928,60 @@ class Calculator {
         } else if (location === "npc" && action === "buy") {
             multiplier = 2;
         };
-        if (ID in md.itemList) {
-            if (location in md.itemList[ID]["prices"]) {
-                return multiplier * md.itemList[ID]["prices"][location];
+        if (ID in md.calculator_data) {
+            if (location in md.calculator_data[ID]["prices"]) {
+                return multiplier * md.calculator_data[ID]["prices"][location];
             } else if (force) {
                 console.log("WARNING:", ID, "no forced cost found");
                 return 0;
-            } else if ("custom" in md.itemList[ID]["prices"]) {
-                return md.itemList[ID]["prices"]["custom"];
-            } else if ("npc" in md.itemList[ID]["prices"]) {
-                return multiplier * md.itemList[ID]["prices"]["npc"];
+            } else if ("custom" in md.calculator_data[ID]["prices"]) {
+                return md.calculator_data[ID]["prices"]["custom"];
+            } else if ("npc" in md.calculator_data[ID]["prices"]) {
+                return multiplier * md.calculator_data[ID]["prices"]["npc"];
             } else {
                 console.log("WARNING:", ID, "no cost found");
                 return 0;
             };
         } else {
-            console.log("WARNING:", ID, "not in itemList");
+            console.log("WARNING:", ID, "not in calculator data");
             return 0;
         };
     };
 
     get_speed_boosts(minion, minion_fuel_id, upgrade_ids, afk_toggle, clock_override, setup_data) {
         let speed_boost = 0;
-        speed_boost += md.itemList[minion_fuel_id]["speed_boost"];
-        speed_boost += md.itemList[upgrade_ids[0]]["speed_boost"] + md.itemList[upgrade_ids[1]]["speed_boost"];
-        speed_boost += md.itemList[setup_data["beacon"]]["speed_boost"] + md.itemList["MITHRIL_INFUSION"]["speed_boost"] * setup_data["infusion"];
-        speed_boost += md.itemList["FREE_WILL"]["speed_boost"] * setup_data["free_will"] + md.itemList["POSTCARD"]["speed_boost"] * setup_data["postcard"];
-        if (setup_data["potato_accessory"] !== "NONE" && (afk_toggle || clock_override) && (md.itemList[setup_data["potato_accessory"]]["affected_minions"].includes(minion))) {
-            speed_boost += md.itemList[setup_data["potato_accessory"]]["speed_boost"];
+        speed_boost += md.calculator_data[minion_fuel_id]["speed_boost"];
+        speed_boost += md.calculator_data[upgrade_ids[0]]["speed_boost"] + md.calculator_data[upgrade_ids[1]]["speed_boost"];
+        speed_boost += md.calculator_data[setup_data["beacon"]]["speed_boost"] + md.calculator_data["MITHRIL_INFUSION"]["speed_boost"] * setup_data["infusion"];
+        speed_boost += md.calculator_data["FREE_WILL"]["speed_boost"] * setup_data["free_will"] + md.calculator_data["POSTCARD"]["speed_boost"] * setup_data["postcard"];
+        if (setup_data["potato_accessory"] !== "NONE" && (afk_toggle || clock_override) && md.has_data_tag(minion, md.calculator_data[setup_data["potato_accessory"]]["affected_minions"])) {
+            speed_boost += md.calculator_data[setup_data["potato_accessory"]]["speed_boost"];
         };
         if (setup_data["crystal"] !== "NONE") {
-            if (md.itemList[setup_data["crystal"]]["affected_minions"].includes(minion)) {
-                speed_boost += md.itemList[setup_data["crystal"]]["speed_boost"];
+            if (md.has_data_tag(minion, md.calculator_data[setup_data["crystal"]]["affected_minions"])) {
+                speed_boost += md.calculator_data[setup_data["crystal"]]["speed_boost"];
             };
         };
         if (setup_data["beacon"] !== "NONE" && setup_data["scorched"]) {
-            speed_boost += md.itemList["SCORCHED_POWER_CRYSTAL"]["speed_boost"];
+            speed_boost += md.calculator_data["SCORCHED_POWER_CRYSTAL"]["speed_boost"];
         };
-        if (minion == "Inferno") {
+        if (minion == "INFERNO_MINION") {
             if (setup_data["rising_celsius_override"]) {
                 speed_boost += 180;
             } else {
                 speed_boost += 18 * Math.min(10, setup_data["amount"]);
             };
         };
-        if (setup_data["mayor"] === "Cole" && (afk_toggle || clock_override) && md.affected_by_cole.includes(minion)) {
+        if (setup_data["mayor"] === "Cole" && (afk_toggle || clock_override) && md.has_data_tag(minion, "mining_minion")) {
             speed_boost += 25;
         };
-        if (minion_fuel_id === "EVERBURNING_FLAME" && md.itemList[minion_fuel_id]["upgrade_special"]["affected_minions"].includes(minion)) {
-            speed_boost += md.itemList[minion_fuel_id]["upgrade_special"]["amount"];
+        if (minion_fuel_id === "EVERBURNING_FLAME" && md.has_data_tag(minion, md.calculator_data[minion_fuel_id]["upgrade_special"]["affected_minions"])) {
+            speed_boost += md.calculator_data[minion_fuel_id]["upgrade_special"]["amount"];
         };
         const afkpet = setup_data["afkpet"];
         const afkpet_rarity = setup_data["afkpet_rarity"];
         const afkpet_lvl = setup_data["afkpet_lvl"];
-        if ((afk_toggle || clock_override) && md.boost_pets[afkpet]["affects"].includes(minion) && afkpet_rarity in md.boost_pets[afkpet]) {
+        if ((afk_toggle || clock_override) && md.has_data_tag(minion, md.boost_pets[afkpet]["affects"]) && afkpet_rarity in md.boost_pets[afkpet]) {
             speed_boost += md.boost_pets[afkpet][afkpet_rarity][0] + afkpet_lvl * md.boost_pets[afkpet][afkpet_rarity][1];
         };
         return speed_boost;
@@ -982,19 +990,19 @@ class Calculator {
     
     get_drop_multiplier(minion, minion_fuel_id, upgrade_ids, afk_toggle, setup_data) {
         let drop_multiplier = 1;
-        if (afk_toggle && setup_data["player_harvests"] && !(["Fishing", "Pumpkin", "Melon"].includes(minion))) {
-            if (["Zombie", "Revenant", "Voidling", "Inferno", "Vampire", "Skeleton", "Creeper", "Spider", "Tarantula", "Cave Spider", "Blaze", "Magma Cube", "Enderman", "Ghast", "Slime", "Cow", "Pig", "Chicken", "Sheep", "Rabbit"].includes(minion)) {
+        if (afk_toggle && setup_data["player_harvests"] && !(["FISHING_MINION", "PUMPKIN_MINION", "MELON_MINION"].includes(minion))) {
+            if (md.has_data_tag(minion, "mob_minion")) {
                 drop_multiplier *= 1 + 15 * setup_data["player_looting"] / 100;
             };
             return drop_multiplier;
         };
-        drop_multiplier *= md.itemList[minion_fuel_id]["drop_multiplier"];
-        drop_multiplier *= md.itemList[upgrade_ids[0]]["drop_multiplier"];
+        drop_multiplier *= md.calculator_data[minion_fuel_id]["drop_multiplier"];
+        drop_multiplier *= md.calculator_data[upgrade_ids[0]]["drop_multiplier"];
         if (afk_toggle && drop_multiplier > 1) {
             // drop multiplier greater than 1 is rounded down while online
             drop_multiplier = Math.floor(drop_multiplier);
         };
-        drop_multiplier *= md.itemList[upgrade_ids[1]]["drop_multiplier"];
+        drop_multiplier *= md.calculator_data[upgrade_ids[1]]["drop_multiplier"];
         if (afk_toggle && drop_multiplier > 1) {
             drop_multiplier = Math.floor(drop_multiplier);
         };
@@ -1006,34 +1014,34 @@ class Calculator {
     
     get_actions_per_harvest(minion, upgrade_ids, afk_toggle, setup_data, setup_notes) {
         let actions_per_harvest = 2;
-        if (minion === "Fishing") {
+        if (minion === "FISHING_MINION") {
             // only has harvests actions
             actions_per_harvest = 1;
         };
         if (afk_toggle) {
-            if (["Pumpkin", "Melon"].includes(minion)) {
+            if (["PUMPKIN_MINION", "MELON_MINION"].includes(minion)) {
                 // pumpkins and melons are forced to regrow for minion to harvest
                 actions_per_harvest = 1;
             };
             if (setup_data["player_harvests"]) {
-                if (["Fishing", "Pumpkin", "Melon"].includes(minion)) {
+                if (["FISHING_MINION", "PUMPKIN_MINION", "MELON_MINION"].includes(minion)) {
                     setup_notes["Player Harvests"] = "Player Harvesting does not work with this minion";
                 } else {
                     actions_per_harvest = 1;
-                    if (minion === "Gravel") {
+                    if (minion === "GRAVEL_MINION") {
                         upgrade_ids.push("FLINT_SHOVEL");
                         setup_notes["Player Tools"] = "Assuming Player is using Flint Shovel";
                     };
-                    if (minion === "Ice") {
+                    if (minion === "ICE_MINION") {
                         setup_notes["Player Tools"] = "Assuming Player is using Silk Touch";
                     };
                 };
             } else if (setup_data["special_layout"]) {
-                if (["Cobblestone", "Mycelium", "Ice"].includes(minion)) {
+                if (["COBBLESTONE_MINION", "MYCELIUM_MINION", "ICE_MINION"].includes(minion)) {
                     // cobblestone generator, regrowing mycelium, freezing water
                     actions_per_harvest = 1;
                 };
-                if (["Flower", "Sand", "Red Sand", "Gravel"].includes(minion)) {
+                if (["FLOWER_MINION", "SAND_MINION", "RED_SAND_MINION", "GRAVEL_MINION"].includes(minion)) {
                     // harvests through natural means: water flushing, gravity
                     actions_per_harvest = 1;
                     // speedBonus -= 10  # only spawning has 10% action speed reduction, not confirmed yet.
@@ -1044,58 +1052,58 @@ class Calculator {
     };
 
     update_loot_table(minion, minion_fuel_id, upgrades, afk_toggle, setup_data) {
-        if (['Oak', 'Spruce', 'Birch', 'Dark Oak', 'Acacia', 'Jungle'].includes(minion)) {
+        if (md.has_data_tag(minion, "wood_minion")) {
             if (afk_toggle) {
                 // chopped trees have 4 blocks of wood, unknown why offline gives 3
-                md.minionList[minion]["drops"][md.getID[`${minion} Log`]] = 4;
+                md.calculator_data[minion]["drops"][Object.keys(md.calculator_data[minion]["drops"])[0]] = 4;
             } else {
-                md.minionList[minion]["drops"][md.getID[`${minion} Log`]] = 3;
+                md.calculator_data[minion]["drops"][Object.keys(md.calculator_data[minion]["drops"])[0]] = 3;
             };
-        } else if (minion == "Gravel") {
+        } else if (minion == "GRAVEL_MINION") {
             if (afk_toggle) {
                 // vanilla minecraft chance for gravel to become flint
-                md.minionList[minion]["drops"]["GRAVEL"] = 0.9;
-                md.minionList[minion]["drops"]["FLINT"] = 0.1;
+                md.calculator_data[minion]["drops"]["GRAVEL"] = 0.9;
+                md.calculator_data[minion]["drops"]["FLINT"] = 0.1;
             } else {
-                md.minionList[minion]["drops"]["GRAVEL"] = 1;
-                md.minionList[minion]["drops"]["FLINT"] = 0;
+                md.calculator_data[minion]["drops"]["GRAVEL"] = 1;
+                md.calculator_data[minion]["drops"]["FLINT"] = 0;
             };
-        } else if (minion == "Pumpkin") {
+        } else if (minion == "PUMPKIN_MINION") {
             if (afk_toggle) {
                 // it just does this, idk, ask Hypixel
-                md.minionList[minion]["drops"]["PUMPKIN"] = 1;
+                md.calculator_data[minion]["drops"]["PUMPKIN"] = 1;
             } else {
-                md.minionList[minion]["drops"]["PUMPKIN"] = 3;
+                md.calculator_data[minion]["drops"]["PUMPKIN"] = 3;
             };
-        } else if (minion == "Sheep") {
+        } else if (minion == "SHEEP_MINION") {
             if (upgrades.includes("ENCHANTED_SHEARS")) {
-                md.minionList[minion]["drops"]["WOOL"] = 0;
+                md.calculator_data[minion]["drops"]["WOOL"] = 0;
             } else {
-                md.minionList[minion]["drops"]["WOOL"] = 1;
+                md.calculator_data[minion]["drops"]["WOOL"] = 1;
             };
-        } else if (minion == "Flower") {
+        } else if (minion == "FLOWER_MINION") {
             if (minion_fuel_id == "THORNY_VINES") {
-                md.minionList[minion]["drops"] = { "WILD_ROSE": 2 };
+                md.calculator_data[minion]["drops"] = { "WILD_ROSE": 2 };
             } else if (afk_toggle && setup_data["special_layout"]) {
                 // tall flowers blocked by low ceiling
-                md.minionList[minion]["drops"] = { "YELLOW_FLOWER": 0.35, "RED_ROSE": 0.15, "RED_ROSE:1": 0.5 / 8, "RED_ROSE:2": 0.5 / 8, "RED_ROSE:3": 0.5 / 8, "RED_ROSE:4": 0.5 / 8, "RED_ROSE:5": 0.5 / 8, "RED_ROSE:6": 0.5 / 8, "RED_ROSE:7": 0.5 / 8, "RED_ROSE:8": 0.5 / 8 };
+                md.calculator_data[minion]["drops"] = { "YELLOW_FLOWER": 0.35, "RED_ROSE": 0.15, "RED_ROSE:1": 0.5 / 8, "RED_ROSE:2": 0.5 / 8, "RED_ROSE:3": 0.5 / 8, "RED_ROSE:4": 0.5 / 8, "RED_ROSE:5": 0.5 / 8, "RED_ROSE:6": 0.5 / 8, "RED_ROSE:7": 0.5 / 8, "RED_ROSE:8": 0.5 / 8 };
             } else {
-                md.minionList[minion]["drops"] = { "YELLOW_FLOWER": 0.35, "RED_ROSE": 0.15, "RED_ROSE:1": 0.5 / 11, "RED_ROSE:2": 0.5 / 11, "RED_ROSE:3": 0.5 / 11, "RED_ROSE:4": 0.5 / 11, "RED_ROSE:5": 0.5 / 11, "RED_ROSE:6": 0.5 / 11, "RED_ROSE:7": 0.5 / 11, "RED_ROSE:8": 0.5 / 11, "DOUBLE_PLANT:1": 0.5 / 11, "DOUBLE_PLANT:4": 0.5 / 11, "DOUBLE_PLANT:5": 0.5 / 11 };
+                md.calculator_data[minion]["drops"] = { "YELLOW_FLOWER": 0.35, "RED_ROSE": 0.15, "RED_ROSE:1": 0.5 / 11, "RED_ROSE:2": 0.5 / 11, "RED_ROSE:3": 0.5 / 11, "RED_ROSE:4": 0.5 / 11, "RED_ROSE:5": 0.5 / 11, "RED_ROSE:6": 0.5 / 11, "RED_ROSE:7": 0.5 / 11, "RED_ROSE:8": 0.5 / 11, "DOUBLE_PLANT:1": 0.5 / 11, "DOUBLE_PLANT:4": 0.5 / 11, "DOUBLE_PLANT:5": 0.5 / 11 };
             };
-        } else if (minion == "Sunflower") {
+        } else if (minion == "SUNFLOWER_MINION") {
             if (minion_fuel_id == "DAYSWITCH") {
-                md.minionList[minion]["drops"] = { "DOUBLE_PLANT": 2 };
+                md.calculator_data[minion]["drops"] = { "DOUBLE_PLANT": 2 };
             } else if (minion_fuel_id == "NIGHTSWITCH") {
-                md.minionList[minion]["drops"] = { "MOONFLOWER": 2 };
+                md.calculator_data[minion]["drops"] = { "MOONFLOWER": 2 };
             } else {
-                md.minionList[minion]["drops"] = { "DOUBLE_PLANT": 1, "MOONFLOWER": 1 };
+                md.calculator_data[minion]["drops"] = { "DOUBLE_PLANT": 1, "MOONFLOWER": 1 };
             };
         };
         return;
     };
 
     get_seconds_per_action(minion, minion_tier, minion_fuel_id, speed_boost, setup_data) {
-        let base_speed = md.minionList[minion]["speed"][minion_tier];
+        let base_speed = md.calculator_data[minion]["speed"][minion_tier];
         let secondsPaction = base_speed / (1 + speed_boost / 100);
         if (minion_fuel_id == "INFERNO_FUEL") {
             secondsPaction /= 1 + md.inferno_fuel_data["grades"][setup_data["inferno_grade"]];
@@ -1136,15 +1144,15 @@ class Calculator {
         let spreading_info = {};
         let replace_info = {};
         for (const upgrade of upgrade_ids) {
-            let upgrade_type = md.itemList[upgrade]["upgrade_special"]["type"];
+            let upgrade_type = md.calculator_data[upgrade]["upgrade_special"]["type"];
             if (upgrade_type.includes("spreading")) {
-                for (let [item, amount] of Object.entries(md.itemList[upgrade]["upgrade_special"]["items"])) {
+                for (let [item, amount] of Object.entries(md.calculator_data[upgrade]["upgrade_special"]["items"])) {
                     spreading_info[item] = amount;
                     drops_list[item] = 0;
                 };
             };
             if (upgrade_type.includes("replace")) {
-                Object.assign(replace_info, md.itemList[upgrade]["upgrade_special"]["replacement_list"]);
+                Object.assign(replace_info, md.calculator_data[upgrade]["upgrade_special"]["replacement_list"]);
             };
         };
         return [spreading_info, replace_info];
@@ -1167,7 +1175,7 @@ class Calculator {
     };
 
     get_base_drops(drops_list, spreading_info, replace_info, minion, harvests_per_time, drop_multiplier) {
-        for (let [item, amount] of Object.entries(md.minionList[minion]["drops"])) {
+        for (let [item, amount] of Object.entries(md.calculator_data[minion]["drops"])) {
             this.add_drops(item, harvests_per_time * amount * drop_multiplier, drops_list, spreading_info, replace_info);
         };
         return;
@@ -1175,19 +1183,19 @@ class Calculator {
 
     get_upgrade_drops(drops_list, spreading_info, minion, minion_tier, drop_multiplier, upgrade_ids, harvests_per_time, afk_toggle, empty_time_seconds, seconds_per_action) {
         for (const upgrade of upgrade_ids) {
-            let upgrade_type = md.itemList[upgrade]["upgrade_special"]["type"];
+            let upgrade_type = md.calculator_data[upgrade]["upgrade_special"]["type"];
             let specific_multiplier = 1;
             let effective_cooldown;
             if (upgrade_type == "add") {
                 // adding upgrades are like Corrupt Soils
                 if (afk_toggle) {
                     if ("CORRUPT_SOIL" == upgrade) {
-                        if ("afkcorrupt" in md.minionList[minion]) {
+                        if ("afkcorrupt" in md.calculator_data[minion]) {
                             // Certain mob minions get more corrupt drops when afking
                             // It is not a constant multiplier, it is equivalent in chance to the main drops of the minion
-                            specific_multiplier = md.minionList[minion]["afkcorrupt"];
+                            specific_multiplier = md.calculator_data[minion]["afkcorrupt"];
                         };
-                        if (minion == "Chicken" && !(upgrade_ids.includes("ENCHANTED_EGG"))) {
+                        if (minion == "CHICKEN_MINION" && !(upgrade_ids.includes("ENCHANTED_EGG"))) {
                             // Online Chicken minion without Enchanted Egg does not make corrupt drops
                             specific_multiplier = 0;
                         };
@@ -1197,11 +1205,11 @@ class Calculator {
                         // the egg on spawn is affected by drop multipliers and spreadings
                         this.add_drops("EGG", harvests_per_time * drop_multiplier, drops_list, spreading_info);
                     };
-                    for (let [item, amount] of Object.entries(md.itemList[upgrade]["upgrade_special"]["items"])) {
+                    for (let [item, amount] of Object.entries(md.calculator_data[upgrade]["upgrade_special"]["items"])) {
                         this.add_drops(item, harvests_per_time * amount * specific_multiplier, drops_list);
                     };
                 } else {
-                    for (let [item, amount] of Object.entries(md.itemList[upgrade]["upgrade_special"]["items"])) {
+                    for (let [item, amount] of Object.entries(md.calculator_data[upgrade]["upgrade_special"]["items"])) {
                         this.add_drops(item, harvests_per_time * amount * specific_multiplier, drops_list, spreading_info);
                     };
                 };
@@ -1212,14 +1220,14 @@ class Calculator {
                     continue;  // Soulflow Engine overrides Lesser Soulflow Engine while online
                 };
                 if (afk_toggle) {
-                    effective_cooldown = 2 * seconds_per_action * (1 + Math.floor(Math.ceil(md.itemList[upgrade]["upgrade_special"]["cooldown"] / seconds_per_action) / 2));
+                    effective_cooldown = 2 * seconds_per_action * (1 + Math.floor(Math.ceil(md.calculator_data[upgrade]["upgrade_special"]["cooldown"] / seconds_per_action) / 2));
                 } else {
-                    effective_cooldown = md.itemList[upgrade]["upgrade_special"]["offline_cooldown"];
+                    effective_cooldown = md.calculator_data[upgrade]["upgrade_special"]["offline_cooldown"];
                 };
-                if ("SOULFLOW_ENGINE" == upgrade && minion == "Voidling") {
+                if ("SOULFLOW_ENGINE" == upgrade && minion == "VOIDLING_MINION") {
                     specific_multiplier = 1 + 0.03 * minion_tier;  // correct most likely, needs testing
                 };
-                for (let [cooldown_item, cooldown_amount] of Object.entries(md.itemList[upgrade]["upgrade_special"]["items"])) {
+                for (let [cooldown_item, cooldown_amount] of Object.entries(md.calculator_data[upgrade]["upgrade_special"]["items"])) {
                     this.add_drops(cooldown_item, specific_multiplier * cooldown_amount * empty_time_seconds / effective_cooldown, drops_list);
                 };
             };
@@ -1255,7 +1263,7 @@ class Calculator {
                 };
                 this.add_drops(item, multiplier * chance * harvests_per_time, drops_list);
             };
-            this.add_drops("HYPERGOLIC_IONIZED_CERAMICS", empty_time_seconds / md.itemList[minion_fuel]["fuel_duration"], drops_list);
+            this.add_drops("HYPERGOLIC_IONIZED_CERAMICS", empty_time_seconds / md.calculator_data[minion_fuel]["fuel_duration"], drops_list);
         };
         
         // calculate fuel cost
@@ -1269,7 +1277,7 @@ class Calculator {
         for (let [component_ID, amount] of Object.entries(infernofuel_components)) {
             costPerInfernofuel += amount * this.get_price(component_ID, setup_data, "buy", "bazaar");
         };
-        md.itemList["INFERNO_FUEL"]["prices"]["custom"] = costPerInfernofuel;
+        md.calculator_data["INFERNO_FUEL"]["prices"]["custom"] = costPerInfernofuel;
         // the fuel cost is put into the item data to be used later in the general fuel cost calculator
         return;
     };
@@ -1307,17 +1315,17 @@ class Calculator {
     get_compacted_drops(drops_list, upgrades) {
         let compacted_items = [];
         for (let upgrade of upgrades) {
-            if (md.itemList[upgrade]["upgrade_special"]["type"].includes("compact")) {
-                compacted_items.push(...this.apply_compactor(drops_list, md.itemList[upgrade]["upgrade_special"]["compacting_list"]));
+            if (md.calculator_data[upgrade]["upgrade_special"]["type"].includes("compact")) {
+                compacted_items.push(...this.apply_compactor(drops_list, md.calculator_data[upgrade]["upgrade_special"]["compacting_list"]));
             };
         };
         return compacted_items;
     }
 
     get_available_storage(minion, minion_tier, setup_data) {
-        let available_storage = md.itemList[setup_data["chest"]]["storage_slots"];
-        if ("storage" in md.minionList[minion] && minion_tier in md.minionList[minion]["storage"]) {
-            available_storage += md.minionList[minion]["storage"][minion_tier];
+        let available_storage = md.calculator_data[setup_data["chest"]]["storage_slots"];
+        if ("storage" in md.calculator_data[minion] && minion_tier in md.calculator_data[minion]["storage"]) {
+            available_storage += md.calculator_data[minion]["storage"][minion_tier];
         } else {
             available_storage += md.standard_storage[minion_tier];
         };
@@ -1346,7 +1354,7 @@ class Calculator {
         } else if (minion_sell_loc == "Best (NPC/Bazaar)") {
             sellto = "best";
         } else if (minion_sell_loc == "Hopper") {
-            hopper_multiplier = md.itemList[setup_data["hopper"]]["hopper_selling_rate"];
+            hopper_multiplier = md.calculator_data[setup_data["hopper"]]["hopper_selling_rate"];
         };
         return [sellto, hopper_multiplier];
     };
@@ -1377,7 +1385,7 @@ class Calculator {
     get_skill_xp(afk_toggle, mayor, drops_list, setup_data) {
         let skill_xp = {};
         for (let [itemtype, amount] of Object.entries(drops_list)) {
-            let [xptype, value] = Object.entries(md.itemList[itemtype]["xp"])[0];
+            let [xptype, value] = Object.entries(md.calculator_data[itemtype]["xp"])[0];
             if (value == 0) {
                 continue;
             };
@@ -1411,7 +1419,7 @@ class Calculator {
             let cost = this.get_price(item, setup_data, "sell", per_item_sell_location[item]) * per_compact;
             let compact_cost = this.get_price(compact_item, setup_data, "sell", per_item_sell_location[compact_item]) * compact_amount;
             if (cost - compact_cost > this.compact_tolerance.get()) {
-                over_compacting.push(md.itemList[item]['display']);
+                over_compacting.push(md.calculator_data[item]['display']);
             };
         };
         if (this.gui.get_length(over_compacting) != 0) {
@@ -1434,8 +1442,8 @@ class Calculator {
         };
         let petxpbonus = (1 + setup_data["taming"] / 100) * (1 + setup_data["beastmaster"] / 100) * non_matching;
         let pet_item;
-        if ([xp_type, "all"].includes(md.itemList[setup_data["petxpboost"]]["exp_boost_type"])) {
-            pet_item = 1 + md.itemList[setup_data["petxpboost"]]["exp_boost_amount"] / 100;
+        if ([xp_type, "all"].includes(md.calculator_data[setup_data["petxpboost"]]["exp_boost_type"])) {
+            pet_item = 1 + md.calculator_data[setup_data["petxpboost"]]["exp_boost_amount"] / 100;
         } else {
             pet_item = 1;
         };
@@ -1549,10 +1557,10 @@ class Calculator {
                 };
             };
             if (pet_slot == "levelingpet" && setup_data["petxpboost"] != "NONE") {
-                pet_profit -= pets_levelled * (md.pet_item_scrub_cost[md.itemList[setup_data["petxpboost"]]["rarity"]] + super_scrubber_price);
+                pet_profit -= pets_levelled * (md.pet_item_scrub_cost[md.calculator_data[setup_data["petxpboost"]]["rarity"]] + super_scrubber_price);
             };
             if (pet_slot != "levelingpet" && setup_data["expshareitem"]) {
-                pet_profit -= pets_levelled * (md.pet_item_scrub_cost[md.itemList["PET_ITEM_EXP_SHARE"]["rarity"]] + super_scrubber_price);
+                pet_profit -= pets_levelled * (md.pet_item_scrub_cost[md.calculator_data["PET_ITEM_EXP_SHARE"]["rarity"]] + super_scrubber_price);
             };
         };
         return [pet_profit, setup_pets, pet_prices];
@@ -1569,11 +1577,11 @@ class Calculator {
                 beacon_fuel_ID = "POWER_CRYSTAL";
             };
             let cost_per_crystal = this.get_price(beacon_fuel_ID, setup_data, "buy", "bazaar");
-            fuel_cost += empty_time_seconds * cost_per_crystal / md.itemList[beacon_fuel_ID]["fuel_duration"] * Number(!(setup_data["B_constant"]));
+            fuel_cost += empty_time_seconds * cost_per_crystal / md.calculator_data[beacon_fuel_ID]["fuel_duration"] * Number(!(setup_data["B_constant"]));
         };
-        if (md.itemList[minion_fuel]["fuel_duration"] != -1) {
+        if (md.calculator_data[minion_fuel]["fuel_duration"] != -1) {
             let cost_per_fuel = this.get_price(minion_fuel, setup_data, "buy", "bazaar");
-            needed_fuel = minion_amount * empty_time_seconds / md.itemList[minion_fuel]["fuel_duration"];
+            needed_fuel = minion_amount * empty_time_seconds / md.calculator_data[minion_fuel]["fuel_duration"];
             fuel_cost += needed_fuel * cost_per_fuel;
         };
         return [fuel_cost, needed_fuel];
@@ -1636,7 +1644,7 @@ class Calculator {
         cost_per_part["minion"] = tiered_coin_cost[minion_tier];
 
         // Infinite fuel cost
-        if (minion_fuel != "NONE" && md.itemList[minion_fuel]["fuel_duration"] == -1) {
+        if (minion_fuel != "NONE" && md.calculator_data[minion_fuel]["fuel_duration"] == -1) {
             cost_per_part["fuel"] = this.get_price(minion_fuel, setup_data, "buy", "bazaar");
         };
 
@@ -1742,7 +1750,7 @@ class Calculator {
 
             // auto update bazaar
             if (this.API_auto_update.get()) {
-                await this.update_prices(false);
+                await this.update_prices(false, inGUI);
             };
         };
 
@@ -1847,8 +1855,8 @@ class Calculator {
         let setup_ID = this.construct_id(setup_data);
 
         // Get minion notes
-        if ("notes" in md.minionList[minion_type]) {
-            Object.assign(setup_notes, md.minionList[minion_type]["notes"]);
+        if ("notes" in md.calculator_data[minion_type]) {
+            Object.assign(setup_notes, md.calculator_data[minion_type]["notes"]);
         };
 
         // collect outputs
@@ -1921,32 +1929,34 @@ class Calculator {
             dict_item_data[item_data["id"]] = item_data;
         };
 
-        for (let item_id in md.itemList) {
+        for (let item_id in md.calculator_data) {
+            if (!("prices" in md.calculator_data[item_id])) {
+                continue;
+            };
             if (item_id in dict_item_data && "npc_sell_price" in dict_item_data[item_id]) {
-                md.itemList[item_id]["prices"]["npc"] = dict_item_data[item_id]["npc_sell_price"];
-            } else if (!("npc" in md.itemList[item_id]["prices"])) {
-                md.itemList[item_id]["prices"]["npc"] = 0;
+                md.calculator_data[item_id]["prices"]["npc"] = dict_item_data[item_id]["npc_sell_price"];
+            } else if (!("npc" in md.calculator_data[item_id]["prices"])) {
+                md.calculator_data[item_id]["prices"]["npc"] = 0;
             };
             if (item_id in raw_bazaar_data["products"]) {
                 this.bazaar_items.push(item_id);
-            } else if ("recipe" in md.itemList[item_id]) {
+            } else if ("recipe" in md.calculator_data[item_id]) {
                 this.recipe_items.push(item_id);
-            } else if ("AH" in md.itemList[item_id] && md.itemList[item_id]["AH"]) {
+            } else if ("AH" in md.calculator_data[item_id] && md.calculator_data[item_id]["AH"]) {
                 this.AH_items.push(item_id);
             };
         };
-        await this.update_prices(false);
+        await this.update_prices(false, true);
     };
 
     async call_bazaar() {
+        this.bazaar_update_txt.set("Loading...");
         let raw_bazaar_data = await this.gui.call_API("https://api.hypixel.net/v2/skyblock/bazaar", "Hypixel Bazaar API");
         if (!("success" in raw_bazaar_data) || raw_bazaar_data["success"] === false) {
             console.log("ERROR: Hypixel Bazaar API call was unsuccessful");
             return;
         };
         this.API_timer = raw_bazaar_data["lastUpdated"];
-        this.bazaar_update_txt.set(this.gui.format_date(this.API_timer));
-        // document.getElementById("bazaar_update_txt").innerHTML = this.variables["bazaar_update_txt"]["var"];
         let top_percent = 0.1;
         for (const item_id of this.bazaar_items) {
             if (!(item_id in raw_bazaar_data["products"])) {
@@ -1955,8 +1965,8 @@ class Calculator {
             for (let action of ["buy", "sell"]) {
                 let top_amount = top_percent * raw_bazaar_data["products"][item_id][`${action}_summary`].map(x => x["amount"]).reduce((partialSum, a) => partialSum + a, 0);
                 if (top_amount === 0) {
-                    md.itemList[item_id]["prices"][`${action}Price`] = 0;
-                    if (!("npc" in md.itemList[item_id]["prices"])) {
+                    md.calculator_data[item_id]["prices"][`${action}Price`] = 0;
+                    if (!("npc" in md.calculator_data[item_id]["prices"])) {
                         console.log(`BAZAAR: no ${action} supply for ${item_id}`);
                     };
                     continue;
@@ -1979,13 +1989,14 @@ class Calculator {
                 let top_percent_avg_price = top_sum / top_amount;
                 let top_price = raw_bazaar_data["products"][item_id][`${action}_summary`][0]["pricePerUnit"];
                 if (top_price / top_percent_avg_price >= 2.5) {
-                    md.itemList[item_id]["prices"][`${action}Price`] = top_price;
+                    md.calculator_data[item_id]["prices"][`${action}Price`] = top_price;
                     console.log(`BAZAAR: bottom heavy ${action} supply for ${item_id}, taking top order price`);
                 } else {
-                    md.itemList[item_id]["prices"][`${action}Price`] = top_percent_avg_price;
+                    md.calculator_data[item_id]["prices"][`${action}Price`] = top_percent_avg_price;
                 };
             };
         };
+        this.bazaar_update_txt.set(this.gui.format_date(this.API_timer));
     };
 
     async call_auction_house(item_id) {
@@ -1994,29 +2005,29 @@ class Calculator {
     };
 
     update_recipe_price(item_id) {
-        if (!(item_id in md.itemList)) {
-            console.log(`ERROR: ${item_id} not in md.itemList`);
+        if (!(item_id in md.calculator_data)) {
+            console.log(`ERROR: ${item_id} not in calculator data`);
             return;
         };
-        if (!("recipe" in md.itemList[item_id])) {
+        if (!("recipe" in md.calculator_data[item_id])) {
             console.log(`ERROR: ${item_id} is not a recipe item`);
             return;
         };
-        md.itemList[item_id]["prices"]["buyPrice"] = 0;
-        md.itemList[item_id]["prices"]["sellPrice"] = 0;
-        for (let [material_id, amount] of Object.entries(md.itemList[item_id]["recipe"])) {
-            if ("AH" in md.itemList[material_id]) {
-                md.itemList[item_id]["prices"]["buyPrice"] += amount * md.itemList[material_id]["prices"]["custom"];
-                md.itemList[item_id]["prices"]["sellPrice"] += amount * md.itemList[material_id]["prices"]["custom"];
+        md.calculator_data[item_id]["prices"]["buyPrice"] = 0;
+        md.calculator_data[item_id]["prices"]["sellPrice"] = 0;
+        for (let [material_id, amount] of Object.entries(md.calculator_data[item_id]["recipe"])) {
+            if ("AH" in md.calculator_data[material_id]) {
+                md.calculator_data[item_id]["prices"]["buyPrice"] += amount * md.calculator_data[material_id]["prices"]["custom"];
+                md.calculator_data[item_id]["prices"]["sellPrice"] += amount * md.calculator_data[material_id]["prices"]["custom"];
                 continue;
             };
-            md.itemList[item_id]["prices"]["buyPrice"] += amount * md.itemList[material_id]["prices"]["buyPrice"];
-            md.itemList[item_id]["prices"]["sellPrice"] += amount * md.itemList[material_id]["prices"]["sellPrice"];
+            md.calculator_data[item_id]["prices"]["buyPrice"] += amount * md.calculator_data[material_id]["prices"]["buyPrice"];
+            md.calculator_data[item_id]["prices"]["sellPrice"] += amount * md.calculator_data[material_id]["prices"]["sellPrice"];
         };
         return;
     };
 
-    async update_prices(cooldown_warning=true) {
+    async update_prices(cooldown_warning=true, in_gui=true) {
         if (Date.now() - this.API_timer < this.API_cooldown.get() * 1000 && this.API_timer !== 0) {
             if (cooldown_warning) {
                 console.log("API: API is on cooldown");
@@ -2024,14 +2035,22 @@ class Calculator {
             return;
         };
         console.log("API: Updating Bazaar prices");
+        let background_color_storage;
+        if (in_gui) {
+            background_color_storage = this.statusC.style.background;
+            this.statusC.style.background = "aqua";
+        };
         await this.call_bazaar();
         console.log("API: Updating Auction House prices");
         for (const item_id of this.AH_items) {
-            md.itemList[item_id]["prices"]["custom"] = await this.call_auction_house(item_id);
+            md.calculator_data[item_id]["prices"]["custom"] = await this.call_auction_house(item_id);
         };
         console.log("API: Updating Recipe prices");
         for (const item_id of this.recipe_items) {
             this.update_recipe_price(item_id);
+        };
+        if (in_gui) {
+            this.statusC.style.background = background_color_storage;
         };
         return;
     };
@@ -2048,7 +2067,7 @@ class Calculator {
                 };
                 let format_function = x => x;
                 if (this.var_dict[var_key].has_tag("item_ID_to_display")) {
-                    format_function = x => md.itemList[x]["display"];
+                    format_function = x => md.calculator_data[x]["display"];
                 };
                 this.var_dict[var_key].update_listbox(format_function);
             };

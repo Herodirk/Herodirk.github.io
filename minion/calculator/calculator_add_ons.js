@@ -8,7 +8,7 @@ class Calc_add_ons {
         let setup_data = calculator.gui.get_from_GUI(["minion", "miniontier", "amount", "extracost"]);
         const materials = md.minionCostSum(setup_data["minion"], setup_data["miniontier"]);
         const extra_costs_string = setup_data["extracost"]
-        let materials_string = Object.keys(materials).map(material => `${materials[material] * setup_data["amount"]} ${md.itemList[material]["display"]}`).join(", ");
+        let materials_string = Object.keys(materials).map(material => `${materials[material] * setup_data["amount"]} ${md.calculator_data[material]["display"]}`).join(", ");
         if (calculator.gui.get_length(extra_costs_string) !== 0) {
             materials_string += ", " + extra_costs_string;
         };
@@ -43,10 +43,9 @@ class Calc_add_ons {
         let setup_data = calculator.gui.get_from_GUI(calculator.ID_order);
         let calculated_setup_profits = {};
         let calculated_setup_costs = {};
-        const loop_minion_options = Object.keys(md.minionList);
-        const loop_minion_skip = ["Custom"];
-        const loop_minion_smelting = ["Iron", "Gold", "Cactus"];
-        const loop_minion_combat = ["Zombie", "Revenant", "Voidling", "Inferno", "Vampire", "Skeleton", "Creeper", "Spider", "Tarantula", "Cave Spider", "Blaze", "Magma Cube", "Enderman", "Ghast", "Slime", "Cow", "Pig", "Chicken", "Sheep", "Rabbit"];
+        const loop_minion_options = Object.values(md.minion_options);
+        const loop_minion_skip = ["CUSTOM_MINION"];
+        const loop_minion_smelting = ["IRON_MINION", "GOLD_MINION", "CACTUS_MINION"];
         let super_compactor = false;
         if (["SUPER_COMPACTOR_3000", "DWARVEN_COMPACTOR"].includes(setup_data["upgrade1"])) {
             super_compactor = true;
@@ -62,11 +61,11 @@ class Calc_add_ons {
             if (loop_minion_skip.includes(loop_minion)) {
                 continue;
             };
-            if (!(loop_minion_combat.includes(loop_minion)) && upgrades.includes("CORRUPT_SOIL")) {
+            if (upgrades.includes("CORRUPT_SOIL") && !(md.has_data_tag(loop_minion, "mob_minion"))) {
                 continue;
             };
             setup_data["minion"] = loop_minion;
-            setup_data["miniontier"] = Number(Object.keys(md.minionList[loop_minion]["speed"]).slice(-1));
+            setup_data["miniontier"] = Number(Object.keys(md.calculator_data[loop_minion]["speed"]).slice(-1));
             if (super_compactor) {
                 if (loop_minion_smelting.includes(loop_minion)) {
                     setup_data["upgrade1"] = "DWARVEN_COMPACTOR";
@@ -84,7 +83,7 @@ class Calc_add_ons {
         let output_string = "Minion : profit , setup cost\n";
         for (let i = 1; i <= 10; i++) {
             let top_minion = Object.keys(calculated_setup_profits).reduce((a, b) => calculated_setup_profits[a] > calculated_setup_profits[b] ? a : b);
-            output_string += top_minion + " : " + calculator.gui.reduced_number(calculated_setup_profits[top_minion]) + " , " + calculator.gui.reduced_number(calculated_setup_costs[top_minion]) + "\n";
+            output_string += md.calculator_data[top_minion]["display"] + " : " + calculator.gui.reduced_number(calculated_setup_profits[top_minion]) + " , " + calculator.gui.reduced_number(calculated_setup_costs[top_minion]) + "\n";
             delete calculated_setup_profits[top_minion];
         };
         console.log(output_string);
@@ -124,7 +123,7 @@ class Calc_add_ons {
         let calculated_setup_costs = {};
     
         let cost_filter = await this.get_inferno_cost_filter(calculator);
-        setup_data["minion"] = "Inferno"
+        setup_data["minion"] = "INFERNO_MINION"
         setup_data["fuel"] = "INFERNO_FUEL"
         setup_data["chest"] = "XXLARGE_ENCHANTED_CHEST"
         setup_data["rising_celsius_override"] = true
