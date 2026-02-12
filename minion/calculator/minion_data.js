@@ -3223,7 +3223,7 @@ class minion_data {
         if (typeof tag === "string" && this.calculator_data[data_ID]["tags"].includes(tag)) {
             return true;
         };
-        if (tag instanceof Array) {
+        if (!(tag instanceof Array)) {
             return false;
         };
         for (const search_tag of tag) {
