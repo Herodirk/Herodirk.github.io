@@ -160,7 +160,7 @@ class Calculator {
         this.foraging_wisdom = new Hvar({"huim": this.gui, "key": "foraging_wisdom", "vtype": "storage", "dtype": "number", "display": "Foraging", "initial": 0.0});
         this.alchemy_wisdom = new Hvar({"huim": this.gui, "key": "alchemy_wisdom", "vtype": "storage", "dtype": "number", "display": "Alchemy", "initial": 0.0});
         this.wisdom = new Hvar({"huim": this.gui, "key": "wisdom", "vtype": "output", "dtype": "object", "display": "Wisdom", "frame": "inputs_player_grid", "widget_width": 20, "widget_height": 6, "initial": {'combat': this.combat_wisdom, 'mining': this.mining_wisdom, 'farming': this.farming_wisdom, 'fishing': this.fishing_wisdom, 'foraging': this.foraging_wisdom, 'alchemy': this.alchemy_wisdom}});
-        this.mayor = new Hvar({"huim": this.gui, "key": "mayor", "vtype": "input", "dtype": "string", "display": "Mayor", "frame": "inputs_player_grid", "initial": "None", "options": ['None', 'Aatrox', 'Cole', 'Diana', 'Diaz', 'Finnegan', 'Foxy', 'Marina', 'Paul', 'Jerry', 'Derpy', 'Scorpius', 'Aura'], "command": () => this.multiswitch("mayors")});
+        this.mayor = new Hvar({"huim": this.gui, "key": "mayor", "vtype": "input", "dtype": "string", "display": "Mayor", "frame": "inputs_player_grid", "initial": "None", "options": md.mayor_options, "command": () => this.multiswitch("mayors")});
         this.levelingpet = new Hvar({"huim": this.gui, "key": "levelingpet", "vtype": "input", "dtype": "string", "display": "Leveling pet", "frame": "inputs_player_grid", "initial": "None", "options": Object.keys(md.all_pets), "command": () => this.multiswitch("pet_leveling")});
         this.taming = new Hvar({"huim": this.gui, "key": "taming", "vtype": "input", "dtype": "number", "display": "Taming", "frame": "inputs_player_grid", "initial": 0.0});
         this.falcon_attribute = new Hvar({"huim": this.gui, "key": "falcon_attribute", "vtype": "input", "dtype": "number", "display": "Battle Experience", "frame": "inputs_player_grid", "initial": 0, "options": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]});
@@ -549,11 +549,15 @@ class Calculator {
                     continue;
                 };
             } else if (["expsharepetslot2", "expsharepetslot3"].includes(var_key)) {
-                if (this.mayor.get() !== "Diana") {
+                if (this.mayor.get(false) !== "Diana") {
                     continue;
                 };
             } else if (["inferno_grade", "inferno_distillate", "inferno_eyedrops"].includes(var_key)) {
                 if (this.fuel.get(false) !== "Inferno Minion Fuel") {
+                    continue;
+                };
+            } else if (var_key === "rising_celsius_override") {
+                if (this.minion.get(false) !== "Inferno") {
                     continue;
                 };
             };
@@ -662,7 +666,7 @@ class Calculator {
                 return null;
             };
         } else if (["expsharepetslot2", "expsharepetslot3"].includes(var_key)) {
-            if (this.mayor.get() !== "Diana") {
+            if (this.mayor.get(false) !== "Diana") {
                 return null;
             };
         } else if (["inferno_grade", "inferno_distillate", "inferno_eyedrops"].includes(var_key)) {  // special case: fuel attributes only relevant for Inferno Minion Fuel
@@ -916,12 +920,7 @@ class Calculator {
                 location = md.bazaar_sell_types[setup_data["bazaar_sell_type"]];
                 if (setup_data["bazaar_taxes"]) {
                     let bazaar_tax = 0.0125 - 0.00125 * setup_data["bazaar_flipper"];
-                    if (setup_data["mayor"] === "Derpy") {
-                        bazaar_tax *= 4;
-                    };
-                    if (setup_data["mayor"] === "Aura") {
-                        bazaar_tax *= 2;
-                    };
+                    bazaar_tax *= md.calculator_data[setup_data["mayor"]]["tax_multiplier"]
                     multiplier = 1 - bazaar_tax;
                 };
             };
@@ -954,9 +953,6 @@ class Calculator {
         speed_boost += md.calculator_data[upgrade_ids[0]]["speed_boost"] + md.calculator_data[upgrade_ids[1]]["speed_boost"];
         speed_boost += md.calculator_data[setup_data["beacon"]]["speed_boost"] + md.calculator_data["MITHRIL_INFUSION"]["speed_boost"] * setup_data["infusion"];
         speed_boost += md.calculator_data["FREE_WILL"]["speed_boost"] * setup_data["free_will"] + md.calculator_data["POSTCARD"]["speed_boost"] * setup_data["postcard"];
-        if (setup_data["potato_accessory"] !== "NONE" && (afk_toggle || clock_override) && md.has_data_tag(minion, md.calculator_data[setup_data["potato_accessory"]]["affected_minions"])) {
-            speed_boost += md.calculator_data[setup_data["potato_accessory"]]["speed_boost"];
-        };
         if (setup_data["crystal"] !== "NONE") {
             if (md.has_data_tag(minion, md.calculator_data[setup_data["crystal"]]["affected_minions"])) {
                 speed_boost += md.calculator_data[setup_data["crystal"]]["speed_boost"];
@@ -972,16 +968,22 @@ class Calculator {
                 speed_boost += 18 * Math.min(10, setup_data["amount"]);
             };
         };
-        if (setup_data["mayor"] === "Cole" && (afk_toggle || clock_override) && md.has_data_tag(minion, "mining_minion")) {
-            speed_boost += 25;
-        };
         if (minion_fuel_id === "EVERBURNING_FLAME" && md.has_data_tag(minion, md.calculator_data[minion_fuel_id]["upgrade_special"]["affected_minions"])) {
             speed_boost += md.calculator_data[minion_fuel_id]["upgrade_special"]["amount"];
+        };
+        if (!(afk_toggle || clock_override)) {
+            return speed_boost;
+        };
+        if (md.has_data_tag(minion, md.calculator_data[setup_data["mayor"]]["affected_minions"])) {
+            speed_boost += md.calculator_data[setup_data["mayor"]]["speed_boost"];
+        };
+        if (md.has_data_tag(minion, md.calculator_data[setup_data["potato_accessory"]]["affected_minions"])) {
+            speed_boost += md.calculator_data[setup_data["potato_accessory"]]["speed_boost"];
         };
         const afkpet = setup_data["afkpet"];
         const afkpet_rarity = setup_data["afkpet_rarity"];
         const afkpet_lvl = setup_data["afkpet_lvl"];
-        if ((afk_toggle || clock_override) && md.has_data_tag(minion, md.boost_pets[afkpet]["affects"]) && afkpet_rarity in md.boost_pets[afkpet]) {
+        if (md.has_data_tag(minion, md.boost_pets[afkpet]["affected_minions"]) && afkpet_rarity in md.boost_pets[afkpet]) {
             speed_boost += md.boost_pets[afkpet][afkpet_rarity][0] + afkpet_lvl * md.boost_pets[afkpet][afkpet_rarity][1];
         };
         return speed_boost;
@@ -1006,8 +1008,8 @@ class Calculator {
         if (afk_toggle && drop_multiplier > 1) {
             drop_multiplier = Math.floor(drop_multiplier);
         };
-        if (setup_data["mayor"] == "Derpy") {
-            drop_multiplier *= 2;
+        if (md.has_data_tag(minion, md.calculator_data[setup_data["mayor"]]["affected_minions"])) {
+            drop_multiplier *= md.calculator_data[setup_data["mayor"]]["drop_multiplier"];
         };
         return drop_multiplier;
     };
@@ -1394,9 +1396,7 @@ class Calculator {
             };
             skill_xp[xptype] += amount * value * (1 + setup_data[xptype + "_wisdom"] / 100);
         };
-        if (["Derpy", "Aura"].includes(mayor)) {
-            this.gui.deepmultiply(skill_xp, 1.5);
-        };
+        this.gui.deepmultiply(skill_xp, md.calculator_data[mayor]["xp_multiplier"]);
         if (afk_toggle && setup_data["player_harvests"] && "combat" in skill_xp) {
             delete skill_xp["combat"];
         };
@@ -1447,7 +1447,7 @@ class Calculator {
         } else {
             pet_item = 1;
         };
-        if (setup_data["mayor"] === "Diana") {
+        if (setup_data["mayor"] === "MAYOR_DIANA") {
             petxpbonus *= 1.35;
         };
         if (["mining", "fishing"].includes(xp_type)) {
@@ -1492,7 +1492,7 @@ class Calculator {
         };
         let setup_pets = { "levelingpet": { "pet": main_pet, "pet_xp": {}, "levelled_pets": 0.0 } };
         for (const var_key of ["expsharepet", "expsharepetslot2", "expsharepetslot3"]) {
-            if (setup_data[var_key] == "None" || (mayor != "Diana" && ["expsharepetslot2", "expsharepetslot3"].includes(var_key))) {
+            if (setup_data[var_key] == "None" || (mayor != "MAYOR_DIANA" && ["expsharepetslot2", "expsharepetslot3"].includes(var_key))) {
                 continue;
             };
             setup_pets[var_key] = { "pet": setup_data[var_key], "pet_xp": { "exp_share": 0.0 }, "levelled_pets": 0.0 };
@@ -1514,7 +1514,7 @@ class Calculator {
                 main_pet_xp[skill] = amount * pet_xp_boost * xp_boost_pet_item;
             };
         };
-        let exp_share_boost = 0.2 * setup_data["taming"] + 10 * (mayor == "Diana") + setup_data["toucan_attribute"];
+        let exp_share_boost = 0.2 * setup_data["taming"] + 10 * (mayor == "MAYOR_DIANA") + setup_data["toucan_attribute"];
         let exp_share_item = 15 * setup_data["expshareitem"];
         for (let [pet_slot, pet_info] of Object.entries(setup_pets)) {
             if (pet_slot == "levelingpet") {
