@@ -2,7 +2,7 @@ class Calculator {
     constructor() {
         this.edit_vars_output = {};
         this.pet_costs = {
-            "None": {"min": 0, "max": 0}
+            "NONE": {"min": 0, "max": 0}
         };
         this.edit_pet_price_pet = "None";
 
@@ -145,7 +145,7 @@ class Calculator {
         this.free_will = new Hvar({"huim": this.gui, "key": "free_will", "vtype": "input", "dtype": "boolean", "display": "Free Will", "frame": "inputs_minion_grid", "initial": false, "command": this.gui.create_switch_call("free_will", "free_will")});
         this.postcard = new Hvar({"huim": this.gui, "key": "postcard", "vtype": "input", "dtype": "boolean", "display": "Postcard", "frame": "inputs_minion_grid", "initial": false});
         this.afk = new Hvar({"huim": this.gui, "key": "afk", "vtype": "input", "dtype": "boolean", "display": "AFK", "frame": "inputs_player_grid", "initial": false, "command": () => this.multiswitch("afk")});
-        this.afkpet = new Hvar({"huim": this.gui, "key": "afkpet", "vtype": "input", "dtype": "string", "display": "AFK Pet", "frame": "inputs_player_grid", "initial": "None", "options": Object.keys(md.boost_pets)});
+        this.afkpet = new Hvar({"huim": this.gui, "key": "afkpet", "vtype": "input", "dtype": "string", "display": "AFK Pet", "frame": "inputs_player_grid", "initial": "None", "options": md.boosting_pet_options});
         this.afkpet_rarity = new Hvar({"huim": this.gui, "key": "afkpet_rarity", "vtype": "input", "dtype": "string", "display": "AFK Pet Rarity", "frame": "inputs_player_grid", "initial": "Legendary", "options": ['Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'Mythic']});
         this.afkpet_lvl = new Hvar({"huim": this.gui, "key": "afkpet_lvl", "vtype": "input", "dtype": "number", "display": "AFK Pet level", "frame": "inputs_player_grid", "initial": 0.0});
         this.enchanted_clock = new Hvar({"huim": this.gui, "key": "enchanted_clock", "vtype": "input", "dtype": "boolean", "display": "Enchanted Clock", "frame": "inputs_player_grid", "initial": false});
@@ -161,15 +161,15 @@ class Calculator {
         this.alchemy_wisdom = new Hvar({"huim": this.gui, "key": "alchemy_wisdom", "vtype": "storage", "dtype": "number", "display": "Alchemy", "initial": 0.0});
         this.wisdom = new Hvar({"huim": this.gui, "key": "wisdom", "vtype": "output", "dtype": "object", "display": "Wisdom", "frame": "inputs_player_grid", "widget_width": 20, "widget_height": 6, "initial": {'combat': this.combat_wisdom, 'mining': this.mining_wisdom, 'farming': this.farming_wisdom, 'fishing': this.fishing_wisdom, 'foraging': this.foraging_wisdom, 'alchemy': this.alchemy_wisdom}});
         this.mayor = new Hvar({"huim": this.gui, "key": "mayor", "vtype": "input", "dtype": "string", "display": "Mayor", "frame": "inputs_player_grid", "initial": "None", "options": md.mayor_options, "command": () => this.multiswitch("mayors")});
-        this.levelingpet = new Hvar({"huim": this.gui, "key": "levelingpet", "vtype": "input", "dtype": "string", "display": "Leveling pet", "frame": "inputs_player_grid", "initial": "None", "options": Object.keys(md.all_pets), "command": () => this.multiswitch("pet_leveling")});
+        this.levelingpet = new Hvar({"huim": this.gui, "key": "levelingpet", "vtype": "input", "dtype": "string", "display": "Leveling pet", "frame": "inputs_player_grid", "initial": "None", "options": md.pet_options, "command": () => this.multiswitch("pet_leveling")});
         this.taming = new Hvar({"huim": this.gui, "key": "taming", "vtype": "input", "dtype": "number", "display": "Taming", "frame": "inputs_player_grid", "initial": 0.0});
         this.falcon_attribute = new Hvar({"huim": this.gui, "key": "falcon_attribute", "vtype": "input", "dtype": "number", "display": "Battle Experience", "frame": "inputs_player_grid", "initial": 0, "options": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]});
         this.toucan_attribute = new Hvar({"huim": this.gui, "key": "toucan_attribute", "vtype": "input", "dtype": "number", "display": "Why Not More", "frame": "inputs_player_grid", "initial": 0, "options": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]});
         this.petxpboost = new Hvar({"huim": this.gui, "key": "petxpboost", "vtype": "input", "dtype": "string", "display": "Pet XP boost", "frame": "inputs_player_grid", "initial": "None", "options": md.pet_exp_boost_options});
         this.beastmaster = new Hvar({"huim": this.gui, "key": "beastmaster", "vtype": "input", "dtype": "number", "display": "Beastmaster", "frame": "inputs_player_grid", "initial": 0.0});
-        this.expsharepet = new Hvar({"huim": this.gui, "key": "expsharepet", "vtype": "input", "dtype": "string", "display": "Exp Share pet", "frame": "inputs_player_grid", "initial": "None", "options": Object.keys(md.all_pets)});
-        this.expsharepetslot2 = new Hvar({"huim": this.gui, "key": "expsharepetslot2", "vtype": "input", "dtype": "string", "display": "Exp Share pet 2", "frame": "inputs_player_grid", "initial": "None", "options": Object.keys(md.all_pets)});
-        this.expsharepetslot3 = new Hvar({"huim": this.gui, "key": "expsharepetslot3", "vtype": "input", "dtype": "string", "display": "Exp Share pet 3", "frame": "inputs_player_grid", "initial": "None", "options": Object.keys(md.all_pets)});
+        this.expsharepet = new Hvar({"huim": this.gui, "key": "expsharepet", "vtype": "input", "dtype": "string", "display": "Exp Share pet", "frame": "inputs_player_grid", "initial": "None", "options": md.pet_options});
+        this.expsharepetslot2 = new Hvar({"huim": this.gui, "key": "expsharepetslot2", "vtype": "input", "dtype": "string", "display": "Exp Share pet 2", "frame": "inputs_player_grid", "initial": "None", "options": md.pet_options});
+        this.expsharepetslot3 = new Hvar({"huim": this.gui, "key": "expsharepetslot3", "vtype": "input", "dtype": "string", "display": "Exp Share pet 3", "frame": "inputs_player_grid", "initial": "None", "options": md.pet_options});
         this.expshareitem = new Hvar({"huim": this.gui, "key": "expshareitem", "vtype": "input", "dtype": "boolean", "display": "Exp Share pet item", "frame": "inputs_player_grid", "initial": false});
         this.scale_time = new Hvar({"huim": this.gui, "key": "scale_time", "vtype": "input", "dtype": "boolean", "display": "Scale Time", "frame": "inputs_player_grid", "initial": false, "command": this.gui.create_switch_call("scaled_time_switch", "scale_time")});
         this.sell_loc = new Hvar({"huim": this.gui, "key": "sell_loc", "vtype": "input", "dtype": "string", "display": "Sell Location", "frame": "inputs_player_grid", "initial": "Best (NPC/Bazaar)", "options": ['Best (NPC/Bazaar)', 'Bazaar', 'Hopper', 'NPC'], "command": this.gui.create_switch_call("NPC_Bazaar", "sell_loc")});
@@ -209,7 +209,7 @@ class Calculator {
         this.scaled_time_amount = new Hvar({"huim": this.gui, "key": "scaled_time_amount", "vtype": "input", "dtype": "number", "display": "Scaled Time span", "initial": 1.0, "frame": "inputs_player_grid"});
         this.scaled_time_unit = new Hvar({"huim": this.gui, "key": "scaled_time_unit", "vtype": "input", "dtype": "string", "display": "Scaled Time unit", "initial": "Days", "frame": "inputs_player_grid", "options": ["Years", "Weeks", "Days", "Hours", "Minutes", "Seconds", "Harvests"]});
         this.rising_celsius_override = new Hvar({"huim": this.gui, "key": "rising_celsius_override", "vtype": "input", "dtype": "boolean", "display": "Force Rising Celsius", "initial": false, "frame": "inputs_minion_grid"});
-        this.used_pet_prices = new Hvar({"huim": this.gui, "key": "used_pet_prices", "vtype": "output", "dtype": "object", "display": "Used Pet Prices", "initial": {}, "frame": "outputs_profit_grid", "widget_width": 35, "widget_height": 4, "switch_initial": true});
+        this.used_pet_prices = new Hvar({"huim": this.gui, "key": "used_pet_prices", "vtype": "output", "dtype": "object", "display": "Used Pet Prices", "initial": {}, "frame": "outputs_profit_grid", "widget_width": 35, "widget_height": 4, "switch_initial": true, "tags": ["item_ID_to_display"]});
 
         this.empty_time_amount.widget.push(this.empty_time_unit.widget[this.empty_time_unit.widget.length - 1]);
         this.scaled_time_amount.widget.push(this.scaled_time_unit.widget[this.scaled_time_unit.widget.length - 1]);
@@ -227,7 +227,7 @@ class Calculator {
         let fancyoutputB = GUI.create_button('Share Output', this.fancy_output.bind(this), true);
         let bazaarB = GUI.create_button("Update Prices", this.update_prices.bind(this), true);
         let settingsB = GUI.create_button('Edit Settings', () => GUI.edit_vars.bind(this)(GUI.update_color_palette.bind(GUI), ["API_auto_update", "API_cooldown", "compact_tolerance", "output_to_clipboard", "color_palette"]), true);
-        let pet_priceB = GUI.create_button('Edit Pet Prices', () => GUI.edit_vars.bind(this)(this.edit_pet_price_redirect.bind(this), {"edit_pet_price_pet": {"dtype": "string", "display": "Pet", "initial": "None", "options": Object.keys(md.all_pets)}}, false), true);
+        let pet_priceB = GUI.create_button('Edit Pet Prices', () => GUI.edit_vars.bind(this)(this.edit_pet_price_redirect.bind(this), {"edit_pet_price_pet": {"dtype": "string", "display": "Pet", "initial": "None", "options": Object.keys(md.pet_options)}}, false), true);
         let emptyspaceLB = GUI.genLabel("control_frame_filler", "")
         let creditLB = GUI.genLabel("credit_label", `Minion Calculator V${this.version}\nMade by Herodirk`);
         let API_creditLB = GUI.genLabel("API_credit_label", `Bazaar data from <a href="https://api.hypixel.net">Hypixel API</a>,<br>AH data from <a href="https://sky.coflnet.com/data">SkyCofl API</a> `, true);
@@ -602,7 +602,7 @@ class Calculator {
                 if (this.var_dict[var_key].has_tag("item_ID_to_display")) {
                     formatting_function = x => md.calculator_data[x]['display'];
                 } else if (var_key === "pets_levelled") {
-                    formatting_function = x => this.var_dict[x].get();
+                    formatting_function = x => this.var_dict[x].get(false);
                 };
                 for (let [list_key, list_val] of Object.entries(this.var_dict[var_key].list)) {
                     if (typeof list_val === "number") {
@@ -725,7 +725,7 @@ class Calculator {
             if (this.var_dict[var_key].has_tag("item_ID_to_display")) {
                 formatting_function = x => md.calculator_data[x]['display'];
             } else if (var_key === "pets_levelled") {
-                formatting_function = x => this.var_dict[x].get();
+                formatting_function = x => this.var_dict[x].get(false);
             };
             for (let [list_key, list_val] of Object.entries(this.var_dict[var_key].list)) {
                 if (typeof list_val === "number") {
@@ -982,9 +982,8 @@ class Calculator {
         };
         const afkpet = setup_data["afkpet"];
         const afkpet_rarity = setup_data["afkpet_rarity"];
-        const afkpet_lvl = setup_data["afkpet_lvl"];
-        if (md.has_data_tag(minion, md.boost_pets[afkpet]["affected_minions"]) && afkpet_rarity in md.boost_pets[afkpet]) {
-            speed_boost += md.boost_pets[afkpet][afkpet_rarity][0] + afkpet_lvl * md.boost_pets[afkpet][afkpet_rarity][1];
+        if (md.has_data_tag(minion, md.calculator_data[afkpet]["affected_minions"]) && afkpet_rarity in md.calculator_data[afkpet]["boosting_pet"]) {
+            speed_boost += md.calculator_data[afkpet]["boosting_pet"][afkpet_rarity][0] + setup_data["afkpet_lvl"] * md.calculator_data[afkpet]["boosting_pet"][afkpet_rarity][1];
         };
         return speed_boost;
     };
@@ -1430,7 +1429,7 @@ class Calculator {
 
     get_pet_xp_boosts(pet, xp_type, setup_data, exp_share=false) {
         let non_matching = 1
-        if (md.all_pets[pet]["type"] !== "all" && md.all_pets[pet]["type"] !== xp_type) {
+        if (md.calculator_data[pet]["type"] !== "all" && md.calculator_data[pet]["type"] !== xp_type) {
             if (["alchemy", "enchanting"].includes(xp_type)) {
                 non_matching = 1 / 12;
             } else {
@@ -1453,7 +1452,7 @@ class Calculator {
         if (["mining", "fishing"].includes(xp_type)) {
             petxpbonus *= 1.5;
         };
-        if (pet === "Reindeer") {
+        if (pet === "PET_REINDEER") {
             petxpbonus *= 2;
         };
         if (xp_type === "combat" && setup_data["falcon_attribute"] !== 0) {
@@ -1487,12 +1486,12 @@ class Calculator {
     get_pet_profit(skill_xp, mayor, setup_data) {
         let pet_profit = 0.0;
         let main_pet = setup_data["levelingpet"];
-        if (main_pet == "None") {
+        if (main_pet == "NONE") {
             return [0, {}, {}];
         };
         let setup_pets = { "levelingpet": { "pet": main_pet, "pet_xp": {}, "levelled_pets": 0.0 } };
         for (const var_key of ["expsharepet", "expsharepetslot2", "expsharepetslot3"]) {
-            if (setup_data[var_key] == "None" || (mayor != "MAYOR_DIANA" && ["expsharepetslot2", "expsharepetslot3"].includes(var_key))) {
+            if (setup_data[var_key] == "NONE" || (mayor != "MAYOR_DIANA" && ["expsharepetslot2", "expsharepetslot3"].includes(var_key))) {
                 continue;
             };
             setup_pets[var_key] = { "pet": setup_data[var_key], "pet_xp": { "exp_share": 0.0 }, "levelled_pets": 0.0 };
@@ -1500,7 +1499,7 @@ class Calculator {
         let pet_prices = {};
         let main_pet_xp = setup_pets["levelingpet"]["pet_xp"];
         let pet_xp_boost, xp_boost_pet_item, left_over_pet_xp, exp_share_pet, equiv_pet_xp_boost, equiv_xp_boost_pet_item, non_matching, dragon_xp_outputs;
-        if (md.all_pets[main_pet]["rarity"].includes("Dragon")) {
+        if (md.calculator_data[main_pet]["rarity"].includes("Dragon")) {
             left_over_pet_xp = 0.0;
             for (let [skill, amount] of Object.entries(skill_xp)) {
                 [pet_xp_boost, xp_boost_pet_item] = this.get_pet_xp_boosts(main_pet, skill, setup_data);
@@ -1521,7 +1520,7 @@ class Calculator {
                 continue;
             };
             exp_share_pet = pet_info["pet"];
-            if (md.all_pets[main_pet]["rarity"].includes("Dragon")) {
+            if (md.calculator_data[main_pet]["rarity"].includes("Dragon")) {
                 if (exp_share_boost == 0) {
                     continue;
                 };
@@ -1544,11 +1543,11 @@ class Calculator {
         let super_scrubber_price = this.get_price("SUPER_SCRUBBER", setup_data, "buy", "custom", true);
         let pets_levelled;
         for (let [pet_slot, pet_info] of Object.entries(setup_pets)) {
-            pets_levelled = Object.values(pet_info["pet_xp"]).reduce((partialSum, a) => partialSum + a, 0) / md.max_lvl_pet_xp_amounts[md.all_pets[pet_info["pet"]]["rarity"]];
+            pets_levelled = Object.values(pet_info["pet_xp"]).reduce((partialSum, a) => partialSum + a, 0) / md.max_lvl_pet_xp_amounts[md.calculator_data[pet_info["pet"]]["rarity"]];
             setup_pets[pet_slot]["levelled_pets"] = pets_levelled;
             if (!(pet_info["pet"] in this.pet_costs)) {
                 if (!(pet_info["pet"] in pet_prices)) {
-                    pet_prices[pet_info["pet"]] = `Price for ${pet_info['pet']} not found`;
+                    pet_prices[pet_info["pet"]] = `Price for ${md.calculator_data[pet_info['pet']]["display"]} not found`;
                 };
             } else {
                 pet_profit += pets_levelled * (this.pet_costs[pet_info["pet"]]["max"] - this.pet_costs[pet_info["pet"]]["min"]);
@@ -2062,7 +2061,7 @@ class Calculator {
                     continue;
                 };
                 if (var_key == "pets_levelled") {
-                    this.pets_levelled.update_listbox(x => this.var_dict[x].get());
+                    this.pets_levelled.update_listbox(x => this.var_dict[x].get(false));
                     continue;
                 };
                 let format_function = x => x;
@@ -2081,7 +2080,7 @@ class Calculator {
     };
 
     edit_pet_price_redirect() {
-        this.edit_pet_price_pet = this.edit_vars_output["edit_pet_price_pet"];
+        this.edit_pet_price_pet = md.pet_options[this.edit_vars_output["edit_pet_price_pet"]];
         if (!(this.edit_pet_price_pet in this.pet_costs)) {
             this.pet_costs[this.edit_pet_price_pet] = {"min": 0, "max": 0};
         };
