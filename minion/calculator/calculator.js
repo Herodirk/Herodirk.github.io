@@ -131,7 +131,7 @@ class Calculator {
         this.fuel = new Hvar({"huim": this.gui, "key": "fuel", "vtype": "input", "dtype": "string", "display": "Fuel", "frame": "inputs_minion_grid", "initial": "None", "options": md.fuel_options, "command": () => this.multiswitch('fuel')});
         this.inferno_grade = new Hvar({"huim": this.gui, "key": "inferno_grade", "vtype": "input", "dtype": "string", "display": "Grade", "frame": "inputs_minion_grid", "initial": "Hypergolic Gabagool", "options": md.inferno_fuel_grade_options});
         this.inferno_distillate = new Hvar({"huim": this.gui, "key": "inferno_distillate", "vtype": "input", "dtype": "string", "display": "Distillate", "frame": "inputs_minion_grid", "initial": "Gabagool Distillate", "options": md.inferno_fuel_distillate_options});
-        this.inferno_eyedrops = new Hvar({"huim": this.gui, "key": "inferno_eyedrops", "vtype": "input", "dtype": "boolean", "display": "Eyedrops", "frame": "inputs_minion_grid", "initial": true});
+        this.inferno_eyedrops = new Hvar({"huim": this.gui, "key": "inferno_eyedrops", "vtype": "input", "dtype": "boolean", "display": "Eyedrops", "frame": "inputs_minion_grid", "initial": false});
         this.hopper = new Hvar({"huim": this.gui, "key": "hopper", "vtype": "input", "dtype": "string", "display": "Hopper", "frame": "inputs_minion_grid", "initial": "None", "options": md.hopper_options});
         this.upgrade1 = new Hvar({"huim": this.gui, "key": "upgrade1", "vtype": "input", "dtype": "string", "display": "Upgrade 1", "frame": "inputs_minion_grid", "initial": "None", "options": md.upgrade_options});
         this.upgrade2 = new Hvar({"huim": this.gui, "key": "upgrade2", "vtype": "input", "dtype": "string", "display": "Upgrade 2", "frame": "inputs_minion_grid", "initial": "None", "options": md.upgrade_options});
@@ -561,7 +561,9 @@ class Calculator {
                     continue;
                 };
             };
-            if (this.var_dict[var_key].get_output_switch() === false) {
+            if (var_key == "scaled_time" && this.scale_time.get() === false && this.empty_time.get_output_switch() === false) {
+                continue
+            } else if (this.var_dict[var_key].get_output_switch() === false) {
                 if (var_key === "notes" && this.special_layout.get() && "Special Layout" in this.notes.list) {
                     string_parts["notes"] = "Notes: Special Layout: " + this.notes.list['Special Layout'];
                 } else {
@@ -681,6 +683,8 @@ class Calculator {
             if (this.setupcost.get_output_switch() === false) {
                 return null;
             };
+        } else if (var_key === "scaled_time" && this.scale_time.get() === false && this.empty_time.get_output_switch() === false) {  // special case: scale time is off and empty time is off
+            return null;
         };
 
         let output_switch_val = this.var_dict[var_key].get_output_switch()

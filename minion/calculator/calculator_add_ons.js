@@ -101,11 +101,14 @@ class Calc_add_ons {
             calculator.collect_addon_output("Bad Luck Inferno", "No Inferno Minion Fuel Found");
             return;
         };
+        let total_profit = outputs["total_profit"];
         if (setup_data["inferno_grade"] != "HYPERGOLIC_GABAGOOL") {
+            if (return_value) {
+                return total_profit;
+            };
             calculator.collect_addon_output("Bad Luck Inferno", "No Hypergolic Items Found");
             return;
         };
-        let total_profit = outputs["total_profit"];
         let item_type_profit = outputs["itemtype_profit"];
         let no_rng_profit = total_profit - item_type_profit["INFERNO_APEX"] - item_type_profit["REAPER_PEPPER"] - item_type_profit["INFERNO_VERTEX"] - item_type_profit["GABAGOOL_THE_FISH"];
         if (return_value) {
