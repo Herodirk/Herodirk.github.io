@@ -95,7 +95,7 @@ class Calc_add_ons {
         // Outputs the profit of the common Hypergolic drops and the price per Inferno Vertex
         if (setup_data === null) {
             setup_data = calculator.gui.get_from_GUI(["fuel", "inferno_grade", "bazaar_buy_type", "bazaar_sell_type", "bazaar_taxes", "bazaar_flipper", "mayor"]);
-            outputs = calculator.gui.get_from_GUI(["total_profit", "itemtype_profit"]);
+            outputs = calculator.gui.get_from_GUI(["total_profit", "itemtype_profit", "harvests"]);
         };
         if (setup_data["fuel"] != "INFERNO_FUEL") {
             calculator.collect_addon_output("Bad Luck Inferno", "No Inferno Minion Fuel Found");
@@ -110,12 +110,16 @@ class Calc_add_ons {
             return;
         };
         let item_type_profit = outputs["itemtype_profit"];
-        let no_rng_profit = total_profit - item_type_profit["INFERNO_APEX"] - item_type_profit["REAPER_PEPPER"] - item_type_profit["INFERNO_VERTEX"] - item_type_profit["GABAGOOL_THE_FISH"];
+        let no_rng_profit_average = total_profit - item_type_profit["INFERNO_APEX"] - item_type_profit["REAPER_PEPPER"] - item_type_profit["GABAGOOL_THE_FISH"];
         if (return_value) {
-            return no_rng_profit;
+            return no_rng_profit_average;
         };
+        const prediction_interval_size = 1.96;  // for 95% of cases within the interval, https://en.wikipedia.org/wiki/Prediction_interval#Known_mean,_known_variance
+        let interval_radius_vertex_amount = prediction_interval_size * Math.sqrt(outputs["harvests"] * md.inferno_fuel_data["drops"]["INFERNO_VERTEX"] * (1 - md.inferno_fuel_data["drops"]["INFERNO_VERTEX"]));
         let per_vertex = calculator.get_price("INFERNO_VERTEX", setup_data, "sell", "bazaar");
-        calculator.collect_addon_output("Bad Luck Inferno Profit", `${calculator.gui.reduced_number(no_rng_profit, 2)} + ${calculator.gui.reduced_number(per_vertex, 2)} per Inferno Vertex`);
+        let interval_min = no_rng_profit_average - per_vertex * interval_radius_vertex_amount
+        let interval_max = no_rng_profit_average + per_vertex * interval_radius_vertex_amount
+        calculator.collect_addon_output("Bad Luck Inferno Profit", `average: ${calculator.gui.reduced_number(no_rng_profit_average, 2)}, 95% of cases: ${calculator.gui.reduced_number(interval_min, 2)} -- ${calculator.gui.reduced_number(interval_max, 2)}, average (no Vertexes): ${calculator.gui.reduced_number(no_rng_profit_average - item_type_profit["INFERNO_VERTEX"], 2)}`);
         return;
     };
 
@@ -163,8 +167,6 @@ class Calc_add_ons {
             output_string += top_minion + " : " + calculator.gui.reduced_number(calculated_setup_bad_luck_profits[top_minion]) + " , " + calculator.gui.reduced_number(calculated_setup_costs[top_minion]) + " , " + calculator.gui.reduced_number(calculated_setup_profits[top_minion]) + "\n";
             delete calculated_setup_bad_luck_profits[top_minion];
         };
-        
-        output_string += `Bad Luck Profit: + ${calculator.gui.reduced_number(calculator.get_price('INFERNO_VERTEX', setup_data, 'sell', 'bazaar'), 2)} per Inferno Vertex\n`;
         console.log(output_string);
         calculator.collect_addon_output("Inferno Minion Loop", "See console (F12)");
     };

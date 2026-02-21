@@ -975,11 +975,11 @@ class Calculator {
         if (minion_fuel_id === "EVERBURNING_FLAME" && md.has_data_tag(minion, md.calculator_data[minion_fuel_id]["upgrade_special"]["affected_minions"])) {
             speed_boost += md.calculator_data[minion_fuel_id]["upgrade_special"]["amount"];
         };
-        if (!(afk_toggle || clock_override)) {
-            return speed_boost;
-        };
         if (md.has_data_tag(minion, md.calculator_data[setup_data["mayor"]]["affected_minions"])) {
             speed_boost += md.calculator_data[setup_data["mayor"]]["speed_boost"];
+        };
+        if (!(afk_toggle || clock_override)) {
+            return speed_boost;
         };
         if (md.has_data_tag(minion, md.calculator_data[setup_data["potato_accessory"]]["affected_minions"])) {
             speed_boost += md.calculator_data[setup_data["potato_accessory"]]["speed_boost"];
