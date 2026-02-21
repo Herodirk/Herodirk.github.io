@@ -76,8 +76,8 @@ class Calc_add_ons {
             let outputs = await calculator.calculate(false, setup_data, true);
             calculated_setup_profits[loop_minion] = outputs["total_profit"];
             calculated_setup_costs[loop_minion] = outputs["setupcost"];
-            // if (calculator.variables["free_will"]["var"]) {
-            //     calculated_setup_costs[loop_minion] += calculator.variables["freewillcost"]["var"];
+            // if (setup_data["free_will"]) {
+            //     calculated_setup_costs[loop_minion] += outputs["freewillcost"];
             // };
         };
         let output_string = "Minion : profit , setup cost\n";
@@ -144,8 +144,8 @@ class Calc_add_ons {
                 let outputs = await calculator.calculate(false, setup_data, true);
                 let bad_luck_profit = this.bad_luck_inferno(calculator, setup_data, outputs, true);
                 let cost = outputs["setupcost"];
-                // if (calculator.variables["free_will"]["var"]) {
-                //     cost += calculator.variables["freewillcost"]["var"];
+                // if (setup_data["free_will"]) {
+                //     cost += outputs["freewillcost"];
                 // };
                 if (cost < cost_filter) {
                     calculated_setup_costs[`${loop_tier}, ${loop_amount}`] = cost;

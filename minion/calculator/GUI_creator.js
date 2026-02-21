@@ -57,7 +57,7 @@ class GUI_creator {
     // Color Palette
 
     update_color_palette() {
-        let new_color_palette = this.palette_names[this.main.variables["color_palette"]["var"]];
+        let new_color_palette = this.palette_names[this.main.color_palette.get()];
         if (new_color_palette === this.current_color_palette) {
             return;
         };
