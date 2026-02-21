@@ -1433,7 +1433,7 @@ class Calculator {
 
     get_pet_xp_boosts(pet, xp_type, setup_data, exp_share=false) {
         let non_matching = 1
-        if (md.calculator_data[pet]["type"] !== "all" && md.calculator_data[pet]["type"] !== xp_type) {
+        if (md.calculator_data[pet]["pet_type"] !== "all" && md.calculator_data[pet]["pet_type"] !== xp_type) {
             if (["alchemy", "enchanting"].includes(xp_type)) {
                 non_matching = 1 / 12;
             } else {
