@@ -104,7 +104,7 @@ class Calculator {
             },
         };
 
-        this.version = 1.2;
+        this.version = "1.2.0";
         GUI.main = this;
         this.var_dict = {}
         this.gui = GUI;
@@ -153,13 +153,12 @@ class Calculator {
         this.player_harvests = new Hvar({"huim": this.gui, "key": "player_harvests", "vtype": "input", "dtype": "boolean", "display": "Player Harvests", "frame": "inputs_player_grid", "initial": false});
         this.player_looting = new Hvar({"huim": this.gui, "key": "player_looting", "vtype": "input", "dtype": "number", "display": "Looting", "frame": "inputs_player_grid", "initial": 0, "options": [0, 1, 2, 3, 4, 5]});
         this.potato_accessory = new Hvar({"huim": this.gui, "key": "potato_accessory", "vtype": "input", "dtype": "string", "display": "Potato Accessory", "frame": "inputs_player_grid", "initial": "None", "options": md.potato_accessory_options});
-        this.combat_wisdom = new Hvar({"huim": this.gui, "key": "combat_wisdom", "vtype": "storage", "dtype": "number", "display": "Combat", "initial": 0.0});
-        this.mining_wisdom = new Hvar({"huim": this.gui, "key": "mining_wisdom", "vtype": "storage", "dtype": "number", "display": "Mining", "initial": 0.0});
-        this.farming_wisdom = new Hvar({"huim": this.gui, "key": "farming_wisdom", "vtype": "storage", "dtype": "number", "display": "Farming", "initial": 0.0});
-        this.fishing_wisdom = new Hvar({"huim": this.gui, "key": "fishing_wisdom", "vtype": "storage", "dtype": "number", "display": "Fishing", "initial": 0.0});
-        this.foraging_wisdom = new Hvar({"huim": this.gui, "key": "foraging_wisdom", "vtype": "storage", "dtype": "number", "display": "Foraging", "initial": 0.0});
-        this.alchemy_wisdom = new Hvar({"huim": this.gui, "key": "alchemy_wisdom", "vtype": "storage", "dtype": "number", "display": "Alchemy", "initial": 0.0});
-        this.wisdom = new Hvar({"huim": this.gui, "key": "wisdom", "vtype": "output", "dtype": "object", "display": "Wisdom", "frame": "inputs_player_grid", "widget_width": 20, "widget_height": 6, "initial": {'combat': this.combat_wisdom, 'mining': this.mining_wisdom, 'farming': this.farming_wisdom, 'fishing': this.fishing_wisdom, 'foraging': this.foraging_wisdom, 'alchemy': this.alchemy_wisdom}});
+        this.combat_wisdom = new Hvar({"huim": this.gui, "key": "combat_wisdom", "vtype": "input", "dtype": "number", "display": "Combat wisdom", "fancy_display": "Combat", "frame": "inputs_player_grid", "initial": 0.0});
+        this.mining_wisdom = new Hvar({"huim": this.gui, "key": "mining_wisdom", "vtype": "input", "dtype": "number", "display": "Mining wisdom", "fancy_display": "Mining", "frame": "inputs_player_grid", "initial": 0.0});
+        this.farming_wisdom = new Hvar({"huim": this.gui, "key": "farming_wisdom", "vtype": "input", "dtype": "number", "display": "Farming wisdom", "fancy_display": "Farming", "frame": "inputs_player_grid", "initial": 0.0});
+        this.fishing_wisdom = new Hvar({"huim": this.gui, "key": "fishing_wisdom", "vtype": "input", "dtype": "number", "display": "Fishing wisdom", "fancy_display": "Fishing", "frame": "inputs_player_grid", "initial": 0.0});
+        this.foraging_wisdom = new Hvar({"huim": this.gui, "key": "foraging_wisdom", "vtype": "input", "dtype": "number", "display": "Foraging wisdom", "fancy_display": "Foraging", "frame": "inputs_player_grid", "initial": 0.0});
+        this.alchemy_wisdom = new Hvar({"huim": this.gui, "key": "alchemy_wisdom", "vtype": "input", "dtype": "number", "display": "Alchemy wisdom", "fancy_display": "Alchemy", "frame": "inputs_player_grid", "initial": 0.0});
         this.mayor = new Hvar({"huim": this.gui, "key": "mayor", "vtype": "input", "dtype": "string", "display": "Mayor", "frame": "inputs_player_grid", "initial": "None", "options": md.mayor_options, "command": () => this.multiswitch("mayors")});
         this.levelingpet = new Hvar({"huim": this.gui, "key": "levelingpet", "vtype": "input", "dtype": "string", "display": "Leveling pet", "frame": "inputs_player_grid", "initial": "None", "options": md.pet_options, "command": () => this.multiswitch("pet_leveling")});
         this.taming = new Hvar({"huim": this.gui, "key": "taming", "vtype": "input", "dtype": "number", "display": "Taming", "frame": "inputs_player_grid", "initial": 0.0});
@@ -178,7 +177,7 @@ class Calculator {
         this.bazaar_taxes = new Hvar({"huim": this.gui, "key": "bazaar_taxes", "vtype": "input", "dtype": "boolean", "display": "Bazaar taxes", "frame": "inputs_player_grid", "initial": true, "command": this.gui.create_switch_call("bazaar_tax", "bazaar_taxes")});
         this.bazaar_flipper = new Hvar({"huim": this.gui, "key": "bazaar_flipper", "vtype": "input", "dtype": "number", "display": "Bazaar Flipper", "frame": "inputs_player_grid", "initial": 1, "options": [0, 1, 2]});
         this.ID = new Hvar({"huim": this.gui, "key": "ID", "vtype": "output", "dtype": "string", "display": "Setup ID", "frame": "outputs_setup_grid", "initial": "", "switch_initial": true});
-        this.ID_container = new Hvar({"huim": this.gui, "key": "ID_container", "vtype": "output", "dtype": "object", "display": "ID", "frame": "outputs_setup_grid", "widget_width": 35, "widget_height": 1, "initial": [], "switch_initial": false});
+        this.ID_container = new Hvar({"huim": this.gui, "key": "ID_container", "vtype": "output", "dtype": "object", "display": "ID", "frame": "outputs_setup_grid", "widget_width": 35, "widget_height": 1, "initial": [], "switch_initial": null});
         this.scaled_time = new Hvar({"huim": this.gui, "key": "scaled_time", "vtype": "output", "dtype": "string", "display": "Scaled Time", "frame": "outputs_setup_grid", "initial": "1.0 Days", "switch_initial": true});
         this.time_seconds = new Hvar({"huim": this.gui, "key": "time_seconds", "vtype": "storage", "dtype": "number", "display": "Time (s)", "initial": 86400.0});
         this.empty_time = new Hvar({"huim": this.gui, "key": "empty_time", "vtype": "output", "dtype": "string", "display": "Empty Time", "fancy_display": "Empty every", "frame": "outputs_setup_grid", "initial": "1.0 Days", "switch_initial": true});
@@ -186,7 +185,7 @@ class Calculator {
         this.harvests = new Hvar({"huim": this.gui, "key": "harvests", "vtype": "output", "dtype": "number", "display": "Harvests", "frame": "outputs_setup_grid", "initial": 0.0, "switch_initial": false});
         this.items = new Hvar({"huim": this.gui, "key": "items", "vtype": "output", "dtype": "object", "display": "Item amounts", "frame": "outputs_setup_grid", "widget_width": 35, "widget_height": 10, "initial": {}, "switch_initial": false, "tags": ["item_ID_to_display"]});
         this.item_sell_loc = new Hvar({"huim": this.gui, "key": "item_sell_loc", "vtype": "output", "dtype": "object", "display": "Sell locations", "frame": "outputs_profit_grid", "widget_width": 35, "widget_height": 10, "initial": {}, "switch_initial": false, "tags": ["item_ID_to_display"]});
-        this.filltime = new Hvar({"huim": this.gui, "key": "filltime", "vtype": "output", "dtype": "number", "display": "Fill time", "frame": "outputs_setup_grid", "initial": 0.0, "switch_initial": false});
+        this.filltime = new Hvar({"huim": this.gui, "key": "filltime", "vtype": "output", "dtype": "number", "display": "Fill time", "frame": "outputs_setup_grid", "initial": 0.0, "switch_initial": null});  // turned off output switch until variable is used
         this.used_storage = new Hvar({"huim": this.gui, "key": "used_storage", "vtype": "output", "dtype": "number", "display": "Used Storage", "frame": "outputs_setup_grid", "initial": 0, "switch_initial": false});
         this.itemtype_profit = new Hvar({"huim": this.gui, "key": "itemtype_profit", "vtype": "output", "dtype": "object", "display": "Itemtype profits", "fancy_display": "Profits per item type", "frame": "outputs_profit_grid", "widget_width": 35, "widget_height": 10, "initial": {}, "switch_initial": false, "tags": ["item_ID_to_display"]});
         this.item_profit = new Hvar({"huim": this.gui, "key": "item_profit", "vtype": "output", "dtype": "number", "display": "Total item profit", "frame": "outputs_profit_grid", "initial": 0.0, "switch_initial": false});
@@ -214,17 +213,14 @@ class Calculator {
         this.empty_time_amount.widget.push(this.empty_time_unit.widget[this.empty_time_unit.widget.length - 1]);
         this.scaled_time_amount.widget.push(this.scaled_time_unit.widget[this.scaled_time_unit.widget.length - 1]);
 
-        let wisdomB = GUI.create_button('Edit', () => GUI.edit_vars.bind(this)(() => this.wisdom.update_listbox.bind(this.wisdom)(x => x, x => x.get(), (key, val) => val.get() !== 0.0), ["combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom"]));
-        this.wisdom.widget.push(wisdomB);
-        
         this.notesAnchor = GUI.genLabel("notesAnchor", "");
         this.notesAnchor.className = "notes_anchor";
-        
+
         let calcB = GUI.create_button("Calculate", () => this.calculate.bind(this)(true), true);
         this.statusC = document.createElement("div")
         Object.assign(this.statusC, {innerText: "\n", className: "status_div", id: "status_div", style: "background: green;"});
-        let outputB = GUI.create_button('Short Output', this.output_data.bind(this), true);
-        let fancyoutputB = GUI.create_button('Share Output', this.fancy_output.bind(this), true);
+        let text_outputB = GUI.create_button('Text Output', () => this.text_output.bind(this)(null, null, false), true);
+        let markdown_outputB = GUI.create_button('Markdown Output', () => this.text_output.bind(this)(null, null, true), true);
         let bazaarB = GUI.create_button("Update Prices", this.update_prices.bind(this), true);
         let settingsB = GUI.create_button('Edit Settings', () => GUI.edit_vars.bind(this)(GUI.update_color_palette.bind(GUI), ["API_auto_update", "API_cooldown", "compact_tolerance", "output_to_clipboard", "color_palette"]), true);
         let pet_priceB = GUI.create_button('Edit Pet Prices', () => GUI.edit_vars.bind(this)(this.edit_pet_price_redirect.bind(this), {"edit_pet_price_pet": {"dtype": "string", "display": "Pet", "initial": "None", "options": Object.keys(md.pet_options)}}, false), true);
@@ -236,12 +232,13 @@ class Calculator {
         creditLB.className = "control_label"
         manualLB.className = "control_label"
         
-        let controlsGrid = [calcB, this.statusC, outputB, fancyoutputB, bazaarB, pet_priceB, settingsB, emptyspaceLB, API_creditLB, manualLB, creditLB];
+        let controlsGrid = [calcB, this.statusC, text_outputB, markdown_outputB, bazaarB, pet_priceB, settingsB, emptyspaceLB, API_creditLB, manualLB, creditLB];
         GUI.fill_arr(controlsGrid, this.frames["controls"]);
         
         let miniontitleLB = GUI.genLabel("miniontitleLB", "\nMinion options");
         let islandtitleLB = GUI.genLabel("islandtitleLB", "\nIsland options");
         let playertitleLB = GUI.genLabel("playertitleLB", "Player options");
+        let wisdomLB = GUI.genLabel("wisdomLB", "Wisdoms:");
         let timingtitleLB = GUI.genLabel("timingtitleLB", "\nTime options");
         let markettitleLB = GUI.genLabel("markettitleLB", "\nMarket options");
         let setupoutputsLB = GUI.genLabel("setupoutputsLB", "Setup Information");
@@ -296,7 +293,13 @@ class Calculator {
                 "player_harvests": null,
                 "player_looting": null,
                 "potato_accessory": null,
-                "wisdom": null,
+                "wisdom_label": [wisdomLB, GUI.create_show_hide_toggle("wisdom_inputs")],
+                "combat_wisdom": null,
+                "mining_wisdom": null,
+                "farming_wisdom": null,
+                "fishing_wisdom": null,
+                "foraging_wisdom": null,
+                "alchemy_wisdom": null,
                 "mayor": null,
                 "levelingpet": null,
                 "toggle_levelingpet_options": [null, GUI.create_show_hide_toggle(() => this.multiswitch("pet_leveling", true))],
@@ -375,13 +378,13 @@ class Calculator {
         };
         GUI.fill_grid(Object.entries(this.addons_widgets), this.frames["addons_buttons_grid"]);
         
-        this.wisdom.update_listbox(x => x, x => x.get(), (key, val) => val.get() !== 0.0);
         for (const var_key of Object.keys(this.var_dict)) {
             if (this.var_dict[var_key].initial !== null) {
                 this.var_dict[var_key].set(this.var_dict[var_key].initial);
             };
         };
         
+        GUI.def_switch("wisdom_inputs", ["combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom"], null, false, false)
         GUI.def_switch("pet_leveling", ["taming", "petxpboost", "beastmaster", "expsharepet", "expshareitem", "pets_levelled", "pet_profit", "falcon_attribute", "toucan_attribute", "used_pet_prices"], "None", true, false);
         GUI.def_switch("exp_share_diana", ["expsharepetslot2", "expsharepetslot3"], "Dianatrue", false, false);
         GUI.def_switch("NPC_Bazaar", ["item_sell_loc"], "Best (NPC/Bazaar)", false, true);
@@ -396,21 +399,10 @@ class Calculator {
         GUI.def_switch("free_will", ["freewillcost"], true, false, false);
 
 
-        this.dependent_variables = {"afkpet_rarity": "afkpet", "afkpet_lvl": "afkpet", "player_harvests": "afk", "empty_time": "scale_time", "freewillcost": "free_will", "expshareitem": "expsharepet", "used_pet_prices": "levelingpet", "pet_profit": "levelingpet"};
+        this.dependent_variables = {"afkpet_rarity": "afkpet", "afkpet_lvl": "afkpet", "player_harvests": "afk", "empty_time": "scale_time", "freewillcost": "free_will", "expshareitem": "expsharepet", "pets_levelled": "levelingpet", "used_pet_prices": "levelingpet", "pet_profit": "levelingpet"};
         this.key_replace_bool = ["infusion", "free_will", "postcard"];
 
-        this.outputOrder = ['fuel', "inferno_grade", "inferno_distillate", "inferno_eyedrops", "rising_celsius_override",
-                            'hopper', 'upgrade1', 'upgrade2', 'chest',
-                            'beacon', 'scorched', 'B_constant', 'B_acquired',
-                            'crystal', 'postcard', 'infusion', 'free_will', 'afk', 'afkpet', 'afkpet_rarity', 'afkpet_lvl', 'enchanted_clock', 'special_layout', 'potato_accessory', 'player_harvests', "player_looting",
-                            'wisdom', 'mayor', 'levelingpet', 'taming', 'falcon_attribute', 'petxpboost', 'beastmaster', 'toucan_attribute', 'expshareitem', 'expsharepet', 'expsharepetslot2', 'expsharepetslot3',
-                            'ID', 'setupcost', 'freewillcost', 'extracost', 'actiontime', 'fuelamount', 'sell_loc', 'bazaar_update_txt', 'bazaar_taxes', 'bazaar_flipper', 'notes',
-                            'empty_time', 'scaled_time', 'harvests', 'used_storage', 'items', 'item_sell_loc',
-                            'item_profit', 'itemtype_profit', 'xp', 'pet_profit', 'pets_levelled', 'used_pet_prices',
-                            'fuelcost', 'total_profit', 'addons_output_container'];
-
-
-        this.fancyOrder = {
+        this.output_order = {
             "**Minion Upgrades**": {
                 "\n> Internal: ": new Set(["fuel", "hopper", "upgrade1", "upgrade2"]),
                 "\n> External: ": new Set(["chest", "beacon", "crystal", "postcard"]),
@@ -420,7 +412,7 @@ class Calculator {
             "Inferno Info": { "\n> ": ["inferno_grade", "inferno_distillate", "inferno_eyedrops", "rising_celsius_override"] },
             "afk": { "\n> ": ["afkpet", "afkpet_rarity", "afkpet_lvl", "enchanted_clock", "special_layout", "potato_accessory"] },
             "playerHarvests": { "\n> ": ["player_looting"] },
-            "wisdom": null,
+            "Wisdoms": {"\n> ": ["combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom"]},
             "mayor": null,
             "levelingpet": {
                 "\n> ": ["taming", "falcon_attribute", "petxpboost", "beastmaster", "toucan_attribute", "expshareitem"],
@@ -534,276 +526,163 @@ class Calculator {
             if (this.var_dict[setting].command !== null) {
                 this.var_dict[setting].command();
             };
-            if (setting.includes("_wisdom")) {
-                this.wisdom.update_listbox(x => x, x => x.get(), (key, val) => val.get() !== 0.0);
-            };
         };
     };
 
-    output_data(toTerminal=true) {
-        let crafted_string = `${this.amount.get()}x ${this.minion.get(false)} t${this.miniontier.get()}; `;
-        let string_parts = {};
-        for (let var_key of this.outputOrder) {
-            if (var_key in this.dependent_variables) {
-                if (["None", "0", "0.0", "", false].includes(this.var_dict[this.dependent_variables[var_key]].get(false))) {
-                    continue;
-                };
-            } else if (["expsharepetslot2", "expsharepetslot3"].includes(var_key)) {
-                if (this.mayor.get(false) !== "Diana") {
-                    continue;
-                };
-            } else if (["inferno_grade", "inferno_distillate", "inferno_eyedrops"].includes(var_key)) {
-                if (this.fuel.get(false) !== "Inferno Minion Fuel") {
-                    continue;
-                };
-            } else if (var_key === "rising_celsius_override") {
-                if (this.minion.get(false) !== "Inferno") {
-                    continue;
-                };
-            };
-            if (var_key == "scaled_time" && this.scale_time.get() === false && this.empty_time.get_output_switch() === false) {
-                continue
-            } else if (this.var_dict[var_key].get_output_switch() === false) {
-                if (var_key === "notes" && this.special_layout.get() && "Special Layout" in this.notes.list) {
-                    string_parts["notes"] = "Notes: Special Layout: " + this.notes.list['Special Layout'];
-                } else {
-                    continue;
-                };
-            };
-            if (var_key === "wisdom") {
-                let wisdoms = {};
-                for (let [list_key, wisdom_var] of Object.entries(this.wisdom.list)) {
-                    if (list_key in this.xp.list && !(["None", 0, 0.0].includes(wisdom_var.get()))) {
-                        wisdoms[list_key] = wisdom_var.get();
-                    };
-                };
-                if (this.gui.get_length(wisdoms) !== 0) {
-                    string_parts["widsom"] = this.wisdom.get_display() + ": " + Array.from(Object.keys(wisdoms), wisdom_type => wisdom_type + ": " + wisdoms[wisdom_type]).join(", ");
-                };
-                continue;
-            };
-            if (var_key === "bazaar_update_txt") {
-                string_parts["bazaar_update_txt"] = `Bazaar info: ${this.bazaar_sell_type.get()}, ${this.bazaar_buy_type.get()}, Last updated at ${this.bazaar_update_txt.get()}`
-                continue;
-            };
-            if (var_key === "extracost") {
-                if (this.setupcost.get_output_switch() === false) {
-                    continue;
-                };
-            };
-            
-            let vtype = this.var_dict[var_key].vtype;
-            let display = this.var_dict[var_key].get_display();
-            let dtype = this.var_dict[var_key].dtype;
-            if (dtype === "object") {
-                if (this.gui.get_length(this.var_dict[var_key].list) === 0) {
-                    continue;
-                };
-                let formatted_list = [];
-                let formatting_function = x => x;
-                if (this.var_dict[var_key].has_tag("item_ID_to_display")) {
-                    formatting_function = x => md.calculator_data[x]['display'];
-                } else if (var_key === "pets_levelled") {
-                    formatting_function = x => this.var_dict[x].get(false);
-                };
-                for (let [list_key, list_val] of Object.entries(this.var_dict[var_key].list)) {
-                    if (typeof list_val === "number") {
-                        formatted_list.push(formatting_function(list_key) + ": " + this.gui.reduced_number(list_val));
-                    } else {
-                        formatted_list.push(formatting_function(list_key) + ": " + list_val);
-                    };
-                };
-                string_parts[var_key] = display + ": " + formatted_list.join(", ");
-                continue;
-            };
-
-            let val = this.var_dict[var_key].get(false);
-            if (vtype === "input") {
-                if (["None", 0, 0.0, false, ""].includes(val)) {
-                    continue;
-                };
-                if (dtype === "number") {
-                    string_parts[var_key] = `${display}: ${val}`;
-                } else if (dtype === "boolean") {
-                    val = `${val}`;
-                    string_parts[var_key] = `${display}: ${{"true": "True", "false" : "False"}[val]}`;
-                } else {
-                    string_parts[var_key] = `${val}`;
-                };
-            } else {
-                if (dtype === "number") {
-                    string_parts[var_key] = `${display}: ${this.gui.reduced_number(val)}`;
-                } else {
-                    string_parts[var_key] = `${display}: ${val}`;
-                };
-            };
-        };
-        crafted_string += Object.values(string_parts).join("; ");
-        if (this.output_to_clipboard.get()) {
-            try {
-                navigator.clipboard.writeText(crafted_string);
-            } catch(error) {
-                if (error.name === "NotAllowedError") {
-                    console.log("Not allowed to write to clipboard, outputting output here instead:");
-                } else {
-                    console.log("Unknown Error", error);
-                };
-                console.log(crafted_string, "\n");
-                toTerminal = false;
-            };
-        };
-        if (toTerminal) {
-            console.log(crafted_string, "\n");
-            return;
-        } else {
-            return crafted_string;
-        };
-    };
-
-    prep_fancy_data(var_key, display=true, newline=false) {
+    data_to_text(var_key, calculation_data, output_switches, markdown=true, display=true, newline=false) {
         let force = false;
-        let val;
+        let data;
         if (var_key in this.dependent_variables) {
-            if (["None", "0", "0.0", "", false].includes(this.var_dict[this.dependent_variables[var_key]].get(false))) {
+            if (["None", "0", "0.0", "", false].includes(calculation_data[this.dependent_variables[var_key]])) {
                 return null;
             };
         } else if (["expsharepetslot2", "expsharepetslot3"].includes(var_key)) {
-            if (this.mayor.get(false) !== "Diana") {
+            if (calculation_data["mayor"] !== "Diana") {
                 return null;
             };
         } else if (["inferno_grade", "inferno_distillate", "inferno_eyedrops"].includes(var_key)) {  // special case: fuel attributes only relevant for Inferno Minion Fuel
-            if (this.fuel.get(false) != "Inferno Minion Fuel") {
+            if (calculation_data["fuel"] != "Inferno Minion Fuel") {
                 return null;
             };
         } else if (var_key === "rising_celsius_override") {  // special case: Rising Celsius only applies to Inferno minions
-            if (this.minion.get(false) != "Inferno") {
+            if (calculation_data["minion"] != "Inferno") {
                 return null;
             };
-        } else if (var_key === "extracost") {  // special case: setup cost is turned off
-            if (this.setupcost.get_output_switch() === false) {
-                return null;
-            };
-        } else if (var_key === "scaled_time" && this.scale_time.get() === false && this.empty_time.get_output_switch() === false) {  // special case: scale time is off and empty time is off
+        } else if (var_key === "extracost" && output_switches["setupcost"] === false) {  // special case: setup cost is turned off
+            return null;
+        } else if (var_key === "scaled_time" && calculation_data["scale_time"] === false && output_switches["empty_time"] === false) {  // special case: scale time is off and empty time is off
             return null;
         };
 
-        let output_switch_val = this.var_dict[var_key].get_output_switch()
+        let output_switch_val = output_switches[var_key]
         if (output_switch_val === false) {
-            if (var_key === "notes" && this.special_layout.get() === true && "Special Layout" in this.notes.list) {
-                return "Notes:\n> Special Layout: `" + this.notes.list['Special Layout'] + "`";
-            } else {
-                return null;
-            };
+            return null;
         } else if (output_switch_val === true) {
             force = true;
         };
 
-
-        if (var_key === "wisdom") {
-            let wisdoms = {};
-            for (let [list_key, wisdom_var] of Object.entries(this.wisdom.list)) {
-                if (list_key in this.xp.list && !(["None", 0, 0.0].includes(wisdom_var.get()))) {
-                    wisdoms[list_key] = wisdom_var.get();
-                };
-            };
-            if (this.gui.get_length(wisdoms) !== 0) {
-                return this.wisdom.get_display(true) + ":\n> " + Array.from(Object.keys(wisdoms), wisdom_type => wisdom_type + ": `" + wisdoms[wisdom_type] + "`").join(", ");
-            };
-            return null;
-        } else if (var_key === "used_storage") {
-            val = "`" + this.var_dict[var_key].get() + "` (out of `" + this.available_storage.get() + "`)";
-        } else if (this.key_replace_bool.includes(var_key)) {
-            if (this.var_dict[var_key].get() === true) {
-                val = "`" + this.var_dict[var_key].get_display(true) + "`";
+        if (this.key_replace_bool.includes(var_key)) {
+            if (calculation_data[var_key] === true) {
+                data = this.var_dict[var_key].get_display(true);
             } else {
                 return null;
             };
-        } else if (var_key === "ID") {
-            val = `||${this.var_dict[var_key].get()}||`.replace("\\", "\\\\")
+        } else if (var_key === "special_layout" && "Special Layout" in calculation_data["notes"]) {
+            data = calculation_data["notes"]["Special Layout"];
         } else if (this.var_dict[var_key].dtype === "object") {
-            if (this.gui.get_length(this.var_dict[var_key].list) === 0) {
-                return null;
-            };
-            let formatted_list = [];
-            let formatting_function = x => x;
-            if (this.var_dict[var_key].has_tag("item_ID_to_display")) {
-                formatting_function = x => md.calculator_data[x]['display'];
-            } else if (var_key === "pets_levelled") {
-                formatting_function = x => this.var_dict[x].get(false);
-            };
-            for (let [list_key, list_val] of Object.entries(this.var_dict[var_key].list)) {
-                if (typeof list_val === "number") {
-                    formatted_list.push(formatting_function(list_key) + ": `" + this.gui.reduced_number(list_val) + "`");
-                } else {
-                    formatted_list.push(formatting_function(list_key) + ": `" + list_val + "`");
-                };
-            };
-            val = "\n> " + formatted_list.join(", ");
+            data = calculation_data[var_key];
         } else if (this.var_dict[var_key].dtype === "number") {
-            val = "`" + this.gui.reduced_number(this.var_dict[var_key].get()) + "`";
+            data = this.gui.reduced_number(calculation_data[var_key]);
         } else if (this.var_dict[var_key].dtype === "boolean") {
-            val = "`" + {"true": "True", "false": "False"}[`${this.var_dict[var_key].get()}`] + "`";
+            data = {"true": "True", "false": "False"}[`${calculation_data[var_key]}`];
         } else {
-            val = "`" + this.var_dict[var_key].get(false) + "`";
+            data = calculation_data[var_key];
         };
-        if (["`None`", "`0`", "`0.0`", "", "``", "`False`"].includes(val) && force === false) {
+        
+        if ((["None", "0", "0.0", "", "False"].includes(data) || GUI.get_length(data) === 0) && force === false) {
             return null;
         };
-        if (var_key === "freewillcost") {
-            val += ` (optimal: apply on t${this.optimal_tier_free_will.get()})`
-        };
-        let return_str = ""
+        
+        let return_str = "";
         if (display) {
             return_str += `${this.var_dict[var_key].get_display(true)}: `;
         };
-        return_str += `${val}`;
+        let value_formatting_function = x => `${x}`;
+        if (markdown) {
+            value_formatting_function = x => "`" + `${x}` + "`";
+        };
+        if (data instanceof Object) {
+            return_str += "\n> ";
+            let formatted_list = [];
+            let key_formatting_function = x => x;
+            if (this.var_dict[var_key].has_tag("item_ID_to_display")) {
+                key_formatting_function = x => md.calculator_data[x]['display'];
+            } else if (var_key === "pets_levelled") {
+                key_formatting_function = x => calculation_data[x];
+            };
+            for (let [list_key, list_val] of Object.entries(data)) {
+                if (typeof list_val === "number") {
+                    list_val = this.gui.reduced_number(list_val);
+                };
+                formatted_list.push(key_formatting_function(list_key) + ": " + value_formatting_function(list_val));
+            };
+            return_str += formatted_list.join(", ");
+        } else if (markdown && var_key === "ID") {
+            return_str += `||${data}||`.replace("\\", "\\\\");
+        } else {
+            return_str += value_formatting_function(data);
+        };
+
+        if (var_key === "used_storage") {
+            return_str += ` (out of ${value_formatting_function(calculation_data["available_storage"])})`;
+        } else if (var_key === "freewillcost") {
+            return_str += ` (optimal: apply on t${calculation_data["optimal_tier_free_will"]})`
+        };
         if (newline) {
             return_str += "\n";
         };
         return return_str;
     };
     
-    fancy_output(toTerminal=true) {
-        let crafted_string = `${this.amount.get()}x **${this.minion.get(false)} t${this.miniontier.get()}**`;
-        for (let key of Object.keys(this.fancyOrder)) {
+    text_output(calculation_data=null, output_switches=null, markdown=true, to_terminal=true) {
+        if (calculation_data === null) {
+            calculation_data = this.gui.get_from_GUI(Object.keys(this.var_dict));
+            Object.assign(calculation_data, this.decode_id(calculation_data["ID"]));
+        };
+        if (output_switches === null) {
+            output_switches = {};
+            for (const var_key in this.var_dict) {
+                output_switches[var_key] = this.var_dict[var_key].get_output_switch();
+            };
+        };
+
+        let crafted_string;
+        if (markdown) {
+            crafted_string = `${calculation_data["amount"]}x **${calculation_data["minion"]} t${calculation_data["miniontier"]}**`;
+        } else {
+            crafted_string = `${calculation_data["amount"]}x ${calculation_data["minion"]} t${calculation_data["miniontier"]}`;
+        };
+        for (let section_key of Object.keys(this.output_order)) {
+            if (section_key === "Beacon Info" && calculation_data["beacon"] === 0) {
+                continue;
+            };
+            if (section_key === "Inferno Info" && calculation_data["minion"] !== "Inferno" && calculation_data["fuel"] !== "Inferno Minion Fuel") {
+                continue;
+            };
+            if (section_key === "Bazaar Info" && output_switches["bazaar_update_txt"] === false) {
+                continue;
+            };
             let line_str = "";
             let header = "";
             let force_line = false;
-            let joined_keys;
-            if (key in this.var_dict) {
-                header = this.prep_fancy_data(key);
+            if (section_key in this.var_dict) {
+                header = this.data_to_text(section_key, calculation_data, output_switches, markdown);
                 force_line = true;
             } else {
-                header = key;
+                header = section_key;
+                if (!(markdown)) {
+                    header = header.replaceAll("*", "");
+                };
             };
             if (header === null) {
                 continue;
             };
-            if (header === "Beacon Info" && this.beacon.get() === 0) {
-                continue;
-            };
-            if (header === "Inferno Info" && this.minion.get(false) !== "Inferno" && this.fuel.get(false) !== "Inferno Minion Fuel") {
-                continue;
-            };
-            if (header === "Bazaar Info" && this.bazaar_update_txt.get_output_switch() === false) {
-                continue;
-            };
-            if (this.fancyOrder[key] instanceof Object) {
-                for (let [sub_key, key_arr] of Object.entries(this.fancyOrder[key])) {
-                    if (sub_key.includes("!")) {
+
+            if (this.output_order[section_key] instanceof Object) {
+                for (let [sub_key, key_arr] of Object.entries(this.output_order[section_key])) {
+                    let line_data = "";
+                    if (sub_key.includes("!")) {  // Tuple-but-not-tuple needs to be done first, as it's really just an Array
                         sub_key = sub_key.substring(1);
-                        if ((joined_keys = Array.from(key_arr, var_key => this.prep_fancy_data(var_key)).filter(x => x !== null).join(sub_key)) !== "") {
-                            line_str += sub_key + joined_keys;
-                        };
+                        line_data += Array.from(key_arr, var_key => this.data_to_text(var_key, calculation_data, output_switches, markdown)).filter(x => x !== null).join(sub_key);
                     } else if (key_arr instanceof Array) {
-                        if ((joined_keys = Array.from(key_arr, var_key => this.prep_fancy_data(var_key)).filter(x => x !== null).join(", ")) !== "") {
-                            line_str += sub_key + joined_keys;
-                        };
+                        line_data += Array.from(key_arr, var_key => this.data_to_text(var_key, calculation_data, output_switches, markdown)).filter(x => x !== null).join(", ");
                     } else if (key_arr instanceof Set) {
-                        if ((joined_keys = Array.from(key_arr, var_key => this.prep_fancy_data(var_key, false)).filter(x => x !== null).join(", ")) !== "") {
-                            line_str += sub_key + joined_keys;
-                        };
+                        line_data += Array.from(key_arr, var_key => this.data_to_text(var_key, calculation_data, output_switches, markdown, false)).filter(x => x !== null).join(", ");
                     };
+                    if (line_data === "") {
+                        continue;
+                    };
+                    line_str += sub_key + line_data;
                 };
             };
             if (line_str !== "" || force_line === true) {
@@ -820,10 +699,10 @@ class Calculator {
                     console.log("Unknown Error", error);
                 };
                 console.log(crafted_string);
-                toTerminal = false
+                to_terminal = false
             };
         };
-        if (toTerminal) {
+        if (to_terminal) {
             console.log(crafted_string, "\n")
             return;
         } else {
@@ -834,7 +713,7 @@ class Calculator {
     construct_id(setup_data) {
         let val;
         let index;
-        let setup_id = String(this.version) + "!";
+        let setup_id = this.version + "!";
         for (const var_key of this.ID_order) {
             if (!(var_key in setup_data)) {
                 console.log(`WARNING: ${var_key} key not in setup_data, assuming default value`);
@@ -874,7 +753,7 @@ class Calculator {
             return setup_data;
         };
         try {
-            ID_version = Number(ID.slice(0, end_ver));
+            ID_version = ID.slice(0, end_ver);
         } catch(Exception) {
             console.log("WARNING: Invalid ID, could not find version number");
             return setup_data;
@@ -2061,9 +1940,6 @@ class Calculator {
     update_listboxes() {
         for (const var_key of Object.keys(this.var_dict)) {
             if (this.var_dict[var_key].dtype === "object") {
-                if (var_key == "wisdom") {
-                    continue;
-                };
                 if (var_key == "pets_levelled") {
                     this.pets_levelled.update_listbox(x => this.var_dict[x].get(false));
                     continue;

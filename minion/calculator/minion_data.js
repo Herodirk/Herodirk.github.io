@@ -3019,6 +3019,11 @@ class minion_data {
                 'pet_type': 'mining',
                 'rarity': 'Legendary'
             },
+            'PET_SEAL': {
+                'display': 'Seal',
+                'pet_type': 'fishing',
+                'rarity': 'Legendary'
+            },
             'PET_SHEEP': {
                 'display': 'Sheep',
                 'pet_type': 'alchemy',
@@ -3096,6 +3101,11 @@ class minion_data {
             'PET_TURTLE': {
                 'display': 'Turtle',
                 'pet_type': 'combat',
+                'rarity': 'Legendary'
+            },
+            'PET_WITCH': {
+                'display': 'Witch',
+                'pet_type': 'alchemy',
                 'rarity': 'Legendary'
             },
             'PET_WITHER_SKELETON': {
@@ -3432,6 +3442,7 @@ class minion_data {
             'Rose Dragon': 'PET_ROSE_DRAGON',
             'Rose Dragon Egg': 'PET_ROSE_DRAGON_EGG',
             'Scatha': 'PET_SCATHA',
+            'Seal': 'PET_SEAL',
             'Sheep': 'PET_SHEEP',
             'Silverfish': 'PET_SILVERFISH',
             'Skeleton': 'PET_SKELETON',
@@ -3447,6 +3458,7 @@ class minion_data {
             'Tarantula': 'PET_TARANTULA',
             'Tiger': 'PET_TIGER',
             'Turtle': 'PET_TURTLE',
+            'Witch': 'PET_WITCH',
             'Wither Skeleton': 'PET_WITHER_SKELETON',
             'Wolf': 'PET_WOLF',
             'Zombie': 'PET_ZOMBIE'

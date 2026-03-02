@@ -107,7 +107,7 @@ input:focus {
     background: var(--controls_frame);
     align-items: center;
     display: grid;
-    grid-template-columns: auto auto auto auto auto auto auto 40% auto auto auto;
+    grid-template-columns: auto auto auto auto auto auto auto 25% auto auto auto;
     width: 100%;
     height: 5vh;
     margin: 0;
