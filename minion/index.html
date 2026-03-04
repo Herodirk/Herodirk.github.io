@@ -79,7 +79,7 @@
         The second number indicates internal system version, like variable storage.<br>
         The third number specifies changes to the inputs of the calculator (see <a href="#setup_id">Setup ID</a> for more).<br>
         The last number is for any other changes, often changes to setup calculation or data.<br>
-        Current version is <span class="code">1.2.0.0</span>.
+        Current version is <span class="code">1.2.0.1</span>.
 
         <h3 id="py_vs_js">Python versus Javascript</h3>
         The calculator is made in both <a href="https://github.com/Herodirk/Minion_Calculator/releases">Python</a> and <a href="calculator/main.html">Javascript</a>.<br>
@@ -120,7 +120,7 @@
         The template <span class="it">Choose Template</span> is the default text shown in the option menu.<br>
         The template <span class="it">ID</span> takes the inputted setup ID from <span class="code">Load ID</span>.<br>
         The template <span class="it">Clean</span> resets all inputs to their standard values.<br>
-        These should not be editted.
+        These three should not be editted.
 
         <h3 id="minion_inputs">Minion</h3>
         Relevant inputs: <span class="code">Minion, Tier, Amount, Fuel, Hopper, Upgrade 1, Upgrade 2, Chest, Infusion, Free Will</span><br>
@@ -177,9 +177,8 @@
         </ul>
 
         <h4 id="wisdom">Wisdom</h4>
-        Relevant inputs: <span class="code">Combat, Mining, Farming, Fishing, Foraging, Alchemy</span><br>
-        All the types of wisdom are bunched into one list variable. This list can be edited by pressing the edit button next to the list box.<br>
-        This will overlay a new frame over the calculator with text input boxes for each main skill and a close button to close that frame.<br>
+        Relevant inputs: <span class="code">Combat wisdom, Mining wisdom, Farming wisdom, Fishing wisdom, Foraging wisdom, Alchemy wisdom</span><br>
+        Wisdom inputs are hidden by default and can be made visible with the <span class="code">Toggle extra options</span> button next to <span class="code">Wisdoms:</span><br>
         Input wisdom values as the same value as the in-game stat.
 
         <h4 id="pet_leveling">Pet Leveling</h4>
@@ -270,12 +269,12 @@
 
 
         <h2 id="controls">Controls</h2>
-        Relevant buttons in Python version: <span class="code">Calculate, Short Output, Share Output, Update Prices, Add-ons Menu, Stop</span><br>
-        In case of Javascript version: <span class="code">Calculate, Short Output, Share Output, Update Prices, Edit Pet Prices, Edit Settings</span><br>
+        Relevant buttons in Python version: <span class="code">Calculate, Text Output, Markdown Output, Update Prices, Add-ons Menu, Stop</span><br>
+        In case of Javascript version: <span class="code">Calculate, Text Output, Markdown Output, Update Prices, Edit Pet Prices, Edit Settings</span><br>
         The controls menu is the bar at the bottom of the calculator.<br>
         <span class="code">Calculate</span> runs the calculation for the inputted values and shows the outputs in the calculator.<br>
-        <span class="code">Short Output</span> and <span class="code">Share Output</span> print the selected outputs to the terminal.<br>
-        <span class="code">Short Output</span> outputs plain and compact text. <span class="code">Share Output</span> outputs markdown text suitable for sharing over Discord.<br>
+        <span class="code">Text Output</span> and <span class="code">Markdown Output</span> print the selected outputs to the terminal.<br>
+        <span class="code">Text Output</span> outputs plain text for general use and <span class="code">Markdown Output</span> outputs markdown text suitable for sharing over Discord.<br>
         <span class="code">Update Prices</span> calls the Bazaar and AH APIs again and updates the prices. This is mostly useful when the setting <span class="code">API_auto_update</span> is <span class="it">False</span>.<br>
         (Python only) <span class="code">Add-ons Menu</span> toggles the Add-ons menu, in this menu the buttons to run the add-ons and the <span class="code">Add-on Outputs</span> are visible.<br>
         (Python only) <span class="code">Stop</span> stops the calculator correctly, please use the stop button to close the calculator as the calculator still has some functions to run before closing.<br>
