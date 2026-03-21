@@ -1,9 +1,10 @@
 class GUI_creator {
     constructor() {
         this.switches = {};
-        this.reduced_amounts = {0: "", 1: "k", 2: "M", 3: "B", 4: "T", 5: "Qd"}
-        this.reduced_amounts_length = 6
-        this.current_color_palette = "dark_red"
+        this.reduced_amounts = {0: "", 1: "k", 2: "M", 3: "B", 4: "T", 5: "Qd"};
+        this.reduced_amounts_length = 6;
+        this.edit_vars_output = {};
+        this.current_color_palette = "dark_red";
         this.color_palettes = {
             "dark": {
                 "background": "#000000",
@@ -132,7 +133,7 @@ class GUI_creator {
         } else {
             options_list = Object.keys(options);
         };
-        select_elem.style.width = (2.5 + 0.5 * Math.max(...(options_list.map(el => String(el).length)))) + "em";
+        select_elem.style.width = "fit-content";
         for (let option of options_list) {
             option_elem = document.createElement("option");
             option_elem.text = option;
@@ -230,8 +231,8 @@ class GUI_creator {
 
     // Switch management
 
-    def_switch(ID, obj, control=null, negate=false, initial=true) {
-        this.switches[ID] = {"state": initial, "obj": obj, "control": control, "negate": negate};
+    def_switch(switch_id, obj, control=null, negate=false, initial=true) {
+        this.switches[switch_id] = {"state": initial, "obj": obj, "control": control, "negate": negate};
         let objs;
         if (initial === false) {
             if (obj instanceof Array) {
@@ -250,24 +251,24 @@ class GUI_creator {
         };
     };
     
-    toggle_switch(ID, control=null) {
-        let state = this.switches[ID]["state"];
+    toggle_switch(switch_id, control=null) {
+        let state = this.switches[switch_id]["state"];
         let objs
         if (control !== null) {
-            if (this.switches[ID]["negate"]) {
-                if (state !== (control === this.switches[ID]["control"])) {
+            if (this.switches[switch_id]["negate"]) {
+                if (state !== (control === this.switches[switch_id]["control"])) {
                     return;
                 };
             } else {
-                if (state === (control === this.switches[ID]["control"])) {
+                if (state === (control === this.switches[switch_id]["control"])) {
                     return;
                 };
             };
         };
-        if (this.switches[ID]["obj"] instanceof Array) {
-            objs = this.switches[ID]["obj"];
+        if (this.switches[switch_id]["obj"] instanceof Array) {
+            objs = this.switches[switch_id]["obj"];
         } else {
-            objs = [this.switches[ID]["obj"]];
+            objs = [this.switches[switch_id]["obj"]];
         };
         if (state === true) {
             for (let obj of objs) {
@@ -278,7 +279,7 @@ class GUI_creator {
                     };
                 };
             };
-            this.switches[ID]["state"] = false;
+            this.switches[switch_id]["state"] = false;
         } else {
             for (let obj of objs) {
                 document.getElementById(obj).hidden = false;
@@ -288,26 +289,27 @@ class GUI_creator {
                     };
                 };
             };
-            this.switches[ID]["state"] = true;
+            this.switches[switch_id]["state"] = true;
         };
     };
     
-    create_switch_call(ID, controlvar=null) {
+    create_switch_call(switch_id, controlvar=null) {
         if (controlvar === null) {
-            return () => this.toggle_switch(ID, null);
+            return () => this.toggle_switch(switch_id, null);
         } else {
-            return () => this.toggle_switch(ID, this.get_value(controlvar));
+            return () => this.toggle_switch(switch_id, this.get_value(controlvar));
         };
     };
 
-    create_show_hide_toggle(ID) {
+    create_show_hide_toggle(switch_id, button_text="Toggle extra options") {
         let button;
-        if (typeof ID === "string") {
-            button = this.create_button("Toggle extra options", this.create_switch_call(ID).bind(this));
-        } else if (typeof ID === "function") {
-            button = this.create_button("Toggle extra options", ID);
+        if (typeof switch_id === "string") {
+            button = this.create_button(button_text, this.create_switch_call(switch_id).bind(this));
+        } else if (typeof switch_id === "function") {
+            button = this.create_button(button_text, switch_id);
         };
-        button.style.width = "10em";
+        button.style.width = "fit-content";
+        button.style.whiteSpace = "nowrap";
         return button;
     };
 
@@ -459,6 +461,9 @@ class GUI_creator {
     };
 
     reduced_number(number, decimal=2) {
+        if (number === Infinity) {
+            return "Infinite";
+        };
         if (number === 0.0) {
             return "0";
         } else if (Math.abs(number) < 1) {
@@ -491,7 +496,6 @@ class GUI_creator {
     };
 
     edit_vars(exit_function, variables=[], existing_variables=true) {
-        // Called as the calculator class
         let dialog_elem = document.getElementById("edit_vars_dialog");
         if (dialog_elem.hasAttribute("open")) {
             return;
@@ -502,37 +506,36 @@ class GUI_creator {
         let elements = {}
         if (existing_variables) {
             for (let var_key of variables) {
-                elements[var_key] = this.gui.def_input_var(`${var_key}_edit`, this.var_dict[var_key].dtype, `${this.var_dict[var_key].get_display()}:`, this.var_dict[var_key].get(false), this.var_dict[var_key].options, null);
+                elements[var_key] = this.def_input_var(`${var_key}_edit`, this.main.var_dict[var_key].dtype, `${this.main.var_dict[var_key].get_display()}:`, this.main.var_dict[var_key].get(false), this.main.var_dict[var_key].options, null);
             };
         } else {
             for (let [var_key, var_data] of Object.entries(variables)) {
-                elements[var_key] = this.gui.def_input_var(`${var_key}_edit`, var_data["dtype"], `${var_data["display"]}:`, var_data["initial"], var_data["options"], null);
+                elements[var_key] = this.def_input_var(`${var_key}_edit`, var_data["dtype"], `${var_data["display"]}:`, var_data["initial"], var_data["options"], null);
             };
         };
-        this.gui.fill_grid(Object.entries(elements), grid_frame);
+        this.fill_grid(Object.entries(elements), grid_frame);
         
         if (confirm_button === null) {
-            confirm_button = this.gui.create_button("Close", null, true);
+            confirm_button = this.create_button("Close", null, true);
             confirm_button.id = "edit_confirm_button";
             document.getElementById("edit_vars_controls").appendChild(confirm_button);
         };
-        confirm_button.onclick = () => this.gui.edit_confirm.bind(this)(exit_function, variables, existing_variables);
+        confirm_button.onclick = () => this.edit_confirm.bind(this)(exit_function, variables, existing_variables);
         dialog_elem.show();
     };
     
     edit_confirm(exit_function, variables=[], existing_variables=true) {
-        // Called as the calculator class
         let dialog_elem = document.getElementById("edit_vars_dialog");
         let inputted_value;
         if (existing_variables) {
             for (let var_key of variables) {
-                inputted_value = this.gui.get_value(`${var_key}_edit`)
-                this.var_dict[var_key].set(inputted_value);
+                inputted_value = this.get_value(`${var_key}_edit`)
+                this.main.var_dict[var_key].set(inputted_value);
             };
         } else {
-            this.gui.clear_object(this.edit_vars_output);
+            this.clear_object(this.edit_vars_output);
             for (let var_key of Object.keys(variables)) {
-                inputted_value = this.gui.get_value(`${var_key}_edit`)
+                inputted_value = this.get_value(`${var_key}_edit`)
                 this.edit_vars_output[var_key] = inputted_value;
             };
         };

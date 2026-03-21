@@ -1,7 +1,7 @@
 
 class Calc_add_ons {
     constructor() {
-        this.add_ons_package = {"Minion Crafting": this.craft_material_amount, "Days to Repay Setup": this.setup_repay_time, "Basic Minion Loop": this.basic_minion_loop, "Bad Luck Inferno": this.bad_luck_inferno, "Inferno Minion Loop": this.inferno_minion_loop};
+        this.add_ons_package = {"Minion Crafting": this.craft_material_amount, "Days to Repay Setup": this.setup_repay_time, "Basic Minion Loop": this.basic_minion_loop_inputs, "Bad Luck Inferno": this.bad_luck_inferno, "Inferno Minion Loop": this.inferno_minion_loop_inputs};
     };
 
     craft_material_amount(calculator) {
@@ -20,9 +20,6 @@ class Calc_add_ons {
         // Outputs the time (in days) it take for a setup to repay itself
         let setup_data = calculator.gui.get_from_GUI(["time_seconds", "setupcost", "free_will", "freewillcost", "total_profit"]);
         let setupcost = setup_data["setupcost"];
-        // if (setup_data["free_will"]) {
-        //     setupcost += setup_data["freewillcost"];
-        // };
         let profit = setup_data["total_profit"];
         if (profit < 0) {
             calculator.collect_addon_output("Setup Repay Time", "Negative profit, cannot repay");
@@ -41,6 +38,11 @@ class Calc_add_ons {
 
     async basic_minion_loop(calculator) {
         let setup_data = calculator.gui.get_from_GUI(calculator.ID_order);
+        let cost_filter = calculator.gui.edit_vars_output["setup_cost_limit"];
+        if (cost_filter === 0) {
+            cost_filter = Infinity;
+        };
+        let markdown_output = calculator.gui.edit_vars_output["markdown_output"];
         let calculated_setup_profits = {};
         let calculated_setup_costs = {};
         const loop_minion_options = Object.values(md.minion_options);
@@ -57,6 +59,7 @@ class Calc_add_ons {
         };
         
         const upgrades = [setup_data["upgrade1"], setup_data["upgrade2"]]
+        let outputs;
         for (const loop_minion of loop_minion_options) {
             if (loop_minion_skip.includes(loop_minion)) {
                 continue;
@@ -73,20 +76,65 @@ class Calc_add_ons {
                     setup_data["upgrade1"] = "SUPER_COMPACTOR_3000";
                 };
             };
-            let outputs = await calculator.calculate(false, setup_data, true);
-            calculated_setup_profits[loop_minion] = outputs["total_profit"];
-            calculated_setup_costs[loop_minion] = outputs["setupcost"];
-            // if (setup_data["free_will"]) {
-            //     calculated_setup_costs[loop_minion] += outputs["freewillcost"];
-            // };
+            outputs = await calculator.calculate(false, setup_data, true);
+            if (outputs["setupcost"] < cost_filter) {
+                calculated_setup_profits[loop_minion] = outputs["total_profit"];
+                calculated_setup_costs[loop_minion] = outputs["setupcost"];
+            };
         };
-        let output_string = "Minion : profit , setup cost\n";
+        if (calculator.gui.get_length(calculated_setup_profits) === 0) {
+            calculator.collect_addon_output("Basic Minion Loop", "No setups pass the cost filter");
+            return;
+        };
+        Object.assign(setup_data, calculator.decode_id(outputs["calculated_ID"]));
+        setup_data["used_pet_prices"] = outputs["used_pet_prices"];
+        setup_data["bazaar_update_txt"] = calculator.bazaar_update_txt.get();
+        let output_str = calculator.text_output(setup_data, {}, {
+            "amount": null,
+            "Upgrades: ": { "": new Set(["fuel", "hopper", "upgrade1", "upgrade2", "chest", "beacon", "crystal", "postcard", "infusion", "free_will"]) },
+            "Beacon Info": { "\n> ": ["scorched", "B_constant", "B_acquired"] },
+            "Inferno Info": { "\n> ": ["inferno_grade", "inferno_distillate", "inferno_eyedrops", "rising_celsius_override"] },
+            "afk": { "\n> ": ["afkpet", "afkpet_rarity", "afkpet_lvl", "enchanted_clock", "special_layout", "potato_accessory"] },
+            "player_harvests": { "\n> ": ["player_looting"] },
+            "Wisdoms": { "\n> ": ["combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom"] },
+            "mayor": null,
+            "levelingpet": {
+                "\n> ": ["taming", "falcon_attribute", "petxpboost", "beastmaster", "toucan_attribute", "expshareitem"],
+                "\n> Exp Share Pets: ": new Set(["expsharepet", "expsharepetslot2", "expsharepetslot3"])
+            },
+            "used_pet_prices": null,
+            "": { "": ["sell_loc", "bazaar_update_txt", "bazaar_sell_type", "bazaar_buy_type", "bazaar_taxes", "bazaar_flipper"] },
+        }, markdown_output, false);
+        if (markdown_output) {
+            output_str += "\n```";
+        } else {
+            output_str += "\n";
+        };
+        output_str += `\nMinion: profit, setup cost (limit: ${calculator.gui.reduced_number(cost_filter)})`;
         for (let i = 1; i <= 10; i++) {
+            if (calculator.gui.get_length(calculated_setup_profits) === 0) {
+                break;
+            };
             let top_minion = Object.keys(calculated_setup_profits).reduce((a, b) => calculated_setup_profits[a] > calculated_setup_profits[b] ? a : b);
-            output_string += md.calculator_data[top_minion]["display"] + " : " + calculator.gui.reduced_number(calculated_setup_profits[top_minion]) + " , " + calculator.gui.reduced_number(calculated_setup_costs[top_minion]) + "\n";
+            output_str += "\n" + md.calculator_data[top_minion]["display"] + ": " + calculator.gui.reduced_number(calculated_setup_profits[top_minion]) + ", " + calculator.gui.reduced_number(calculated_setup_costs[top_minion]);
             delete calculated_setup_profits[top_minion];
         };
-        console.log(output_string);
+        if (markdown_output) {
+            output_str += "\n```";
+        };
+        output_str += "\n";
+        if (calculator.output_to_clipboard.get()) {
+            try {
+                navigator.clipboard.writeText(output_str);
+            } catch (error) {
+                if (error.name === "NotAllowedError") {
+                    console.log("Not allowed to write to clipboard.");
+                } else {
+                    console.log("Unknown Error", error);
+                };
+            };
+        };
+        console.log(output_str);
         calculator.collect_addon_output("Basic Minion Loop", "See console (F12)");
         return;
     };
@@ -129,24 +177,31 @@ class Calc_add_ons {
         let calculated_setup_bad_luck_profits = {};
         let calculated_setup_costs = {};
     
-        let cost_filter = await this.get_inferno_cost_filter(calculator);
+        let cost_filter = calculator.gui.edit_vars_output["setup_cost_limit"];
+        if (cost_filter === 0) {
+            cost_filter = Infinity;
+        };
+        let minion_amount_limit = calculator.gui.edit_vars_output["amount_limit"];
+        if (minion_amount_limit < 1) {
+            calculator.collect_addon_output("Inferno Minion Loop", "Positive minion amount limit is required");
+            return;
+        };
+        let markdown_output = calculator.gui.edit_vars_output["markdown_output"];
         setup_data["minion"] = "INFERNO_MINION"
         setup_data["fuel"] = "INFERNO_FUEL"
         setup_data["chest"] = "XXLARGE_ENCHANTED_CHEST"
         setup_data["rising_celsius_override"] = true
     
         const loop_tiers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-        const loop_amounts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
+        const loop_amounts = [...Array(minion_amount_limit + 1).keys()].splice(1);
+        let outputs;
         for (const loop_tier of loop_tiers) {
             setup_data["miniontier"] = loop_tier;
             for (const loop_amount of loop_amounts) {
                 setup_data["amount"] = loop_amount;
-                let outputs = await calculator.calculate(false, setup_data, true);
+                outputs = await calculator.calculate(false, setup_data, true);
                 let bad_luck_profit = this.bad_luck_inferno(calculator, setup_data, outputs, true);
                 let cost = outputs["setupcost"];
-                // if (setup_data["free_will"]) {
-                //     cost += outputs["freewillcost"];
-                // };
                 if (cost < cost_filter) {
                     calculated_setup_costs[`${loop_tier}, ${loop_amount}`] = cost;
                     calculated_setup_profits[`${loop_tier}, ${loop_amount}`] = outputs["total_profit"];
@@ -158,26 +213,66 @@ class Calc_add_ons {
             calculator.collect_addon_output("Inferno Minion Loop", "No setups pass the cost filter");
             return;
         };
-        let output_string = "Tier, Amount : bad luck profit , minion cost , true average profit\n";
+        Object.assign(setup_data, calculator.decode_id(outputs["calculated_ID"]));
+        setup_data["used_pet_prices"] = outputs["used_pet_prices"];
+        setup_data["bazaar_update_txt"] = calculator.bazaar_update_txt.get();
+        let output_str = calculator.text_output(setup_data, {}, {
+            "amount": null,
+            "Upgrades: ": { "": new Set(["fuel", "hopper", "upgrade1", "upgrade2", "chest", "beacon", "crystal", "postcard", "infusion", "free_will"]) },
+            "Beacon Info": { "\n> ": ["scorched", "B_constant", "B_acquired"] },
+            "Inferno Info": { "\n> ": ["inferno_grade", "inferno_distillate", "inferno_eyedrops", "rising_celsius_override"] },
+            "afk": { "\n> ": ["afkpet", "afkpet_rarity", "afkpet_lvl", "enchanted_clock", "special_layout", "potato_accessory"] },
+            "player_harvests": { "\n> ": ["player_looting"] },
+            "Wisdoms": { "\n> ": ["combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom"] },
+            "mayor": null,
+            "levelingpet": {
+                "\n> ": ["taming", "falcon_attribute", "petxpboost", "beastmaster", "toucan_attribute", "expshareitem"],
+                "\n> Exp Share Pets: ": new Set(["expsharepet", "expsharepetslot2", "expsharepetslot3"])
+            },
+            "used_pet_prices": null,
+            "": { "": ["sell_loc", "bazaar_update_txt", "bazaar_sell_type", "bazaar_buy_type", "bazaar_taxes", "bazaar_flipper"] },
+        }, markdown_output, false);
+        if (markdown_output) {
+            output_str += "\n```";
+        } else {
+            output_str += "\n";
+        };
+        output_str += `\nTier, Amount (limit: ${calculator.gui.reduced_number(minion_amount_limit)}): bad luck profit, setup cost (limit: ${calculator.gui.reduced_number(cost_filter)}), true average profit`;
         for (let i = 1; i <= 10; i++) {
             if (calculator.gui.get_length(calculated_setup_bad_luck_profits) === 0) {
                 break;
             };
             let top_minion = Object.keys(calculated_setup_bad_luck_profits).reduce((a, b) => calculated_setup_bad_luck_profits[a] > calculated_setup_bad_luck_profits[b] ? a : b);
-            output_string += top_minion + " : " + calculator.gui.reduced_number(calculated_setup_bad_luck_profits[top_minion]) + " , " + calculator.gui.reduced_number(calculated_setup_costs[top_minion]) + " , " + calculator.gui.reduced_number(calculated_setup_profits[top_minion]) + "\n";
+            output_str += "\n" + top_minion + ": " + calculator.gui.reduced_number(calculated_setup_bad_luck_profits[top_minion]) + ", " + calculator.gui.reduced_number(calculated_setup_costs[top_minion]) + ", " + calculator.gui.reduced_number(calculated_setup_profits[top_minion]);
             delete calculated_setup_bad_luck_profits[top_minion];
         };
-        console.log(output_string);
+        if (markdown_output) {
+            output_str += "\n```";
+        };
+        output_str += "\n";
+        if (calculator.output_to_clipboard.get()) {
+            try {
+                navigator.clipboard.writeText(output_str);
+            } catch(error) {
+                if (error.name === "NotAllowedError") {
+                    console.log("Not allowed to write to clipboard, outputting output here instead:");
+                } else {
+                    console.log("Unknown Error", error);
+                };
+                console.log(output_str);
+            };
+        };
+        console.log(output_str);
         calculator.collect_addon_output("Inferno Minion Loop", "See console (F12)");
     };
 
-    get_inferno_cost_filter(calculator) {
-        var promiseResolve, promiseReject;
-        var cost_promise = new Promise(function(resolve, reject){
-            promiseResolve = () => resolve(calculator.edit_vars_output["inferno_loop_cost_filter"]);
-            promiseReject = () => reject(600000000);
-        });
-        calculator.gui.edit_vars.bind(calculator)(promiseResolve, {"inferno_loop_cost_filter": {"dtype": "number", "display": "Max Setup Cost", "initial": 0, "options": null}}, false);
-        return cost_promise;
+    basic_minion_loop_inputs(calculator) {
+        calculator.gui.edit_vars(() => this.basic_minion_loop.bind(this)(calculator), {"setup_cost_limit": {"dtype": "number", "display": "Setup Cost Limit", "initial": 0, "options": null}, "markdown_output": {"dtype": "boolean", "display": "Markdown Output", "initial": true, "options": null}}, false);
+        return;
+    };
+
+    inferno_minion_loop_inputs(calculator) {
+        calculator.gui.edit_vars(() => this.inferno_minion_loop.bind(this)(calculator), {"setup_cost_limit": {"dtype": "number", "display": "Setup Cost Limit", "initial": 0, "options": null}, "amount_limit": {"dtype": "number", "display": "Minion Amount Limit", "initial": 32, "options": null}, "markdown_output": {"dtype": "boolean", "display": "Markdown Output", "initial": true, "options": null}}, false);
+        return;
     };
 };

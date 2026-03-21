@@ -1,6 +1,5 @@
 class Calculator {
     constructor() {
-        this.edit_vars_output = {};
         this.pet_costs = {
             "NONE": {"min": 0, "max": 0}
         };
@@ -8,7 +7,7 @@ class Calculator {
 
         this.templateList = {
             "Choose Template": {},
-            "ID": {},
+            "Load ID": {},
             "Clean": {},
             "Corrupt": {
                 "hopper": "Enchanted Hopper",
@@ -120,7 +119,7 @@ class Calculator {
 
         this.API_auto_update = new Hvar({"huim": this.gui, "key": "API_auto_update", "vtype": "storage", "dtype": "boolean", "display": "API Auto Update", "initial": true});
         this.API_cooldown = new Hvar({"huim": this.gui, "key": "API_cooldown", "vtype": "storage", "dtype": "number", "display": "API Cooldown (s)", "initial": 120});
-        this.compact_tolerance = new Hvar({"huim": this.gui, "key": "compact_tolerance", "vtype": "storage", "dtype": "number", "display": "Over-Compacting Tolerance (coins)", "initial": 10000});
+        this.compact_tolerance = new Hvar({"huim": this.gui, "key": "compact_tolerance", "vtype": "storage", "dtype": "number", "display": "Over-compacting (coin)", "initial": 10000});
         this.output_to_clipboard = new Hvar({"huim": this.gui, "key": "output_to_clipboard", "vtype": "storage", "dtype": "boolean", "display": "Output to Clipboard", "initial": true});
         this.color_palette = new Hvar({"huim": this.gui, "key": "color_palette", "vtype": "storage", "dtype": "string", "display": "Color Palette", "initial": "Dark Red", "options": Object.keys(this.gui.palette_names)});
         this.template = new Hvar({"huim": this.gui, "key": "template", "vtype": "input", "display": "Templates", "initial": "Choose Template", "dtype": "string", "frame": "inputs_minion_grid", "options": Object.keys(this.templateList), "command": this.load_template.bind(this)});
@@ -142,7 +141,7 @@ class Calculator {
         this.B_acquired = new Hvar({"huim": this.gui, "key": "B_acquired", "vtype": "input", "dtype": "boolean", "display": "Acquired Beacon", "frame": "inputs_minion_grid", "initial": false});
         this.infusion = new Hvar({"huim": this.gui, "key": "infusion", "vtype": "input", "dtype": "boolean", "display": "Infusion", "frame": "inputs_minion_grid", "initial": false});
         this.crystal = new Hvar({"huim": this.gui, "key": "crystal", "vtype": "input", "dtype": "string", "display": "Crystal", "frame": "inputs_minion_grid", "initial": "None", "options": md.floating_crystal_options});
-        this.free_will = new Hvar({"huim": this.gui, "key": "free_will", "vtype": "input", "dtype": "boolean", "display": "Free Will", "frame": "inputs_minion_grid", "initial": false, "command": this.gui.create_switch_call("free_will", "free_will")});
+        this.free_will = new Hvar({"huim": this.gui, "key": "free_will", "vtype": "input", "dtype": "boolean", "display": "Free Will", "frame": "inputs_minion_grid", "initial": false, "command": this.gui.create_switch_call("optimal_free_will", "free_will")});
         this.postcard = new Hvar({"huim": this.gui, "key": "postcard", "vtype": "input", "dtype": "boolean", "display": "Postcard", "frame": "inputs_minion_grid", "initial": false});
         this.afk = new Hvar({"huim": this.gui, "key": "afk", "vtype": "input", "dtype": "boolean", "display": "AFK", "frame": "inputs_player_grid", "initial": false, "command": () => this.multiswitch("afk")});
         this.afkpet = new Hvar({"huim": this.gui, "key": "afkpet", "vtype": "input", "dtype": "string", "display": "AFK Pet", "frame": "inputs_player_grid", "initial": "None", "options": md.boosting_pet_options});
@@ -176,7 +175,7 @@ class Calculator {
         this.bazaar_buy_type = new Hvar({"huim": this.gui, "key": "bazaar_buy_type", "vtype": "input", "dtype": "string", "display": "Bazaar buy type", "frame": "inputs_player_grid", "initial": "Buy Order", "options": Object.keys(md.bazaar_buy_types)});
         this.bazaar_taxes = new Hvar({"huim": this.gui, "key": "bazaar_taxes", "vtype": "input", "dtype": "boolean", "display": "Bazaar taxes", "frame": "inputs_player_grid", "initial": true, "command": this.gui.create_switch_call("bazaar_tax", "bazaar_taxes")});
         this.bazaar_flipper = new Hvar({"huim": this.gui, "key": "bazaar_flipper", "vtype": "input", "dtype": "number", "display": "Bazaar Flipper", "frame": "inputs_player_grid", "initial": 1, "options": [0, 1, 2]});
-        this.ID = new Hvar({"huim": this.gui, "key": "ID", "vtype": "output", "dtype": "string", "display": "Setup ID", "frame": "outputs_setup_grid", "initial": "", "switch_initial": true});
+        this.calculated_ID = new Hvar({"huim": this.gui, "key": "calculated_ID", "vtype": "output", "dtype": "string", "display": "Setup ID", "frame": "outputs_setup_grid", "initial": "", "switch_initial": true});
         this.ID_container = new Hvar({"huim": this.gui, "key": "ID_container", "vtype": "output", "dtype": "object", "display": "ID", "frame": "outputs_setup_grid", "widget_width": 35, "widget_height": 1, "initial": [], "switch_initial": null});
         this.scaled_time = new Hvar({"huim": this.gui, "key": "scaled_time", "vtype": "output", "dtype": "string", "display": "Scaled Time", "frame": "outputs_setup_grid", "initial": "1.0 Days", "switch_initial": true});
         this.time_seconds = new Hvar({"huim": this.gui, "key": "time_seconds", "vtype": "storage", "dtype": "number", "display": "Time (s)", "initial": 86400.0});
@@ -198,10 +197,10 @@ class Calculator {
         this.notes = new Hvar({"huim": this.gui, "key": "notes", "vtype": "output", "dtype": "object", "display": "Notes", "frame": "outputs_setup_grid", "widget_width": 50, "widget_height": 4, "initial": {}, "switch_initial": false});
         this.bazaar_update_txt = new Hvar({"huim": this.gui, "key": "bazaar_update_txt", "vtype": "output", "dtype": "string", "display": "Bazaar data", "frame": "outputs_profit_grid", "initial": "Not Loaded", "switch_initial": true});
         this.setupcost = new Hvar({"huim": this.gui, "key": "setupcost", "vtype": "output", "dtype": "number", "display": "Setup cost", "frame": "outputs_profit_grid", "initial": 0.0, "switch_initial": true});
-        this.freewillcost = new Hvar({"huim": this.gui, "key": "freewillcost", "vtype": "output", "dtype": "number", "display": "Free Will cost", "fancy_display": "+ Average Free Will cost", "frame": "outputs_profit_grid", "initial": 0.0, "switch_initial": true});
-        this.extracost = new Hvar({"huim": this.gui, "key": "extracost", "vtype": "storage", "dtype": "string", "display": "Extra cost", "fancy_display": "+ Extra cost", "initial": ""});
-        this.optimal_tier_free_will = new Hvar({"huim": this.gui, "key": "optimal_tier_free_will", "vtype": "storage", "dtype": "number", "display": "Optimal Tier Free Will", "initial": 1});
-        this.available_storage = new Hvar({"huim": this.gui, "key": "available_storage", "vtype": "storage", "dtype": "number", "display": "Available Storage", "initial": 0});
+        this.setupcost_breakdown = new Hvar({"huim": this.gui, "key": "setupcost_breakdown", "vtype": "output", "dtype": "object", "display": "Setup part costs", "frame": "outputs_profit_grid", "widget_width": 35, "widget_height": 8, "initial": {}, "switch_initial": false});
+        this.extracost = new Hvar({"huim": this.gui, "key": "extracost", "vtype": "output", "dtype": "string", "display": "Extra cost", "frame": "outputs_profit_grid", "initial": "None", "switch_initial": true});
+        this.optimal_tier_free_will = new Hvar({"huim": this.gui, "key": "optimal_tier_free_will", "vtype": "output", "dtype": "number", "display": "Tier Free Will", "fancy_display": "Optimal tier Free Will", "frame": "outputs_profit_grid", "initial": 0, "switch_initial": true});
+        this.available_storage = new Hvar({"huim": this.gui, "key": "available_storage", "vtype": "output", "dtype": "number", "display": "Available Storage", "frame": "outputs_setup_grid", "initial": 0, "switch_initial": false});
         this.addons_output_container = new Hvar({"huim": this.gui, "key": "addons_output_container", "vtype": "output", "dtype": "object", "display": "Add-on Outputs", "frame": "addons_output_grid", "widget_width": 65, "widget_height": 20, "initial": {}, "switch_initial": false});
         this.empty_time_amount = new Hvar({"huim": this.gui, "key": "empty_time_amount", "vtype": "input", "dtype": "number", "display": "Empty Time span", "initial": 1.0, "frame": "inputs_player_grid"});
         this.empty_time_unit = new Hvar({"huim": this.gui, "key": "empty_time_unit", "vtype": "input", "dtype": "string", "display": "Empty Time unit", "initial": "Days", "frame": "inputs_player_grid", "options": ["Years", "Weeks", "Days", "Hours", "Minutes", "Seconds", "Harvests"]});
@@ -213,46 +212,46 @@ class Calculator {
         this.empty_time_amount.widget.push(this.empty_time_unit.widget[this.empty_time_unit.widget.length - 1]);
         this.scaled_time_amount.widget.push(this.scaled_time_unit.widget[this.scaled_time_unit.widget.length - 1]);
 
-        this.notesAnchor = GUI.genLabel("notesAnchor", "");
+        this.notesAnchor = this.gui.genLabel("notesAnchor", "");
         this.notesAnchor.className = "notes_anchor";
 
-        let calcB = GUI.create_button("Calculate", () => this.calculate.bind(this)(true), true);
+        let calcB = this.gui.create_button("Calculate", () => this.calculate.bind(this)(true), true);
         this.statusC = document.createElement("div")
         Object.assign(this.statusC, {innerText: "\n", className: "status_div", id: "status_div", style: "background: green;"});
-        let text_outputB = GUI.create_button('Text Output', () => this.text_output.bind(this)(null, null, false), true);
-        let markdown_outputB = GUI.create_button('Markdown Output', () => this.text_output.bind(this)(null, null, true), true);
-        let bazaarB = GUI.create_button("Update Prices", this.update_prices.bind(this), true);
-        let settingsB = GUI.create_button('Edit Settings', () => GUI.edit_vars.bind(this)(GUI.update_color_palette.bind(GUI), ["API_auto_update", "API_cooldown", "compact_tolerance", "output_to_clipboard", "color_palette"]), true);
-        let pet_priceB = GUI.create_button('Edit Pet Prices', () => GUI.edit_vars.bind(this)(this.edit_pet_price_redirect.bind(this), {"edit_pet_price_pet": {"dtype": "string", "display": "Pet", "initial": "None", "options": Object.keys(md.pet_options)}}, false), true);
-        let emptyspaceLB = GUI.genLabel("control_frame_filler", "")
-        let creditLB = GUI.genLabel("credit_label", `Minion Calculator V${this.version}\nMade by Herodirk`);
-        let API_creditLB = GUI.genLabel("API_credit_label", `Bazaar data from <a href="https://api.hypixel.net">Hypixel API</a>,<br>AH data from <a href="https://sky.coflnet.com/data">SkyCofl API</a> `, true);
-        let manualLB = GUI.genLabel("manual_label", `Online Manual:<br><a href="https://herodirk.github.io/minion/index.html">Calculator Manual</a>`, true);
+        let text_outputB = this.gui.create_button('Text Output', () => this.text_output.bind(this)(null, null, null, false), true);
+        let markdown_outputB = this.gui.create_button('Markdown Output', () => this.text_output.bind(this)(null, null, null, true), true);
+        let pricesB = this.gui.create_button("Update Prices", this.update_prices.bind(this), true);
+        let settingsB = this.gui.create_button('Edit Settings', () => this.gui.edit_vars.bind(this.gui)(this.gui.update_color_palette.bind(this.gui), ["API_auto_update", "API_cooldown", "compact_tolerance", "output_to_clipboard", "color_palette"]), true);
+        let pet_priceB = this.gui.create_button('Edit Pet Prices', () => this.gui.edit_vars.bind(this.gui)(this.edit_pet_price_redirect.bind(this), {"edit_pet_price_pet": {"dtype": "string", "display": "Pet", "initial": "None", "options": Object.keys(md.pet_options)}}, false), true);
+        let emptyspaceLB = this.gui.genLabel("control_frame_filler", "")
+        let creditLB = this.gui.genLabel("credit_label", `Minion Calculator V${this.version}\nMade by Herodirk`);
+        let API_creditLB = this.gui.genLabel("API_credit_label", `Bazaar data from <a href="https://api.hypixel.net">Hypixel API</a>,<br>AH data from <a href="https://sky.coflnet.com/data">SkyCofl API</a> `, true);
+        let manualLB = this.gui.genLabel("manual_label", `Online Manual:<br><a href="https://herodirk.github.io/minion/index.html">Calculator Manual</a>`, true);
         API_creditLB.className = "control_label"
         creditLB.className = "control_label"
         manualLB.className = "control_label"
         
-        let controlsGrid = [calcB, this.statusC, text_outputB, markdown_outputB, bazaarB, pet_priceB, settingsB, emptyspaceLB, API_creditLB, manualLB, creditLB];
-        GUI.fill_arr(controlsGrid, this.frames["controls"]);
+        let controlsGrid = [calcB, this.statusC, text_outputB, markdown_outputB, pricesB, pet_priceB, settingsB, emptyspaceLB, API_creditLB, manualLB, creditLB];
+        this.gui.fill_arr(controlsGrid, this.frames["controls"]);
         
-        let miniontitleLB = GUI.genLabel("miniontitleLB", "\nMinion options");
-        let islandtitleLB = GUI.genLabel("islandtitleLB", "\nIsland options");
-        let playertitleLB = GUI.genLabel("playertitleLB", "Player options");
-        let wisdomLB = GUI.genLabel("wisdomLB", "Wisdoms:");
-        let timingtitleLB = GUI.genLabel("timingtitleLB", "\nTime options");
-        let markettitleLB = GUI.genLabel("markettitleLB", "\nMarket options");
-        let setupoutputsLB = GUI.genLabel("setupoutputsLB", "Setup Information");
-        let setupprintLB = GUI.genLabel("setupprintLB", "Share");
-        let minionoutputsLB = GUI.genLabel("minionoutputsLB", "Minion Outputs");
-        let minionprintLB = GUI.genLabel("minionprintLB", "Share");
-        let profitoutputsLB = GUI.genLabel("profitoutputsLB", "Profit Outputs");
-        let profitprintLB = GUI.genLabel("profitprintLB", "Share");
-        let addonsprintLB = GUI.genLabel("addonsprintLB", "Share")
-        let addonsoutputsLB = GUI.genLabel("addonsoutputsLB", "Add-on Outputs")
+        let miniontitleLB = this.gui.genLabel("miniontitleLB", "\nMinion options");
+        let islandtitleLB = this.gui.genLabel("islandtitleLB", "\nIsland options");
+        let playertitleLB = this.gui.genLabel("playertitleLB", "Player options");
+        let wisdomLB = this.gui.genLabel("wisdomLB", "Wisdoms:");
+        let timingtitleLB = this.gui.genLabel("timingtitleLB", "\nTime options");
+        let markettitleLB = this.gui.genLabel("markettitleLB", "\nMarket options");
+        let setupoutputsLB = this.gui.genLabel("setupoutputsLB", "Setup Information");
+        let setupprintLB = this.gui.genLabel("setupprintLB", "Share");
+        let minionoutputsLB = this.gui.genLabel("minionoutputsLB", "Minion Outputs");
+        let minionprintLB = this.gui.genLabel("minionprintLB", "Share");
+        let profitoutputsLB = this.gui.genLabel("profitoutputsLB", "Profit Outputs");
+        let profitprintLB = this.gui.genLabel("profitprintLB", "Share");
+        let addonsprintLB = this.gui.genLabel("addonsprintLB", "Share")
+        let addonsoutputsLB = this.gui.genLabel("addonsoutputsLB", "Add-on Outputs")
         
-        let afk_options_button = GUI.create_show_hide_toggle("afking");
+        let afk_options_button = this.gui.create_show_hide_toggle("afking");
         this.afk.widget.push(afk_options_button);
-        let beacon_options_button = GUI.create_show_hide_toggle("beacon");
+        let beacon_options_button = this.gui.create_show_hide_toggle("beacon");
         this.beacon.widget.push(beacon_options_button);
         
         this.grids = {
@@ -293,7 +292,7 @@ class Calculator {
                 "player_harvests": null,
                 "player_looting": null,
                 "potato_accessory": null,
-                "wisdom_label": [wisdomLB, GUI.create_show_hide_toggle("wisdom_inputs")],
+                "wisdom_label": [wisdomLB, this.gui.create_show_hide_toggle("wisdom_inputs")],
                 "combat_wisdom": null,
                 "mining_wisdom": null,
                 "farming_wisdom": null,
@@ -302,7 +301,7 @@ class Calculator {
                 "alchemy_wisdom": null,
                 "mayor": null,
                 "levelingpet": null,
-                "toggle_levelingpet_options": [null, GUI.create_show_hide_toggle(() => this.multiswitch("pet_leveling", true))],
+                "toggle_levelingpet_options": [null, this.gui.create_show_hide_toggle(() => this.multiswitch("pet_leveling", true))],
                 "taming": null,
                 "falcon_attribute": null,
                 "petxpboost": null,
@@ -325,11 +324,12 @@ class Calculator {
             },
             "outputs_setup_grid": {
                 "labels": [null, setupoutputsLB, setupprintLB],
-                "ID": [this.ID.widget[0], this.ID_container.widget[1], this.ID.widget[2]],
+                "setup_ID": [this.calculated_ID.widget[0], this.ID_container.widget[1], this.calculated_ID.widget[2]],
                 "empty_time": null,
                 "scaled_time": null,
                 "actiontime": null,
                 "fuelamount": null,
+                "available_storage": null,
                 "notes": [this.notes.widget[0], null, this.notes.widget[2]],
                 "notes_anchor": [this.notesAnchor],
                 "notes_space_1": [null],
@@ -346,7 +346,10 @@ class Calculator {
                 "labels": [null, profitoutputsLB, profitprintLB],
                 "bazaar_update_txt": null,
                 "setupcost": null,
-                "freewillcost": null,
+                "setupcost_breakdown_toggle": [null, this.gui.create_show_hide_toggle("setup_cost_breakdown", "Toggle breakdown")],
+                "setupcost_breakdown": null,
+                "extracost": null,
+                "optimal_tier_free_will": null,
                 "item_sell_loc": null,
                 "itemtype_profit": null,
                 "item_profit": null,
@@ -361,7 +364,7 @@ class Calculator {
             },
         };
         for (let grid_key of Object.keys(this.grids)) {
-            GUI.fill_grid(this.gui.create_grid(this.grids[grid_key]), this.frames[grid_key]);
+            this.gui.fill_grid(this.gui.create_grid(this.grids[grid_key]), this.frames[grid_key]);
         };
         
         this.notes.widget[1].className = "notes_box";
@@ -373,10 +376,10 @@ class Calculator {
         for (const [addon_name, addon_function] of Object.entries(this.addons_list)) {
             this.addons_widgets[addon_name] = []
             let button_function = () => addon_function.bind(add_ons)(this)
-            this.addons_widgets[addon_name].push(GUI.create_button(addon_name, button_function, false))
-            this.addons_widgets[addon_name].push(GUI.def_input_var(`${addon_name}_auto_run`, "boolean", null, false))
+            this.addons_widgets[addon_name].push(this.gui.create_button(addon_name, button_function, false))
+            this.addons_widgets[addon_name].push(this.gui.def_input_var(`${addon_name}_auto_run`, "boolean", null, false))
         };
-        GUI.fill_grid(Object.entries(this.addons_widgets), this.frames["addons_buttons_grid"]);
+        this.gui.fill_grid(Object.entries(this.addons_widgets), this.frames["addons_buttons_grid"]);
         
         for (const var_key of Object.keys(this.var_dict)) {
             if (this.var_dict[var_key].initial !== null) {
@@ -384,25 +387,26 @@ class Calculator {
             };
         };
         
-        GUI.def_switch("wisdom_inputs", ["combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom"], null, false, false)
-        GUI.def_switch("pet_leveling", ["taming", "petxpboost", "beastmaster", "expsharepet", "expshareitem", "pets_levelled", "pet_profit", "falcon_attribute", "toucan_attribute", "used_pet_prices"], "None", true, false);
-        GUI.def_switch("exp_share_diana", ["expsharepetslot2", "expsharepetslot3"], "Dianatrue", false, false);
-        GUI.def_switch("NPC_Bazaar", ["item_sell_loc"], "Best (NPC/Bazaar)", false, true);
-        GUI.def_switch("infernofuel", ["inferno_grade", "inferno_distillate", "inferno_eyedrops"], "Inferno Minion Fuel", false, false);
-        GUI.def_switch("rising_celsius", ["rising_celsius_override"], "Inferno", false, false);
-        GUI.def_switch("beacon", ["scorched", "B_constant", "B_acquired"], "None", true, false);
-        GUI.def_switch("potato_accessory_switch", ["potato_accessory"], "Potatotrue", false, false);
-        GUI.def_switch("bazaar_tax", ["bazaar_flipper"], true, false, true);
-        GUI.def_switch("afking", ["afkpet", "afkpet_rarity", "afkpet_lvl", "enchanted_clock", "special_layout", "player_harvests", "player_looting"], true, false, false);
-        GUI.def_switch("fuel_amount", ["fuelamount"], -1, true, false);
-        GUI.def_switch("scaled_time_switch", ["scaled_time_amount", "scaled_time_unit", "scaled_time"], true, false, false);
-        GUI.def_switch("free_will", ["freewillcost"], true, false, false);
+        this.gui.def_switch("wisdom_inputs", ["combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom"], null, false, false)
+        this.gui.def_switch("pet_leveling", ["taming", "petxpboost", "beastmaster", "expsharepet", "expshareitem", "pets_levelled", "pet_profit", "falcon_attribute", "toucan_attribute", "used_pet_prices"], "None", true, false);
+        this.gui.def_switch("exp_share_diana", ["expsharepetslot2", "expsharepetslot3"], "Dianatrue", false, false);
+        this.gui.def_switch("NPC_Bazaar", ["item_sell_loc"], "Best (NPC/Bazaar)", false, true);
+        this.gui.def_switch("infernofuel", ["inferno_grade", "inferno_distillate", "inferno_eyedrops"], "Inferno Minion Fuel", false, false);
+        this.gui.def_switch("rising_celsius", ["rising_celsius_override"], "Inferno", false, false);
+        this.gui.def_switch("beacon", ["scorched", "B_constant", "B_acquired"], "None", true, false);
+        this.gui.def_switch("potato_accessory_switch", ["potato_accessory"], "Potatotrue", false, false);
+        this.gui.def_switch("bazaar_tax", ["bazaar_flipper"], true, false, true);
+        this.gui.def_switch("afking", ["afkpet", "afkpet_rarity", "afkpet_lvl", "enchanted_clock", "special_layout", "player_harvests", "player_looting"], true, false, false);
+        this.gui.def_switch("fuel_amount", ["fuelamount"], -1, true, false);
+        this.gui.def_switch("scaled_time_switch", ["scaled_time_amount", "scaled_time_unit", "scaled_time"], true, false, false);
+        this.gui.def_switch("optimal_free_will", ["optimal_tier_free_will"], true, false, false);
+        this.gui.def_switch("setup_cost_breakdown", ["setupcost_breakdown"], null, false, false)
 
-
-        this.dependent_variables = {"afkpet_rarity": "afkpet", "afkpet_lvl": "afkpet", "player_harvests": "afk", "empty_time": "scale_time", "freewillcost": "free_will", "expshareitem": "expsharepet", "pets_levelled": "levelingpet", "used_pet_prices": "levelingpet", "pet_profit": "levelingpet"};
+        this.dependent_variables = {"afkpet_rarity": "afkpet", "afkpet_lvl": "afkpet", "player_harvests": "afk", "empty_time": "scale_time", "optimal_tier_free_will": "free_will", "expshareitem": "expsharepet", "pets_levelled": "levelingpet", "used_pet_prices": "levelingpet", "pet_profit": "levelingpet"};
         this.key_replace_bool = ["infusion", "free_will", "postcard"];
 
-        this.output_order = {
+        this.standard_output_order = {
+            "### ": {"$": ["amount"], "$x ": ["minion"], "$ t": ["miniontier"]},
             "**Minion Upgrades**": {
                 "\n> Internal: ": new Set(["fuel", "hopper", "upgrade1", "upgrade2"]),
                 "\n> External: ": new Set(["chest", "beacon", "crystal", "postcard"]),
@@ -419,7 +423,8 @@ class Calculator {
                 "\n> Exp Share Pets: ": new Set(["expsharepet", "expsharepetslot2", "expsharepetslot3"])
             },
             "used_pet_prices": null,
-            "**Setup Information**": { "!\n> ": ["ID", "setupcost", "freewillcost", "extracost", "actiontime", "fuelamount"] },
+            "**Setup Information**": { "!\n> ": ["calculated_ID", "actiontime", "fuelamount", "available_storage", "optimal_tier_free_will", "setupcost", "extracost",] },
+            "setupcost_breakdown": null,
             "Bazaar Info": { "\n> ": ["sell_loc", "bazaar_update_txt", "bazaar_sell_type", "bazaar_buy_type", "bazaar_taxes", "bazaar_flipper"] },
             "notes": null,
             "empty_time": null,
@@ -463,41 +468,41 @@ class Calculator {
     multiswitch(multi_ID, force=false) {
         if (multi_ID === "minion") {
             let minionType = this.minion.get(false);
-            GUI.set_value("miniontier", Object.keys(md.calculator_data[md.minion_options[minionType]]["speed"]).slice(-1));
-            GUI.toggle_switch("potato_accessory_switch", minionType + String(this.afk.get(false)));
-            GUI.toggle_switch("rising_celsius", minionType);
+            this.gui.set_value("miniontier", Object.keys(md.calculator_data[md.minion_options[minionType]]["speed"]).slice(-1));
+            this.gui.toggle_switch("potato_accessory_switch", minionType + String(this.afk.get(false)));
+            this.gui.toggle_switch("rising_celsius", minionType);
         } else if (multi_ID === "tier") {
             let minionType = this.minion.get(true);
             let minionTier = this.miniontier.get(false);
             if (!(minionTier in md.calculator_data[minionType]["speed"])) {
-                GUI.set_value("miniontier", Object.keys(md.calculator_data[minionType]["speed"]).slice(-1));
+                this.gui.set_value("miniontier", Object.keys(md.calculator_data[minionType]["speed"]).slice(-1));
             };
         } else if (multi_ID === "fuel") {
             let control = this.fuel.get(false);
-            GUI.toggle_switch("infernofuel", control);
-            GUI.toggle_switch("fuel_amount", md.calculator_data[md.fuel_options[control]]["fuel_duration"]);
+            this.gui.toggle_switch("infernofuel", control);
+            this.gui.toggle_switch("fuel_amount", md.calculator_data[md.fuel_options[control]]["fuel_duration"]);
         } else if (multi_ID === "afk") {
             let afkState = this.afk.get(false);
             let minionType = this.minion.get(false);
-            GUI.toggle_switch("afking", afkState);
-            GUI.toggle_switch("potato_accessory_switch", minionType + String(afkState));
+            this.gui.toggle_switch("afking", afkState);
+            this.gui.toggle_switch("potato_accessory_switch", minionType + String(afkState));
         } else if (multi_ID === "pet_leveling") {
             let mayor = this.mayor.get(false);
             let pet_leveling_state;
             if (force) {
-                GUI.toggle_switch("pet_leveling");
-                pet_leveling_state = GUI.switches["pet_leveling"]["state"]
-                GUI.toggle_switch("exp_share_diana", mayor + String(pet_leveling_state));
+                this.gui.toggle_switch("pet_leveling");
+                pet_leveling_state = this.gui.switches["pet_leveling"]["state"]
+                this.gui.toggle_switch("exp_share_diana", mayor + String(pet_leveling_state));
             } else {
                 let control = this.levelingpet.get(false);
-                GUI.toggle_switch("pet_leveling", control);
-                pet_leveling_state = GUI.switches["pet_leveling"]["state"]
-                GUI.toggle_switch("exp_share_diana", mayor + String(pet_leveling_state));
+                this.gui.toggle_switch("pet_leveling", control);
+                pet_leveling_state = this.gui.switches["pet_leveling"]["state"]
+                this.gui.toggle_switch("exp_share_diana", mayor + String(pet_leveling_state));
             };
         } else if (multi_ID === "mayors") {
             let mayor = this.mayor.get(false);
-            let pet_leveling_state = GUI.switches["pet_leveling"]["state"];
-            GUI.toggle_switch("exp_share_diana", mayor + String(pet_leveling_state));
+            let pet_leveling_state = this.gui.switches["pet_leveling"]["state"];
+            this.gui.toggle_switch("exp_share_diana", mayor + String(pet_leveling_state));
         };
         return;
     };
@@ -509,7 +514,7 @@ class Calculator {
         };
         this.template.set("Choose Template")
         let template;
-        if (templateName === "ID") {
+        if (templateName === "Load ID") {
             template = this.decode_id(this.load_ID.get());
         } else if (templateName === "Clean") {
             template = {};
@@ -530,7 +535,9 @@ class Calculator {
     };
 
     data_to_text(var_key, calculation_data, output_switches, markdown=true, display=true, newline=false) {
-        let force = false;
+        if (!(var_key in calculation_data)) {
+            return null;
+        };
         let data;
         if (var_key in this.dependent_variables) {
             if (["None", "0", "0.0", "", false].includes(calculation_data[this.dependent_variables[var_key]])) {
@@ -548,13 +555,15 @@ class Calculator {
             if (calculation_data["minion"] != "Inferno") {
                 return null;
             };
-        } else if (var_key === "extracost" && output_switches["setupcost"] === false) {  // special case: setup cost is turned off
-            return null;
         } else if (var_key === "scaled_time" && calculation_data["scale_time"] === false && output_switches["empty_time"] === false) {  // special case: scale time is off and empty time is off
             return null;
         };
 
-        let output_switch_val = output_switches[var_key]
+        let force = false;
+        let output_switch_val = null;
+        if (var_key in output_switches) {
+            output_switch_val = output_switches[var_key];
+        };
         if (output_switch_val === false) {
             return null;
         } else if (output_switch_val === true) {
@@ -579,7 +588,7 @@ class Calculator {
             data = calculation_data[var_key];
         };
         
-        if ((["None", "0", "0.0", "", "False"].includes(data) || GUI.get_length(data) === 0) && force === false) {
+        if ((["None", "0", "0.0", "", "False"].includes(data) || this.gui.get_length(data) === 0) && force === false) {
             return null;
         };
         
@@ -599,6 +608,8 @@ class Calculator {
                 key_formatting_function = x => md.calculator_data[x]['display'];
             } else if (var_key === "pets_levelled") {
                 key_formatting_function = x => calculation_data[x];
+            } else if (var_key === "setupcost_breakdown") {
+                key_formatting_function = x => this.var_dict[x].get_display(true);
             };
             for (let [list_key, list_val] of Object.entries(data)) {
                 if (typeof list_val === "number") {
@@ -607,27 +618,22 @@ class Calculator {
                 formatted_list.push(key_formatting_function(list_key) + ": " + value_formatting_function(list_val));
             };
             return_str += formatted_list.join(", ");
-        } else if (markdown && var_key === "ID") {
+        } else if (markdown && var_key === "calculated_ID") {
             return_str += `||${data}||`.replace("\\", "\\\\");
         } else {
             return_str += value_formatting_function(data);
         };
 
-        if (var_key === "used_storage") {
-            return_str += ` (out of ${value_formatting_function(calculation_data["available_storage"])})`;
-        } else if (var_key === "freewillcost") {
-            return_str += ` (optimal: apply on t${calculation_data["optimal_tier_free_will"]})`
-        };
         if (newline) {
             return_str += "\n";
         };
         return return_str;
     };
     
-    text_output(calculation_data=null, output_switches=null, markdown=true, to_terminal=true) {
+    text_output(calculation_data=null, output_switches=null, output_order=null, markdown=true, to_terminal=true) {
         if (calculation_data === null) {
             calculation_data = this.gui.get_from_GUI(Object.keys(this.var_dict));
-            Object.assign(calculation_data, this.decode_id(calculation_data["ID"]));
+            Object.assign(calculation_data, this.decode_id(calculation_data["calculated_ID"]));
         };
         if (output_switches === null) {
             output_switches = {};
@@ -635,21 +641,19 @@ class Calculator {
                 output_switches[var_key] = this.var_dict[var_key].get_output_switch();
             };
         };
-
-        let crafted_string;
-        if (markdown) {
-            crafted_string = `${calculation_data["amount"]}x **${calculation_data["minion"]} t${calculation_data["miniontier"]}**`;
-        } else {
-            crafted_string = `${calculation_data["amount"]}x ${calculation_data["minion"]} t${calculation_data["miniontier"]}`;
+        if (output_order === null) {
+            output_order = this.standard_output_order;
         };
-        for (let section_key of Object.keys(this.output_order)) {
+
+        let crafted_string = "";
+        for (let section_key of Object.keys(output_order)) {
             if (section_key === "Beacon Info" && calculation_data["beacon"] === 0) {
                 continue;
             };
             if (section_key === "Inferno Info" && calculation_data["minion"] !== "Inferno" && calculation_data["fuel"] !== "Inferno Minion Fuel") {
                 continue;
             };
-            if (section_key === "Bazaar Info" && output_switches["bazaar_update_txt"] === false) {
+            if (section_key === "Bazaar Info" && "bazaar_update_txt" in output_switches && output_switches["bazaar_update_txt"] === false) {
                 continue;
             };
             let line_str = "";
@@ -662,16 +666,20 @@ class Calculator {
                 header = section_key;
                 if (!(markdown)) {
                     header = header.replaceAll("*", "");
+                    header = header.replaceAll("### ", "");
                 };
             };
             if (header === null) {
                 continue;
             };
 
-            if (this.output_order[section_key] instanceof Object) {
-                for (let [sub_key, key_arr] of Object.entries(this.output_order[section_key])) {
+            if (output_order[section_key] instanceof Object) {
+                for (let [sub_key, key_arr] of Object.entries(output_order[section_key])) {
                     let line_data = "";
-                    if (sub_key.includes("!")) {  // Tuple-but-not-tuple needs to be done first, as it's really just an Array
+                    if (sub_key.includes("$")) {
+                        sub_key = sub_key.substring(1);
+                        line_data += Array.from(key_arr, var_key => this.data_to_text(var_key, calculation_data, output_switches, false, false)).filter(x => x !== null).join(", ");
+                    } else if (sub_key.includes("!")) {
                         sub_key = sub_key.substring(1);
                         line_data += Array.from(key_arr, var_key => this.data_to_text(var_key, calculation_data, output_switches, markdown)).filter(x => x !== null).join(sub_key);
                     } else if (key_arr instanceof Array) {
@@ -740,61 +748,61 @@ class Calculator {
         return setup_id;
     };
 
-    decode_id(ID) {
-        if (!(ID instanceof String)) {
-            ID = String(ID);
+    decode_id(setup_id) {
+        if (!(setup_id instanceof String)) {
+            setup_id = String(setup_id);
         };
         let setup_data = {};
-        let end_ver = ID.indexOf("!");
+        let end_ver = setup_id.indexOf("!");
         let ID_version;
         let end_val;
         if (end_ver === -1) {
-            console.log("WARNING: Invalid ID, could not find version number");
+            console.log("WARNING: Invalid setup ID, could not find version number");
             return setup_data;
         };
         try {
-            ID_version = ID.slice(0, end_ver);
+            ID_version = setup_id.slice(0, end_ver);
         } catch(Exception) {
-            console.log("WARNING: Invalid ID, could not find version number");
+            console.log("WARNING: Invalid setup ID, could not find version number");
             return setup_data;
         };
         let ID_index = end_ver + 1;
         if (ID_version !== this.version) {
-            console.log("WARNING: Invalid ID, Incompatible version");
+            console.log("WARNING: Invalid setup ID, Incompatible version");
             return setup_data;
         };
         try {
             for (const var_key of this.ID_order) {
                 let var_options = this.var_dict[var_key].options
                 if (var_options === null) {
-                    if (ID[ID_index] !== "!") {
+                    if (setup_id[ID_index] !== "!") {
                         console.log(`WARNING: did not find ${var_key}`);
                         return {};
                     };
-                    end_val = ID.indexOf("!", ID_index + 1);
-                    setup_data[var_key] = {"string": String, "number": Number, "boolean": Boolean}[this.var_dict[var_key].dtype](ID.slice(ID_index + 1, end_val));
+                    end_val = setup_id.indexOf("!", ID_index + 1);
+                    setup_data[var_key] = {"string": String, "number": Number, "boolean": Boolean}[this.var_dict[var_key].dtype](setup_id.slice(ID_index + 1, end_val));
                     ID_index = end_val + 1;
                 } else if (this.gui.get_length(var_options) > 79) {
-                    if (ID[ID_index] !== "!") {
+                    if (setup_id[ID_index] !== "!") {
                         console.log(`WARNING: did not find ${var_key}`);
                         return {};
                     };
-                    end_val = ID.indexOf("!", ID_index + 1);
-                    setup_data[var_key] = var_options[Number(ID.slice(ID_index + 1, end_val))];
+                    end_val = setup_id.indexOf("!", ID_index + 1);
+                    setup_data[var_key] = var_options[Number(setup_id.slice(ID_index + 1, end_val))];
                     ID_index = end_val + 1;
                 } else {
-                    setup_data[var_key] = var_options[ID.charCodeAt(ID_index) - 48];
+                    setup_data[var_key] = var_options[setup_id.charCodeAt(ID_index) - 48];
                     ID_index += 1;
                 };
             };
         } catch(error) {
-            console.log("WARNING: Invalid ID, ID incomplete");
+            console.log("WARNING: Invalid setup ID, ID incomplete");
             return {};
         };
         return setup_data;
     };
 
-    get_price(ID, setup_data, action="buy", location="bazaar", force=false) {
+    get_price(item_ID, setup_data, action="buy", location="bazaar", force=false) {
         let multiplier = 1;
         if (location === "bazaar") {
             if (action === "buy") {
@@ -810,22 +818,22 @@ class Calculator {
         } else if (location === "npc" && action === "buy") {
             multiplier = 2;
         };
-        if (ID in md.calculator_data) {
-            if (location in md.calculator_data[ID]["prices"]) {
-                return multiplier * md.calculator_data[ID]["prices"][location];
+        if (item_ID in md.calculator_data) {
+            if (location in md.calculator_data[item_ID]["prices"]) {
+                return multiplier * md.calculator_data[item_ID]["prices"][location];
             } else if (force) {
-                console.log("WARNING:", ID, "no forced cost found");
+                console.log("WARNING: no forced cost found for " + item_ID);
                 return 0;
-            } else if ("custom" in md.calculator_data[ID]["prices"]) {
-                return md.calculator_data[ID]["prices"]["custom"];
-            } else if ("npc" in md.calculator_data[ID]["prices"]) {
-                return multiplier * md.calculator_data[ID]["prices"]["npc"];
+            } else if ("custom" in md.calculator_data[item_ID]["prices"]) {
+                return md.calculator_data[item_ID]["prices"]["custom"];
+            } else if ("npc" in md.calculator_data[item_ID]["prices"]) {
+                return multiplier * md.calculator_data[item_ID]["prices"]["npc"];
             } else {
-                console.log("WARNING:", ID, "no cost found");
+                console.log("WARNING: no cost found for " + item_ID);
                 return 0;
             };
         } else {
-            console.log("WARNING:", ID, "not in calculator data");
+            console.log("WARNING: " + item_ID + " not in calculator data");
             return 0;
         };
     };
@@ -997,12 +1005,12 @@ class Calculator {
 
     get_time_constants(seconds_per_action, actions_per_harvest, setup_data) {
         let empty_time_seconds = this.gui.time_number(setup_data["empty_time_unit"], setup_data["empty_time_amount"], seconds_per_action * actions_per_harvest);
-        let empty_time_str = `${setup_data["empty_time_amount"]} ${setup_data["empty_time_unit"]}`; 
-        let scaled_time_str = `${setup_data["empty_time_amount"]} ${setup_data["empty_time_unit"]}`;
+        let empty_time_str = `${this.gui.reduced_number(setup_data["empty_time_amount"])} ${setup_data["empty_time_unit"]}`; 
+        let scaled_time_str = `${this.gui.reduced_number(setup_data["empty_time_amount"])} ${setup_data["empty_time_unit"]}`;
         let timeratio = 1;
         if (setup_data["scale_time"]) {
             let scaled_time_seconds = this.gui.time_number(setup_data["scaled_time_unit"], setup_data["scaled_time_amount"], seconds_per_action * actions_per_harvest);
-            scaled_time_str = `${setup_data["scaled_time_amount"]} ${setup_data["scaled_time_unit"]}`;
+            scaled_time_str = `${this.gui.reduced_number(setup_data["scaled_time_amount"])} ${setup_data["scaled_time_unit"]}`;
             timeratio = scaled_time_seconds / empty_time_seconds;
         };
         return [empty_time_seconds, timeratio, empty_time_str, scaled_time_str];
@@ -1403,7 +1411,7 @@ class Calculator {
                 continue;
             };
             exp_share_pet = pet_info["pet"];
-            if (md.calculator_data[main_pet]["rarity"].includes("Dragon")) {
+            if (md.calculator_data[exp_share_pet]["rarity"].includes("Dragon")) {
                 if (exp_share_boost == 0) {
                     continue;
                 };
@@ -1469,9 +1477,9 @@ class Calculator {
         return [fuel_cost, needed_fuel];
     };
 
-    get_setup_cost(minion_type, minion_tier, minion_amount, minion_fuel, upgrades, setup_pets, setup_notes, setup_data) {
+    get_setup_cost(minion_type, minion_tier, minion_amount, minion_fuel, upgrades, setup_pets, setup_data) {
         let cost_per_part = {};
-        let extra_cost = "";
+        let extra_cost = "None";
 
         // Single minion cost
         let cost_cache = {};
@@ -1520,7 +1528,6 @@ class Calculator {
             };
         };
         if (this.gui.get_length(tiered_extra_cost) != 0) {
-            setup_notes["Extra cost"] = Array.from(Object.keys(tiered_extra_cost[minion_tier]), material => `${tiered_extra_cost[minion_tier][material]} ${material}`).join(", ") + " per minion";
             extra_cost = Array.from(Object.keys(tiered_extra_cost[minion_tier]), material => `${tiered_extra_cost[minion_tier][material] * minion_amount} ${material}`).join(", ");
         };
         cost_per_part["minion"] = tiered_coin_cost[minion_tier];
@@ -1538,7 +1545,7 @@ class Calculator {
         // Internal minion upgrades cost
         for (let [i, upgrade] of Object.entries(upgrades)) {
             if (upgrade != "NONE") {
-                cost_per_part[`upgrade${i + 1}`] = this.get_price(upgrade, setup_data, "buy", "bazaar");
+                cost_per_part[`upgrade${Number(i) + 1}`] = this.get_price(upgrade, setup_data, "buy", "bazaar");
             };
         };
 
@@ -1551,6 +1558,7 @@ class Calculator {
         let free_will_price = this.get_price("FREE_WILL", setup_data, "buy", "bazaar");
         let postcard_price = this.get_price("POSTCARD", setup_data, "buy", "custom", true);
         let final_postcard_cost;
+        let free_will_optimal_tier = 0;
         if (postcard_price == 0) {
             // If no price found, use the free will price
             final_postcard_cost = free_will_price;
@@ -1566,11 +1574,8 @@ class Calculator {
                 let free_wills_failed = free_wills_needed - 1;
                 tiered_free_will[tier] = free_wills_failed * (tiered_coin_cost[tier] - final_postcard_cost) + free_wills_needed * free_will_price;
             };
-            let optimal = Number(Object.keys(tiered_free_will).reduce((a, b) => tiered_free_will[a] < tiered_free_will[b] ? a : b));
-            this.optimal_tier_free_will.set(optimal);
-            setup_notes["Free Will"] = `per minion, apply ${this.gui.round_number(1 / (0.5 + 0.04 * (optimal - 1)))} Free Wills on Tier ${optimal}`;
-            cost_per_part["free_will"] = tiered_free_will[optimal];
-            this.freewillcost.set(cost_per_part["free_will"]);
+            free_will_optimal_tier = Number(Object.keys(tiered_free_will).reduce((a, b) => tiered_free_will[a] < tiered_free_will[b] ? a : b));
+            cost_per_part["free_will"] = tiered_free_will[free_will_optimal_tier];
         };
 
         // Storage Chest cost
@@ -1623,7 +1628,7 @@ class Calculator {
 
 
         let total_cost = Object.values(cost_per_part).reduce((partialSum, a) => partialSum + a, 0);
-        return [total_cost, extra_cost, cost_per_part];
+        return [total_cost, extra_cost, free_will_optimal_tier, cost_per_part];
     };
 
     async calculate(inGUI=false, setup_data=null, return_outputs=false) {
@@ -1731,7 +1736,7 @@ class Calculator {
         let total_profit = item_profit + pet_profit - fuel_cost;
 
         // Setup cost
-        let [total_cost, extra_cost, cost_per_part] = this.get_setup_cost(minion_type, minion_tier, minion_amount, minion_fuel, upgrades, setup_pets, setup_notes, setup_data);
+        let [total_cost, extra_cost, free_will_optimal_tier, cost_per_part] = this.get_setup_cost(minion_type, minion_tier, minion_amount, minion_fuel, upgrades, setup_pets, setup_data);
 
         // Construct ID
         let setup_ID = this.construct_id(setup_data);
@@ -1764,9 +1769,10 @@ class Calculator {
             "available_storage": available_storage,
             "item_sell_loc": per_item_sell_location,
             "ID_container": [setup_ID],
-            "ID": setup_ID,
+            "calculated_ID": setup_ID,
             "extracost": extra_cost,
             "setupcost": total_cost,
+            "setupcost_breakdown": cost_per_part,
             "filltime": fill_time,
             "used_storage": used_storage,
             "empty_time": empty_time_str,
@@ -1774,6 +1780,7 @@ class Calculator {
             "actiontime": seconds_per_action,
             "notes": setup_notes,
             "used_pet_prices": pet_prices,
+            "optimal_tier_free_will": free_will_optimal_tier,
         });
 
         // Update GUI
@@ -1943,6 +1950,9 @@ class Calculator {
                 if (var_key == "pets_levelled") {
                     this.pets_levelled.update_listbox(x => this.var_dict[x].get(false));
                     continue;
+                } else if (var_key === "setupcost_breakdown") {
+                    this.setupcost_breakdown.update_listbox(x => this.var_dict[x].get_display(false));
+                    continue;
                 };
                 let format_function = x => x;
                 if (this.var_dict[var_key].has_tag("item_ID_to_display")) {
@@ -1960,18 +1970,18 @@ class Calculator {
     };
 
     edit_pet_price_redirect() {
-        this.edit_pet_price_pet = md.pet_options[this.edit_vars_output["edit_pet_price_pet"]];
+        this.edit_pet_price_pet = md.pet_options[this.gui.edit_vars_output["edit_pet_price_pet"]];
         if (!(this.edit_pet_price_pet in this.pet_costs)) {
             this.pet_costs[this.edit_pet_price_pet] = {"min": 0, "max": 0};
         };
         let initial_max = this.pet_costs[this.edit_pet_price_pet]["max"];
         let initial_min = this.pet_costs[this.edit_pet_price_pet]["min"];
-        GUI.edit_vars.bind(this)(this.edit_pet_price_store.bind(this), {"min_price": {"dtype": "number", "display": "Level 1 price", "initial": initial_min, "options": null}, "max_price": {"dtype": "number", "display": "Max level price", "initial": initial_max, "options": null}}, false);
+        this.gui.edit_vars.bind(this.gui)(this.edit_pet_price_store.bind(this), {"min_price": {"dtype": "number", "display": "Level 1 price", "initial": initial_min, "options": null}, "max_price": {"dtype": "number", "display": "Max level price", "initial": initial_max, "options": null}}, false);
     };
 
     edit_pet_price_store() {
-        this.pet_costs[this.edit_pet_price_pet]["max"] = this.edit_vars_output["max_price"];
-        this.pet_costs[this.edit_pet_price_pet]["min"] = this.edit_vars_output["min_price"];
+        this.pet_costs[this.edit_pet_price_pet]["max"] = this.gui.edit_vars_output["max_price"];
+        this.pet_costs[this.edit_pet_price_pet]["min"] = this.gui.edit_vars_output["min_price"];
     };
 
 };
