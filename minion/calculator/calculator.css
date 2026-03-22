@@ -31,6 +31,8 @@
 
 .frame {
     overflow: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
     display: inline-block;
     vertical-align: top;
     background-color: var(--frame_background);
@@ -39,6 +41,10 @@
     box-sizing: border-box;
     width: 24.4%;
     height: 75vh;
+}
+
+.frame::-webkit-scrollbar {
+  display: none;
 }
 
 .input_grid_frame {
@@ -146,6 +152,8 @@ input:focus {
 
 .output_list {
     overflow: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
     text-wrap-mode: nowrap;
     background-color: var(--widget_background);
     border: 2px solid var(--widget_border);
@@ -156,6 +164,10 @@ input:focus {
     margin-top: 0;
     margin-bottom: 0;
     padding-left: 0;
+}
+
+.output_list::-webkit-scrollbar {
+    display: none;
 }
 
 .status_div {
@@ -181,6 +193,8 @@ input:focus {
 
 .small_frame {
     overflow: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
     display: inline-block;
     vertical-align: top;
     background-color: var(--frame_background);
@@ -189,6 +203,10 @@ input:focus {
     box-sizing: border-box;
     width: 20vw;
     height: 30vh;
+}
+
+.small_frame::-webkit-scrollbar {
+    display: none;
 }
 
 
@@ -205,6 +223,8 @@ input:focus {
 
 .add_ons_frame {
     overflow: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
     display: inline-block;
     vertical-align: top;
     background-color: var(--frame_background);
@@ -213,6 +233,10 @@ input:focus {
     box-sizing: border-box;
     width: 49.4%;
     height: 50vh;
+}
+
+.add_ons_frame::-webkit-scrollbar {
+    display: none;
 }
 
 .add_ons_output_grid_frame {
