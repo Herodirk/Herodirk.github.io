@@ -1,8 +1,5 @@
 class Calculator {
     constructor() {
-        this.pet_costs = {
-            "NONE": {"min": 0, "max": 0}
-        };
         this.edit_pet_price_pet = "None";
 
         this.templateList = {
@@ -119,6 +116,7 @@ class Calculator {
 
         this.API_auto_update = new Hvar({"huim": this.gui, "key": "API_auto_update", "vtype": "storage", "dtype": "boolean", "display": "API Auto Update", "initial": true});
         this.API_cooldown = new Hvar({"huim": this.gui, "key": "API_cooldown", "vtype": "storage", "dtype": "number", "display": "API Cooldown (s)", "initial": 120});
+        this.pet_API_cooldown = new Hvar({"huim": this.gui, "key": "pet_API_cooldown", "vtype": "storage", "dtype": "number", "display": "Pet API Cooldown (s)", "initial": 1800});
         this.compact_tolerance = new Hvar({"huim": this.gui, "key": "compact_tolerance", "vtype": "storage", "dtype": "number", "display": "Over-compacting (coin)", "initial": 10000});
         this.output_to_clipboard = new Hvar({"huim": this.gui, "key": "output_to_clipboard", "vtype": "storage", "dtype": "boolean", "display": "Output to Clipboard", "initial": true});
         this.color_palette = new Hvar({"huim": this.gui, "key": "color_palette", "vtype": "storage", "dtype": "string", "display": "Color Palette", "initial": "Dark Red", "options": Object.keys(this.gui.palette_names)});
@@ -207,6 +205,7 @@ class Calculator {
         this.scaled_time_amount = new Hvar({"huim": this.gui, "key": "scaled_time_amount", "vtype": "input", "dtype": "number", "display": "Scaled Time span", "initial": 1.0, "frame": "inputs_player_grid"});
         this.scaled_time_unit = new Hvar({"huim": this.gui, "key": "scaled_time_unit", "vtype": "input", "dtype": "string", "display": "Scaled Time unit", "initial": "Days", "frame": "inputs_player_grid", "options": ["Years", "Weeks", "Days", "Hours", "Minutes", "Seconds", "Harvests"]});
         this.rising_celsius_override = new Hvar({"huim": this.gui, "key": "rising_celsius_override", "vtype": "input", "dtype": "boolean", "display": "Force Rising Celsius", "initial": false, "frame": "inputs_minion_grid"});
+        this.pet_costs = new Hvar({"huim": this.gui, "key": "pet_costs", "vtype": "storage", "dtype": "object", "display": "Pet Prices", "initial": {"NONE": {"min": 1, "max": 1, "last_updated": 0}}})
         this.used_pet_prices = new Hvar({"huim": this.gui, "key": "used_pet_prices", "vtype": "output", "dtype": "object", "display": "Used Pet Prices", "initial": {}, "frame": "outputs_profit_grid", "widget_width": 35, "widget_height": 4, "switch_initial": true, "tags": ["item_ID_to_display"]});
 
         this.empty_time_amount.widget.push(this.empty_time_unit.widget[this.empty_time_unit.widget.length - 1]);
@@ -221,7 +220,7 @@ class Calculator {
         let text_outputB = this.gui.create_button('Text Output', () => this.text_output.bind(this)(null, null, null, false), true);
         let markdown_outputB = this.gui.create_button('Markdown Output', () => this.text_output.bind(this)(null, null, null, true), true);
         let pricesB = this.gui.create_button("Update Prices", this.update_prices.bind(this), true);
-        let settingsB = this.gui.create_button('Edit Settings', () => this.gui.edit_vars.bind(this.gui)(this.gui.update_color_palette.bind(this.gui), ["API_auto_update", "API_cooldown", "compact_tolerance", "output_to_clipboard", "color_palette"]), true);
+        let settingsB = this.gui.create_button('Edit Settings', () => this.gui.edit_vars.bind(this.gui)(this.gui.update_color_palette.bind(this.gui), ["API_auto_update", "API_cooldown", "pet_API_cooldown", "compact_tolerance", "output_to_clipboard", "color_palette"]), true);
         let pet_priceB = this.gui.create_button('Edit Pet Prices', () => this.gui.edit_vars.bind(this.gui)(this.edit_pet_price_redirect.bind(this), {"edit_pet_price_pet": {"dtype": "string", "display": "Pet", "initial": "None", "options": Object.keys(md.pet_options)}}, false), true);
         let emptyspaceLB = this.gui.genLabel("control_frame_filler", "")
         let creditLB = this.gui.genLabel("credit_label", `Minion Calculator V${this.version}\nMade by Herodirk`);
@@ -1000,6 +999,7 @@ class Calculator {
         if (minion_fuel_id == "INFERNO_FUEL") {
             secondsPaction /= 1 + md.inferno_fuel_data["grades"][setup_data["inferno_grade"]];
         };
+        secondsPaction = Math.round(secondsPaction * 20) / 20
         return secondsPaction;
     };
 
@@ -1332,7 +1332,7 @@ class Calculator {
         };
         let petxpbonus = (1 + setup_data["taming"] / 100) * (1 + setup_data["beastmaster"] / 100) * non_matching;
         let pet_item;
-        if ([xp_type, "all"].includes(md.calculator_data[setup_data["petxpboost"]]["exp_boost_type"])) {
+        if ([xp_type, "all"].includes(md.calculator_data[setup_data["petxpboost"]]["exp_boost_type"]) && !(md.has_data_tag(pet, "dragon_egg_pet"))) {
             pet_item = 1 + md.calculator_data[setup_data["petxpboost"]]["exp_boost_amount"] / 100;
         } else {
             pet_item = 1;
@@ -1352,34 +1352,13 @@ class Calculator {
         return [petxpbonus, pet_item];
     };
 
-    dragon_xp(gained_xp, left_over_pet_xp, pet_xp_boost, xp_boost_pet_item) {
-        const drag_lvl_100 = 25353230;
-        const drag_lvl_200 = 210255385;
-        let gained_pet_xp = 0.0;
-        let skill_xp_per_pet = (drag_lvl_200 + drag_lvl_100 * (xp_boost_pet_item - 1)) / (xp_boost_pet_item * pet_xp_boost);
-        gained_pet_xp = - left_over_pet_xp
-        if (left_over_pet_xp <= drag_lvl_100) {
-            gained_xp += left_over_pet_xp / pet_xp_boost;
-        } else {
-            gained_xp += (left_over_pet_xp + drag_lvl_100 * (xp_boost_pet_item - 1)) / (pet_xp_boost * xp_boost_pet_item);
-        };
-        gained_pet_xp += Math.floor(gained_xp / skill_xp_per_pet) * drag_lvl_200;
-        let left_over_xp = gained_xp % skill_xp_per_pet;
-        if (left_over_xp <= drag_lvl_100 / pet_xp_boost) {
-            left_over_pet_xp = left_over_xp * pet_xp_boost;
-        } else {
-            left_over_pet_xp = left_over_xp * pet_xp_boost * xp_boost_pet_item + drag_lvl_100 * (1 - xp_boost_pet_item);
-        };
-        gained_pet_xp += left_over_pet_xp;
-        return [gained_pet_xp, left_over_pet_xp];
-    };
-
-    get_pet_profit(skill_xp, mayor, setup_data) {
-        let pet_profit = 0.0;
+    get_pets_levelled(skill_xp, mayor, setup_data) {
         let main_pet = setup_data["levelingpet"];
         if (main_pet == "NONE") {
-            return [0, {}, {}];
+            return {};
         };
+
+        // Creating setup_pets
         let setup_pets = { "levelingpet": { "pet": main_pet, "pet_xp": {}, "levelled_pets": 0.0 } };
         for (const var_key of ["expsharepet", "expsharepetslot2", "expsharepetslot3"]) {
             if (setup_data[var_key] == "NONE" || (mayor != "MAYOR_DIANA" && ["expsharepetslot2", "expsharepetslot3"].includes(var_key))) {
@@ -1387,23 +1366,22 @@ class Calculator {
             };
             setup_pets[var_key] = { "pet": setup_data[var_key], "pet_xp": { "exp_share": 0.0 }, "levelled_pets": 0.0 };
         };
-        let pet_prices = {};
+
+        // Main pet
         let main_pet_xp = setup_pets["levelingpet"]["pet_xp"];
+        let dragon_pet_multiplier = pet_item => 1;
+        let dragon_pet_xp_lvl_200 = md.max_lvl_pet_xp_amounts["Dragon"];
+        let dragon_pet_xp_lvl_100 = md.max_lvl_pet_xp_amounts["Legendary"];
         let pet_xp_boost, xp_boost_pet_item, left_over_pet_xp, exp_share_pet, equiv_pet_xp_boost, equiv_xp_boost_pet_item, non_matching, dragon_xp_outputs;
-        if (md.calculator_data[main_pet]["rarity"].includes("Dragon")) {
-            left_over_pet_xp = 0.0;
-            for (let [skill, amount] of Object.entries(skill_xp)) {
-                [pet_xp_boost, xp_boost_pet_item] = this.get_pet_xp_boosts(main_pet, skill, setup_data);
-                dragon_xp_outputs = this.dragon_xp(amount, left_over_pet_xp, pet_xp_boost, xp_boost_pet_item);
-                main_pet_xp[skill] = dragon_xp_outputs[0];
-                left_over_pet_xp = dragon_xp_outputs[1];
-            };
-        } else {
-            for (let [skill, amount] of Object.entries(skill_xp)) {
-                [pet_xp_boost, xp_boost_pet_item] = this.get_pet_xp_boosts(main_pet, skill, setup_data);
-                main_pet_xp[skill] = amount * pet_xp_boost * xp_boost_pet_item;
-            };
+        if (md.has_data_tag(main_pet, "dragon_pet")) { 
+            dragon_pet_multiplier = pet_item => dragon_pet_xp_lvl_200 / ( dragon_pet_xp_lvl_200 + dragon_pet_xp_lvl_100 * (pet_item - 1))
         };
+        for (let [skill, amount] of Object.entries(skill_xp)) {
+            [pet_xp_boost, xp_boost_pet_item] = this.get_pet_xp_boosts(main_pet, skill, setup_data);
+            main_pet_xp[skill] = amount * pet_xp_boost * xp_boost_pet_item * dragon_pet_multiplier(xp_boost_pet_item);
+        };
+
+        // Exp Share
         let exp_share_boost = 0.2 * setup_data["taming"] + 10 * (mayor == "MAYOR_DIANA") + setup_data["toucan_attribute"];
         let exp_share_item = 15 * setup_data["expshareitem"];
         for (let [pet_slot, pet_info] of Object.entries(setup_pets)) {
@@ -1411,49 +1389,60 @@ class Calculator {
                 continue;
             };
             exp_share_pet = pet_info["pet"];
-            if (md.calculator_data[exp_share_pet]["rarity"].includes("Dragon")) {
+            dragon_pet_multiplier = 1;
+            if (md.has_data_tag(exp_share_pet, "dragon_pet")) {
                 if (exp_share_boost == 0) {
                     continue;
                 };
-                left_over_pet_xp = 0.0;
-                for (let [skill, amount] of Object.entries(main_pet_xp)) {
-                    non_matching = this.get_pet_xp_boosts(exp_share_pet, skill, setup_data, true);
-                    equiv_pet_xp_boost = non_matching * (exp_share_boost / 100);
-                    equiv_xp_boost_pet_item = 1 + exp_share_item / exp_share_boost;
-                    dragon_xp_outputs = this.dragon_xp(amount, left_over_pet_xp, equiv_pet_xp_boost, equiv_xp_boost_pet_item);
-                    pet_info["pet_xp"]["exp_share"] += dragon_xp_outputs[0];
-                    left_over_pet_xp = dragon_xp_outputs[1];
-                };
-            } else {
-                for (let [skill, amount] of Object.entries(main_pet_xp)) {
-                    non_matching = this.get_pet_xp_boosts(exp_share_pet, skill, setup_data, true);
-                    pet_info["pet_xp"]["exp_share"] += amount * ((exp_share_boost + exp_share_item) / 100) * non_matching;
-                };
+                dragon_pet_multiplier = dragon_pet_xp_lvl_200 / ( dragon_pet_xp_lvl_200 + dragon_pet_xp_lvl_100 * (exp_share_item / exp_share_boost))
             };
+            for (let [skill, amount] of Object.entries(main_pet_xp)) {
+                non_matching = this.get_pet_xp_boosts(exp_share_pet, skill, setup_data, true);
+                pet_info["pet_xp"]["exp_share"] += amount * ((exp_share_boost + exp_share_item * (!(md.has_data_tag(exp_share_pet, "dragon_egg_pet")))) / 100) * non_matching * dragon_pet_multiplier;
+            };  
         };
-        let super_scrubber_price = this.get_price("SUPER_SCRUBBER", setup_data, "buy", "custom", true);
+
+        // Calculate levelled pets
         let pets_levelled;
         for (let [pet_slot, pet_info] of Object.entries(setup_pets)) {
-            pets_levelled = Object.values(pet_info["pet_xp"]).reduce((partialSum, a) => partialSum + a, 0) / md.max_lvl_pet_xp_amounts[md.calculator_data[pet_info["pet"]]["rarity"]];
-            setup_pets[pet_slot]["levelled_pets"] = pets_levelled;
-            if (!(pet_info["pet"] in this.pet_costs)) {
+            let max_lvl_pet_xp;
+            if (md.has_data_tag(pet_info["pet"], "dragon_pet")) {
+                max_lvl_pet_xp = md.max_lvl_pet_xp_amounts["Dragon"];
+            } else {
+                max_lvl_pet_xp = md.max_lvl_pet_xp_amounts[md.calculator_data[pet_info["pet"]]["rarity"]];
+            };
+            pets_levelled = Object.values(pet_info["pet_xp"]).reduce((partialSum, a) => partialSum + a, 0) / max_lvl_pet_xp;
+            pet_info["levelled_pets"] = pets_levelled;
+        };
+        return setup_pets;
+    };
+
+    get_pet_profit(setup_pets, setup_data) {
+        let pet_profit = 0.0;
+        let pet_prices = {};
+        let super_scrubber_price = this.get_price("SUPER_SCRUBBER", setup_data, "buy", "custom", true);
+        for (let [pet_slot, pet_info] of Object.entries(setup_pets)) {
+            if (!(pet_info["pet"] in this.pet_costs.list)) {
                 if (!(pet_info["pet"] in pet_prices)) {
                     pet_prices[pet_info["pet"]] = `Price for ${md.calculator_data[pet_info['pet']]["display"]} not found`;
                 };
             } else {
-                pet_profit += pets_levelled * (this.pet_costs[pet_info["pet"]]["max"] - this.pet_costs[pet_info["pet"]]["min"]);
+                pet_profit += pet_info["levelled_pets"] * (this.pet_costs.list[pet_info["pet"]]["max"] - this.pet_costs.list[pet_info["pet"]]["min"]);
                 if (!(pet_info["pet"] in pet_prices)) {
-                    pet_prices[pet_info["pet"]] = `${this.gui.reduced_number(this.pet_costs[pet_info["pet"]]["min"])} - ${this.gui.reduced_number(this.pet_costs[pet_info["pet"]]["max"])}`;
+                    pet_prices[pet_info["pet"]] = `${this.gui.reduced_number(this.pet_costs.list[pet_info["pet"]]["min"])} - ${this.gui.reduced_number(this.pet_costs.list[pet_info["pet"]]["max"])}`;
                 };
             };
+            if (md.has_data_tag(pet_info["pet"], "dragon_egg_pet")) {
+                continue;
+            };
             if (pet_slot == "levelingpet" && setup_data["petxpboost"] != "NONE") {
-                pet_profit -= pets_levelled * (md.pet_item_scrub_cost[md.calculator_data[setup_data["petxpboost"]]["rarity"]] + super_scrubber_price);
+                pet_profit -= pet_info["levelled_pets"] * (md.pet_item_scrub_cost[md.calculator_data[setup_data["petxpboost"]]["rarity"]] + super_scrubber_price);
             };
             if (pet_slot != "levelingpet" && setup_data["expshareitem"]) {
-                pet_profit -= pets_levelled * (md.pet_item_scrub_cost[md.calculator_data["PET_ITEM_EXP_SHARE"]["rarity"]] + super_scrubber_price);
+                pet_profit -= pet_info["levelled_pets"] * (md.pet_item_scrub_cost[md.calculator_data["PET_ITEM_EXP_SHARE"]["rarity"]] + super_scrubber_price);
             };
         };
-        return [pet_profit, setup_pets, pet_prices];
+        return [pet_profit, pet_prices];
     };
 
     get_finite_fuel_cost(minion_amount, minion_fuel, empty_time_seconds, setup_data) {
@@ -1608,6 +1597,9 @@ class Calculator {
 
         // Pet Item costs
         for (let pet_slot of Object.keys(setup_pets)) {
+            if (md.has_data_tag(setup_pets[pet_slot]["pet"], "dragon_egg_pet")) {
+                continue;
+            };
             if (pet_slot == "levelingpet") {
                 cost_per_part["petxpboost"] = this.get_price(setup_data["petxpboost"], setup_data, "buy", "custom", true);
             } else if (setup_data["expshareitem"]) {
@@ -1632,18 +1624,25 @@ class Calculator {
     };
 
     async calculate(inGUI=false, setup_data=null, return_outputs=false) {
-        if (inGUI === true) {
-            this.statusC.style.background = "yellow";
-
-            // auto update bazaar
-            if (this.API_auto_update.get()) {
-                await this.update_prices(false, inGUI);
-            };
-        };
-
         if (setup_data === null) {
             setup_data = this.gui.get_from_GUI(this.ID_order);
         };
+        if (inGUI === true) {
+            this.statusC.style.background = "yellow";
+
+            // auto update API
+            if (this.API_auto_update.get()) {
+                await this.update_prices(false, inGUI);
+                for (const pet_ID of [setup_data["levelingpet"], setup_data["expsharepet"], setup_data["expsharepetslot2"], setup_data["expsharepetslot3"]]) {
+                    await this.update_pet_price(pet_ID);
+                };
+                if (md.has_data_tag(setup_data["petxpboost"], "auction_price_upon_request") && (Date.now() - md.calculator_data[setup_data["petxpboost"]]["price_last_updated"] > this.API_cooldown.get() * 1000)) {
+                    md.calculator_data[setup_data["petxpboost"]]["prices"]["custom"] = await this.call_auction_house(setup_data["petxpboost"]);
+                    md.calculator_data[setup_data["petxpboost"]]["price_last_updated"] = Date.now();
+                };
+            };
+        };
+
 
         // extracting often used minion constants
         let minion_type = setup_data["minion"];
@@ -1726,8 +1725,9 @@ class Calculator {
         // Check for over-compacting
         this.get_over_compacting(sell_location, compacted_items, per_item_sell_location, setup_notes, setup_data);
 
-        // Pet leveling calculations
-        let [pet_profit, setup_pets, pet_prices] = this.get_pet_profit(skill_xp, mayor, setup_data);
+        // Pet leveling
+        let setup_pets = this.get_pets_levelled(skill_xp, mayor, setup_data)
+        let [pet_profit, pet_prices] = this.get_pet_profit(setup_pets, setup_data);
 
         // calculating beacon and limited fuel cost
         let [fuel_cost, needed_fuel] = this.get_finite_fuel_cost(minion_amount, minion_fuel, empty_time_seconds, setup_data);
@@ -1831,8 +1831,10 @@ class Calculator {
                 this.bazaar_items.push(item_id);
             } else if ("recipe" in md.calculator_data[item_id]) {
                 this.recipe_items.push(item_id);
-            } else if ("AH" in md.calculator_data[item_id] && md.calculator_data[item_id]["AH"]) {
+            } else if (md.has_data_tag(item_id, "auction_price")) {
                 this.AH_items.push(item_id);
+            } else if (md.has_data_tag(item_id, "auction_price_upon_request")) {
+                md.calculator_data[item_id]["price_last_updated"] = 0;
             };
         };
         await this.update_prices(false, true);
@@ -1889,7 +1891,7 @@ class Calculator {
     };
 
     async call_auction_house(item_id) {
-        let raw_auction_data = await this.gui.call_API("https://sky.coflnet.com/api/item/price/" + item_id + "/bin", "SkyCofl AH API")
+        let raw_auction_data = await this.gui.call_API("https://sky.coflnet.com/api/item/price/" + item_id + "/bin", `SkyCofl AH BIN API: ${item_id}`)
         return (raw_auction_data["lowest"] + raw_auction_data["secondLowest"]) / 2;
     };
 
@@ -1905,7 +1907,7 @@ class Calculator {
         md.calculator_data[item_id]["prices"]["buyPrice"] = 0;
         md.calculator_data[item_id]["prices"]["sellPrice"] = 0;
         for (let [material_id, amount] of Object.entries(md.calculator_data[item_id]["recipe"])) {
-            if ("AH" in md.calculator_data[material_id]) {
+            if (md.has_data_tag(material_id, "auction_price")) {
                 md.calculator_data[item_id]["prices"]["buyPrice"] += amount * md.calculator_data[material_id]["prices"]["custom"];
                 md.calculator_data[item_id]["prices"]["sellPrice"] += amount * md.calculator_data[material_id]["prices"]["custom"];
                 continue;
@@ -1941,6 +1943,61 @@ class Calculator {
         if (in_gui) {
             this.statusC.style.background = background_color_storage;
         };
+        return;
+    };
+
+    async update_pet_price(pet_ID) {
+        if (pet_ID === "NONE") {
+            return;
+        };
+        if (pet_ID in this.pet_costs.list && Date.now() - this.pet_costs.list[pet_ID]["last_updated"] < this.pet_API_cooldown.get() * 1000) {
+            console.log(`${pet_ID} price update is on cooldown`);
+            return;
+        };
+        let rarity_options = { "Common": "COMMON", "Uncommon": "UNCOMMON", "Rare": "RARE", "Epic": "EPIC", "Legendary": "LEGENDARY", "Mythic": "MYTHIC"};
+        let level_ranges = { "min": "1", "max": "100" };
+        let api_end_point = "https://sky.coflnet.com/api/item/price/";
+        let api_pet_id;
+        if (md.has_data_tag(pet_ID, "dragon_egg_pet")) {
+            api_pet_id = pet_ID.replaceAll("_EGG", "");
+            level_ranges["max"] = "100-103";
+        } else {
+            api_pet_id = pet_ID;
+        };
+        if (md.has_data_tag(pet_ID, "dragon_pet")) {
+            level_ranges["max"] = "200";
+        };
+        let api_bin = "/bin";
+        let api_static_filters = "?filters[Rarity]=" + rarity_options[md.calculator_data[pet_ID]["rarity"]] + "&filters[Candy]=0&filters[PetLevel]=";
+        let results = {"min": 0, "max": 0};
+        for (let [level_type, level_range] of Object.entries(level_ranges)) {
+            let raw_auction_data = await this.gui.call_API(api_end_point + api_pet_id + api_bin + api_static_filters + level_range, `SkyCofl pet AH BIN API: ${api_pet_id}`);
+            let lowest_price = raw_auction_data["lowest"];
+            let second_lowest_price = raw_auction_data["secondLowest"];
+            if (lowest_price === 0 || second_lowest_price === 0) {
+                // fall back to average of last 2 days if not enough BINs are found
+                raw_auction_data = await this.gui.call_API(api_end_point + api_pet_id + api_static_filters + level_range, `SkyCofl pet AH API: ${api_pet_id}`);
+                results[level_type] = raw_auction_data["mean"]
+            } else {
+                results[level_type] = (lowest_price + second_lowest_price) / 2;
+            };
+            // console.log(level_type, level_range)
+        };
+        if (!(pet_ID in this.pet_costs.list)) {
+            // non-zero min and max is required for new entry
+            if (results["min"] !== 0 && results["max"] !== 0) {
+                this.pet_costs.list[pet_ID] = { "min": 0, "max": 0, "last_updated": 0 };
+            } else {
+                return;
+            };
+        };
+        if (results["min"] != 0) {
+            this.pet_costs.list[pet_ID]["min"] = results["min"];
+        };
+        if (results["max"] != 0) {
+            this.pet_costs.list[pet_ID]["max"] = results["max"];
+        };
+        this.pet_costs.list[pet_ID]["last_updated"] = Date.now();
         return;
     };
 

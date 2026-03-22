@@ -652,7 +652,7 @@ class Hvar {
     };
 
     update_listbox(key_format_function= x => x, value_format_function= x => x, filter= (key, val) => true) {
-        if (this.dtype !== "object") {
+        if (this.dtype !== "object" || this.vtype !== "output") {
             return;
         };
         let listbox_list = [];

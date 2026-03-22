@@ -755,7 +755,7 @@ class minion_data {
             'ENCHANTED_GOLDEN_CARROT': {
                 'display': 'Enchanted Golden Carrot',
                 "prices": {},
-                'xp': { 'farming': 0 }  // correct inaccuracy (2025-12-18)
+                'xp': { 'farming': 2560 }  // correct (2026-3-7)
             },
             'POTATO_ITEM': {
                 'display': 'Potato',
@@ -810,12 +810,12 @@ class minion_data {
             'ENCHANTED_HUGE_MUSHROOM_2': {
                 'display': 'Enchanted Red Mushroom Block',
                 "prices": {},
-                'xp': { 'farming': 1536 }  // correct inaccuracy (2025-12-22)
+                'xp': { 'farming': 1536 }  // correct inaccuracy (2026-3-17)
             },
             'ENCHANTED_HUGE_MUSHROOM_1': {
                 'display': 'Enchanted Brown Mushroom Block',
                 "prices": {},
-                'xp': { 'farming': 1536 }  // correct inaccuracy (2025-12-22)
+                'xp': { 'farming': 1536 }  // correct inaccuracy (2026-3-17)
             },
             'CACTUS': {
                 'display': 'Cactus',
@@ -850,7 +850,7 @@ class minion_data {
             'ENCHANTED_COOKIE': {
                 'display': 'Enchanted Cookie',
                 "prices": {},
-                'xp': { 'farming': 0 }  // correct inaccuracy (2025-12-19)
+                'xp': { 'farming': 5120 }  // correct (2026-3-9)
             },
             'SUGAR_CANE': {
                 'display': 'Sugar Cane',
@@ -1165,8 +1165,8 @@ class minion_data {
             'GABAGOOL_THE_FISH': {
                 'display': 'Gabagool the Fish',
                 "prices": {},
-                "AH": true,
-                'xp': { 'combat': 0 }  // unsure if correctly implemented
+                'xp': { 'combat': 0 },  // unsure if correctly implemented
+                "tags": ["auction_price"]
             },
             'HYPERGOLIC_IONIZED_CERAMICS': {
                 'display': 'Hypergolic Ionized Ceramics',
@@ -1738,7 +1738,7 @@ class minion_data {
                 "drop_multiplier": 1,
                 "upgrade_special": { "type": "spreading", "items": { "RED_GIFT": 0.000045 }},
                 "prices": {},
-                "AH": true,
+                "tags": ["auction_price"]
             },
             'LESSER_SOULFLOW_ENGINE': {
                 'display': 'Lesser Soulflow Engine',
@@ -1919,21 +1919,21 @@ class minion_data {
                 'display': "Postcard",
                 "speed_boost": 5,
                 'prices': {},
-                "AH": true
+                "tags": ["auction_price"]
             },
             "POTATO_TALISMAN": {
                 'display': "Potato Talisman",
                 "speed_boost": 5,
                 "affected_minions": ["POTATO_MINION"],
                 'prices': {},
-                "AH": true
+                "tags": ["auction_price"]
             },
             "POTATO_RING": {
                 'display': "Potato Ring",
                 "speed_boost": 10,
                 "affected_minions": ["POTATO_MINION"],
                 'prices': {},
-                "AH": true
+                "tags": ["auction_price"]
             },
 
             // Other Crafting Materials
@@ -1997,7 +1997,7 @@ class minion_data {
             "WINTER_ISLAND": {
                 "display": "Winter Island",
                 "prices": {},
-                "AH": true
+                "tags": ["auction_price"]
             },
 
             // Pet Items
@@ -2021,7 +2021,7 @@ class minion_data {
                 "exp_boost_type": "mining",
                 "exp_boost_amount": 40,
                 'prices': {},
-                "AH": true
+                "tags": ["auction_price_upon_request"]
             },
             'PET_ITEM_FARMING_SKILL_BOOST_COMMON': {
                 'display': 'Common Farming Exp Boost',  // not in bazaar (Zog)
@@ -2036,7 +2036,7 @@ class minion_data {
                 "exp_boost_type": "farming",
                 "exp_boost_amount": 30,
                 'prices': {},
-                "AH": true
+                "tags": ["auction_price_upon_request"]
             },
             'PET_ITEM_FARMING_SKILL_BOOST_RARE': {
                 'display': 'Rare Farming Exp Boost',  // not in bazaar (Zog)
@@ -2065,7 +2065,7 @@ class minion_data {
                 "exp_boost_type": "fishing",
                 "exp_boost_amount": 30,
                 'prices': {},
-                "AH": true
+                "tags": ["auction_price_upon_request"]
             },
             'PET_ITEM_FISHING_SKILL_BOOST_RARE': {
                 'display': 'Rare Fishing Exp Boost',
@@ -2073,7 +2073,7 @@ class minion_data {
                 "exp_boost_type": "fishing",
                 "exp_boost_amount": 40,
                 'prices': {},
-                "AH": true
+                "tags": ["auction_price_upon_request"]
             },
             'PET_ITEM_FISHING_SKILL_BOOST_EPIC': {
                 'display': 'Epic Fishing Exp Boost',
@@ -2081,7 +2081,7 @@ class minion_data {
                 "exp_boost_type": "fishing",
                 "exp_boost_amount": 50,
                 'prices': {},
-                "AH": true
+                "tags": ["auction_price_upon_request"]
             },
             'PET_ITEM_COMBAT_SKILL_BOOST_COMMON': {
                 'display': 'Common Combat Exp Boost',  // not in bazaar (Zog)
@@ -2096,7 +2096,7 @@ class minion_data {
                 "exp_boost_type": "combat",
                 "exp_boost_amount": 30,
                 'prices': {},
-                "AH": true
+                "tags": ["auction_price_upon_request"]
             },
             'PET_ITEM_COMBAT_SKILL_BOOST_RARE': {
                 'display': 'Rare Combat Exp Boost',
@@ -2104,7 +2104,7 @@ class minion_data {
                 "exp_boost_type": "combat",
                 "exp_boost_amount": 40,
                 'prices': {},
-                "AH": true
+                "tags": ["auction_price_upon_request"]
             },
             'PET_ITEM_COMBAT_SKILL_BOOST_EPIC': {
                 'display': 'Epic Combat Exp Boost',
@@ -2112,7 +2112,7 @@ class minion_data {
                 "exp_boost_type": "combat",
                 "exp_boost_amount": 50,
                 'prices': {},
-                "AH": true
+                "tags": ["auction_price_upon_request"]
             },
             'PET_ITEM_FORAGING_SKILL_BOOST_COMMON': {
                 'display': 'Common Foraging Exp Boost',  // not in bazaar (Zog)
@@ -2127,7 +2127,7 @@ class minion_data {
                 "exp_boost_type": "foraging",
                 "exp_boost_amount": 50,
                 'prices': {},
-                "AH": true
+                "tags": ["auction_price_upon_request"]
             },
             'PET_ITEM_ALL_SKILLS_BOOST_COMMON': {
                 'display': 'All Skills Exp Boost',  // not in bazaar (Zog)
@@ -2142,7 +2142,7 @@ class minion_data {
                 "exp_boost_type": "all",
                 "exp_boost_amount": 20,
                 'prices': {},
-                "AH": true
+                "tags": ["auction_price_upon_request"]
             },
             "PET_ITEM_EXP_SHARE": {
                 'display': "Exp Share",
@@ -2354,6 +2354,7 @@ class minion_data {
                 'display': 'Cactus',
                 "drops": { "CACTUS": 3 },
                 "speed": { 1: 27, 2: 27, 3: 25, 4: 25, 5: 23, 6: 23, 7: 21, 8: 21, 9: 18, 10: 18, 11: 15, 12: 12 },
+                "notes": { "Inaccuracy": "while AFK, can harvest ungrown cactus" },
                 "tags": ["farming_crop_minion"]
             },
             "COCOA_BEANS_MINION": {
@@ -2366,6 +2367,7 @@ class minion_data {
                 'display': 'Sugar Cane',
                 "drops": { "SUGAR_CANE": 3 },
                 "speed": { 1: 22, 2: 22, 3: 20, 4: 20, 5: 18, 6: 18, 7: 16, 8: 16, 9: 14.5, 10: 14.5, 11: 12, 12: 9 },
+                "notes": { "Inaccuracy": "while AFK, can harvest ungrown sugar cane" },
                 "tags": ["farming_crop_minion"]
             },
             "NETHER_WART_MINION": {
@@ -2812,12 +2814,14 @@ class minion_data {
             'PET_GOLDEN_DRAGON': {
                 'display': 'Golden Dragon',
                 'pet_type': 'combat',
-                'rarity': 'Dragon'
+                'rarity': 'Legendary',
+                "tags": ["dragon_pet"]
             },
             'PET_GOLDEN_DRAGON_EGG': {
                 'display': 'Golden Dragon Egg',
                 'pet_type': 'combat',
-                'rarity': 'Legendary'
+                'rarity': 'Legendary',
+                "tags": ["dragon_egg_pet"]
             },
             'PET_GOLEM': {
                 'display': 'Golem',
@@ -2867,12 +2871,14 @@ class minion_data {
             'PET_JADE_DRAGON': {
                 'display': 'Jade Dragon',
                 'pet_type': 'foraging',
-                'rarity': 'Dragon'
+                'rarity': 'Legendary',
+                "tags": ["dragon_pet"]
             },
             'PET_JADE_DRAGON_EGG': {
                 'display': 'Jade Dragon Egg',
                 'pet_type': 'foraging',
-                'rarity': 'Legendary'
+                'rarity': 'Legendary',
+                "tags": ["dragon_egg_pet"]
             },
             'PET_JELLYFISH': {
                 'display': 'Jellyfish',
@@ -3007,12 +3013,14 @@ class minion_data {
             'PET_ROSE_DRAGON': {
                 'display': 'Rose Dragon',
                 'pet_type': 'farming',
-                'rarity': 'Dragon'
+                'rarity': 'Legendary',
+                "tags": ["dragon_pet"]
             },
             'PET_ROSE_DRAGON_EGG': {
                 'display': 'Rose Dragon Egg',
                 'pet_type': 'farming',
-                'rarity': 'Legendary'
+                'rarity': 'Legendary',
+                "tags": ["dragon_egg_pet"]
             },
             'PET_SCATHA': {
                 'display': 'Scatha',

@@ -1,7 +1,7 @@
 
 class Calc_add_ons {
     constructor() {
-        this.add_ons_package = {"Minion Crafting": this.craft_material_amount, "Days to Repay Setup": this.setup_repay_time, "Basic Minion Loop": this.basic_minion_loop_inputs, "Bad Luck Inferno": this.bad_luck_inferno, "Inferno Minion Loop": this.inferno_minion_loop_inputs};
+        this.add_ons_package = {"Minion Crafting": this.craft_material_amount, "Days to Repay Setup": this.setup_repay_time, "Basic Minion Loop": this.basic_minion_loop_inputs, "Bad Luck Inferno": this.bad_luck_inferno, "Inferno Minion Loop": this.inferno_minion_loop_inputs, "Exact Pet Levelling": this.exact_pet_levelling_inputs};
     };
 
     craft_material_amount(calculator) {
@@ -274,5 +274,109 @@ class Calc_add_ons {
     inferno_minion_loop_inputs(calculator) {
         calculator.gui.edit_vars(() => this.inferno_minion_loop.bind(this)(calculator), {"setup_cost_limit": {"dtype": "number", "display": "Setup Cost Limit", "initial": 0, "options": null}, "amount_limit": {"dtype": "number", "display": "Minion Amount Limit", "initial": 32, "options": null}, "markdown_output": {"dtype": "boolean", "display": "Markdown Output", "initial": true, "options": null}}, false);
         return;
+    };
+
+    dragon_xp(gained_xp, left_over_pet_xp, pet_xp_boost, xp_boost_pet_item) {
+        const drag_lvl_100 = md.max_lvl_pet_xp_amounts["Legendary"];
+        const drag_lvl_200 = md.max_lvl_pet_xp_amounts["Dragon"];
+        let gained_pet_xp = 0.0;
+        let skill_xp_per_pet = (drag_lvl_200 + drag_lvl_100 * (xp_boost_pet_item - 1)) / (xp_boost_pet_item * pet_xp_boost);
+        gained_pet_xp = - left_over_pet_xp
+        if (left_over_pet_xp <= drag_lvl_100) {
+            gained_xp += left_over_pet_xp / pet_xp_boost;
+        } else {
+            gained_xp += (left_over_pet_xp + drag_lvl_100 * (xp_boost_pet_item - 1)) / (pet_xp_boost * xp_boost_pet_item);
+        };
+        gained_pet_xp += Math.floor(gained_xp / skill_xp_per_pet) * drag_lvl_200;
+        let left_over_xp = gained_xp % skill_xp_per_pet;
+        if (left_over_xp <= drag_lvl_100 / pet_xp_boost) {
+            left_over_pet_xp = left_over_xp * pet_xp_boost;
+        } else {
+            left_over_pet_xp = left_over_xp * pet_xp_boost * xp_boost_pet_item + drag_lvl_100 * (1 - xp_boost_pet_item);
+        };
+        gained_pet_xp += left_over_pet_xp;
+        return [gained_pet_xp, left_over_pet_xp];
+    };
+
+    exact_pet_levelling_inputs(calculator) {
+        let setup_data = calculator.gui.get_from_GUI(["mayor", "levelingpet", "expsharepet", "expsharepetslot2", "expsharepetslot3"])
+        if (setup_data["levelingpet"] === "NONE") {
+            calculator.collect_addon_output("Exact Pet Levelling", "No pet levelling active");
+            return;
+        };
+        let setup_pets = { "levelingpet": { "pet": setup_data["levelingpet"], "pet_xp": {}, "levelled_pets": 0.0 } }
+        for (const var_key of ["expsharepet", "expsharepetslot2", "expsharepetslot3"]) {
+            if (setup_data[var_key] === "NONE" || (setup_data["mayor"] !== "MAYOR_DIANA" && ["expsharepetslot2", "expsharepetslot3"].includes(var_key))) {
+                continue;
+            };
+            setup_pets[var_key] = { "pet": setup_data[var_key], "pet_xp": { "exp_share": 0.0 }, "levelled_pets": 0.0 };
+        };
+        let input_variables = {};
+        for (let [pet_slot, pet_info] in setup_pets.items()) {
+            input_variables[pet_slot + "_starting_pet_xp"] = {"dtype": "number", "display": md.calculator_data[pet_info["pet"]]["display"] + " pet xp", "initial": 0, "options": null};
+        };
+        calculator.gui.edit_vars((pet_data=setup_pets) => this.exact_pet_levelling.bind(this)(calculator, pet_data), input_variables, false)
+        return;
+    };
+
+    exact_pet_levelling(calculator, setup_pets) {
+        let setup_data = calculator.gui.get_from_GUI(["mayor", "xp", "taming", "toucan_attribute", "expshareitem", "petxpboost", "beastmaster", "falcon_attribute", "bazaar_buy_type", "bazaar_sell_type", "bazaar_taxes", "bazaar_flipper"])
+        let skill_xp = setup_data["xp"]
+        let main_pet = setup_pets["levelingpet"]["pet"];
+        let main_pet_xp = setup_pets["levelingpet"]["pet_xp"];
+        let pet_xp_boost, xp_boost_pet_item, left_over_pet_xp, exp_share_pet, equiv_pet_xp_boost, equiv_xp_boost_pet_item, non_matching, dragon_xp_outputs;
+        if (md.has_data_tag(main_pet, "dragon_pet")) {
+            left_over_pet_xp = calculator.gui.edit_vars_output["levelingpet_starting_pet_xp"];
+            for (let [skill, amount] of Object.entries(skill_xp)) {
+                [pet_xp_boost, xp_boost_pet_item] = calculator.get_pet_xp_boosts(main_pet, skill, setup_data);
+                dragon_xp_outputs = this.dragon_xp(amount, left_over_pet_xp, pet_xp_boost, xp_boost_pet_item);
+                main_pet_xp[skill] = dragon_xp_outputs[0];
+                left_over_pet_xp = dragon_xp_outputs[1];
+            };
+        } else {
+            for (let [skill, amount] of Object.entries(skill_xp)) {
+                [pet_xp_boost, xp_boost_pet_item] = calculator.get_pet_xp_boosts(main_pet, skill, setup_data);
+                main_pet_xp[skill] = amount * pet_xp_boost * xp_boost_pet_item;
+            };
+        };
+        let exp_share_boost = 0.2 * setup_data["taming"] + 10 * (mayor == "MAYOR_DIANA") + setup_data["toucan_attribute"];
+        let exp_share_item = 15 * setup_data["expshareitem"];
+        for (let [pet_slot, pet_info] of Object.entries(setup_pets)) {
+            if (pet_slot === "levelingpet") {
+                continue;
+            };
+            exp_share_pet = pet_info["pet"];
+            if (md.has_data_tag(exp_share_pet, "dragon_pet")) {
+                if (exp_share_boost === 0) {
+                    continue;
+                };
+                left_over_pet_xp = calculator.gui.edit_vars_output[pet_slot + "_starting_pet_xp"];
+                for (let [skill, amount] of Object.entries(main_pet_xp)) {
+                    non_matching = this.get_pet_xp_boosts(exp_share_pet, skill, setup_data, true);
+                    equiv_pet_xp_boost = non_matching * (exp_share_boost / 100);
+                    equiv_xp_boost_pet_item = 1 + exp_share_item / exp_share_boost;
+                    dragon_xp_outputs = this.dragon_xp(amount, left_over_pet_xp, equiv_pet_xp_boost, equiv_xp_boost_pet_item);
+                    pet_info["pet_xp"]["exp_share"] += dragon_xp_outputs[0];
+                    left_over_pet_xp = dragon_xp_outputs[1];
+                };
+            } else {
+                for (let [skill, amount] of Object.entries(main_pet_xp)) {
+                    non_matching = this.get_pet_xp_boosts(exp_share_pet, skill, setup_data, true);
+                    pet_info["pet_xp"]["exp_share"] += amount * ((exp_share_boost + exp_share_item * (!(md.has_data_tag(exp_share_pet, "dragon_egg_pet")))) / 100) * non_matching;
+                };
+            };
+        };
+        for (let [pet_slot, pet_info] of Object.entries(setup_pets)) {
+            let max_lvl_pet_xp;
+            if (md.has_data_tag(pet_info["pet"], "dragon_pet")) {
+                max_lvl_pet_xp = md.max_lvl_pet_xp_amounts["Dragon"];
+            } else {
+                max_lvl_pet_xp = md.max_lvl_pet_xp_amounts[md.calculator_data[pet_info["pet"]]["rarity"]];
+            };
+            pets_levelled = (calculator.gui.edit_vars_output[pet_slot + "_starting_pet_xp"] + Object.values(pet_info["pet_xp"]).reduce((partialSum, a) => partialSum + a, 0)) / max_lvl_pet_xp;
+            pet_info["levelled_pets"] = pets_levelled;
+        };
+        let output_string = Array.from(Object.values(setup_pets), pet_info => `${calculator.gui.reduced_number(pet_info['levelled_pets'], 4)} ${md.calculator_data[pet_info["pet"]]["display"]}`).join(", ")
+        calculator.collect_addon_output("Exact Pet Levelling", output_string);
     };
 };
