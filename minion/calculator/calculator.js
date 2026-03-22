@@ -1,7 +1,5 @@
 class Calculator {
     constructor() {
-        this.edit_pet_price_pet = "None";
-
         this.templateList = {
             "Choose Template": {},
             "Load ID": {},
@@ -221,7 +219,7 @@ class Calculator {
         let markdown_outputB = this.gui.create_button('Markdown Output', () => this.text_output.bind(this)(null, null, null, true), true);
         let pricesB = this.gui.create_button("Update Prices", this.update_prices.bind(this), true);
         let settingsB = this.gui.create_button('Edit Settings', () => this.gui.edit_vars.bind(this.gui)(this.gui.update_color_palette.bind(this.gui), ["API_auto_update", "API_cooldown", "pet_API_cooldown", "compact_tolerance", "output_to_clipboard", "color_palette"]), true);
-        let pet_priceB = this.gui.create_button('Edit Pet Prices', () => this.gui.edit_vars.bind(this.gui)(this.edit_pet_price_redirect.bind(this), {"edit_pet_price_pet": {"dtype": "string", "display": "Pet", "initial": "None", "options": Object.keys(md.pet_options)}}, false), true);
+        let addonsB = this.gui.create_button("Add-ons Menu", () => document.getElementById("add_ons_menu").scrollIntoView({ behavior: "smooth", block: "start", inline: "center" }), true)
         let emptyspaceLB = this.gui.genLabel("control_frame_filler", "")
         let creditLB = this.gui.genLabel("credit_label", `Minion Calculator V${this.version}\nMade by Herodirk`);
         let API_creditLB = this.gui.genLabel("API_credit_label", `Bazaar data from <a href="https://api.hypixel.net">Hypixel API</a>,<br>AH data from <a href="https://sky.coflnet.com/data">SkyCofl API</a> `, true);
@@ -230,7 +228,7 @@ class Calculator {
         creditLB.className = "control_label"
         manualLB.className = "control_label"
         
-        let controlsGrid = [calcB, this.statusC, text_outputB, markdown_outputB, pricesB, pet_priceB, settingsB, emptyspaceLB, API_creditLB, manualLB, creditLB];
+        let controlsGrid = [calcB, this.statusC, text_outputB, markdown_outputB, pricesB, addonsB, settingsB, emptyspaceLB, API_creditLB, manualLB, creditLB];
         this.gui.fill_arr(controlsGrid, this.frames["controls"]);
         
         let miniontitleLB = this.gui.genLabel("miniontitleLB", "\nMinion options");
@@ -2025,20 +2023,4 @@ class Calculator {
         this.addons_output_container.update_listbox();
         return;
     };
-
-    edit_pet_price_redirect() {
-        this.edit_pet_price_pet = md.pet_options[this.gui.edit_vars_output["edit_pet_price_pet"]];
-        if (!(this.edit_pet_price_pet in this.pet_costs)) {
-            this.pet_costs[this.edit_pet_price_pet] = {"min": 0, "max": 0};
-        };
-        let initial_max = this.pet_costs[this.edit_pet_price_pet]["max"];
-        let initial_min = this.pet_costs[this.edit_pet_price_pet]["min"];
-        this.gui.edit_vars.bind(this.gui)(this.edit_pet_price_store.bind(this), {"min_price": {"dtype": "number", "display": "Level 1 price", "initial": initial_min, "options": null}, "max_price": {"dtype": "number", "display": "Max level price", "initial": initial_max, "options": null}}, false);
-    };
-
-    edit_pet_price_store() {
-        this.pet_costs[this.edit_pet_price_pet]["max"] = this.gui.edit_vars_output["max_price"];
-        this.pet_costs[this.edit_pet_price_pet]["min"] = this.gui.edit_vars_output["min_price"];
-    };
-
 };
