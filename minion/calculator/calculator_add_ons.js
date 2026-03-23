@@ -312,7 +312,7 @@ class Calc_add_ons {
             setup_pets[var_key] = { "pet": setup_data[var_key], "pet_xp": { "exp_share": 0.0 }, "levelled_pets": 0.0 };
         };
         let input_variables = {};
-        for (let [pet_slot, pet_info] in setup_pets.items()) {
+        for (let [pet_slot, pet_info] of Object.entries(setup_pets)) {
             input_variables[pet_slot + "_starting_pet_xp"] = {"dtype": "number", "display": md.calculator_data[pet_info["pet"]]["display"] + " pet xp", "initial": 0, "options": null};
         };
         calculator.gui.edit_vars((pet_data=setup_pets) => this.exact_pet_levelling.bind(this)(calculator, pet_data), input_variables, false)

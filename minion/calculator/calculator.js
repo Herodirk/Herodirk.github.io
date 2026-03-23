@@ -1317,18 +1317,21 @@ class Calculator {
     };
 
     get_pet_xp_boosts(pet, xp_type, setup_data, exp_share=false) {
-        let non_matching = 1
+        let pet_xp_boost = 1
         if (md.calculator_data[pet]["pet_type"] !== "all" && md.calculator_data[pet]["pet_type"] !== xp_type) {
             if (["alchemy", "enchanting"].includes(xp_type)) {
-                non_matching = 1 / 12;
+                pet_xp_boost = 1 / 12;
             } else {
-                non_matching = 1 / 3;
+                pet_xp_boost = 1 / 3;
             };
         };
-        if (exp_share) {
-            return non_matching;
+        if (["mining", "fishing"].includes(xp_type)) {
+            pet_xp_boost *= 1.5;
         };
-        let petxpbonus = (1 + setup_data["taming"] / 100) * (1 + setup_data["beastmaster"] / 100) * non_matching;
+        if (exp_share) {
+            return pet_xp_boost;
+        };
+        pet_xp_boost *= (1 + setup_data["taming"] / 100) * (1 + setup_data["beastmaster"] / 100);
         let pet_item;
         if ([xp_type, "all"].includes(md.calculator_data[setup_data["petxpboost"]]["exp_boost_type"]) && !(md.has_data_tag(pet, "dragon_egg_pet"))) {
             pet_item = 1 + md.calculator_data[setup_data["petxpboost"]]["exp_boost_amount"] / 100;
@@ -1336,18 +1339,15 @@ class Calculator {
             pet_item = 1;
         };
         if (setup_data["mayor"] === "MAYOR_DIANA") {
-            petxpbonus *= 1.35;
-        };
-        if (["mining", "fishing"].includes(xp_type)) {
-            petxpbonus *= 1.5;
+            pet_xp_boost *= 1.35;
         };
         if (pet === "PET_REINDEER") {
-            petxpbonus *= 2;
+            pet_xp_boost *= 2;
         };
         if (xp_type === "combat" && setup_data["falcon_attribute"] !== 0) {
-            petxpbonus *= (1 + setup_data["falcon_attribute"] / 100);
+            pet_xp_boost *= (1 + setup_data["falcon_attribute"] / 100);
         };
-        return [petxpbonus, pet_item];
+        return [pet_xp_boost, pet_item];
     };
 
     get_pets_levelled(skill_xp, mayor, setup_data) {
@@ -1370,7 +1370,7 @@ class Calculator {
         let dragon_pet_multiplier = pet_item => 1;
         let dragon_pet_xp_lvl_200 = md.max_lvl_pet_xp_amounts["Dragon"];
         let dragon_pet_xp_lvl_100 = md.max_lvl_pet_xp_amounts["Legendary"];
-        let pet_xp_boost, xp_boost_pet_item, left_over_pet_xp, exp_share_pet, equiv_pet_xp_boost, equiv_xp_boost_pet_item, non_matching, dragon_xp_outputs;
+        let pet_xp_boost, xp_boost_pet_item, exp_share_pet;
         if (md.has_data_tag(main_pet, "dragon_pet")) { 
             dragon_pet_multiplier = pet_item => dragon_pet_xp_lvl_200 / ( dragon_pet_xp_lvl_200 + dragon_pet_xp_lvl_100 * (pet_item - 1))
         };
@@ -1395,8 +1395,8 @@ class Calculator {
                 dragon_pet_multiplier = dragon_pet_xp_lvl_200 / ( dragon_pet_xp_lvl_200 + dragon_pet_xp_lvl_100 * (exp_share_item / exp_share_boost))
             };
             for (let [skill, amount] of Object.entries(main_pet_xp)) {
-                non_matching = this.get_pet_xp_boosts(exp_share_pet, skill, setup_data, true);
-                pet_info["pet_xp"]["exp_share"] += amount * ((exp_share_boost + exp_share_item * (!(md.has_data_tag(exp_share_pet, "dragon_egg_pet")))) / 100) * non_matching * dragon_pet_multiplier;
+                pet_xp_boost = this.get_pet_xp_boosts(exp_share_pet, skill, setup_data, true);
+                pet_info["pet_xp"]["exp_share"] += amount * ((exp_share_boost + exp_share_item * (!(md.has_data_tag(exp_share_pet, "dragon_egg_pet")))) / 100) * pet_xp_boost * dragon_pet_multiplier;
             };  
         };
 
