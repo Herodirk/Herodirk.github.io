@@ -367,7 +367,7 @@ class Calc_add_ons {
             };
         };
         for (let [pet_slot, pet_info] of Object.entries(setup_pets)) {
-            let max_lvl_pet_xp;
+            let pets_levelled, max_lvl_pet_xp;
             if (md.has_data_tag(pet_info["pet"], "dragon_pet")) {
                 max_lvl_pet_xp = md.max_lvl_pet_xp_amounts["Dragon"];
             } else {
