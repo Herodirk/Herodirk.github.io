@@ -136,6 +136,8 @@
         "Sleepy Hollow": "SLEEPY_HOLLOW",
         "Hunter Knife": "HUNTER_KNIFE"
     },
+    "upgrade1": "upgrade",
+    "upgrade2": "upgrade",
     "chest": {
         "None": "NONE",
         "Small Storage": "SMALL_ENCHANTED_CHEST",
@@ -308,6 +310,11 @@
         9,
         10
     ],
+    "falcon_attribute": "attribute",
+    "toucan_attribute": "attribute",
+    "expsharepet": "levelingpet",
+    "expsharepetslot2": "levelingpet",
+    "expsharepetslot3": "levelingpet",
     "pet_exp_boost": {
         "None": "NONE",
         "Common Mining Exp Boost": "PET_ITEM_MINING_SKILL_BOOST_COMMON",
@@ -350,5 +357,8 @@
         0,
         1,
         2
-    ]
+    ],
+    "time_unit": ["Years", "Weeks", "Days", "Hours", "Minutes", "Seconds", "Harvests"],
+    "empty_time_unit": "time_unit",
+    "scaled_time_unit": "time_unit"
 }
