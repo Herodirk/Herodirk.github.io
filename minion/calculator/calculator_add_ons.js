@@ -18,7 +18,7 @@ class Calc_add_ons {
 
     setup_repay_time(calculator) {
         // Outputs the time (in days) it take for a setup to repay itself
-        let setup_data = calculator.gui.get_from_GUI(["time_seconds", "setupcost", "free_will", "freewillcost", "total_profit"]);
+        let setup_data = calculator.gui.get_from_GUI(["time_seconds", "setupcost", "free_will", "total_profit"]);
         let setupcost = setup_data["setupcost"];
         let profit = setup_data["total_profit"];
         if (profit < 0) {
@@ -217,7 +217,6 @@ class Calc_add_ons {
         setup_data["used_pet_prices"] = outputs["used_pet_prices"];
         setup_data["bazaar_update_txt"] = calculator.bazaar_update_txt.get();
         let output_str = calculator.text_output(setup_data, {}, {
-            "amount": null,
             "Upgrades: ": { "": new Set(["fuel", "hopper", "upgrade1", "upgrade2", "chest", "beacon", "crystal", "postcard", "infusion", "free_will"]) },
             "Beacon Info": { "\n> ": ["scorched", "B_constant", "B_acquired"] },
             "Inferno Info": { "\n> ": ["inferno_grade", "inferno_distillate", "inferno_eyedrops", "rising_celsius_override"] },
