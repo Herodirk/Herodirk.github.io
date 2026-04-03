@@ -87,7 +87,7 @@ class Calc_add_ons {
             return;
         };
         Object.assign(setup_data, calculator.decode_id(outputs["calculated_ID"]));
-        setup_data["used_pet_prices"] = outputs["used_pet_prices"];
+        Object.assign(setup_data, outputs);
         setup_data["bazaar_update_txt"] = calculator.bazaar_update_txt.get();
         let output_str = calculator.text_output(setup_data, {}, {
             "amount": null,
@@ -214,7 +214,7 @@ class Calc_add_ons {
             return;
         };
         Object.assign(setup_data, calculator.decode_id(outputs["calculated_ID"]));
-        setup_data["used_pet_prices"] = outputs["used_pet_prices"];
+        Object.assign(setup_data, outputs);
         setup_data["bazaar_update_txt"] = calculator.bazaar_update_txt.get();
         let output_str = calculator.text_output(setup_data, {}, {
             "Upgrades: ": { "": new Set(["fuel", "hopper", "upgrade1", "upgrade2", "chest", "beacon", "crystal", "postcard", "infusion", "free_will"]) },
