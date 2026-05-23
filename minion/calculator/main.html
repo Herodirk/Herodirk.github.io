@@ -57,9 +57,8 @@
             let MD;
             Promise.all([input_options_promise, id_order_promise, calculator_data_promise]).then((resolves) => {
                 const [input_options_json, id_order_json, calculator_data_json] = resolves;
-                console.log("Promise.all results:", input_options_json, id_order_json);
-                calc = new Calculator({"input_options": input_options_json, "id_order": id_order_json});
                 MD = new H_data_M({"calculator_data": calculator_data_json});
+                calc = new Calculator({"input_options": input_options_json, "id_order": id_order_json});
             })
             // const MD = new H_data_M({"calculator_data": calculator_data_json});
             // let calc = new Calculator({"input_options": input_options_json, "id_order": id_order_json});
