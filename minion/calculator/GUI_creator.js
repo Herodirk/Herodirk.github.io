@@ -316,7 +316,7 @@ class GUI_creator {
 
     // Data logistics
 
-    async call_API(api_url, api_name="API"){
+    async call_API(api_url, api_name="API") {
         try {
             const f = await fetch(api_url);
             var raw_data = await f.json();
@@ -590,9 +590,14 @@ class Hvar {
         };
         this.widget = null;
         this.translation = null;
+        this.reverse_translation = null;
         if (this.options !== null && !(this.options instanceof Array)) {
             this.translation = this.options;
             this.options = Object.keys(this.options);
+            this.reverse_translation = {};
+            for (let [untranslated, translated] of Object.entries(this.translation)) {
+                this.reverse_translation[translated] = untranslated;
+            };
         };
 
         if (this.vtype === "input") {
@@ -642,7 +647,10 @@ class Hvar {
         return (this.tags.includes(tag));
     };
 
-    set(value) {
+    set(value, translated=false) {
+        if ((this.translation !== null) && (translated === true)) {
+            value = this.reverse_translation[value];
+        };
         if (this.vtype === "storage" || document.getElementById(this.key) === null) {
             this.var = value;
         } else {
@@ -672,6 +680,39 @@ class Hvar {
             };
         };
         this.huim.fill_list_box(this.key, listbox_list);
+        return;
+    };
+
+    update_option_list(new_list, translated=false) {
+        if (this.dtype === "boolean") {
+            return;
+        };
+        if (this.options === null) {
+            return;
+        };
+        if (translated) {
+            let translated_list = [];
+            for (let list_item of new_list) {
+                translated_list.push(this.reverse_translation[list_item]);
+            };
+            new_list = translated_list;
+        };
+        if (!(new_list.every((list_item) => this.options.includes(list_item)))) {
+            return;
+        };
+        let old_value = this.get(false);
+        this.widget[1].innerHTML = "";
+        let option_elem;
+        for (let list_item of new_list) {
+            option_elem = document.createElement("option");
+            option_elem.text = list_item;
+            this.widget[1].add(option_elem);
+        };
+        if (!(new_list.includes(old_value))) {
+            this.set(new_list[new_list.length - 1]);
+        } else {
+            this.set(old_value);
+        };
         return;
     };
 };

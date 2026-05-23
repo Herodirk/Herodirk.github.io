@@ -1,5 +1,5 @@
 class Calculator {
-    constructor() {
+    constructor(json_data) {
         this.templateList = {
             "Choose Template": {},
             "Load ID": {},
@@ -56,25 +56,27 @@ class Calculator {
                 "afkpet_lvl": 100,
                 "afk": true,
             },
-            "Solo Wisdom": {
-                "mining_wisdom": 83.5,  // max Seasoned Mineman (15), cookie (25), god pot (20), Cavern Wisdom (6.5), Refined Divine drill with Compact X (7 + 10)
-                "combat_wisdom": 109,  // max Slayer unique tier kills (6 + 6 + 6 + 12 + 6), Rift Necklace (1), Hunter Ring (5), Bubba Blister (2), Veteran (10), cookie (25), god pot (30)
-                "farming_wisdom": 72.5,  // Fruit Bowl (1), Pelt Belt (1), Zorro's Cape (1), Rift Necklace (1), Agarimoo Artifact (1), Garden Wisdom (6.5) cookie (25), god pot (20), Blessed Mythic farming tool with Cultivating X (6 + 10)
-                "fishing_wisdom": 55.5,  // Moby-Duck (1), Future Calories Talisman (1), Agarimoo Artifact (1), Chumming Talisman (1), Sea Wisdom (6.5), cookie (25), god pot (20)
-                "foraging_wisdom": 93.82,  // Efficient Forager (15), Foraging Wisdom (6.5), David's Cloak (5), Foraging Wisdom Boosters armor and equipment (4 + 2), cookie (25), god pot (20), Moonglade Legendary Axe with Absorb X, Foraging Wisdom Boosters and essence shop perk Axed I ((5 + 10 + 1) * 1.02)
+            "Solo Wisdom": {  // consists of non-random sources of wisdom that can be achieved alone on the private island, excluding pets
+                "mining_wisdom": 100.1,  // Abicase (1.5), cookie (25), god pot (20), Celestial Mason Jar (3), Refined Divine drill with Compact X (7 + 10), Dimensional Mythic armor (4 * 3), Cavern Wisdom (6.5), Blue Omelette Seasoned Mineman (15.1)
+                "combat_wisdom": 113.5,  // Hunter Ring (5), Abicase (1.5), Bubba Blister (2), Rift Necklace (1), cookie (25), god pot (30), Celestial Mason Jar (3), Veteran (10), unique slayer tier kills (6 + 6 + 6 + 12 + 6)
+                "farming_wisdom": 190,  // Agarimoo Artifact (1), Abicase (1.5), Lunar Legendary Pelt Belt (1 + 3), Lunar Mythic Zorro's Cape during Contest (2 * (1 + 4)), Lunar Mythic Rift Necklace (1 + 6), Lunar Mythic Gillsplash Gloves (4), Blessed Legendary Mk. III farming tool with Cultivating X (3 + 5 + 10), Mythic Sunny armor (4 * 6), cookie (25), god pot (20), Celestial Mason Jar (3), Very Moldy Bread (30 + 5), Garden Wisdom (6.5), Sowledge Chip (30), Fruit Bowl (1)
+                "fishing_wisdom": 91.5,  // Agarimoo Artifact (1), Chumming Talisman (1), Abicase (1.5), cookie (25), god pot (20), Celestial Mason Jar (3), Moby-Duck (30 + 1), Sea Wisdom (6.5), Ship Parts (1.5), Mysterious Package (1)
+                "foraging_wisdom": 98.32,  // Abicase (1.5), cookie (25), god pot (20), Celestial Mason Jar (3), David's Cloak (5), Foraging Wisdom Boosters armor and equipment (4 + 2), Moonglade Legendary Axe with Absorb X, Foraging Wisdom Boosters and essence shop perk Axed I ((5 + 10 + 1) * 1.02), Efficient Forager (15), Foraging Wisdom (6.5)
+                "alchemy_wisdom": 54.5  // Witch's Artifact (1.5), cookie (25), god pot (20), Celestial Mason Jar (3), Spider Slayer VIII (5)
             },
-            "Full Coop Wisdom": {  // cookie (25), god pot (20), 8 * (1 + 45 / 100) = 8 + (8 * 45) / 100 =  1 + (700 + 8 * 45) / 100 = 1 + 1060 / 100
-                "mining_wisdom": 1060,  
-                "combat_wisdom": 1060,
-                "farming_wisdom": 1060,
-                "fishing_wisdom": 1060,
-                "foraging_wisdom": 1060,
+            "Full Coop Wisdom": {  // effective wisdom of 8 players, for each player same sources as above, but no tools, armor or equipment. Calculates as `8 * (1 + W / 100) = (1 + (700 + 8 * W) / 100)`
+                "mining_wisdom": 1268,  // Abicase (1.5), cookie (25), god pot (20), Celestial Mason Jar (3), Cavern Wisdom (6.5), Seasoned Mineman (15)
+                "combat_wisdom": 1600,  // Hunter Ring (5), Abicase (1.5), Bubba Blister (2), cookie (25), god pot (30), Celestial Mason Jar (3), Veteran (10), unique slayer tier kills (6 + 6 + 6 + 12 + 6)
+                "farming_wisdom": 1684,  // Agarimoo Artifact (1), Abicase (1.5), cookie (25), god pot (20), Celestial Mason Jar (3), Very Moldy Bread (30 + 5), Garden Wisdom (6.5), Sowledge Chip (30), Fruit Bowl (1)
+                "fishing_wisdom": 1432,  // Agarimoo Artifact (1), Chumming Talisman (1), Abicase (1.5), cookie (25), god pot (20), Celestial Mason Jar (3), Moby-Duck (30 + 1), Sea Wisdom (6.5), Ship Parts (1.5), Mysterious Package (1)
+                "foraging_wisdom": 1268,  // Abicase (1.5), cookie (25), god pot (20), Celestial Mason Jar (3), Efficient Forager (15), Foraging Wisdom (6.5)
+                "alchemy_wisdom": 1136  // Witch's Artifact (1.5), cookie (25), god pot (20), Celestial Mason Jar (3), Spider Slayer VIII (5)
             },
             "Combat Pet Leveling": {
                 "expshareitem": true,
                 "taming": 60,
                 "falcon_attribute": 10,
-                "petxpboost": "Epic Combat Exp Boost",
+                "pet_exp_boost": "Epic Combat Exp Boost",
                 "toucan_attribute": 10,
             },
             "Maxed Inferno Minion": {
@@ -89,7 +91,7 @@ class Calculator {
                 "upgrade2": "Flycatcher",
                 "chest": "XX-Large Storage",
                 "beacon": "Beacon V",
-                "scorched": true,
+                "beacon_fuel": "Scorched Power Crystal",
                 "infusion": true,
                 "free_will": true,
                 "postcard": true,
@@ -98,10 +100,11 @@ class Calculator {
             },
         };
 
-        this.version = "1.2.0";
+        this.version = "1.2.1";
         GUI.main = this;
         this.var_dict = {}
         this.gui = GUI;
+        this.md = MD;
         this.frames = {
             "inputs_minion_grid": document.getElementById("inputs_minion_grid"),
             "inputs_player_grid": document.getElementById("inputs_player_grid"),
@@ -112,6 +115,8 @@ class Calculator {
             "addons_output_grid": document.getElementById("addons_output_grid"),
         };
 
+        this.ID_order = json_data["id_order"];
+        this.input_options = json_data["input_options"];
         this.API_auto_update = new Hvar({"huim": this.gui, "key": "API_auto_update", "vtype": "storage", "dtype": "boolean", "display": "API Auto Update", "initial": true});
         this.API_cooldown = new Hvar({"huim": this.gui, "key": "API_cooldown", "vtype": "storage", "dtype": "number", "display": "API Cooldown (s)", "initial": 120});
         this.pet_API_cooldown = new Hvar({"huim": this.gui, "key": "pet_API_cooldown", "vtype": "storage", "dtype": "number", "display": "Pet API Cooldown (s)", "initial": 1800});
@@ -120,57 +125,62 @@ class Calculator {
         this.color_palette = new Hvar({"huim": this.gui, "key": "color_palette", "vtype": "storage", "dtype": "string", "display": "Color Palette", "initial": "Dark Red", "options": Object.keys(this.gui.palette_names)});
         this.template = new Hvar({"huim": this.gui, "key": "template", "vtype": "input", "display": "Templates", "initial": "Choose Template", "dtype": "string", "frame": "inputs_minion_grid", "options": Object.keys(this.templateList), "command": this.load_template.bind(this)});
         this.load_ID = new Hvar({"huim": this.gui, "key": "load_id", "vtype": "input", "dtype": "string", "frame": "inputs_minion_grid", "display": "Load ID", "initial": ""});
-        this.minion = new Hvar({"huim": this.gui, "key": "minion", "vtype": "input", "dtype": "string", "display": "Minion", "frame": "inputs_minion_grid", "initial": "Custom", "options": md.minion_options, "command": () => this.multiswitch('minion')});
-        this.miniontier = new Hvar({"huim": this.gui, "key": "miniontier", "vtype": "input", "dtype": "number", "display": "Tier", "frame": "inputs_minion_grid", "initial": 12, "options": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "command": () => this.multiswitch('tier')});
+        this.minion = new Hvar({"huim": this.gui, "key": "minion", "vtype": "input", "dtype": "string", "display": "Minion", "frame": "inputs_minion_grid", "initial": "Custom", "options": this.input_options["minion"], "command": () => this.multiswitch('minion')});
+        this.miniontier = new Hvar({"huim": this.gui, "key": "miniontier", "vtype": "input", "dtype": "number", "display": "Tier", "frame": "inputs_minion_grid", "initial": 12, "options": this.input_options["miniontier"], "command": () => this.multiswitch('tier')});
         this.amount = new Hvar({"huim": this.gui, "key": "amount", "vtype": "input", "dtype": "number", "display": "Amount", "frame": "inputs_minion_grid", "initial": 1, "options": null});
-        this.fuel = new Hvar({"huim": this.gui, "key": "fuel", "vtype": "input", "dtype": "string", "display": "Fuel", "frame": "inputs_minion_grid", "initial": "None", "options": md.fuel_options, "command": () => this.multiswitch('fuel')});
-        this.inferno_grade = new Hvar({"huim": this.gui, "key": "inferno_grade", "vtype": "input", "dtype": "string", "display": "Grade", "frame": "inputs_minion_grid", "initial": "Hypergolic Gabagool", "options": md.inferno_fuel_grade_options});
-        this.inferno_distillate = new Hvar({"huim": this.gui, "key": "inferno_distillate", "vtype": "input", "dtype": "string", "display": "Distillate", "frame": "inputs_minion_grid", "initial": "Gabagool Distillate", "options": md.inferno_fuel_distillate_options});
+        this.fuel = new Hvar({"huim": this.gui, "key": "fuel", "vtype": "input", "dtype": "string", "display": "Fuel", "frame": "inputs_minion_grid", "initial": "None", "options": this.input_options["fuel"], "command": () => this.multiswitch('fuel')});
+        this.inferno_grade = new Hvar({"huim": this.gui, "key": "inferno_grade", "vtype": "input", "dtype": "string", "display": "Grade", "frame": "inputs_minion_grid", "initial": "Hypergolic Gabagool", "options": this.input_options["inferno_grade"]});
+        this.inferno_distillate = new Hvar({"huim": this.gui, "key": "inferno_distillate", "vtype": "input", "dtype": "string", "display": "Distillate", "frame": "inputs_minion_grid", "initial": "Gabagool Distillate", "options": this.input_options["inferno_distillate"]});
         this.inferno_eyedrops = new Hvar({"huim": this.gui, "key": "inferno_eyedrops", "vtype": "input", "dtype": "boolean", "display": "Eyedrops", "frame": "inputs_minion_grid", "initial": false});
-        this.hopper = new Hvar({"huim": this.gui, "key": "hopper", "vtype": "input", "dtype": "string", "display": "Hopper", "frame": "inputs_minion_grid", "initial": "None", "options": md.hopper_options});
-        this.upgrade1 = new Hvar({"huim": this.gui, "key": "upgrade1", "vtype": "input", "dtype": "string", "display": "Upgrade 1", "frame": "inputs_minion_grid", "initial": "None", "options": md.upgrade_options});
-        this.upgrade2 = new Hvar({"huim": this.gui, "key": "upgrade2", "vtype": "input", "dtype": "string", "display": "Upgrade 2", "frame": "inputs_minion_grid", "initial": "None", "options": md.upgrade_options});
-        this.chest = new Hvar({"huim": this.gui, "key": "chest", "vtype": "input", "dtype": "string", "display": "Chest", "frame": "inputs_minion_grid", "initial": "None", "options": md.chest_options});
-        this.beacon = new Hvar({"huim": this.gui, "key": "beacon", "vtype": "input", "dtype": "string", "display": "Beacon", "frame": "inputs_minion_grid", "initial": "None", "options": md.beacon_options, "command": this.gui.create_switch_call("beacon", "beacon")});
-        this.scorched = new Hvar({"huim": this.gui, "key": "scorched", "vtype": "input", "dtype": "boolean", "display": "Scorched", "frame": "inputs_minion_grid", "initial": false});
-        this.B_constant = new Hvar({"huim": this.gui, "key": "B_constant", "vtype": "input", "dtype": "boolean", "display": "Free Fuel Beacon", "frame": "inputs_minion_grid", "initial": false});
-        this.B_acquired = new Hvar({"huim": this.gui, "key": "B_acquired", "vtype": "input", "dtype": "boolean", "display": "Acquired Beacon", "frame": "inputs_minion_grid", "initial": false});
+        this.hopper = new Hvar({"huim": this.gui, "key": "hopper", "vtype": "input", "dtype": "string", "display": "Hopper", "frame": "inputs_minion_grid", "initial": "None", "options": this.input_options["hopper"]});
+        this.upgrade1 = new Hvar({"huim": this.gui, "key": "upgrade1", "vtype": "input", "dtype": "string", "display": "Upgrade 1", "frame": "inputs_minion_grid", "initial": "None", "options": this.input_options["upgrade"]});
+        this.upgrade2 = new Hvar({"huim": this.gui, "key": "upgrade2", "vtype": "input", "dtype": "string", "display": "Upgrade 2", "frame": "inputs_minion_grid", "initial": "None", "options": this.input_options["upgrade"]});
+        this.chest = new Hvar({"huim": this.gui, "key": "chest", "vtype": "input", "dtype": "string", "display": "Chest", "frame": "inputs_minion_grid", "initial": "None", "options": this.input_options["chest"]});
+        this.beacon = new Hvar({"huim": this.gui, "key": "beacon", "vtype": "input", "dtype": "string", "display": "Beacon", "frame": "inputs_minion_grid", "initial": "None", "options": this.input_options["beacon"], "command": this.gui.create_switch_call("beacon", "beacon")});
+        this.beacon_fuel = new Hvar({"huim": this.gui, "key": "beacon_fuel", "vtype": "input", "dtype": "string", "display": "Beacon Fuel", "frame": "inputs_minion_grid", "initial": "Power Crystal", "options": this.input_options["beacon_fuel"]});
+        this.free_fuel_beacon = new Hvar({"huim": this.gui, "key": "free_fuel_beacon", "vtype": "input", "dtype": "boolean", "display": "Free Fuel Beacon", "frame": "inputs_minion_grid", "initial": false});
         this.infusion = new Hvar({"huim": this.gui, "key": "infusion", "vtype": "input", "dtype": "boolean", "display": "Infusion", "frame": "inputs_minion_grid", "initial": false});
-        this.crystal = new Hvar({"huim": this.gui, "key": "crystal", "vtype": "input", "dtype": "string", "display": "Crystal", "frame": "inputs_minion_grid", "initial": "None", "options": md.floating_crystal_options});
+        this.crystal = new Hvar({"huim": this.gui, "key": "crystal", "vtype": "input", "dtype": "string", "display": "Crystal", "frame": "inputs_minion_grid", "initial": "None", "options": this.input_options["crystal"], "command": this.gui.create_switch_call("cornucopia_bonus", "crystal")});
+        this.unique_farming_minions = new Hvar({"huim": this.gui, "key": "unique_farming_minions", "vtype": "input", "dtype": "number", "display": "Uniques", "fancy_display": "Unique Farming Minions", "frame": "inputs_minion_grid", "initial": 1});
         this.free_will = new Hvar({"huim": this.gui, "key": "free_will", "vtype": "input", "dtype": "boolean", "display": "Free Will", "frame": "inputs_minion_grid", "initial": false, "command": this.gui.create_switch_call("optimal_free_will", "free_will")});
         this.postcard = new Hvar({"huim": this.gui, "key": "postcard", "vtype": "input", "dtype": "boolean", "display": "Postcard", "frame": "inputs_minion_grid", "initial": false});
         this.afk = new Hvar({"huim": this.gui, "key": "afk", "vtype": "input", "dtype": "boolean", "display": "AFK", "frame": "inputs_player_grid", "initial": false, "command": () => this.multiswitch("afk")});
-        this.afkpet = new Hvar({"huim": this.gui, "key": "afkpet", "vtype": "input", "dtype": "string", "display": "AFK Pet", "frame": "inputs_player_grid", "initial": "None", "options": md.boosting_pet_options});
-        this.afkpet_rarity = new Hvar({"huim": this.gui, "key": "afkpet_rarity", "vtype": "input", "dtype": "string", "display": "AFK Pet Rarity", "frame": "inputs_player_grid", "initial": "Legendary", "options": ['Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'Mythic']});
+        this.afkpet = new Hvar({"huim": this.gui, "key": "afkpet", "vtype": "input", "dtype": "string", "display": "AFK Pet", "frame": "inputs_player_grid", "initial": "None", "options": this.input_options["afkpet"], "command": () => this.afkpet_rarity.update_option_list(Object.keys(this.md.calculator_data[this.afkpet.get(true)]["boosting_pet"]), true)});
+        this.afkpet_rarity = new Hvar({"huim": this.gui, "key": "afkpet_rarity", "vtype": "input", "dtype": "string", "display": "AFK Pet Rarity", "frame": "inputs_player_grid", "initial": "Legendary", "options": this.input_options["pet_rarity"]});
         this.afkpet_lvl = new Hvar({"huim": this.gui, "key": "afkpet_lvl", "vtype": "input", "dtype": "number", "display": "AFK Pet level", "frame": "inputs_player_grid", "initial": 0.0});
         this.enchanted_clock = new Hvar({"huim": this.gui, "key": "enchanted_clock", "vtype": "input", "dtype": "boolean", "display": "Enchanted Clock", "frame": "inputs_player_grid", "initial": false});
         this.special_layout = new Hvar({"huim": this.gui, "key": "special_layout", "vtype": "input", "dtype": "boolean", "display": "Special Layout", "frame": "inputs_player_grid", "initial": false});
         this.player_harvests = new Hvar({"huim": this.gui, "key": "player_harvests", "vtype": "input", "dtype": "boolean", "display": "Player Harvests", "frame": "inputs_player_grid", "initial": false});
-        this.player_looting = new Hvar({"huim": this.gui, "key": "player_looting", "vtype": "input", "dtype": "number", "display": "Looting", "frame": "inputs_player_grid", "initial": 0, "options": [0, 1, 2, 3, 4, 5]});
-        this.potato_accessory = new Hvar({"huim": this.gui, "key": "potato_accessory", "vtype": "input", "dtype": "string", "display": "Potato Accessory", "frame": "inputs_player_grid", "initial": "None", "options": md.potato_accessory_options});
+        this.player_looting = new Hvar({"huim": this.gui, "key": "player_looting", "vtype": "input", "dtype": "number", "display": "Looting", "frame": "inputs_player_grid", "initial": 0, "options": this.input_options["player_looting"]});
+        this.potato_accessory = new Hvar({"huim": this.gui, "key": "potato_accessory", "vtype": "input", "dtype": "string", "display": "Potato Accessory", "frame": "inputs_player_grid", "initial": "None", "options": this.input_options["potato_accessory"]});
         this.combat_wisdom = new Hvar({"huim": this.gui, "key": "combat_wisdom", "vtype": "input", "dtype": "number", "display": "Combat wisdom", "fancy_display": "Combat", "frame": "inputs_player_grid", "initial": 0.0});
         this.mining_wisdom = new Hvar({"huim": this.gui, "key": "mining_wisdom", "vtype": "input", "dtype": "number", "display": "Mining wisdom", "fancy_display": "Mining", "frame": "inputs_player_grid", "initial": 0.0});
         this.farming_wisdom = new Hvar({"huim": this.gui, "key": "farming_wisdom", "vtype": "input", "dtype": "number", "display": "Farming wisdom", "fancy_display": "Farming", "frame": "inputs_player_grid", "initial": 0.0});
         this.fishing_wisdom = new Hvar({"huim": this.gui, "key": "fishing_wisdom", "vtype": "input", "dtype": "number", "display": "Fishing wisdom", "fancy_display": "Fishing", "frame": "inputs_player_grid", "initial": 0.0});
         this.foraging_wisdom = new Hvar({"huim": this.gui, "key": "foraging_wisdom", "vtype": "input", "dtype": "number", "display": "Foraging wisdom", "fancy_display": "Foraging", "frame": "inputs_player_grid", "initial": 0.0});
         this.alchemy_wisdom = new Hvar({"huim": this.gui, "key": "alchemy_wisdom", "vtype": "input", "dtype": "number", "display": "Alchemy wisdom", "fancy_display": "Alchemy", "frame": "inputs_player_grid", "initial": 0.0});
-        this.mayor = new Hvar({"huim": this.gui, "key": "mayor", "vtype": "input", "dtype": "string", "display": "Mayor", "frame": "inputs_player_grid", "initial": "None", "options": md.mayor_options, "command": () => this.multiswitch("mayors")});
-        this.levelingpet = new Hvar({"huim": this.gui, "key": "levelingpet", "vtype": "input", "dtype": "string", "display": "Leveling pet", "frame": "inputs_player_grid", "initial": "None", "options": md.pet_options, "command": () => this.multiswitch("pet_leveling")});
+        this.mayor = new Hvar({"huim": this.gui, "key": "mayor", "vtype": "input", "dtype": "string", "display": "Mayor", "frame": "inputs_player_grid", "initial": "None", "options": this.input_options["mayor"], "command": () => this.multiswitch("mayors")});
+        this.levelingpet = new Hvar({"huim": this.gui, "key": "levelingpet", "vtype": "input", "dtype": "string", "display": "Leveling pet", "frame": "inputs_player_grid", "initial": "None", "options": this.input_options["levelingpet"], "command": () => this.multiswitch("pet_leveling")});
+        this.levelingpet_rarity = new Hvar({"huim": this.gui, "key": "levelingpet_rarity", "vtype": "input", "dtype": "string", "display": "Leveling pet Rarity", "frame": "inputs_player_grid", "initial": "Legendary", "options": this.input_options["pet_rarity"]});
         this.taming = new Hvar({"huim": this.gui, "key": "taming", "vtype": "input", "dtype": "number", "display": "Taming", "frame": "inputs_player_grid", "initial": 0.0});
-        this.falcon_attribute = new Hvar({"huim": this.gui, "key": "falcon_attribute", "vtype": "input", "dtype": "number", "display": "Battle Experience", "frame": "inputs_player_grid", "initial": 0, "options": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]});
-        this.toucan_attribute = new Hvar({"huim": this.gui, "key": "toucan_attribute", "vtype": "input", "dtype": "number", "display": "Why Not More", "frame": "inputs_player_grid", "initial": 0, "options": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]});
-        this.petxpboost = new Hvar({"huim": this.gui, "key": "petxpboost", "vtype": "input", "dtype": "string", "display": "Pet XP boost", "frame": "inputs_player_grid", "initial": "None", "options": md.pet_exp_boost_options});
+        this.falcon_attribute = new Hvar({"huim": this.gui, "key": "falcon_attribute", "vtype": "input", "dtype": "number", "display": "Battle Experience", "frame": "inputs_player_grid", "initial": 0, "options": this.input_options["attribute"]});
+        this.toucan_attribute = new Hvar({"huim": this.gui, "key": "toucan_attribute", "vtype": "input", "dtype": "number", "display": "Why Not More", "frame": "inputs_player_grid", "initial": 0, "options": this.input_options["attribute"]});
+        this.pet_exp_boost = new Hvar({"huim": this.gui, "key": "pet_exp_boost", "vtype": "input", "dtype": "string", "display": "Pet XP boost", "frame": "inputs_player_grid", "initial": "None", "options": this.input_options["pet_exp_boost"]});
         this.beastmaster = new Hvar({"huim": this.gui, "key": "beastmaster", "vtype": "input", "dtype": "number", "display": "Beastmaster", "frame": "inputs_player_grid", "initial": 0.0});
-        this.expsharepet = new Hvar({"huim": this.gui, "key": "expsharepet", "vtype": "input", "dtype": "string", "display": "Exp Share pet", "frame": "inputs_player_grid", "initial": "None", "options": md.pet_options});
-        this.expsharepetslot2 = new Hvar({"huim": this.gui, "key": "expsharepetslot2", "vtype": "input", "dtype": "string", "display": "Exp Share pet 2", "frame": "inputs_player_grid", "initial": "None", "options": md.pet_options});
-        this.expsharepetslot3 = new Hvar({"huim": this.gui, "key": "expsharepetslot3", "vtype": "input", "dtype": "string", "display": "Exp Share pet 3", "frame": "inputs_player_grid", "initial": "None", "options": md.pet_options});
+        this.expsharepet = new Hvar({"huim": this.gui, "key": "expsharepet", "vtype": "input", "dtype": "string", "display": "Exp Share pet", "frame": "inputs_player_grid", "initial": "None", "options": this.input_options["levelingpet"], "command": () => this.expsharepet_rarity.update_option_list(this.md.calculator_data[this.expsharepet.get(true)]["pet_rarities"], true)});
+        this.expsharepet_rarity = new Hvar({"huim": this.gui, "key": "expsharepet_rarity", "vtype": "input", "dtype": "string", "display": "Exp Share pet Rarity", "frame": "inputs_player_grid", "initial": "Legendary", "options": this.input_options["pet_rarity"]});
+        this.expsharepetslot2 = new Hvar({"huim": this.gui, "key": "expsharepetslot2", "vtype": "input", "dtype": "string", "display": "Exp Share pet 2", "frame": "inputs_player_grid", "initial": "None", "options": this.input_options["levelingpet"], "command": () => this.expsharepetslot2_rarity.update_option_list(this.md.calculator_data[this.expsharepetslot2.get(true)]["pet_rarities"], true)});
+        this.expsharepetslot2_rarity = new Hvar({"huim": this.gui, "key": "expsharepetslot2_rarity", "vtype": "input", "dtype": "string", "display": "Exp Share pet Rarity", "frame": "inputs_player_grid", "initial": "Legendary", "options": this.input_options["pet_rarity"]});
+        this.expsharepetslot3 = new Hvar({"huim": this.gui, "key": "expsharepetslot3", "vtype": "input", "dtype": "string", "display": "Exp Share pet 3", "frame": "inputs_player_grid", "initial": "None", "options": this.input_options["levelingpet"], "command": () => this.expsharepetslot3_rarity.update_option_list(this.md.calculator_data[this.expsharepetslot3.get(true)]["pet_rarities"], true)});
+        this.expsharepetslot3_rarity = new Hvar({"huim": this.gui, "key": "expsharepetslot3_rarity", "vtype": "input", "dtype": "string", "display": "Exp Share pet Rarity", "frame": "inputs_player_grid", "initial": "Legendary", "options": this.input_options["pet_rarity"]});
         this.expshareitem = new Hvar({"huim": this.gui, "key": "expshareitem", "vtype": "input", "dtype": "boolean", "display": "Exp Share pet item", "frame": "inputs_player_grid", "initial": false});
         this.scale_time = new Hvar({"huim": this.gui, "key": "scale_time", "vtype": "input", "dtype": "boolean", "display": "Scale Time", "frame": "inputs_player_grid", "initial": false, "command": this.gui.create_switch_call("scaled_time_switch", "scale_time")});
-        this.sell_loc = new Hvar({"huim": this.gui, "key": "sell_loc", "vtype": "input", "dtype": "string", "display": "Sell Location", "frame": "inputs_player_grid", "initial": "Best (NPC/Bazaar)", "options": ['Best (NPC/Bazaar)', 'Bazaar', 'Hopper', 'NPC'], "command": this.gui.create_switch_call("NPC_Bazaar", "sell_loc")});
-        this.bazaar_sell_type = new Hvar({"huim": this.gui, "key": "bazaar_sell_type", "vtype": "input", "dtype": "string", "display": "Bazaar sell type", "frame": "inputs_player_grid", "initial": "Sell Offer", "options": Object.keys(md.bazaar_sell_types)});
-        this.bazaar_buy_type = new Hvar({"huim": this.gui, "key": "bazaar_buy_type", "vtype": "input", "dtype": "string", "display": "Bazaar buy type", "frame": "inputs_player_grid", "initial": "Buy Order", "options": Object.keys(md.bazaar_buy_types)});
+        this.sell_loc = new Hvar({"huim": this.gui, "key": "sell_loc", "vtype": "input", "dtype": "string", "display": "Sell Location", "frame": "inputs_player_grid", "initial": "Best (NPC/Bazaar)", "options": this.input_options["sell_loc"], "command": this.gui.create_switch_call("NPC_Bazaar", "sell_loc")});
+        this.bazaar_sell_type = new Hvar({"huim": this.gui, "key": "bazaar_sell_type", "vtype": "input", "dtype": "string", "display": "Bazaar sell type", "frame": "inputs_player_grid", "initial": "Sell Offer", "options": this.input_options["bazaar_sell_type"]});
+        this.bazaar_buy_type = new Hvar({"huim": this.gui, "key": "bazaar_buy_type", "vtype": "input", "dtype": "string", "display": "Bazaar buy type", "frame": "inputs_player_grid", "initial": "Buy Order", "options": this.input_options["bazaar_buy_type"]});
         this.bazaar_taxes = new Hvar({"huim": this.gui, "key": "bazaar_taxes", "vtype": "input", "dtype": "boolean", "display": "Bazaar taxes", "frame": "inputs_player_grid", "initial": true, "command": this.gui.create_switch_call("bazaar_tax", "bazaar_taxes")});
-        this.bazaar_flipper = new Hvar({"huim": this.gui, "key": "bazaar_flipper", "vtype": "input", "dtype": "number", "display": "Bazaar Flipper", "frame": "inputs_player_grid", "initial": 1, "options": [0, 1, 2]});
+        this.bazaar_flipper = new Hvar({"huim": this.gui, "key": "bazaar_flipper", "vtype": "input", "dtype": "number", "display": "Bazaar Flipper", "frame": "inputs_player_grid", "initial": 1, "options": this.input_options["bazaar_flipper"]});
+        this.sell_form = new Hvar({"huim": this.gui, "key": "sell_form", "vtype": "input", "dtype": "string", "display": "Sell Form", "frame": "inputs_player_grid", "initial": "Base", "options": this.input_options["sell_form"]})
         this.calculated_ID = new Hvar({"huim": this.gui, "key": "calculated_ID", "vtype": "output", "dtype": "string", "display": "Setup ID", "frame": "outputs_setup_grid", "initial": "", "switch_initial": true});
         this.ID_container = new Hvar({"huim": this.gui, "key": "ID_container", "vtype": "output", "dtype": "object", "display": "ID", "frame": "outputs_setup_grid", "widget_width": 35, "widget_height": 1, "initial": [], "switch_initial": null});
         this.scaled_time = new Hvar({"huim": this.gui, "key": "scaled_time", "vtype": "output", "dtype": "string", "display": "Scaled Time", "frame": "outputs_setup_grid", "initial": "1.0 Days", "switch_initial": true});
@@ -199,15 +209,21 @@ class Calculator {
         this.available_storage = new Hvar({"huim": this.gui, "key": "available_storage", "vtype": "output", "dtype": "number", "display": "Available Storage", "frame": "outputs_setup_grid", "initial": 0, "switch_initial": false});
         this.addons_output_container = new Hvar({"huim": this.gui, "key": "addons_output_container", "vtype": "output", "dtype": "object", "display": "Add-on Outputs", "frame": "addons_output_grid", "widget_width": 65, "widget_height": 20, "initial": {}, "switch_initial": false});
         this.empty_time_amount = new Hvar({"huim": this.gui, "key": "empty_time_amount", "vtype": "input", "dtype": "number", "display": "Empty Time span", "initial": 1.0, "frame": "inputs_player_grid"});
-        this.empty_time_unit = new Hvar({"huim": this.gui, "key": "empty_time_unit", "vtype": "input", "dtype": "string", "display": "Empty Time unit", "initial": "Days", "frame": "inputs_player_grid", "options": ["Years", "Weeks", "Days", "Hours", "Minutes", "Seconds", "Harvests"]});
+        this.empty_time_unit = new Hvar({"huim": this.gui, "key": "empty_time_unit", "vtype": "input", "dtype": "string", "display": "Empty Time unit", "initial": "Days", "frame": "inputs_player_grid", "options": this.input_options["time_unit"]});
         this.scaled_time_amount = new Hvar({"huim": this.gui, "key": "scaled_time_amount", "vtype": "input", "dtype": "number", "display": "Scaled Time span", "initial": 1.0, "frame": "inputs_player_grid"});
-        this.scaled_time_unit = new Hvar({"huim": this.gui, "key": "scaled_time_unit", "vtype": "input", "dtype": "string", "display": "Scaled Time unit", "initial": "Days", "frame": "inputs_player_grid", "options": ["Years", "Weeks", "Days", "Hours", "Minutes", "Seconds", "Harvests"]});
+        this.scaled_time_unit = new Hvar({"huim": this.gui, "key": "scaled_time_unit", "vtype": "input", "dtype": "string", "display": "Scaled Time unit", "initial": "Days", "frame": "inputs_player_grid", "options": this.input_options["time_unit"]});
         this.rising_celsius_override = new Hvar({"huim": this.gui, "key": "rising_celsius_override", "vtype": "input", "dtype": "boolean", "display": "Force Rising Celsius", "initial": false, "frame": "inputs_minion_grid"});
-        this.pet_costs = new Hvar({"huim": this.gui, "key": "pet_costs", "vtype": "storage", "dtype": "object", "display": "Pet Prices", "initial": {"NONE": {"min": 1, "max": 1, "last_updated": 0}}})
-        this.used_pet_prices = new Hvar({"huim": this.gui, "key": "used_pet_prices", "vtype": "output", "dtype": "object", "display": "Used Pet Prices", "initial": {}, "frame": "outputs_profit_grid", "widget_width": 35, "widget_height": 4, "switch_initial": true, "tags": ["item_ID_to_display"]});
+        this.pet_costs = new Hvar({"huim": this.gui, "key": "pet_costs", "vtype": "storage", "dtype": "object", "display": "Pet Prices", "initial": {"NONE": {"LEGENDARY": {"min": 1, "max": 1, "last_updated": 0}}}})
+        this.used_pet_prices = new Hvar({"huim": this.gui, "key": "used_pet_prices", "vtype": "output", "dtype": "object", "display": "Used Pet Prices", "initial": {}, "frame": "outputs_profit_grid", "widget_width": 35, "widget_height": 4, "switch_initial": true});
+        this.custom_upgrade_toggle = new Hvar({"huim": this.gui, "key": "custom_upgrade_toggle", "vtype": "storage", "dtype": "boolean", "display": "Custom Upgrade", "initial": false});
 
         this.empty_time_amount.widget.push(this.empty_time_unit.widget[this.empty_time_unit.widget.length - 1]);
         this.scaled_time_amount.widget.push(this.scaled_time_unit.widget[this.scaled_time_unit.widget.length - 1]);
+        this.afkpet.widget.push(this.afkpet_rarity.widget[this.afkpet_rarity.widget.length - 1])
+        this.levelingpet.widget.push(this.levelingpet_rarity.widget[this.levelingpet_rarity.widget.length - 1])
+        this.expsharepet.widget.push(this.expsharepet_rarity.widget[this.expsharepet_rarity.widget.length - 1])
+        this.expsharepetslot2.widget.push(this.expsharepetslot2_rarity.widget[this.expsharepetslot2_rarity.widget.length - 1])
+        this.expsharepetslot3.widget.push(this.expsharepetslot3_rarity.widget[this.expsharepetslot3_rarity.widget.length - 1])
 
         this.notesAnchor = this.gui.genLabel("notesAnchor", "");
         this.notesAnchor.className = "notes_anchor";
@@ -272,17 +288,16 @@ class Calculator {
                 "free_will": null,
                 "island_label": [null, islandtitleLB],
                 "beacon": null,
-                "scorched": null,
-                "B_constant": null,
-                "B_acquired": null,
+                "beacon_fuel": null,
+                "free_fuel_beacon": null,
                 "crystal": null,
+                "unique_farming_minions": null,
                 "postcard": null,
             },
             "inputs_player_grid": {
                 "player_label": [null, playertitleLB],
                 "afk": null,
                 "afkpet": null,
-                "afkpet_rarity": null,
                 "afkpet_lvl": null,
                 "enchanted_clock": null,
                 "special_layout": null,
@@ -301,7 +316,7 @@ class Calculator {
                 "toggle_levelingpet_options": [null, this.gui.create_show_hide_toggle(() => this.multiswitch("pet_leveling", true))],
                 "taming": null,
                 "falcon_attribute": null,
-                "petxpboost": null,
+                "pet_exp_boost": null,
                 "beastmaster": null,
                 "expsharepet": null,
                 "expsharepetslot2": null,
@@ -317,7 +332,8 @@ class Calculator {
                 "bazaar_sell_type": null,
                 "bazaar_buy_type": null,
                 "bazaar_taxes": null,
-                "bazaar_flipper": null
+                "bazaar_flipper": null,
+                "sell_form": null
             },
             "outputs_setup_grid": {
                 "labels": [null, setupoutputsLB, setupprintLB],
@@ -385,12 +401,12 @@ class Calculator {
         };
         
         this.gui.def_switch("wisdom_inputs", ["combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom"], null, false, false)
-        this.gui.def_switch("pet_leveling", ["taming", "petxpboost", "beastmaster", "expsharepet", "expshareitem", "pets_levelled", "pet_profit", "falcon_attribute", "toucan_attribute", "used_pet_prices"], "None", true, false);
-        this.gui.def_switch("exp_share_diana", ["expsharepetslot2", "expsharepetslot3"], "Dianatrue", false, false);
+        this.gui.def_switch("pet_leveling", ["taming", "pet_exp_boost", "beastmaster", "expsharepet", "expsharepet_rarity", "expshareitem", "pets_levelled", "pet_profit", "falcon_attribute", "toucan_attribute", "used_pet_prices"], "None", true, false);
+        this.gui.def_switch("exp_share_diana", ["expsharepetslot2", "expsharepetslot3", "expsharepetslot2_rarity", "expsharepetslot3_rarity"], "Dianatrue", false, false);
         this.gui.def_switch("NPC_Bazaar", ["item_sell_loc"], "Best (NPC/Bazaar)", false, true);
         this.gui.def_switch("infernofuel", ["inferno_grade", "inferno_distillate", "inferno_eyedrops"], "Inferno Minion Fuel", false, false);
         this.gui.def_switch("rising_celsius", ["rising_celsius_override"], "Inferno", false, false);
-        this.gui.def_switch("beacon", ["scorched", "B_constant", "B_acquired"], "None", true, false);
+        this.gui.def_switch("beacon", ["beacon_fuel", "free_fuel_beacon"], "None", true, false);
         this.gui.def_switch("potato_accessory_switch", ["potato_accessory"], "Potatotrue", false, false);
         this.gui.def_switch("bazaar_tax", ["bazaar_flipper"], true, false, true);
         this.gui.def_switch("afking", ["afkpet", "afkpet_rarity", "afkpet_lvl", "enchanted_clock", "special_layout", "player_harvests", "player_looting"], true, false, false);
@@ -398,8 +414,24 @@ class Calculator {
         this.gui.def_switch("scaled_time_switch", ["scaled_time_amount", "scaled_time_unit", "scaled_time"], true, false, false);
         this.gui.def_switch("optimal_free_will", ["optimal_tier_free_will"], true, false, false);
         this.gui.def_switch("setup_cost_breakdown", ["setupcost_breakdown"], null, false, false)
+        this.gui.def_switch("cornucopia_bonus", ["unique_farming_minions"], "Cornucopia Crystal", false, false);
 
-        this.dependent_variables = {"afkpet_rarity": "afkpet", "afkpet_lvl": "afkpet", "player_harvests": "afk", "empty_time": "scale_time", "optimal_tier_free_will": "free_will", "expshareitem": "expsharepet", "pets_levelled": "levelingpet", "used_pet_prices": "levelingpet", "pet_profit": "levelingpet"};
+        this.dependent_variables = {
+            "afkpet_rarity": "afkpet",
+            "afkpet_lvl": "afkpet",
+            "player_harvests": "afk",
+            "empty_time": "scale_time",
+            "optimal_tier_free_will": "free_will",
+            "expshareitem": "expsharepet",
+            "pets_levelled": "levelingpet",
+            "used_pet_prices": "levelingpet",
+            "pet_profit": "levelingpet",
+            "levelingpet_rarity": "levelingpet",
+            "expsharepet_rarity": "expsharepet",
+            "expsharepetslot2_rarity": "expsharepetslot2",
+            "expsharepetslot3_rarity": "expsharepetslot3",
+            "beacon_fuel": "beacon"
+        };
         this.key_replace_bool = ["infusion", "free_will", "postcard"];
 
         this.standard_output_order = {
@@ -407,22 +439,27 @@ class Calculator {
             "**Minion Upgrades**": {
                 "\n> Internal: ": new Set(["fuel", "hopper", "upgrade1", "upgrade2"]),
                 "\n> External: ": new Set(["chest", "beacon", "crystal", "postcard"]),
+                "\n-# ": ["unique_farming_minions", "custom_upgrade_toggle"],
                 "\n> Permanent: ": new Set(["infusion", "free_will"])
             },
-            "Beacon Info": { "\n> ": ["scorched", "B_constant", "B_acquired"] },
+            "Beacon Info": { "\n> ": ["beacon_fuel", "free_fuel_beacon"] },
             "Inferno Info": { "\n> ": ["inferno_grade", "inferno_distillate", "inferno_eyedrops", "rising_celsius_override"] },
             "afk": { "\n> ": ["afkpet", "afkpet_rarity", "afkpet_lvl", "enchanted_clock", "special_layout", "potato_accessory"] },
             "playerHarvests": { "\n> ": ["player_looting"] },
             "Wisdoms": {"\n> ": ["combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom"]},
             "mayor": null,
-            "levelingpet": {
-                "\n> ": ["taming", "falcon_attribute", "petxpboost", "beastmaster", "toucan_attribute", "expshareitem"],
-                "\n> Exp Share Pets: ": new Set(["expsharepet", "expsharepetslot2", "expsharepetslot3"])
+            "Leveling pet: ": {
+                "%": [["levelingpet_rarity", "levelingpet"]],
+                "\n> ": ["taming", "falcon_attribute", "pet_exp_boost", "beastmaster", "toucan_attribute", "expshareitem"],
+                "%\n> Exp Share Pets: ": [["expsharepet_rarity", "expsharepet"], ["expsharepetslot2_rarity", "expsharepetslot2"], ["expsharepetslot3_rarity", "expsharepetslot3"]]
             },
             "used_pet_prices": null,
-            "**Setup Information**": { "!\n> ": ["calculated_ID", "actiontime", "fuelamount", "available_storage", "optimal_tier_free_will", "setupcost", "extracost",] },
+            "**Setup Information**\n": {
+                "> ": ["calculated_ID"],
+                "\n> ": ["actiontime", "fuelamount", "available_storage", "optimal_tier_free_will", "setupcost", "extracost"]
+            },
             "setupcost_breakdown": null,
-            "Bazaar Info": { "\n> ": ["sell_loc", "bazaar_update_txt", "bazaar_sell_type", "bazaar_buy_type", "bazaar_taxes", "bazaar_flipper"] },
+            "Market Info": { "\n> ": ["sell_loc", "bazaar_update_txt", "bazaar_sell_type", "bazaar_buy_type", "bazaar_taxes", "bazaar_flipper", "sell_form"] },
             "notes": null,
             "empty_time": null,
             "**Outputs** for ": { "": new Set(["scaled_time"]) },
@@ -440,21 +477,6 @@ class Calculator {
             "addons_output_container": null
         };
 
-        this.ID_order = [
-            "minion", "miniontier", "amount", "fuel",
-            "hopper", "upgrade1", "upgrade2", "chest", "beacon", "scorched", "B_constant", "B_acquired",
-            "infusion", "crystal", "free_will", "postcard",
-            "inferno_grade", "inferno_distillate", "inferno_eyedrops", "rising_celsius_override",
-            "afk", "afkpet", "afkpet_rarity", "afkpet_lvl", "enchanted_clock", "special_layout",
-            "player_harvests", "player_looting", "potato_accessory",
-            "combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom",
-            "mayor",
-            "levelingpet", "taming", "falcon_attribute", "toucan_attribute", "petxpboost", "beastmaster",
-            "expsharepet", "expsharepetslot2", "expsharepetslot3", "expshareitem",
-            "sell_loc", "bazaar_sell_type", "bazaar_buy_type", "bazaar_taxes", "bazaar_flipper",
-            "empty_time_amount", "empty_time_unit", "scale_time", "scaled_time_amount", "scaled_time_unit",
-        ];
-
         this.API_timer = 0;
         this.bazaar_items = [];
         this.AH_items = [];
@@ -465,19 +487,19 @@ class Calculator {
     multiswitch(multi_ID, force=false) {
         if (multi_ID === "minion") {
             let minionType = this.minion.get(false);
-            this.gui.set_value("miniontier", Object.keys(md.calculator_data[md.minion_options[minionType]]["speed"]).slice(-1));
+            this.gui.set_value("miniontier", Object.keys(this.md.calculator_data[this.input_options["minion"][minionType]]["speed"]).slice(-1));
             this.gui.toggle_switch("potato_accessory_switch", minionType + String(this.afk.get(false)));
             this.gui.toggle_switch("rising_celsius", minionType);
         } else if (multi_ID === "tier") {
             let minionType = this.minion.get(true);
             let minionTier = this.miniontier.get(false);
-            if (!(minionTier in md.calculator_data[minionType]["speed"])) {
-                this.gui.set_value("miniontier", Object.keys(md.calculator_data[minionType]["speed"]).slice(-1));
+            if (!(String(minionTier) in this.md.calculator_data[minionType]["speed"])) {
+                this.gui.set_value("miniontier", Object.keys(this.md.calculator_data[minionType]["speed"]).slice(-1));
             };
         } else if (multi_ID === "fuel") {
             let control = this.fuel.get(false);
             this.gui.toggle_switch("infernofuel", control);
-            this.gui.toggle_switch("fuel_amount", md.calculator_data[md.fuel_options[control]]["fuel_duration"]);
+            this.gui.toggle_switch("fuel_amount", this.md.calculator_data[this.input_options["fuel"][control]]["fuel_duration"]);
         } else if (multi_ID === "afk") {
             let afkState = this.afk.get(false);
             let minionType = this.minion.get(false);
@@ -495,6 +517,7 @@ class Calculator {
                 this.gui.toggle_switch("pet_leveling", control);
                 pet_leveling_state = this.gui.switches["pet_leveling"]["state"]
                 this.gui.toggle_switch("exp_share_diana", mayor + String(pet_leveling_state));
+                this.levelingpet_rarity.update_option_list(this.md.calculator_data[this.input_options["levelingpet"][control]]["pet_rarities"], true)
             };
         } else if (multi_ID === "mayors") {
             let mayor = this.mayor.get(false);
@@ -545,11 +568,15 @@ class Calculator {
                 return null;
             };
         } else if (["inferno_grade", "inferno_distillate", "inferno_eyedrops"].includes(var_key)) {  // special case: fuel attributes only relevant for Inferno Minion Fuel
-            if (calculation_data["fuel"] != "Inferno Minion Fuel") {
+            if (calculation_data["fuel"] !== "Inferno Minion Fuel") {
                 return null;
             };
         } else if (var_key === "rising_celsius_override") {  // special case: Rising Celsius only applies to Inferno minions
-            if (calculation_data["minion"] != "Inferno") {
+            if (calculation_data["minion"] !== "Inferno") {
+                return null;
+            };
+        } else if (var_key === "unique_farming_minions") {  // special case: Unique Farming Minions only matters for Cornucopia Crystal
+            if (calculation_data["crystal"] !== "Cornucopia Crystal") {
                 return null;
             };
         } else if (var_key === "scaled_time" && calculation_data["scale_time"] === false && output_switches["empty_time"] === false) {  // special case: scale time is off and empty time is off
@@ -575,6 +602,8 @@ class Calculator {
             };
         } else if (var_key === "special_layout" && "Special Layout" in calculation_data["notes"]) {
             data = calculation_data["notes"]["Special Layout"];
+        } else if (var_key === "custom_upgrade_toggle" && calculation_data[var_key]) {
+            data = `Speed boost: ${this.md.calculator_data["CUSTOM_UPGRADE"]["speed_boost"]}, Drop multiplier: ${this.md.calculator_data["CUSTOM_UPGRADE"]["drop_multiplier"]}`
         } else if (this.var_dict[var_key].dtype === "object") {
             data = calculation_data[var_key];
         } else if (this.var_dict[var_key].dtype === "number") {
@@ -602,11 +631,13 @@ class Calculator {
             let formatted_list = [];
             let key_formatting_function = x => x;
             if (this.var_dict[var_key].has_tag("item_ID_to_display")) {
-                key_formatting_function = x => md.calculator_data[x]['display'];
+                key_formatting_function = x => this.md.calculator_data[x]['display'];
             } else if (var_key === "pets_levelled") {
-                key_formatting_function = x => calculation_data[x];
+                key_formatting_function = x => calculation_data[x + "_rarity"] + " " + calculation_data[x];
             } else if (var_key === "setupcost_breakdown") {
                 key_formatting_function = x => this.var_dict[x].get_display(true);
+            } else if (var_key === "used_pet_prices") {
+                key_formatting_function = x => x.split(".").map(y => this.md.calculator_data[y]["display"]).join(" ")
             };
             for (let [list_key, list_val] of Object.entries(data)) {
                 if (typeof list_val === "number") {
@@ -650,7 +681,7 @@ class Calculator {
             if (section_key === "Inferno Info" && calculation_data["minion"] !== "Inferno" && calculation_data["fuel"] !== "Inferno Minion Fuel") {
                 continue;
             };
-            if (section_key === "Bazaar Info" && "bazaar_update_txt" in output_switches && output_switches["bazaar_update_txt"] === false) {
+            if (section_key === "Market Info" && "bazaar_update_txt" in output_switches && output_switches["bazaar_update_txt"] === false) {
                 continue;
             };
             let line_str = "";
@@ -664,6 +695,7 @@ class Calculator {
                 if (!(markdown)) {
                     header = header.replaceAll("*", "");
                     header = header.replaceAll("### ", "");
+                    header = header.replaceAll("-# ", "- ");
                 };
             };
             if (header === null) {
@@ -672,10 +704,18 @@ class Calculator {
 
             if (output_order[section_key] instanceof Object) {
                 for (let [sub_key, key_arr] of Object.entries(output_order[section_key])) {
+                    if (!(markdown)) {
+                        sub_key = sub_key.replaceAll("*", "");
+                        sub_key = sub_key.replaceAll("### ", "");
+                        sub_key = sub_key.replaceAll("-# ", "- ");
+                    };
                     let line_data = "";
                     if (sub_key.includes("$")) {
                         sub_key = sub_key.substring(1);
                         line_data += Array.from(key_arr, var_key => this.data_to_text(var_key, calculation_data, output_switches, false, false)).filter(x => x !== null).join(", ");
+                    } else if (sub_key.includes("%")) {
+                        sub_key = sub_key.substring(1)
+                        line_data += Array.from(key_arr, key_group => Array.from(key_group, var_key => this.data_to_text(var_key, calculation_data, output_switches, markdown, false)).filter(x => x !== null).join(" ")).filter(x => x !== "").join(", ")
                     } else if (sub_key.includes("!")) {
                         sub_key = sub_key.substring(1);
                         line_data += Array.from(key_arr, var_key => this.data_to_text(var_key, calculation_data, output_switches, markdown)).filter(x => x !== null).join(sub_key);
@@ -723,8 +763,8 @@ class Calculator {
             if (!(var_key in setup_data)) {
                 console.log(`WARNING: ${var_key} key not in setup_data, assuming default value`);
                 val = this.var_dict[var_key].initial;
-            } else if (this.var_dict[var_key].translation !== null) {
-                val = md.calculator_data[setup_data[var_key]]["display"];
+            } else if (this.var_dict[var_key].reverse_translation !== null) {
+                val = this.var_dict[var_key].reverse_translation[setup_data[var_key]];
             } else {
                 val = setup_data[var_key];
             };
@@ -803,28 +843,28 @@ class Calculator {
         let multiplier = 1;
         if (location === "bazaar") {
             if (action === "buy") {
-                location = md.bazaar_buy_types[setup_data["bazaar_buy_type"]];
+                location = setup_data["bazaar_buy_type"];
             } else if (action === "sell") {
-                location = md.bazaar_sell_types[setup_data["bazaar_sell_type"]];
+                location = setup_data["bazaar_sell_type"];
                 if (setup_data["bazaar_taxes"]) {
                     let bazaar_tax = 0.0125 - 0.00125 * setup_data["bazaar_flipper"];
-                    bazaar_tax *= md.calculator_data[setup_data["mayor"]]["tax_multiplier"]
+                    bazaar_tax *= this.md.calculator_data[setup_data["mayor"]]["tax_multiplier"]
                     multiplier = 1 - bazaar_tax;
                 };
             };
         } else if (location === "npc" && action === "buy") {
             multiplier = 2;
         };
-        if (item_ID in md.calculator_data) {
-            if (location in md.calculator_data[item_ID]["prices"]) {
-                return multiplier * md.calculator_data[item_ID]["prices"][location];
+        if (item_ID in this.md.calculator_data) {
+            if (location in this.md.calculator_data[item_ID]["prices"]) {
+                return multiplier * this.md.calculator_data[item_ID]["prices"][location];
             } else if (force) {
                 console.log("WARNING: no forced cost found for " + item_ID);
                 return 0;
-            } else if ("custom" in md.calculator_data[item_ID]["prices"]) {
-                return md.calculator_data[item_ID]["prices"]["custom"];
-            } else if ("npc" in md.calculator_data[item_ID]["prices"]) {
-                return multiplier * md.calculator_data[item_ID]["prices"]["npc"];
+            } else if ("custom" in this.md.calculator_data[item_ID]["prices"]) {
+                return this.md.calculator_data[item_ID]["prices"]["custom"];
+            } else if ("npc" in this.md.calculator_data[item_ID]["prices"]) {
+                return multiplier * this.md.calculator_data[item_ID]["prices"]["npc"];
             } else {
                 console.log("WARNING: no cost found for " + item_ID);
                 return 0;
@@ -835,19 +875,26 @@ class Calculator {
         };
     };
 
-    get_speed_boosts(minion, minion_fuel_id, upgrade_ids, afk_toggle, clock_override, setup_data) {
+    get_speed_boosts(minion, upgrade_ids, upgrade_effects, afk_toggle, clock_override, setup_data) {
         let speed_boost = 0;
-        speed_boost += md.calculator_data[minion_fuel_id]["speed_boost"];
-        speed_boost += md.calculator_data[upgrade_ids[0]]["speed_boost"] + md.calculator_data[upgrade_ids[1]]["speed_boost"];
-        speed_boost += md.calculator_data[setup_data["beacon"]]["speed_boost"] + md.calculator_data["MITHRIL_INFUSION"]["speed_boost"] * setup_data["infusion"];
-        speed_boost += md.calculator_data["FREE_WILL"]["speed_boost"] * setup_data["free_will"] + md.calculator_data["POSTCARD"]["speed_boost"] * setup_data["postcard"];
+        for (let upgrade of upgrade_ids) {
+            speed_boost += this.md.calculator_data[upgrade]["speed_boost"];
+        };
+        speed_boost += this.md.calculator_data[setup_data["beacon"]]["speed_boost"] + this.md.calculator_data["MITHRIL_INFUSION"]["speed_boost"] * setup_data["infusion"];
+        speed_boost += this.md.calculator_data["FREE_WILL"]["speed_boost"] * setup_data["free_will"] + this.md.calculator_data["POSTCARD"]["speed_boost"] * setup_data["postcard"];
+        if (setup_data["custom_upgrade_toggle"]) {
+            speed_boost += this.md.calculator_data["CUSTOM_UPGRADE"]["speed_boost"];
+        };
         if (setup_data["crystal"] !== "NONE") {
-            if (md.has_data_tag(minion, md.calculator_data[setup_data["crystal"]]["affected_minions"])) {
-                speed_boost += md.calculator_data[setup_data["crystal"]]["speed_boost"];
+            if (this.md.has_data_tag(minion, this.md.calculator_data[setup_data["crystal"]]["affected_minions"])) {
+                speed_boost += this.md.calculator_data[setup_data["crystal"]]["speed_boost"];
+                if (setup_data["crystal"] === "CORNUCOPIA_CRYSTAL") {
+                    speed_boost += setup_data["unique_farming_minions"];
+                };
             };
         };
-        if (setup_data["beacon"] !== "NONE" && setup_data["scorched"]) {
-            speed_boost += md.calculator_data["SCORCHED_POWER_CRYSTAL"]["speed_boost"];
+        if (setup_data["beacon"] !== "NONE") {
+            speed_boost += this.md.calculator_data[setup_data["beacon_fuel"]]["speed_boost"];
         };
         if (minion == "INFERNO_MINION") {
             if (setup_data["rising_celsius_override"]) {
@@ -856,52 +903,51 @@ class Calculator {
                 speed_boost += 18 * Math.min(10, setup_data["amount"]);
             };
         };
-        if (minion_fuel_id === "EVERBURNING_FLAME" && md.has_data_tag(minion, md.calculator_data[minion_fuel_id]["upgrade_special"]["affected_minions"])) {
-            speed_boost += md.calculator_data[minion_fuel_id]["upgrade_special"]["amount"];
+        for (let [item_ID, effect_data] of Object.entries(upgrade_effects["speed_bonus"])) {
+            if (this.md.has_data_tag(minion, effect_data["affected_minions"])) {
+                speed_boost += effect_data["amount"];
+            };
         };
-        if (md.has_data_tag(minion, md.calculator_data[setup_data["mayor"]]["affected_minions"])) {
-            speed_boost += md.calculator_data[setup_data["mayor"]]["speed_boost"];
+        if (this.md.has_data_tag(minion, this.md.calculator_data[setup_data["mayor"]]["affected_minions"])) {
+            speed_boost += this.md.calculator_data[setup_data["mayor"]]["speed_boost"];
         };
         if (!(afk_toggle || clock_override)) {
             return speed_boost;
         };
-        if (md.has_data_tag(minion, md.calculator_data[setup_data["potato_accessory"]]["affected_minions"])) {
-            speed_boost += md.calculator_data[setup_data["potato_accessory"]]["speed_boost"];
+        if (this.md.has_data_tag(minion, this.md.calculator_data[setup_data["potato_accessory"]]["affected_minions"])) {
+            speed_boost += this.md.calculator_data[setup_data["potato_accessory"]]["speed_boost"];
         };
         const afkpet = setup_data["afkpet"];
         const afkpet_rarity = setup_data["afkpet_rarity"];
-        if (md.has_data_tag(minion, md.calculator_data[afkpet]["affected_minions"]) && afkpet_rarity in md.calculator_data[afkpet]["boosting_pet"]) {
-            speed_boost += md.calculator_data[afkpet]["boosting_pet"][afkpet_rarity][0] + setup_data["afkpet_lvl"] * md.calculator_data[afkpet]["boosting_pet"][afkpet_rarity][1];
+        if (this.md.has_data_tag(minion, this.md.calculator_data[afkpet]["affected_minions"]) && afkpet_rarity in this.md.calculator_data[afkpet]["boosting_pet"]) {
+            speed_boost += this.md.calculator_data[afkpet]["boosting_pet"][afkpet_rarity][0] + setup_data["afkpet_lvl"] * this.md.calculator_data[afkpet]["boosting_pet"][afkpet_rarity][1];
         };
         return speed_boost;
     };
 
     
-    get_drop_multiplier(minion, minion_fuel_id, upgrade_ids, afk_toggle, setup_data) {
+    get_drop_multiplier(minion, upgrade_ids, afk_toggle, setup_data) {
         let drop_multiplier = 1;
         if (afk_toggle && setup_data["player_harvests"] && !(["FISHING_MINION", "PUMPKIN_MINION", "MELON_MINION"].includes(minion))) {
-            if (md.has_data_tag(minion, "mob_minion")) {
+            if (this.md.has_data_tag(minion, "mob_minion")) {
                 drop_multiplier *= 1 + 15 * setup_data["player_looting"] / 100;
             };
             return drop_multiplier;
         };
-        drop_multiplier *= md.calculator_data[minion_fuel_id]["drop_multiplier"];
-        drop_multiplier *= md.calculator_data[upgrade_ids[0]]["drop_multiplier"];
-        if (afk_toggle && drop_multiplier > 1) {
-            // drop multiplier greater than 1 is rounded down while online
-            drop_multiplier = Math.floor(drop_multiplier);
+        for (let upgrade of upgrade_ids) {
+            drop_multiplier *= this.md.calculator_data[upgrade]["drop_multiplier"];
+            if (afk_toggle && drop_multiplier > 1) {
+                // drop multiplier greater than 1 is rounded down while online
+                drop_multiplier = Math.floor(drop_multiplier);
+            };
         };
-        drop_multiplier *= md.calculator_data[upgrade_ids[1]]["drop_multiplier"];
-        if (afk_toggle && drop_multiplier > 1) {
-            drop_multiplier = Math.floor(drop_multiplier);
-        };
-        if (md.has_data_tag(minion, md.calculator_data[setup_data["mayor"]]["affected_minions"])) {
-            drop_multiplier *= md.calculator_data[setup_data["mayor"]]["drop_multiplier"];
+        if (this.md.has_data_tag(minion, this.md.calculator_data[setup_data["mayor"]]["affected_minions"])) {
+            drop_multiplier *= this.md.calculator_data[setup_data["mayor"]]["drop_multiplier"];
         };
         return drop_multiplier;
     };
     
-    get_actions_per_harvest(minion, upgrade_ids, afk_toggle, setup_data, setup_notes) {
+    get_actions_per_harvest(minion, upgrade_ids, upgrade_effects, afk_toggle, setup_data, setup_notes) {
         let actions_per_harvest = 2;
         if (minion === "FISHING_MINION") {
             // only has harvests actions
@@ -918,7 +964,7 @@ class Calculator {
                 } else {
                     actions_per_harvest = 1;
                     if (minion === "GRAVEL_MINION") {
-                        upgrade_ids.push("FLINT_SHOVEL");
+                        upgrade_effects["replacing"]["GRAVEL"] = { "FLINT": 1 };
                         setup_notes["Player Tools"] = "Assuming Player is using Flint Shovel";
                     };
                     if (minion === "ICE_MINION") {
@@ -930,8 +976,13 @@ class Calculator {
                     // cobblestone generator, regrowing mycelium, freezing water
                     actions_per_harvest = 1;
                 };
-                if (["FLOWER_MINION", "SAND_MINION", "RED_SAND_MINION", "GRAVEL_MINION"].includes(minion)) {
-                    // harvests through natural means: water flushing, gravity
+                if (minion == "FLOWER_MINION" && !(upgrade_ids.includes("THORNY_VINES"))) {
+                    // harvests through natural means: water flushing
+                    actions_per_harvest = 1;
+                    // speedBonus -= 10  # only spawning has 10% action speed reduction, not confirmed yet.
+                }
+                if (["SAND_MINION", "RED_SAND_MINION", "GRAVEL_MINION"].includes(minion)) {
+                    // harvests through natural means: gravity
                     actions_per_harvest = 1;
                     // speedBonus -= 10  # only spawning has 10% action speed reduction, not confirmed yet.
                 };
@@ -940,65 +991,69 @@ class Calculator {
         return actions_per_harvest;
     };
 
-    update_loot_table(minion, minion_fuel_id, upgrades, afk_toggle, setup_data) {
-        if (md.has_data_tag(minion, "wood_minion")) {
+    update_loot_table(minion, upgrade_ids, upgrade_effects, afk_toggle, setup_data) {
+        if (this.md.has_data_tag(minion, "wood_minion")) {
             if (afk_toggle) {
                 // chopped trees have 4 blocks of wood, unknown why offline gives 3
-                md.calculator_data[minion]["drops"][Object.keys(md.calculator_data[minion]["drops"])[0]] = 4;
-            } else {
-                md.calculator_data[minion]["drops"][Object.keys(md.calculator_data[minion]["drops"])[0]] = 3;
+                Object.assign(upgrade_effects["replacing"], {
+                    "LOG": {"LOG": 4 / 3},
+                    "LOG:1": {"LOG:1": 4 / 3},
+                    "LOG:2": {"LOG:2": 4 / 3},
+                    "LOG_2:1": {"LOG_2:1": 4 / 3},
+                    "LOG_2": {"LOG_2": 4 / 3},
+                    "LOG:3": {"LOG:3": 4 / 3},
+                });
             };
         } else if (minion == "GRAVEL_MINION") {
             if (afk_toggle) {
                 // vanilla minecraft chance for gravel to become flint
-                md.calculator_data[minion]["drops"]["GRAVEL"] = 0.9;
-                md.calculator_data[minion]["drops"]["FLINT"] = 0.1;
+                this.md.calculator_data[minion]["drops"]["GRAVEL"] = 0.9;
+                this.md.calculator_data[minion]["drops"]["FLINT"] = 0.1;
             } else {
-                md.calculator_data[minion]["drops"]["GRAVEL"] = 1;
-                md.calculator_data[minion]["drops"]["FLINT"] = 0;
+                this.md.calculator_data[minion]["drops"]["GRAVEL"] = 1;
+                this.md.calculator_data[minion]["drops"]["FLINT"] = 0;
             };
         } else if (minion == "PUMPKIN_MINION") {
-            if (afk_toggle) {
+            if (!(afk_toggle)) {
+                Object.assign(upgrade_effects["replacing"], {"PUMPKIN": {"PUMPKIN": 3}});
                 // it just does this, idk, ask Hypixel
-                md.calculator_data[minion]["drops"]["PUMPKIN"] = 1;
-            } else {
-                md.calculator_data[minion]["drops"]["PUMPKIN"] = 3;
             };
         } else if (minion == "SHEEP_MINION") {
-            if (upgrades.includes("ENCHANTED_SHEARS")) {
-                md.calculator_data[minion]["drops"]["WOOL"] = 0;
-            } else {
-                md.calculator_data[minion]["drops"]["WOOL"] = 1;
+            if (upgrade_ids.includes("ENCHANTED_SHEARS")) {
+                Object.assign(upgrade_effects["replacing"], {"WOOL": {"WOOL": 0}});
             };
         } else if (minion == "FLOWER_MINION") {
-            if (minion_fuel_id == "THORNY_VINES") {
-                md.calculator_data[minion]["drops"] = { "WILD_ROSE": 2 };
-            } else if (afk_toggle && setup_data["special_layout"]) {
+            if (afk_toggle && setup_data["special_layout"] && !(upgrade_ids.includes("THORNY_VINES"))) {
                 // tall flowers blocked by low ceiling
-                md.calculator_data[minion]["drops"] = { "YELLOW_FLOWER": 0.35, "RED_ROSE": 0.15, "RED_ROSE:1": 0.5 / 8, "RED_ROSE:2": 0.5 / 8, "RED_ROSE:3": 0.5 / 8, "RED_ROSE:4": 0.5 / 8, "RED_ROSE:5": 0.5 / 8, "RED_ROSE:6": 0.5 / 8, "RED_ROSE:7": 0.5 / 8, "RED_ROSE:8": 0.5 / 8 };
-            } else {
-                md.calculator_data[minion]["drops"] = { "YELLOW_FLOWER": 0.35, "RED_ROSE": 0.15, "RED_ROSE:1": 0.5 / 11, "RED_ROSE:2": 0.5 / 11, "RED_ROSE:3": 0.5 / 11, "RED_ROSE:4": 0.5 / 11, "RED_ROSE:5": 0.5 / 11, "RED_ROSE:6": 0.5 / 11, "RED_ROSE:7": 0.5 / 11, "RED_ROSE:8": 0.5 / 11, "DOUBLE_PLANT:1": 0.5 / 11, "DOUBLE_PLANT:4": 0.5 / 11, "DOUBLE_PLANT:5": 0.5 / 11 };
-            };
-        } else if (minion == "SUNFLOWER_MINION") {
-            if (minion_fuel_id == "DAYSWITCH") {
-                md.calculator_data[minion]["drops"] = { "DOUBLE_PLANT": 2 };
-            } else if (minion_fuel_id == "NIGHTSWITCH") {
-                md.calculator_data[minion]["drops"] = { "MOONFLOWER": 2 };
-            } else {
-                md.calculator_data[minion]["drops"] = { "DOUBLE_PLANT": 1, "MOONFLOWER": 1 };
+                Object.assign(upgrade_effects["replacing"], {
+                    "RED_ROSE:1": {"RED_ROSE:1": 11 / 8},
+                    "RED_ROSE:2": {"RED_ROSE:2": 11 / 8},
+                    "RED_ROSE:3": {"RED_ROSE:3": 11 / 8},
+                    "RED_ROSE:4": {"RED_ROSE:4": 11 / 8},
+                    "RED_ROSE:5": {"RED_ROSE:5": 11 / 8},
+                    "RED_ROSE:6": {"RED_ROSE:6": 11 / 8},
+                    "RED_ROSE:7": {"RED_ROSE:7": 11 / 8},
+                    "RED_ROSE:8": {"RED_ROSE:8": 11 / 8},
+                    "DOUBLE_PLANT:1": {},
+                    "DOUBLE_PLANT:4": {},
+                    "DOUBLE_PLANT:5": {}
+                });
             };
         };
         return;
     };
 
     get_seconds_per_action(minion, minion_tier, minion_fuel_id, speed_boost, setup_data) {
-        let base_speed = md.calculator_data[minion]["speed"][minion_tier];
-        let secondsPaction = base_speed / (1 + speed_boost / 100);
+        let base_speed = this.md.calculator_data[minion]["speed"][minion_tier];
+        let seconds_per_action = base_speed / (1 + speed_boost / 100);
         if (minion_fuel_id == "INFERNO_FUEL") {
-            secondsPaction /= 1 + md.inferno_fuel_data["grades"][setup_data["inferno_grade"]];
+            seconds_per_action /= 1 + this.md.inferno_fuel_data["grades"][setup_data["inferno_grade"]];
         };
-        secondsPaction = Math.round(secondsPaction * 20) / 20
-        return secondsPaction;
+        seconds_per_action = Math.round(seconds_per_action * 20) / 20;
+        if (seconds_per_action < 0.05) {
+            seconds_per_action = 0.05;
+        };
+        return seconds_per_action;
     };
 
     get_time_constants(seconds_per_action, actions_per_harvest, setup_data) {
@@ -1030,27 +1085,48 @@ class Calculator {
         return [harvests_per_time, drop_multiplier];
     };
 
-    get_upgrade_info(upgrade_ids, drops_list) {
-        let spreading_info = {};
-        let replace_info = {};
+    get_upgrade_info(minion_fuel_id, drops_list, setup_data) {
+        let upgrade_effects = {
+            "replacing": {},  // old item: {new item: ratio = (new item / old item)}, or {} (empty dict) to remove old item
+            "spreading": {},  // item: average per drop
+            "adding": {},  // "ID": {item: amount}
+            "cooldown": {},  // "ID": {items: {item: amount}, online_cooldown: seconds, offline_cooldown: seconds}
+            "speed_bonus": {},  // "ID": {amount: +%, affected_minions: [affected minion tags and IDs]}
+            "compacting": {},  // "ID": {item: compacting recipes}
+            "expanding": 0
+        };
+        let upgrade_ids = [minion_fuel_id, setup_data["upgrade1"], setup_data["upgrade2"]];
+        if (setup_data["custom_upgrade_toggle"]) {
+            upgrade_ids.push("CUSTOM_UPGRADE");
+        };
         for (const upgrade of upgrade_ids) {
-            let upgrade_type = md.calculator_data[upgrade]["upgrade_special"]["type"];
-            if (upgrade_type.includes("spreading")) {
-                for (let [item, amount] of Object.entries(md.calculator_data[upgrade]["upgrade_special"]["items"])) {
-                    spreading_info[item] = amount;
-                    drops_list[item] = 0;
+            if (!("upgrade_effects" in this.md.calculator_data[upgrade])) {
+                continue;
+            };
+            for (let [effect_type, upgrade_effect_data] of Object.entries(this.md.calculator_data[upgrade]["upgrade_effects"])) {
+                if ("replacing" === effect_type) {
+                    Object.assign(upgrade_effects["replacing"], upgrade_effect_data)
+                } else if ("spreading" === effect_type) {
+                    for (let [item, amount] of Object.entries(upgrade_effect_data)) {
+                        upgrade_effects["spreading"][item] = amount;
+                        drops_list[item] = 0;
+                    };
+                } else if ("expanding" === effect_type) {
+                    upgrade_effects[effect_type] += upgrade_effect_data;
+                } else {
+                    upgrade_effects[effect_type][upgrade] = upgrade_effect_data;
                 };
             };
-            if (upgrade_type.includes("replace")) {
-                Object.assign(replace_info, md.calculator_data[upgrade]["upgrade_special"]["replacement_list"]);
-            };
         };
-        return [spreading_info, replace_info];
+        return [upgrade_ids, upgrade_effects];
     };
 
-    add_drops(item, amount, drops_list, spreading_info=null, replace_info=null) {
-        if (replace_info !== null && item in replace_info) {
-            item = replace_info[item];
+    add_drops(item, amount, drops_list, spreading_info=null, replacing_info=null) {
+        if (replacing_info !== null && item in replacing_info) {
+            for (let [new_item, ratio] of Object.entries(replacing_info[item])) {
+                this.add_drops(new_item, amount * ratio, drops_list, spreading_info, null);
+            };
+            return;
         };
         if (!(item in drops_list)) {
             drops_list[item] = 0;
@@ -1064,80 +1140,82 @@ class Calculator {
         return;
     };
 
-    get_base_drops(drops_list, spreading_info, replace_info, minion, harvests_per_time, drop_multiplier) {
-        for (let [item, amount] of Object.entries(md.calculator_data[minion]["drops"])) {
-            this.add_drops(item, harvests_per_time * amount * drop_multiplier, drops_list, spreading_info, replace_info);
+    get_base_drops(drops_list, upgrade_effects, minion, harvests_per_time, drop_multiplier) {
+        for (let [item, amount] of Object.entries(this.md.calculator_data[minion]["drops"])) {
+            this.add_drops(item, harvests_per_time * amount * drop_multiplier, drops_list, upgrade_effects["spreading"], upgrade_effects["replacing"]);
         };
         return;
     };
 
-    get_upgrade_drops(drops_list, spreading_info, minion, minion_tier, drop_multiplier, upgrade_ids, harvests_per_time, afk_toggle, empty_time_seconds, seconds_per_action) {
-        for (const upgrade of upgrade_ids) {
-            let upgrade_type = md.calculator_data[upgrade]["upgrade_special"]["type"];
-            let specific_multiplier = 1;
-            let effective_cooldown;
-            if (upgrade_type == "add") {
-                // adding upgrades are like Corrupt Soils
-                if (afk_toggle) {
-                    if ("CORRUPT_SOIL" == upgrade) {
-                        if ("afkcorrupt" in md.calculator_data[minion]) {
-                            // Certain mob minions get more corrupt drops when afking
-                            // It is not a constant multiplier, it is equivalent in chance to the main drops of the minion
-                            specific_multiplier = md.calculator_data[minion]["afkcorrupt"];
-                        };
-                        if (minion == "CHICKEN_MINION" && !(upgrade_ids.includes("ENCHANTED_EGG"))) {
-                            // Online Chicken minion without Enchanted Egg does not make corrupt drops
-                            specific_multiplier = 0;
-                        };
+    get_upgrade_drops(drops_list, upgrade_effects, minion, minion_tier, drop_multiplier, upgrade_ids, harvests_per_time, afk_toggle, empty_time_seconds, seconds_per_action, setup_data) {
+        let specific_multiplier, effective_cooldown;
+        for (let [upgrade, effect_data] of Object.entries(upgrade_effects["adding"])) {
+            // adding upgrades are like Corrupt Soils
+            specific_multiplier = 1;
+            if (afk_toggle) {
+                if ("CORRUPT_SOIL" == upgrade) {
+                    if ("afkcorrupt" in this.md.calculator_data[minion]) {
+                        // Certain mob minions get more corrupt drops when afking
+                        // It is not a constant multiplier, it is equivalent in chance to the main drops of the minion
+                        specific_multiplier = this.md.calculator_data[minion]["afkcorrupt"];
                     };
-                    if ("ENCHANTED_EGG" == upgrade) {
-                        // Enchanted Eggs make one laid egg and one egg on kill while AFKing
-                        // the egg on spawn is affected by drop multipliers and spreadings
-                        this.add_drops("EGG", harvests_per_time * drop_multiplier, drops_list, spreading_info);
-                    };
-                    for (let [item, amount] of Object.entries(md.calculator_data[upgrade]["upgrade_special"]["items"])) {
-                        this.add_drops(item, harvests_per_time * amount * specific_multiplier, drops_list);
-                    };
-                } else {
-                    for (let [item, amount] of Object.entries(md.calculator_data[upgrade]["upgrade_special"]["items"])) {
-                        this.add_drops(item, harvests_per_time * amount * specific_multiplier, drops_list, spreading_info);
+                    if (minion == "CHICKEN_MINION" && !(upgrade_ids.includes("ENCHANTED_EGG"))) {
+                        // Online Chicken minion without Enchanted Egg does not make corrupt drops
+                        specific_multiplier = 0;
                     };
                 };
-            } else if (upgrade_type == "cooldown") {
-                // cooldown upgrades are like Soulflow Engines
-                // formula for effective_cooldown still in research
-                if (afk_toggle && upgrade == "LESSER_SOULFLOW_ENGINE" && upgrade_ids.includes("SOULFLOW_ENGINE")) {
-                    continue;  // Soulflow Engine overrides Lesser Soulflow Engine while online
+                if ("ENCHANTED_EGG" == upgrade) {
+                    // Enchanted Eggs make one laid egg and one egg on kill while AFKing
+                    // the egg on spawn is affected by drop multipliers and spreadings
+                    this.add_drops("EGG", harvests_per_time * drop_multiplier, drops_list, upgrade_effects["spreading"]);
                 };
-                if (afk_toggle) {
-                    effective_cooldown = 2 * seconds_per_action * (1 + Math.floor(Math.ceil(md.calculator_data[upgrade]["upgrade_special"]["cooldown"] / seconds_per_action) / 2));
-                } else {
-                    effective_cooldown = md.calculator_data[upgrade]["upgrade_special"]["offline_cooldown"];
+                for (let [item, amount] of Object.entries(effect_data)) {
+                    this.add_drops(item, harvests_per_time * amount * specific_multiplier, drops_list);
                 };
-                if ("SOULFLOW_ENGINE" == upgrade && minion == "VOIDLING_MINION") {
-                    specific_multiplier = 1 + 0.03 * minion_tier;  // correct most likely, needs testing
+            } else {
+                for (let [item, amount] of Object.entries(effect_data)) {
+                    this.add_drops(item, harvests_per_time * amount * specific_multiplier, drops_list, upgrade_effects["spreading"]);
                 };
-                for (let [cooldown_item, cooldown_amount] of Object.entries(md.calculator_data[upgrade]["upgrade_special"]["items"])) {
-                    this.add_drops(cooldown_item, specific_multiplier * cooldown_amount * empty_time_seconds / effective_cooldown, drops_list);
+            };
+        };
+        for (let [upgrade, effect_data] of Object.entries(upgrade_effects["cooldown"])) {
+            // cooldown upgrades are like Soulflow Engines
+            // formula for effective_cooldown still in research
+            specific_multiplier = 1;
+            if (afk_toggle && upgrade === "LESSER_SOULFLOW_ENGINE" && upgrade_ids.includes("SOULFLOW_ENGINE")) {
+                continue;  // Soulflow Engine overrides Lesser Soulflow Engine while online
+            };
+            if (afk_toggle) {
+                effective_cooldown = 2 * seconds_per_action * (1 + Math.floor(Math.ceil(effect_data["online_cooldown"] / seconds_per_action) / 2));
+            } else {
+                effective_cooldown = effect_data["offline_cooldown"];
+            };
+            if ("SOULFLOW_ENGINE" === upgrade && minion === "VOIDLING_MINION") {
+                specific_multiplier = 1 + 0.03 * minion_tier;  // correct most likely, needs testing
+            };
+            for (let [cooldown_item, cooldown_amount] of Object.entries(effect_data["items"])) {
+                if (cooldown_item === "RAW_SOULFLOW") {
+                    specific_multiplier *= this.get_drop_multiplier(minion, upgrade_ids, afk_toggle, setup_data);
                 };
+                this.add_drops(cooldown_item, specific_multiplier * cooldown_amount * empty_time_seconds / effective_cooldown, drops_list);
             };
         };
         return;
     };
 
-    get_inferno_drops(drops_list, spreading_info, replace_info, minion, minion_tier, minion_fuel, drop_multiplier, harvests_per_time, empty_time_seconds, afk_toggle, setup_data) {
+    get_inferno_drops(drops_list, upgrade_effects, minion, minion_tier, minion_fuel, drop_multiplier, harvests_per_time, empty_time_seconds, afk_toggle, setup_data) {
         if (minion_fuel != "INFERNO_FUEL") {
             return;
         };
         // distilate drops
         const distilate = setup_data["inferno_distillate"];
-        const distilate_item = md.inferno_fuel_data["distilates"][distilate][0];
-        const amount_per = md.inferno_fuel_data["distilates"][distilate][1];
+        const distilate_item = this.md.inferno_fuel_data["distilates"][distilate][0];
+        const amount_per = this.md.inferno_fuel_data["distilates"][distilate][1];
         const distillate_harvests = (harvests_per_time * 4) / 5;
         if (afk_toggle) {
-            this.get_base_drops(drops_list, spreading_info, replace_info, minion, - distillate_harvests, drop_multiplier);
+            this.get_base_drops(drops_list, upgrade_effects, minion, - distillate_harvests, drop_multiplier);
         } else {
-            this.get_base_drops(drops_list, null, replace_info, minion, - distillate_harvests, drop_multiplier);
+            this.get_base_drops(drops_list, {"spreading": null, "replacing": upgrade_effects["replacing"]}, minion, - distillate_harvests, drop_multiplier);
         };
         this.add_drops(distilate_item, distillate_harvests * amount_per, drops_list);
 
@@ -1147,13 +1225,13 @@ class Calculator {
             if (setup_data["inferno_eyedrops"] === true) {  // Capsaicin Eyedrops
                 multiplier = 1.3;
             };
-            for (let [item, chance] of Object.entries(md.inferno_fuel_data["drops"])) {
+            for (let [item, chance] of Object.entries(this.md.inferno_fuel_data["drops"])) {
                 if (item == "INFERNO_APEX" && minion_tier >= 10) {  // Apex Minion perk
                     chance *= 2;
                 };
                 this.add_drops(item, multiplier * chance * harvests_per_time, drops_list);
             };
-            this.add_drops("HYPERGOLIC_IONIZED_CERAMICS", empty_time_seconds / md.calculator_data[minion_fuel]["fuel_duration"], drops_list);
+            this.add_drops("HYPERGOLIC_IONIZED_CERAMICS", empty_time_seconds / this.md.calculator_data[minion_fuel]["fuel_duration"], drops_list);
         };
         
         // calculate fuel cost
@@ -1167,7 +1245,7 @@ class Calculator {
         for (let [component_ID, amount] of Object.entries(infernofuel_components)) {
             costPerInfernofuel += amount * this.get_price(component_ID, setup_data, "buy", "bazaar");
         };
-        md.calculator_data["INFERNO_FUEL"]["prices"]["custom"] = costPerInfernofuel;
+        this.md.calculator_data["INFERNO_FUEL"]["prices"]["custom"] = costPerInfernofuel;
         // the fuel cost is put into the item data to be used later in the general fuel cost calculator
         return;
     };
@@ -1175,26 +1253,27 @@ class Calculator {
     apply_compactor(drops_list, compacting_list) {
         let compacted_items = [];
         let compactables = Object.keys(drops_list);
-        let item, amount, per_compacted, compacted_name, compacted_amount, left_over;
+        let item, amount, compacting_data, per_compacted, compacted_name, compacted_amount, left_over;
         while (compactables.length) {
             item = compactables.pop();
             if (!(item in compacting_list)) {
                 continue;
             };
             amount = drops_list[item];
-            per_compacted = compacting_list[item]["per"];
+            compacting_data = this.md.calculator_data[item]["compacting"][compacting_list[item]]
+            per_compacted = compacting_data["per"];
             if (amount < per_compacted) {
                 continue;
             };
-            compacted_name = compacting_list[item]["makes"];
+            compacted_name = compacting_data["makes"];
             compacted_amount = Math.floor(amount / per_compacted);
-            if ("amount" in compacting_list[item]) {
-                compacted_amount *= compacting_list[item]["amount"];
+            if ("amount" in compacting_data) {
+                compacted_amount *= compacting_data["amount"];
             };
             left_over = amount % per_compacted;
             drops_list[item] = left_over;
             drops_list[compacted_name] = compacted_amount;
-            compacted_items.push({"from": item, ...compacting_list[item]});
+            compacted_items.push({"from": item, ...compacting_data});
             if (compacted_name in compacting_list) {
                 compactables.push(compacted_name);
             };
@@ -1202,22 +1281,20 @@ class Calculator {
         return compacted_items;
     };
 
-    get_compacted_drops(drops_list, upgrades) {
+    get_compacted_drops(drops_list, upgrade_effects) {
         let compacted_items = [];
-        for (let upgrade of upgrades) {
-            if (md.calculator_data[upgrade]["upgrade_special"]["type"].includes("compact")) {
-                compacted_items.push(...this.apply_compactor(drops_list, md.calculator_data[upgrade]["upgrade_special"]["compacting_list"]));
-            };
+        for (let compacting_list of Object.values(upgrade_effects["compacting"])) {
+            compacted_items.push(...this.apply_compactor(drops_list, compacting_list));
         };
         return compacted_items;
     }
 
     get_available_storage(minion, minion_tier, setup_data) {
-        let available_storage = md.calculator_data[setup_data["chest"]]["storage_slots"];
-        if ("storage" in md.calculator_data[minion] && minion_tier in md.calculator_data[minion]["storage"]) {
-            available_storage += md.calculator_data[minion]["storage"][minion_tier];
+        let available_storage = this.md.calculator_data[setup_data["chest"]]["storage_slots"];
+        if ("storage" in this.md.calculator_data[minion] && minion_tier in this.md.calculator_data[minion]["storage"]) {
+            available_storage += this.md.calculator_data[minion]["storage"][String(minion_tier)];
         } else {
-            available_storage += md.standard_storage[minion_tier];
+            available_storage += this.md.standard_storage[minion_tier];
         };
         return available_storage;
     };
@@ -1244,7 +1321,7 @@ class Calculator {
         } else if (minion_sell_loc == "Best (NPC/Bazaar)") {
             sellto = "best";
         } else if (minion_sell_loc == "Hopper") {
-            hopper_multiplier = md.calculator_data[setup_data["hopper"]]["hopper_selling_rate"];
+            hopper_multiplier = this.md.calculator_data[setup_data["hopper"]]["hopper_selling_rate"];
         };
         return [sellto, hopper_multiplier];
     };
@@ -1254,17 +1331,36 @@ class Calculator {
         let per_item_profit = {};
         let per_item_sell_location = {};
         let item_prices = {};
+        let compacting_data, sell_itemtype, price_ratio, effective_per_compacted;
         for (let [itemtype, amount] of Object.entries(drops_list)) {
+            sell_itemtype = itemtype;
+            price_ratio = 1;
+            if (setup_data["sell_form"] !== 0) {
+                for (let compacted_tier = 1; compacted_tier < setup_data["sell_form"] + 1; compacted_tier++) {
+                    if (this.md.calculator_data[sell_itemtype]["compact_tier"] >= compacted_tier) {
+                        continue;
+                    };
+                    if ("compacting" in this.md.calculator_data[sell_itemtype] && "compact" in this.md.calculator_data[sell_itemtype]["compacting"]) {
+                        compacting_data = this.md.calculator_data[sell_itemtype]["compacting"]["compact"]
+                        effective_per_compacted = compacting_data["per"];
+                        if ("amount" in compacting_data) {
+                            effective_per_compacted /= compacting_data["amount"];
+                        };
+                        price_ratio /= effective_per_compacted;
+                        sell_itemtype = compacting_data["makes"];
+                    };
+                };
+            };
             this.gui.clear_object(item_prices);
-            item_prices["NPC"] = this.get_price(itemtype, setup_data, "sell", "npc");
-            item_prices["bazaar"] = this.get_price(itemtype, setup_data, "sell", "bazaar");
-            // item_prices["custom"] = this.get_price(itemtype, setup_data, "sell", "custom", true)  // might use later
+            item_prices["NPC"] = this.get_price(sell_itemtype, setup_data, "sell", "npc");
+            item_prices["bazaar"] = this.get_price(sell_itemtype, setup_data, "sell", "bazaar");
+            // item_prices["custom"] = this.get_price(sell_itemtype, setup_data, "sell", "custom", true)  // might use later
             if (sell_location in item_prices) {
                 per_item_sell_location[itemtype] = sell_location;
             } else {
                 per_item_sell_location[itemtype] = Object.keys(item_prices).reduce((a, b) => item_prices[a] > item_prices[b] ? a : b);  // https://stackoverflow.com/a/27376421
             };
-            let final_price = item_prices[per_item_sell_location[itemtype]];
+            let final_price = item_prices[per_item_sell_location[itemtype]] * price_ratio;
             per_item_profit[itemtype] = amount * final_price * hopper_multiplier;
             item_profit += amount * final_price;
         };
@@ -1275,16 +1371,17 @@ class Calculator {
     get_skill_xp(afk_toggle, mayor, drops_list, setup_data) {
         let skill_xp = {};
         for (let [itemtype, amount] of Object.entries(drops_list)) {
-            let [xptype, value] = Object.entries(md.calculator_data[itemtype]["xp"])[0];
-            if (value == 0) {
-                continue;
+            for (let [xptype, value] of Object.entries(this.md.calculator_data[itemtype]["xp"])) {
+                if (value === 0) {
+                    continue;
+                };
+                if (!(xptype in skill_xp)) {
+                    skill_xp[xptype] = 0;
+                };
+                skill_xp[xptype] += amount * value * (1 + setup_data[xptype + "_wisdom"] / 100);
             };
-            if (!(xptype in skill_xp)) {
-                skill_xp[xptype] = 0;
-            };
-            skill_xp[xptype] += amount * value * (1 + setup_data[xptype + "_wisdom"] / 100);
         };
-        this.gui.deepmultiply(skill_xp, md.calculator_data[mayor]["xp_multiplier"]);
+        this.gui.deepmultiply(skill_xp, this.md.calculator_data[mayor]["xp_multiplier"]);
         if (afk_toggle && setup_data["player_harvests"] && "combat" in skill_xp) {
             delete skill_xp["combat"];
         };
@@ -1307,7 +1404,7 @@ class Calculator {
             let cost = this.get_price(item, setup_data, "sell", per_item_sell_location[item]) * per_compact;
             let compact_cost = this.get_price(compact_item, setup_data, "sell", per_item_sell_location[compact_item]) * compact_amount;
             if (cost - compact_cost > this.compact_tolerance.get()) {
-                over_compacting.push(md.calculator_data[item]['display']);
+                over_compacting.push(this.md.calculator_data[item]['display']);
             };
         };
         if (this.gui.get_length(over_compacting) != 0) {
@@ -1318,7 +1415,7 @@ class Calculator {
 
     get_pet_xp_boosts(pet, xp_type, setup_data, exp_share=false) {
         let pet_xp_boost = 1
-        if (md.calculator_data[pet]["pet_type"] !== "all" && md.calculator_data[pet]["pet_type"] !== xp_type) {
+        if (this.md.calculator_data[pet]["pet_type"] !== "all" && this.md.calculator_data[pet]["pet_type"] !== xp_type) {
             if (["alchemy", "enchanting"].includes(xp_type)) {
                 pet_xp_boost = 1 / 12;
             } else {
@@ -1333,8 +1430,8 @@ class Calculator {
         };
         pet_xp_boost *= (1 + setup_data["taming"] / 100) * (1 + setup_data["beastmaster"] / 100);
         let pet_item;
-        if ([xp_type, "all"].includes(md.calculator_data[setup_data["petxpboost"]]["exp_boost_type"]) && !(md.has_data_tag(pet, "dragon_egg_pet"))) {
-            pet_item = 1 + md.calculator_data[setup_data["petxpboost"]]["exp_boost_amount"] / 100;
+        if ([xp_type, "all"].includes(this.md.calculator_data[setup_data["pet_exp_boost"]]["exp_boost_type"]) && !(this.md.has_data_tag(pet, "dragon_egg_pet"))) {
+            pet_item = 1 + this.md.calculator_data[setup_data["pet_exp_boost"]]["exp_boost_amount"] / 100;
         } else {
             pet_item = 1;
         };
@@ -1357,21 +1454,21 @@ class Calculator {
         };
 
         // Creating setup_pets
-        let setup_pets = { "levelingpet": { "pet": main_pet, "pet_xp": {}, "levelled_pets": 0.0 } };
+        let setup_pets = { "levelingpet": { "pet": main_pet, "rarity": setup_data["levelingpet_rarity"], "pet_xp": {}, "levelled_pets": 0.0 } };
         for (const var_key of ["expsharepet", "expsharepetslot2", "expsharepetslot3"]) {
             if (setup_data[var_key] == "NONE" || (mayor != "MAYOR_DIANA" && ["expsharepetslot2", "expsharepetslot3"].includes(var_key))) {
                 continue;
             };
-            setup_pets[var_key] = { "pet": setup_data[var_key], "pet_xp": { "exp_share": 0.0 }, "levelled_pets": 0.0 };
+            setup_pets[var_key] = { "pet": setup_data[var_key], "rarity": setup_data[var_key + "_rarity"], "pet_xp": { "exp_share": 0.0 }, "levelled_pets": 0.0 };
         };
 
         // Main pet
         let main_pet_xp = setup_pets["levelingpet"]["pet_xp"];
         let dragon_pet_multiplier = pet_item => 1;
-        let dragon_pet_xp_lvl_200 = md.max_lvl_pet_xp_amounts["Dragon"];
-        let dragon_pet_xp_lvl_100 = md.max_lvl_pet_xp_amounts["Legendary"];
+        let dragon_pet_xp_lvl_200 = this.md.calculator_data["DRAGON"]["max_lvl_pet_xp_amount"];
+        let dragon_pet_xp_lvl_100 = this.md.calculator_data["LEGENDARY"]["max_lvl_pet_xp_amount"];
         let pet_xp_boost, xp_boost_pet_item, exp_share_pet;
-        if (md.has_data_tag(main_pet, "dragon_pet")) { 
+        if (this.md.has_data_tag(main_pet, "dragon_pet")) { 
             dragon_pet_multiplier = pet_item => dragon_pet_xp_lvl_200 / ( dragon_pet_xp_lvl_200 + dragon_pet_xp_lvl_100 * (pet_item - 1))
         };
         for (let [skill, amount] of Object.entries(skill_xp)) {
@@ -1388,7 +1485,7 @@ class Calculator {
             };
             exp_share_pet = pet_info["pet"];
             dragon_pet_multiplier = 1;
-            if (md.has_data_tag(exp_share_pet, "dragon_pet")) {
+            if (this.md.has_data_tag(exp_share_pet, "dragon_pet")) {
                 if (exp_share_boost == 0) {
                     continue;
                 };
@@ -1396,7 +1493,7 @@ class Calculator {
             };
             for (let [skill, amount] of Object.entries(main_pet_xp)) {
                 pet_xp_boost = this.get_pet_xp_boosts(exp_share_pet, skill, setup_data, true);
-                pet_info["pet_xp"]["exp_share"] += amount * ((exp_share_boost + exp_share_item * (!(md.has_data_tag(exp_share_pet, "dragon_egg_pet")))) / 100) * pet_xp_boost * dragon_pet_multiplier;
+                pet_info["pet_xp"]["exp_share"] += amount * ((exp_share_boost + exp_share_item * (!(this.md.has_data_tag(exp_share_pet, "dragon_egg_pet")))) / 100) * pet_xp_boost * dragon_pet_multiplier;
             };  
         };
 
@@ -1404,10 +1501,12 @@ class Calculator {
         let pets_levelled;
         for (let [pet_slot, pet_info] of Object.entries(setup_pets)) {
             let max_lvl_pet_xp;
-            if (md.has_data_tag(pet_info["pet"], "dragon_pet")) {
-                max_lvl_pet_xp = md.max_lvl_pet_xp_amounts["Dragon"];
+            if (this.md.has_data_tag(pet_info["pet"], "dragon_pet")) {
+                max_lvl_pet_xp = dragon_pet_xp_lvl_200;
+            } else if (this.md.has_data_tag(pet_info["pet"], "hatched_dragon_pet")) {
+                max_lvl_pet_xp = dragon_pet_xp_lvl_200 - dragon_pet_xp_lvl_100;
             } else {
-                max_lvl_pet_xp = md.max_lvl_pet_xp_amounts[md.calculator_data[pet_info["pet"]]["rarity"]];
+                max_lvl_pet_xp = this.md.calculator_data[pet_info["rarity"]]["max_lvl_pet_xp_amount"];
             };
             pets_levelled = Object.values(pet_info["pet_xp"]).reduce((partialSum, a) => partialSum + a, 0) / max_lvl_pet_xp;
             pet_info["levelled_pets"] = pets_levelled;
@@ -1419,25 +1518,27 @@ class Calculator {
         let pet_profit = 0.0;
         let pet_prices = {};
         let super_scrubber_price = this.get_price("SUPER_SCRUBBER", setup_data, "buy", "custom", true);
+        let combined_pet_id;
         for (let [pet_slot, pet_info] of Object.entries(setup_pets)) {
-            if (!(pet_info["pet"] in this.pet_costs.list)) {
-                if (!(pet_info["pet"] in pet_prices)) {
-                    pet_prices[pet_info["pet"]] = `Price for ${md.calculator_data[pet_info['pet']]["display"]} not found`;
+            combined_pet_id = pet_info['rarity'] + "." + pet_info["pet"];
+            if (!(pet_info["pet"] in this.pet_costs.list) || !(pet_info["rarity"] in this.pet_costs.list[pet_info["pet"]])) {
+                if (!(combined_pet_id in pet_prices)) {
+                    pet_prices[combined_pet_id] = "Price not found";
                 };
             } else {
-                pet_profit += pet_info["levelled_pets"] * (this.pet_costs.list[pet_info["pet"]]["max"] - this.pet_costs.list[pet_info["pet"]]["min"]);
-                if (!(pet_info["pet"] in pet_prices)) {
-                    pet_prices[pet_info["pet"]] = `${this.gui.reduced_number(this.pet_costs.list[pet_info["pet"]]["min"])} - ${this.gui.reduced_number(this.pet_costs.list[pet_info["pet"]]["max"])}`;
+                pet_profit += pet_info["levelled_pets"] * (this.pet_costs.list[pet_info["pet"]][pet_info["rarity"]]["max"] - this.pet_costs.list[pet_info["pet"]][pet_info["rarity"]]["min"]);
+                if (!(combined_pet_id in pet_prices)) {
+                    pet_prices[combined_pet_id] = `${this.gui.reduced_number(this.pet_costs.list[pet_info["pet"]][pet_info["rarity"]]["min"])} - ${this.gui.reduced_number(this.pet_costs.list[pet_info["pet"]][pet_info["rarity"]]["max"])}`;
                 };
             };
-            if (md.has_data_tag(pet_info["pet"], "dragon_egg_pet")) {
+            if (this.md.has_data_tag(pet_info["pet"], "dragon_egg_pet")) {
                 continue;
             };
-            if (pet_slot == "levelingpet" && setup_data["petxpboost"] != "NONE") {
-                pet_profit -= pet_info["levelled_pets"] * (md.pet_item_scrub_cost[md.calculator_data[setup_data["petxpboost"]]["rarity"]] + super_scrubber_price);
+            if (pet_slot == "levelingpet" && setup_data["pet_exp_boost"] != "NONE") {
+                pet_profit -= pet_info["levelled_pets"] * (this.md.calculator_data[this.md.calculator_data[setup_data["pet_exp_boost"]]["rarity"]]["pet_item_scrub_cost"] + super_scrubber_price);
             };
             if (pet_slot != "levelingpet" && setup_data["expshareitem"]) {
-                pet_profit -= pet_info["levelled_pets"] * (md.pet_item_scrub_cost[md.calculator_data["PET_ITEM_EXP_SHARE"]["rarity"]] + super_scrubber_price);
+                pet_profit -= pet_info["levelled_pets"] * (this.md.calculator_data[this.md.calculator_data["PET_ITEM_EXP_SHARE"]["rarity"]]["pet_item_scrub_cost"] + super_scrubber_price);
             };
         };
         return [pet_profit, pet_prices];
@@ -1446,25 +1547,19 @@ class Calculator {
     get_finite_fuel_cost(minion_amount, minion_fuel, empty_time_seconds, setup_data) {
         let fuel_cost = 0.0;
         let needed_fuel = 0.0;
-        let beacon_fuel_ID;
         if (setup_data["beacon"] != "NONE") {
-            if (setup_data["scorched"]) {
-                beacon_fuel_ID = "SCORCHED_POWER_CRYSTAL";
-            } else {
-                beacon_fuel_ID = "POWER_CRYSTAL";
-            };
-            let cost_per_crystal = this.get_price(beacon_fuel_ID, setup_data, "buy", "bazaar");
-            fuel_cost += empty_time_seconds * cost_per_crystal / md.calculator_data[beacon_fuel_ID]["fuel_duration"] * Number(!(setup_data["B_constant"]));
+            let cost_per_crystal = this.get_price(setup_data["beacon_fuel"], setup_data, "buy", "bazaar");
+            fuel_cost += empty_time_seconds * cost_per_crystal / this.md.calculator_data[setup_data["beacon_fuel"]]["fuel_duration"] * Number(!(setup_data["free_fuel_beacon"]));
         };
-        if (md.calculator_data[minion_fuel]["fuel_duration"] != -1) {
+        if (this.md.calculator_data[minion_fuel]["fuel_duration"] != -1) {
             let cost_per_fuel = this.get_price(minion_fuel, setup_data, "buy", "bazaar");
-            needed_fuel = minion_amount * empty_time_seconds / md.calculator_data[minion_fuel]["fuel_duration"];
+            needed_fuel = minion_amount * empty_time_seconds / this.md.calculator_data[minion_fuel]["fuel_duration"];
             fuel_cost += needed_fuel * cost_per_fuel;
         };
         return [fuel_cost, needed_fuel];
     };
 
-    get_setup_cost(minion_type, minion_tier, minion_amount, minion_fuel, upgrades, setup_pets, setup_data) {
+    get_setup_cost(minion_type, minion_tier, minion_amount, minion_fuel, setup_pets, setup_data) {
         let cost_per_part = {};
         let extra_cost = "None";
 
@@ -1475,16 +1570,16 @@ class Calculator {
         let tier_loop = [...Array(minion_tier).keys()].map(x => x + 1);
         for (const tier of tier_loop) {
             tiered_coin_cost[tier] = 0.0;
-            if (minion_type in md.extraMinionCosts) {
-                if (tier in md.extraMinionCosts[minion_type]) {
-                    if ("COINS" in md.extraMinionCosts[minion_type][tier]) {
-                        tiered_coin_cost[tier] += md.extraMinionCosts[minion_type][tier]["COINS"];
+            if ("extra_minion_costs" in this.md.calculator_data[minion_type]) {
+                if (tier in this.md.calculator_data[minion_type]["extra_minion_costs"]) {
+                    if ("COINS" in this.md.calculator_data[minion_type]["extra_minion_costs"][String(tier)]) {
+                        tiered_coin_cost[tier] += this.md.calculator_data[minion_type]["extra_minion_costs"][String(tier)]["COINS"];
                     };
-                    if (this.gui.get_length(md.extraMinionCosts[minion_type][tier]) > 1 || !("COINS" in md.extraMinionCosts[minion_type][tier])) {
+                    if (this.gui.get_length(this.md.calculator_data[minion_type]["extra_minion_costs"][String(tier)]) > 1 || !("COINS" in this.md.calculator_data[minion_type]["extra_minion_costs"][String(tier)])) {
                         if (!(tier in tiered_extra_cost)) {
                             tiered_extra_cost[tier] = {};
                         };
-                        for (const [cost_type, amount] of Object.entries(md.extraMinionCosts[minion_type][tier])) {
+                        for (const [cost_type, amount] of Object.entries(this.md.calculator_data[minion_type]["extra_minion_costs"][String(tier)])) {
                             if (cost_type === "COINS") {
                                 continue;
                             };
@@ -1493,7 +1588,7 @@ class Calculator {
                     };
                 };
             };
-            for (let [item, amount] of Object.entries(md.minionCosts[minion_type][tier])) {
+            for (let [item, amount] of Object.entries(this.md.calculator_data[minion_type]["minion_costs"][String(tier)])) {
                 if (!(item in cost_cache)) {
                     cost_cache[item] = this.get_price(item, setup_data, "buy", "bazaar");
                 };
@@ -1520,20 +1615,21 @@ class Calculator {
         cost_per_part["minion"] = tiered_coin_cost[minion_tier];
 
         // Infinite fuel cost
-        if (minion_fuel != "NONE" && md.calculator_data[minion_fuel]["fuel_duration"] == -1) {
+        if (minion_fuel !== "NONE" && this.md.calculator_data[minion_fuel]["fuel_duration"] === -1) {
             cost_per_part["fuel"] = this.get_price(minion_fuel, setup_data, "buy", "bazaar");
         };
 
         // Hopper cost
-        if (setup_data["hopper"] != "NONE") {
+        if (setup_data["hopper"] !== "NONE") {
             cost_per_part["hopper"] = this.get_price(setup_data["hopper"], setup_data, "buy", "bazaar");
         };
 
         // Internal minion upgrades cost
-        for (let [i, upgrade] of Object.entries(upgrades)) {
-            if (upgrade != "NONE") {
-                cost_per_part[`upgrade${Number(i) + 1}`] = this.get_price(upgrade, setup_data, "buy", "bazaar");
-            };
+        if (setup_data["upgrade1"] !== "NONE") {
+            cost_per_part["upgrade1"] = this.get_price(setup_data["upgrade1"], setup_data, "buy", "bazaar");
+        };
+        if (setup_data["upgrade2"] !== "NONE") {
+            cost_per_part["upgrade2"] = this.get_price(setup_data["upgrade2"], setup_data, "buy", "bazaar");
         };
 
         // Infusion cost
@@ -1574,7 +1670,7 @@ class Calculator {
         this.gui.deepmultiply(cost_per_part, minion_amount);
 
         // Beacon cost
-        if (setup_data["beacon"] != "NONE" && !(setup_data["B_acquired"])) {
+        if (setup_data["beacon"] != "NONE") {
             cost_per_part["beacon"] = this.get_price(setup_data["beacon"], setup_data, "buy", "bazaar");
         };
 
@@ -1595,11 +1691,11 @@ class Calculator {
 
         // Pet Item costs
         for (let pet_slot of Object.keys(setup_pets)) {
-            if (md.has_data_tag(setup_pets[pet_slot]["pet"], "dragon_egg_pet")) {
+            if (this.md.has_data_tag(setup_pets[pet_slot]["pet"], "dragon_egg_pet")) {
                 continue;
             };
             if (pet_slot == "levelingpet") {
-                cost_per_part["petxpboost"] = this.get_price(setup_data["petxpboost"], setup_data, "buy", "custom", true);
+                cost_per_part["pet_exp_boost"] = this.get_price(setup_data["pet_exp_boost"], setup_data, "buy", "custom", true);
             } else if (setup_data["expshareitem"]) {
                 if (!("expshareitem" in cost_per_part)) {
                     cost_per_part["expshareitem"] = 0;
@@ -1610,10 +1706,10 @@ class Calculator {
 
         // Attribute costs
         if (setup_data["toucan_attribute"] != 0) {
-            cost_per_part["toucan_attribute"] = md.attribute_shards["Epic"][setup_data["toucan_attribute"]] * this.get_price("SHARD_TOUCAN", setup_data, "buy", "bazaar");
+            cost_per_part["toucan_attribute"] = this.md.calculator_data["EPIC"]["attribute_shards"][setup_data["toucan_attribute"]] * this.get_price("SHARD_TOUCAN", setup_data, "buy", "bazaar");
         };
         if (setup_data["falcon_attribute"] != 0) {
-            cost_per_part["falcon_attribute"] = md.attribute_shards["Rare"][setup_data["falcon_attribute"]] * this.get_price("SHARD_FALCON", setup_data, "buy", "bazaar");
+            cost_per_part["falcon_attribute"] = this.md.calculator_data["RARE"]["attribute_shards"][setup_data["falcon_attribute"]] * this.get_price("SHARD_FALCON", setup_data, "buy", "bazaar");
         };
 
 
@@ -1631,12 +1727,12 @@ class Calculator {
             // auto update API
             if (this.API_auto_update.get()) {
                 await this.update_prices(false, inGUI);
-                for (const pet_ID of [setup_data["levelingpet"], setup_data["expsharepet"], setup_data["expsharepetslot2"], setup_data["expsharepetslot3"]]) {
-                    await this.update_pet_price(pet_ID);
+                for (const pet_slot of ["levelingpet", "expsharepet", "expsharepetslot2", "expsharepetslot3"]) {
+                    await this.update_pet_price(setup_data[pet_slot], setup_data[pet_slot + "_rarity"]);
                 };
-                if (md.has_data_tag(setup_data["petxpboost"], "auction_price_upon_request") && (Date.now() - md.calculator_data[setup_data["petxpboost"]]["price_last_updated"] > this.API_cooldown.get() * 1000)) {
-                    md.calculator_data[setup_data["petxpboost"]]["prices"]["custom"] = await this.call_auction_house(setup_data["petxpboost"]);
-                    md.calculator_data[setup_data["petxpboost"]]["price_last_updated"] = Date.now();
+                if (this.md.has_data_tag(setup_data["pet_exp_boost"], "auction_price_upon_request") && (Date.now() - this.md.calculator_data[setup_data["pet_exp_boost"]]["price_last_updated"] > this.API_cooldown.get() * 1000)) {
+                    this.md.calculator_data[setup_data["pet_exp_boost"]]["prices"]["custom"] = await this.call_auction_house(setup_data["pet_exp_boost"]);
+                    this.md.calculator_data[setup_data["pet_exp_boost"]]["price_last_updated"] = Date.now();
                 };
             };
         };
@@ -1662,20 +1758,20 @@ class Calculator {
             clock_override = true;
         };
 
-        // list upgrades types
-        let upgrades = [setup_data["upgrade1"], setup_data["upgrade2"]];
+        // get upgrade info
+        let [upgrades, upgrade_effects] = this.get_upgrade_info(minion_fuel, drops_list, setup_data);
 
         // adding up minion speed bonus
-        let speed_boost = this.get_speed_boosts(minion_type, minion_fuel, upgrades, afk_toggle, clock_override, setup_data);
+        let speed_boost = this.get_speed_boosts(minion_type, upgrades, upgrade_effects, afk_toggle, clock_override, setup_data);
 
         // multiply up minion drop bonus
-        let drop_multiplier = this.get_drop_multiplier(minion_type, minion_fuel, upgrades, afk_toggle, setup_data);
+        let drop_multiplier = this.get_drop_multiplier(minion_type, upgrades, afk_toggle, setup_data);
 
         // AFKing, Special Layouts and Player Harvests influences
-        let actions_per_harvest = this.get_actions_per_harvest(minion_type, upgrades, afk_toggle, setup_data, setup_notes);
+        let actions_per_harvest = this.get_actions_per_harvest(minion_type, upgrades, upgrade_effects, afk_toggle, setup_data, setup_notes);
 
         // AFK loot table changes
-        this.update_loot_table(minion_type, minion_fuel, upgrades, afk_toggle, setup_data);
+        this.update_loot_table(minion_type, upgrades, upgrade_effects, afk_toggle, setup_data);
 
         // calculate final minion speed
         let seconds_per_action = this.get_seconds_per_action(minion_type, minion_tier, minion_fuel, speed_boost, setup_data);
@@ -1687,20 +1783,17 @@ class Calculator {
         let harvests_per_time;
         [harvests_per_time, drop_multiplier] = this.get_harvests_per_time(empty_time_seconds, actions_per_harvest, seconds_per_action, afk_toggle, drop_multiplier, setup_data);
 
-        // initialise drops list and get upgrade info
-        let [spreading_info, replace_info] = this.get_upgrade_info(upgrades, drops_list);
-
         // base drops
-        this.get_base_drops(drops_list, spreading_info, replace_info, minion_type, harvests_per_time, drop_multiplier);
+        this.get_base_drops(drops_list, upgrade_effects, minion_type, harvests_per_time, drop_multiplier);
 
         // upgrade drops
-        this.get_upgrade_drops(drops_list, spreading_info, minion_type, minion_tier, drop_multiplier, upgrades, harvests_per_time, afk_toggle, empty_time_seconds, seconds_per_action);
+        this.get_upgrade_drops(drops_list, upgrade_effects, minion_type, minion_tier, drop_multiplier, upgrades, harvests_per_time, afk_toggle, empty_time_seconds, seconds_per_action, setup_data);
 
         // Inferno minion fuel drops
-        this.get_inferno_drops(drops_list, spreading_info, replace_info, minion_type, minion_tier, minion_fuel, drop_multiplier, harvests_per_time, empty_time_seconds, afk_toggle, setup_data);
+        this.get_inferno_drops(drops_list, upgrade_effects, minion_type, minion_tier, minion_fuel, drop_multiplier, harvests_per_time, empty_time_seconds, afk_toggle, setup_data);
 
         // Apply compactors
-        let compacted_items = this.get_compacted_drops(drops_list, upgrades);
+        let compacted_items = this.get_compacted_drops(drops_list, upgrade_effects);
 
         // storage calculations
         let available_storage = this.get_available_storage(minion_type, minion_tier, setup_data);
@@ -1734,14 +1827,14 @@ class Calculator {
         let total_profit = item_profit + pet_profit - fuel_cost;
 
         // Setup cost
-        let [total_cost, extra_cost, free_will_optimal_tier, cost_per_part] = this.get_setup_cost(minion_type, minion_tier, minion_amount, minion_fuel, upgrades, setup_pets, setup_data);
+        let [total_cost, extra_cost, free_will_optimal_tier, cost_per_part] = this.get_setup_cost(minion_type, minion_tier, minion_amount, minion_fuel, setup_pets, setup_data);
 
         // Construct ID
         let setup_ID = this.construct_id(setup_data);
 
         // Get minion notes
-        if ("notes" in md.calculator_data[minion_type]) {
-            Object.assign(setup_notes, md.calculator_data[minion_type]["notes"]);
+        if ("notes" in this.md.calculator_data[minion_type]) {
+            Object.assign(setup_notes, this.md.calculator_data[minion_type]["notes"]);
         };
 
         // collect outputs
@@ -1816,23 +1909,23 @@ class Calculator {
             dict_item_data[item_data["id"]] = item_data;
         };
 
-        for (let item_id in md.calculator_data) {
-            if (!("prices" in md.calculator_data[item_id])) {
+        for (let item_id in this.md.calculator_data) {
+            if (!("prices" in this.md.calculator_data[item_id])) {
                 continue;
             };
             if (item_id in dict_item_data && "npc_sell_price" in dict_item_data[item_id]) {
-                md.calculator_data[item_id]["prices"]["npc"] = dict_item_data[item_id]["npc_sell_price"];
-            } else if (!("npc" in md.calculator_data[item_id]["prices"])) {
-                md.calculator_data[item_id]["prices"]["npc"] = 0;
+                this.md.calculator_data[item_id]["prices"]["npc"] = dict_item_data[item_id]["npc_sell_price"];
+            } else if (!("npc" in this.md.calculator_data[item_id]["prices"])) {
+                this.md.calculator_data[item_id]["prices"]["npc"] = 0;
             };
             if (item_id in raw_bazaar_data["products"]) {
                 this.bazaar_items.push(item_id);
-            } else if ("recipe" in md.calculator_data[item_id]) {
+            } else if ("recipe" in this.md.calculator_data[item_id]) {
                 this.recipe_items.push(item_id);
-            } else if (md.has_data_tag(item_id, "auction_price")) {
+            } else if (this.md.has_data_tag(item_id, "auction_price")) {
                 this.AH_items.push(item_id);
-            } else if (md.has_data_tag(item_id, "auction_price_upon_request")) {
-                md.calculator_data[item_id]["price_last_updated"] = 0;
+            } else if (this.md.has_data_tag(item_id, "auction_price_upon_request")) {
+                this.md.calculator_data[item_id]["price_last_updated"] = 0;
             };
         };
         await this.update_prices(false, true);
@@ -1854,8 +1947,8 @@ class Calculator {
             for (let action of ["buy", "sell"]) {
                 let top_amount = top_percent * raw_bazaar_data["products"][item_id][`${action}_summary`].map(x => x["amount"]).reduce((partialSum, a) => partialSum + a, 0);
                 if (top_amount === 0) {
-                    md.calculator_data[item_id]["prices"][`${action}Price`] = 0;
-                    if (!("npc" in md.calculator_data[item_id]["prices"])) {
+                    this.md.calculator_data[item_id]["prices"][`${action}Price`] = 0;
+                    if (!("npc" in this.md.calculator_data[item_id]["prices"])) {
                         console.log(`BAZAAR: no ${action} supply for ${item_id}`);
                     };
                     continue;
@@ -1878,10 +1971,10 @@ class Calculator {
                 let top_percent_avg_price = top_sum / top_amount;
                 let top_price = raw_bazaar_data["products"][item_id][`${action}_summary`][0]["pricePerUnit"];
                 if (top_price / top_percent_avg_price >= 2.5) {
-                    md.calculator_data[item_id]["prices"][`${action}Price`] = top_price;
+                    this.md.calculator_data[item_id]["prices"][`${action}Price`] = top_price;
                     console.log(`BAZAAR: bottom heavy ${action} supply for ${item_id}, taking top order price`);
                 } else {
-                    md.calculator_data[item_id]["prices"][`${action}Price`] = top_percent_avg_price;
+                    this.md.calculator_data[item_id]["prices"][`${action}Price`] = top_percent_avg_price;
                 };
             };
         };
@@ -1894,24 +1987,24 @@ class Calculator {
     };
 
     update_recipe_price(item_id) {
-        if (!(item_id in md.calculator_data)) {
+        if (!(item_id in this.md.calculator_data)) {
             console.log(`ERROR: ${item_id} not in calculator data`);
             return;
         };
-        if (!("recipe" in md.calculator_data[item_id])) {
+        if (!("recipe" in this.md.calculator_data[item_id])) {
             console.log(`ERROR: ${item_id} is not a recipe item`);
             return;
         };
-        md.calculator_data[item_id]["prices"]["buyPrice"] = 0;
-        md.calculator_data[item_id]["prices"]["sellPrice"] = 0;
-        for (let [material_id, amount] of Object.entries(md.calculator_data[item_id]["recipe"])) {
-            if (md.has_data_tag(material_id, "auction_price")) {
-                md.calculator_data[item_id]["prices"]["buyPrice"] += amount * md.calculator_data[material_id]["prices"]["custom"];
-                md.calculator_data[item_id]["prices"]["sellPrice"] += amount * md.calculator_data[material_id]["prices"]["custom"];
+        this.md.calculator_data[item_id]["prices"]["buyPrice"] = 0;
+        this.md.calculator_data[item_id]["prices"]["sellPrice"] = 0;
+        for (let [material_id, amount] of Object.entries(this.md.calculator_data[item_id]["recipe"])) {
+            if (this.md.has_data_tag(material_id, "auction_price")) {
+                this.md.calculator_data[item_id]["prices"]["buyPrice"] += amount * this.md.calculator_data[material_id]["prices"]["custom"];
+                this.md.calculator_data[item_id]["prices"]["sellPrice"] += amount * this.md.calculator_data[material_id]["prices"]["custom"];
                 continue;
             };
-            md.calculator_data[item_id]["prices"]["buyPrice"] += amount * md.calculator_data[material_id]["prices"]["buyPrice"];
-            md.calculator_data[item_id]["prices"]["sellPrice"] += amount * md.calculator_data[material_id]["prices"]["sellPrice"];
+            this.md.calculator_data[item_id]["prices"]["buyPrice"] += amount * this.md.calculator_data[material_id]["prices"]["buyPrice"];
+            this.md.calculator_data[item_id]["prices"]["sellPrice"] += amount * this.md.calculator_data[material_id]["prices"]["sellPrice"];
         };
         return;
     };
@@ -1932,7 +2025,7 @@ class Calculator {
         await this.call_bazaar();
         console.log("API: Updating Auction House prices");
         for (const item_id of this.AH_items) {
-            md.calculator_data[item_id]["prices"]["custom"] = await this.call_auction_house(item_id);
+            this.md.calculator_data[item_id]["prices"]["custom"] = await this.call_auction_house(item_id);
         };
         console.log("API: Updating Recipe prices");
         for (const item_id of this.recipe_items) {
@@ -1944,29 +2037,32 @@ class Calculator {
         return;
     };
 
-    async update_pet_price(pet_ID) {
-        if (pet_ID === "NONE") {
+    async update_pet_price(pet_ID, rarity) {
+        if (["NONE", "PET_CUSTOM_PET", "PET_BINGO"].includes(pet_ID)) {
             return;
         };
-        if (pet_ID in this.pet_costs.list && Date.now() - this.pet_costs.list[pet_ID]["last_updated"] < this.pet_API_cooldown.get() * 1000) {
-            console.log(`${pet_ID} price update is on cooldown`);
+        if (pet_ID in this.pet_costs.list && rarity in this.pet_costs.list[pet_ID] && Date.now() - this.pet_costs.list[pet_ID][rarity]["last_updated"] < this.pet_API_cooldown.get() * 1000) {
+            console.log(`${pet_ID} ${rarity} price update is on cooldown`);
             return;
         };
-        let rarity_options = { "Common": "COMMON", "Uncommon": "UNCOMMON", "Rare": "RARE", "Epic": "EPIC", "Legendary": "LEGENDARY", "Mythic": "MYTHIC"};
         let level_ranges = { "min": "1", "max": "100" };
         let api_end_point = "https://sky.coflnet.com/api/item/price/";
         let api_pet_id;
-        if (md.has_data_tag(pet_ID, "dragon_egg_pet")) {
+        if (this.md.has_data_tag(pet_ID, "dragon_egg_pet")) {
             api_pet_id = pet_ID.replaceAll("_EGG", "");
             level_ranges["max"] = "100-103";
+        } else if (this.md.has_data_tag(pet_ID, "hatched_dragon_pet")) {
+            api_pet_id = pet_ID.replaceAll("_HATCHED", "");
+            level_ranges["min"] = "100-103";
+            level_ranges["max"] = "200";
         } else {
             api_pet_id = pet_ID;
         };
-        if (md.has_data_tag(pet_ID, "dragon_pet")) {
+        if (this.md.has_data_tag(pet_ID, "dragon_pet")) {
             level_ranges["max"] = "200";
         };
         let api_bin = "/bin";
-        let api_static_filters = "?filters[Rarity]=" + rarity_options[md.calculator_data[pet_ID]["rarity"]] + "&filters[Candy]=0&filters[PetLevel]=";
+        let api_static_filters = "?filters[Rarity]=" + rarity + "&filters[Candy]=0&filters[PetItem]=NOT_TIER_BOOST&filters[PetLevel]=";
         let results = {"min": 0, "max": 0};
         for (let [level_type, level_range] of Object.entries(level_ranges)) {
             let raw_auction_data = await this.gui.call_API(api_end_point + api_pet_id + api_bin + api_static_filters + level_range, `SkyCofl pet AH BIN API: ${api_pet_id}`);
@@ -1983,19 +2079,24 @@ class Calculator {
         };
         if (!(pet_ID in this.pet_costs.list)) {
             // non-zero min and max is required for new entry
-            if (results["min"] !== 0 && results["max"] !== 0) {
-                this.pet_costs.list[pet_ID] = { "min": 0, "max": 0, "last_updated": 0 };
-            } else {
+            if (results["min"] === 0 || results["max"] === 0) {
                 return;
             };
+            this.pet_costs.list[pet_ID] = {};
         };
+        if (!(rarity in this.pet_costs.list[pet_ID])) {
+            if (results["min"] === 0 || results["max"] === 0) {
+                return;
+            };
+            this.pet_costs.list[pet_ID][rarity] = { "min": 0, "max": 0, "last_updated": 0 };
+        }
         if (results["min"] != 0) {
-            this.pet_costs.list[pet_ID]["min"] = results["min"];
+            this.pet_costs.list[pet_ID][rarity]["min"] = results["min"];
         };
         if (results["max"] != 0) {
-            this.pet_costs.list[pet_ID]["max"] = results["max"];
+            this.pet_costs.list[pet_ID][rarity]["max"] = results["max"];
         };
-        this.pet_costs.list[pet_ID]["last_updated"] = Date.now();
+        this.pet_costs.list[pet_ID][rarity]["last_updated"] = Date.now();
         return;
     };
 
@@ -2003,15 +2104,18 @@ class Calculator {
         for (const var_key of Object.keys(this.var_dict)) {
             if (this.var_dict[var_key].dtype === "object") {
                 if (var_key == "pets_levelled") {
-                    this.pets_levelled.update_listbox(x => this.var_dict[x].get(false));
+                    this.pets_levelled.update_listbox(x => this.var_dict[x + "_rarity"].get(false) + " " + this.var_dict[x].get(false));
                     continue;
                 } else if (var_key === "setupcost_breakdown") {
                     this.setupcost_breakdown.update_listbox(x => this.var_dict[x].get_display(false));
                     continue;
+                } else if (var_key == "used_pet_prices") {
+                    this.used_pet_prices.update_listbox(x => x.split(".").map(y => this.md.calculator_data[y]["display"]).join(" "))
+                    continue;
                 };
                 let format_function = x => x;
                 if (this.var_dict[var_key].has_tag("item_ID_to_display")) {
-                    format_function = x => md.calculator_data[x]["display"];
+                    format_function = x => this.md.calculator_data[x]["display"];
                 };
                 this.var_dict[var_key].update_listbox(format_function);
             };
