@@ -52,7 +52,7 @@
             const add_ons = new Calc_add_ons();
             const input_options_promise = GUI.call_API("./calculator_version_data/input_options.json", "Calculator Files")
             const id_order_promise = GUI.call_API("./calculator_version_data/id_order.json", "Calculator Files")
-            const calculator_data_promise = GUI.call_API("./calculator_version_data/id_order.json", "Calculator Files")
+            const calculator_data_promise = GUI.call_API("./calculator_data.json", "Calculator Files")
             let calc;
             let MD;
             Promise.all([input_options_promise, id_order_promise, calculator_data_promise]).then((resolves) => {
