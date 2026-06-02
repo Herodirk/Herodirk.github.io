@@ -229,22 +229,23 @@ class Calculator {
         this.notesAnchor.className = "notes_anchor";
 
         let calcB = this.gui.create_button("Calculate", () => this.calculate.bind(this)(true), true);
-        this.statusC = document.createElement("div")
+        this.statusC = document.createElement("div");
         Object.assign(this.statusC, {innerText: "\n", className: "status_div", id: "status_div", style: "background: green;"});
         let text_outputB = this.gui.create_button('Text Output', () => this.text_output.bind(this)(null, null, null, false), true);
         let markdown_outputB = this.gui.create_button('Markdown Output', () => this.text_output.bind(this)(null, null, null, true), true);
         let pricesB = this.gui.create_button("Update Prices", this.update_prices.bind(this), true);
         let settingsB = this.gui.create_button('Edit Settings', () => this.gui.edit_vars.bind(this.gui)(this.gui.update_color_palette.bind(this.gui), ["API_auto_update", "API_cooldown", "pet_API_cooldown", "compact_tolerance", "output_to_clipboard", "color_palette"]), true);
-        let addonsB = this.gui.create_button("Add-ons Menu", () => document.getElementById("add_ons_menu").scrollIntoView({ behavior: "smooth", block: "start", inline: "center" }), true)
-        let emptyspaceLB = this.gui.genLabel("control_frame_filler", "")
+        let addonsB = this.gui.create_button("Add-ons Menu", () => document.getElementById("add_ons_menu").scrollIntoView({ behavior: "smooth", block: "start", inline: "center" }), true);
+        let custom_inputsB = this.gui.create_button("Custom Inputs", () => this.md.edit_custom_inputs.bind(this.md)(this.gui, this.md.custom_inputs_edit_tree), true);
+        let emptyspaceLB = this.gui.genLabel("control_frame_filler", "");
         let creditLB = this.gui.genLabel("credit_label", `Minion Calculator V${this.version}\nMade by Herodirk`);
         let API_creditLB = this.gui.genLabel("API_credit_label", `Bazaar data from <a href="https://api.hypixel.net">Hypixel API</a>,<br>AH data from <a href="https://sky.coflnet.com/data">SkyCofl API</a> `, true);
         let manualLB = this.gui.genLabel("manual_label", `Online Manual:<br><a href="https://herodirk.github.io/minion/index.html">Calculator Manual</a>`, true);
-        API_creditLB.className = "control_label"
-        creditLB.className = "control_label"
-        manualLB.className = "control_label"
+        API_creditLB.className = "control_label";
+        creditLB.className = "control_label";
+        manualLB.className = "control_label";
         
-        let controlsGrid = [calcB, this.statusC, text_outputB, markdown_outputB, pricesB, addonsB, settingsB, emptyspaceLB, API_creditLB, manualLB, creditLB];
+        let controlsGrid = [calcB, this.statusC, text_outputB, markdown_outputB, pricesB, addonsB, settingsB, custom_inputsB, emptyspaceLB, API_creditLB, manualLB, creditLB];
         this.gui.fill_arr(controlsGrid, this.frames["controls"]);
         
         let miniontitleLB = this.gui.genLabel("miniontitleLB", "\nMinion options");
@@ -487,14 +488,14 @@ class Calculator {
     multiswitch(multi_ID, force=false) {
         if (multi_ID === "minion") {
             let minionType = this.minion.get(false);
-            this.gui.set_value("miniontier", Object.keys(this.md.calculator_data[this.input_options["minion"][minionType]]["speed"]).slice(-1));
+            this.gui.set_value("miniontier", Object.keys(this.md.calculator_data[this.input_options["minion"][minionType]]["speed"]).slice(-1)[0]);
             this.gui.toggle_switch("potato_accessory_switch", minionType + String(this.afk.get(false)));
             this.gui.toggle_switch("rising_celsius", minionType);
         } else if (multi_ID === "tier") {
             let minionType = this.minion.get(true);
             let minionTier = this.miniontier.get(false);
             if (!(String(minionTier) in this.md.calculator_data[minionType]["speed"])) {
-                this.gui.set_value("miniontier", Object.keys(this.md.calculator_data[minionType]["speed"]).slice(-1));
+                this.gui.set_value("miniontier", Object.keys(this.md.calculator_data[minionType]["speed"]).slice(-1)[0]);
             };
         } else if (multi_ID === "fuel") {
             let control = this.fuel.get(false);

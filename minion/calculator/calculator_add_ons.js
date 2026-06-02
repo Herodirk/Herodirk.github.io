@@ -68,7 +68,7 @@ class Calc_add_ons {
                 continue;
             };
             setup_data["minion"] = loop_minion;
-            setup_data["miniontier"] = Number(Object.keys(calculator.md.calculator_data[loop_minion]["speed"]).slice(-1));
+            setup_data["miniontier"] = Number(Object.keys(calculator.md.calculator_data[loop_minion]["speed"]).slice(-1)[0]);
             if (super_compactor) {
                 if (loop_minion_smelting.includes(loop_minion)) {
                     setup_data["upgrade1"] = "DWARVEN_COMPACTOR";
