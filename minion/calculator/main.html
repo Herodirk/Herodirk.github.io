@@ -44,24 +44,24 @@
                 </div>
             </div>
         </div>
-        <script src="local_json/id_order.js"></script>
+        <!-- <script src="local_json/id_order.js"></script>
         <script src="local_json/input_options.js"></script>
-        <script src="local_json/calculator_data.js"></script>
+        <script src="local_json/calculator_data.js"></script> -->
         <script>
             const GUI = new GUI_creator();
             const add_ons = new Calc_add_ons();
-            // const input_options_promise = GUI.call_API("./calculator_version_data/input_options.json", "Calculator Files")
-            // const id_order_promise = GUI.call_API("./calculator_version_data/id_order.json", "Calculator Files")
-            // const calculator_data_promise = GUI.call_API("./calculator_data.json", "Calculator Files")
-            // let calc;
-            // let MD;
-            // Promise.all([input_options_promise, id_order_promise, calculator_data_promise]).then((resolves) => {
-            //     const [input_options_json, id_order_json, calculator_data_json] = resolves;
-            //     MD = new H_data_M({"calculator_data": calculator_data_json});
-            //     calc = new Calculator({"input_options": input_options_json, "id_order": id_order_json});
-            // })
-            const MD = new H_data_M({"calculator_data": calculator_data_json});
-            let calc = new Calculator({"input_options": input_options_json, "id_order": id_order_json});
+            const input_options_promise = GUI.call_API("./calculator_version_data/input_options.json", "Calculator Files")
+            const id_order_promise = GUI.call_API("./calculator_version_data/id_order.json", "Calculator Files")
+            const calculator_data_promise = GUI.call_API("./calculator_data.json", "Calculator Files")
+            let calc;
+            let MD;
+            Promise.all([input_options_promise, id_order_promise, calculator_data_promise]).then((resolves) => {
+                const [input_options_json, id_order_json, calculator_data_json] = resolves;
+                MD = new H_data_M({"calculator_data": calculator_data_json});
+                calc = new Calculator({"input_options": input_options_json, "id_order": id_order_json});
+            })
+            // const MD = new H_data_M({"calculator_data": calculator_data_json});
+            // let calc = new Calculator({"input_options": input_options_json, "id_order": id_order_json});
         </script>
     </body>
 </html>
