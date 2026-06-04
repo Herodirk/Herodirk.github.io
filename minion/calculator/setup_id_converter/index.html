@@ -4,6 +4,8 @@
         <title>Setup ID Converter</title>
         <link rel="stylesheet" href="../../../dark_mode.css">
         <link rel="stylesheet" href="../calculator.css">
+        <script src="../GUI_creator.js"></script>
+        <script src="converter.js"></script>
     </head>
     <nav>
         <a href="https://herodirk.github.io">Home</a>
@@ -11,7 +13,23 @@
     </nav>
     <body>
         <h1>Minion Calculator: Setup ID Converter</h1>
-        WIP
-        <br>
+        Still under construction.
+        <div class="calculator">
+            <div id="inputs" class="frame">
+                <div id="inputs_grid" class="input_grid_frame"></div>
+            </div><div id="outputs" class="frame">
+                <div id="outputs_grid" class="output_grid_frame"></div>
+            </div>
+            <dialog id="edit_vars_dialog" class="floating_dialog">
+                <div id="edit_vars" class="small_frame">
+                    <div id="edit_vars_grid" class="edit_grid_frame"></div>
+                </div>
+                <div id="edit_vars_controls" class="controls_frame" style="position: absolute; bottom: 0;"></div>
+            </dialog>
+        </div>
+        <script>
+            const GUI = new GUI_creator();
+            const conv = new converter();
+        </script>
     </body>
 </html>
