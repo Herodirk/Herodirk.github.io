@@ -69,6 +69,11 @@ class converter {
         let input_data = this.huim.get_from_GUI(["load_id", "output_version"])
         let initial_id = input_data["load_id"];
         let [initial_version, template] = await this.decode_id(initial_id);
+        if (initial_version === "ERROR") {
+            this.huim.send_to_GUI({"id_container": [template]});
+            this.update_listboxes();
+            return;
+        }
         let new_version = input_data["output_version"];
         let new_version_data = await this.load_version_data(new_version);
         let var_options;
@@ -176,14 +181,14 @@ class converter {
                 let var_options = this.get_var_options(var_key, input_options);
                 if (var_options === null) {
                     if (setup_id[ID_index] !== "!") {
-                        return ["ERROR", `did not find ${var_key}`];
+                        return ["ERROR", `Invalid setup ID, did not find ${var_key}`];
                     };
                     end_val = setup_id.indexOf("!", ID_index + 1);
                     setup_data[var_key] = setup_id.slice(ID_index + 1, end_val);
                     ID_index = end_val + 1;
                 } else if (this.huim.get_length(var_options) > 79) {
                     if (setup_id[ID_index] !== "!") {
-                        return ["ERROR", `did not find ${var_key}`];
+                        return ["ERROR", `Invalid setup ID, did not find ${var_key}`];
                     };
                     end_val = setup_id.indexOf("!", ID_index + 1);
                     setup_data[var_key] = var_options[Number(setup_id.slice(ID_index + 1, end_val))];
