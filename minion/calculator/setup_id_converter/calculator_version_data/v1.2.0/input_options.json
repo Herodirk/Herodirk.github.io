@@ -154,6 +154,14 @@
         "Beacon IV": "BEACON_4",
         "Beacon V": "BEACON_5"
     },
+    "boolean": [
+        false,
+        true
+    ],
+    "scorched": "boolean",
+    "B_constant": "boolean",
+    "B_acquired": "boolean",
+    "infusion": "boolean",
     "crystal": {
         "None": "NONE",
         "Farm Crystal": "FARM_CRYSTAL",
@@ -162,6 +170,11 @@
         "Winter Crystal": "WINTER_ISLAND_CRYSTAL",
         "Mithril + Winter Crystal": "MITHRIL_WINTER_CRYSTAL"
     },
+    "free_will": "boolean",
+    "postcard": "boolean",
+    "inferno_eyedrops": "boolean",
+    "rising_celsius_override": "boolean",
+    "afk": "boolean",
     "afkpet": {
         "None": "NONE",
         "Magma Cube": "PET_MAGMA_CUBE",
@@ -180,6 +193,9 @@
         "Legendary",
         "Mythic"
     ],
+    "enchanted_clock": "boolean",
+    "special_layout": "boolean",
+    "player_harvests": "boolean",
     "player_looting": [
         0,
         1,
@@ -337,6 +353,7 @@
         "All Skills Exp Boost": "PET_ITEM_ALL_SKILLS_BOOST_COMMON",
         "All Skills Exp Super-Boost": "ALL_SKILLS_SUPER_BOOST"
     },
+    "expshareitem": "boolean",
     "sell_loc": [
         "Best (NPC/Bazaar)",
         "Bazaar",
@@ -353,6 +370,7 @@
         "Insta Buy": "buyPrice",
         "Custom": "custom"
     },
+    "bazaar_taxes": "boolean",
     "bazaar_flipper": [
         0,
         1,
@@ -360,5 +378,6 @@
     ],
     "time_unit": ["Years", "Weeks", "Days", "Hours", "Minutes", "Seconds", "Harvests"],
     "empty_time_unit": "time_unit",
+    "scale_time": "boolean",
     "scaled_time_unit": "time_unit"
 }
