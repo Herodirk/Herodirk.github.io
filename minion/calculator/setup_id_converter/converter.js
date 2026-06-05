@@ -51,21 +51,66 @@ class converter {
         return;
     };
 
+    get_var_options(var_key, input_options) {
+        let var_options = null;
+        if (var_key in input_options) {
+            if (input_options[var_key] instanceof Array) {
+                var_options = input_options[var_key];
+            } else if (typeof input_options[var_key] === "string") {
+                var_options = Object.keys(input_options[input_options[var_key]]);
+            } else {
+                var_options = Object.keys(input_options[var_key]);
+            };
+        };
+        return var_options;
+    };
+
     async convert() {
-        let initial_id = this.load_id.get();
+        let input_data = this.huim.get_from_GUI(["load_id", "output_version"])
+        let initial_id = input_data["load_id"];
         let [initial_version, template] = await this.decode_id(initial_id);
-        let new_version = this.output_version.get();
+        let new_version = input_data["output_version"];
         let new_version_data = await this.load_version_data(new_version);
-        // for (const var_key of new_version_data["id_order"]) {
-        //     if (!(var_key in template)) {
-        //         template[var_key] = 0
-        //     }
-        // }
+        let var_options;
+        let differences = {};
+        for (const var_key of new_version_data["id_order"]) {
+            var_options = this.get_var_options(var_key, new_version_data["input_options"]);
+            if (!(var_key in template)) {
+                differences[var_key] = "missing";
+                if (var_options === null) {
+                    template[var_key] = 0;
+                } else {
+                    template[var_key] = var_options[0];
+                };
+            } else {
+                if (var_options !== null && !(var_options.includes(template[var_key]))) {
+                    differences[var_key] = "unavailable option"
+                    template[var_key] = var_options[0];
+                };
+            };
+        };
+        let new_setup_id = this.construct_id(template, new_version, new_version_data);
+        let output_data = {
+            "converted_id": new_setup_id,
+            "id_container": [new_setup_id],
+            "id_differences": differences
+        };
+        this.huim.send_to_GUI(output_data);
+        this.update_listboxes();
         return;
     };
 
     copy_id() {
-        console.log("copy magic");
+        try {
+            navigator.clipboard.writeText(this.converted_id.get());
+        } catch(error) {
+            if (error.name === "NotAllowedError") {
+                console.log("Not allowed to write to clipboard, outputting output here instead:");
+            } else {
+                console.log("Unknown Error", error);
+            };
+            console.log(crafted_string);
+        };
         return;
     };
 
@@ -89,18 +134,7 @@ class converter {
         let setup_id = version + "!";
         for (const var_key of ID_order) {
             val = setup_data[var_key];
-            let var_options = null;
-            if (var_key in input_options) {
-                if (input_options[var_key] instanceof Array) {
-                    var_options = input_options[var_key];
-                } else if (typeof input_options[var_key] === "string") {
-                    var_options = Object.values(input_options[input_options[var_key]]);
-                } else {
-                    var_options = Object.values(input_options[var_key]);
-                };
-            } else if (typeof val === "boolean") {
-                var_options = [false, true];
-            };
+            let var_options = this.get_var_options(var_key, input_options);
             if (var_options === null) {
                 if (parseInt(val) === val) {
                     val = parseInt(val);
@@ -139,19 +173,7 @@ class converter {
         let input_options = version_data["input_options"];
         try {
             for (const var_key of ID_order) {
-                let var_options = null;
-                if (var_key in input_options) {
-                    if (input_options[var_key] instanceof Array) {
-                        var_options = input_options[var_key];
-                    } else if (typeof input_options[var_key] === "string") {
-                        var_options = Object.values(input_options[input_options[var_key]]);
-                    } else {
-                        var_options = Object.values(input_options[var_key]);
-                    };
-                } else if (setup_id[ID_index] !== "!") {
-                    var_options = [false, true];
-                };
-
+                let var_options = this.get_var_options(var_key, input_options);
                 if (var_options === null) {
                     if (setup_id[ID_index] !== "!") {
                         return ["ERROR", `did not find ${var_key}`];
@@ -179,7 +201,7 @@ class converter {
     };
 
     update_listboxes() {
-        this.converted_id.update_listbox();
+        this.id_container.update_listbox();
         this.id_differences.update_listbox();
         return;
     };

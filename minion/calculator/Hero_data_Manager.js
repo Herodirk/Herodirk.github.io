@@ -212,7 +212,7 @@ class H_data_M {
 
     has_data_tag(data_ID, tag) {
         if (!(data_ID in this.calculator_data)) {
-            console.log(`ERROR - has_data_tag - data ID {data_ID} not in calculator data`);
+            console.log(`ERROR - has_data_tag - data ID ${data_ID} not in calculator data`);
             return false;
         };
         if (tag === null) {
