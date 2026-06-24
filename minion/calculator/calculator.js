@@ -213,7 +213,6 @@ class Calculator {
         this.scaled_time_amount = new Hvar({"huim": this.gui, "key": "scaled_time_amount", "vtype": "input", "dtype": "number", "display": "Scaled Time span", "initial": 1.0, "frame": "inputs_player_grid"});
         this.scaled_time_unit = new Hvar({"huim": this.gui, "key": "scaled_time_unit", "vtype": "input", "dtype": "string", "display": "Scaled Time unit", "initial": "Days", "frame": "inputs_player_grid", "options": this.input_options["time_unit"]});
         this.rising_celsius_override = new Hvar({"huim": this.gui, "key": "rising_celsius_override", "vtype": "input", "dtype": "boolean", "display": "Force Rising Celsius", "initial": false, "frame": "inputs_minion_grid"});
-        this.pet_costs = new Hvar({"huim": this.gui, "key": "pet_costs", "vtype": "storage", "dtype": "object", "display": "Pet Prices", "initial": {"NONE": {"LEGENDARY": {"min": 1, "max": 1, "last_updated": 0}}}})
         this.used_pet_prices = new Hvar({"huim": this.gui, "key": "used_pet_prices", "vtype": "output", "dtype": "object", "display": "Used Pet Prices", "initial": {}, "frame": "outputs_profit_grid", "widget_width": 35, "widget_height": 4, "switch_initial": true});
         this.custom_upgrade_toggle = new Hvar({"huim": this.gui, "key": "custom_upgrade_toggle", "vtype": "storage", "dtype": "boolean", "display": "Custom Upgrade", "initial": false});
 
@@ -228,15 +227,18 @@ class Calculator {
         this.notesAnchor = this.gui.genLabel("notesAnchor", "");
         this.notesAnchor.className = "notes_anchor";
 
+        this.gui.new_edit_vars("settings", {"API_auto_update": null, "API_cooldown": null, "pet_API_cooldown": null, "compact_tolerance": null, "output_to_clipboard": null, "color_palette": null}, this.edit_settings.bind(this));
+        this.md.create_custom_inputs_edit_vars(this.md.custom_inputs_edit_tree, "start");
+
         let calcB = this.gui.create_button("Calculate", () => this.calculate.bind(this)(true), true);
         this.statusC = document.createElement("div");
         Object.assign(this.statusC, {innerText: "\n", className: "status_div", id: "status_div", style: "background: green;"});
         let text_outputB = this.gui.create_button('Text Output', () => this.text_output.bind(this)(null, null, null, false), true);
         let markdown_outputB = this.gui.create_button('Markdown Output', () => this.text_output.bind(this)(null, null, null, true), true);
         let pricesB = this.gui.create_button("Update Prices", this.update_prices.bind(this), true);
-        let settingsB = this.gui.create_button('Edit Settings', () => this.gui.edit_vars.bind(this.gui)(this.gui.update_color_palette.bind(this.gui), ["API_auto_update", "API_cooldown", "pet_API_cooldown", "compact_tolerance", "output_to_clipboard", "color_palette"]), true);
+        let settingsB = this.gui.create_button('Edit Settings', () => this.gui.edit_vars.bind(this.gui)("settings"), true);
         let addonsB = this.gui.create_button("Add-ons Menu", () => document.getElementById("add_ons_menu").scrollIntoView({ behavior: "smooth", block: "start", inline: "center" }), true);
-        let custom_inputsB = this.gui.create_button("Custom Inputs", () => this.md.edit_custom_inputs.bind(this.md)(this.gui, this.md.custom_inputs_edit_tree), true);
+        let custom_inputsB = this.gui.create_button("Custom Inputs", () => this.gui.edit_vars.bind(this.gui)("custom_input_start"), true);
         let emptyspaceLB = this.gui.genLabel("control_frame_filler", "");
         let creditLB = this.gui.genLabel("credit_label", `Minion Calculator V${this.version}\nMade by Herodirk`);
         let API_creditLB = this.gui.genLabel("API_credit_label", `Bazaar data from <a href="https://api.hypixel.net">Hypixel API</a>,<br>AH data from <a href="https://sky.coflnet.com/data">SkyCofl API</a> `, true);
@@ -385,7 +387,14 @@ class Calculator {
         this.notesAnchor.appendChild(this.notes.widget[1]);
         
         // Add-ons buttons
-        this.addons_list = {...add_ons.add_ons_package};
+        this.addons_list = {};
+        for (let addon_function_key of Object.keys(add_ons.add_ons_package)) {
+            if (addon_function_key.includes("__init__")) {
+                add_ons.add_ons_package[addon_function_key].bind(add_ons)(this);
+            } else {
+                this.addons_list[addon_function_key] = add_ons.add_ons_package[addon_function_key];
+            };
+        };
         this.addons_widgets = {};
         for (const [addon_name, addon_function] of Object.entries(this.addons_list)) {
             this.addons_widgets[addon_name] = []
@@ -445,7 +454,11 @@ class Calculator {
             },
             "Beacon Info": { "\n> ": ["beacon_fuel", "free_fuel_beacon"] },
             "Inferno Info": { "\n> ": ["inferno_grade", "inferno_distillate", "inferno_eyedrops", "rising_celsius_override"] },
-            "afk": { "\n> ": ["afkpet", "afkpet_rarity", "afkpet_lvl", "enchanted_clock", "special_layout", "potato_accessory"] },
+            "afk": {
+                "%\n> ": [["afkpet_rarity", "afkpet"]],
+                " lvl ": new Set(["afkpet_lvl"]),
+                "\n> ": ["enchanted_clock", "special_layout", "potato_accessory"]
+            },
             "playerHarvests": { "\n> ": ["player_looting"] },
             "Wisdoms": {"\n> ": ["combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom"]},
             "mayor": null,
@@ -883,9 +896,6 @@ class Calculator {
         };
         speed_boost += this.md.calculator_data[setup_data["beacon"]]["speed_boost"] + this.md.calculator_data["MITHRIL_INFUSION"]["speed_boost"] * setup_data["infusion"];
         speed_boost += this.md.calculator_data["FREE_WILL"]["speed_boost"] * setup_data["free_will"] + this.md.calculator_data["POSTCARD"]["speed_boost"] * setup_data["postcard"];
-        if (setup_data["custom_upgrade_toggle"]) {
-            speed_boost += this.md.calculator_data["CUSTOM_UPGRADE"]["speed_boost"];
-        };
         if (setup_data["crystal"] !== "NONE") {
             if (this.md.has_data_tag(minion, this.md.calculator_data[setup_data["crystal"]]["affected_minions"])) {
                 speed_boost += this.md.calculator_data[setup_data["crystal"]]["speed_boost"];
@@ -1292,7 +1302,7 @@ class Calculator {
 
     get_available_storage(minion, minion_tier, setup_data) {
         let available_storage = this.md.calculator_data[setup_data["chest"]]["storage_slots"];
-        if ("storage" in this.md.calculator_data[minion] && minion_tier in this.md.calculator_data[minion]["storage"]) {
+        if ("storage" in this.md.calculator_data[minion] && String(minion_tier) in this.md.calculator_data[minion]["storage"]) {
             available_storage += this.md.calculator_data[minion]["storage"][String(minion_tier)];
         } else {
             available_storage += this.md.standard_storage[minion_tier];
@@ -1517,19 +1527,19 @@ class Calculator {
 
     get_pet_profit(setup_pets, setup_data) {
         let pet_profit = 0.0;
-        let pet_prices = {};
+        let used_pet_prices = {};
         let super_scrubber_price = this.get_price("SUPER_SCRUBBER", setup_data, "buy", "custom", true);
         let combined_pet_id;
         for (let [pet_slot, pet_info] of Object.entries(setup_pets)) {
             combined_pet_id = pet_info['rarity'] + "." + pet_info["pet"];
-            if (!(pet_info["pet"] in this.pet_costs.list) || !(pet_info["rarity"] in this.pet_costs.list[pet_info["pet"]])) {
-                if (!(combined_pet_id in pet_prices)) {
-                    pet_prices[combined_pet_id] = "Price not found";
+            if (!(pet_info['rarity'] in this.md.calculator_data[pet_info["pet"]]["pet_prices"])) {
+                if (!(combined_pet_id in used_pet_prices)) {
+                    used_pet_prices[combined_pet_id] = "Price not found";
                 };
             } else {
-                pet_profit += pet_info["levelled_pets"] * (this.pet_costs.list[pet_info["pet"]][pet_info["rarity"]]["max"] - this.pet_costs.list[pet_info["pet"]][pet_info["rarity"]]["min"]);
-                if (!(combined_pet_id in pet_prices)) {
-                    pet_prices[combined_pet_id] = `${this.gui.reduced_number(this.pet_costs.list[pet_info["pet"]][pet_info["rarity"]]["min"])} - ${this.gui.reduced_number(this.pet_costs.list[pet_info["pet"]][pet_info["rarity"]]["max"])}`;
+                pet_profit += pet_info["levelled_pets"] * (this.md.calculator_data[pet_info["pet"]]["pet_prices"][pet_info["rarity"]]["max"] - this.md.calculator_data[pet_info["pet"]]["pet_prices"][pet_info["rarity"]]["min"]);
+                if (!(combined_pet_id in used_pet_prices)) {
+                    used_pet_prices[combined_pet_id] = `${this.gui.reduced_number(this.md.calculator_data[pet_info["pet"]]["pet_prices"][pet_info["rarity"]]["min"])} - ${this.gui.reduced_number(this.md.calculator_data[pet_info["pet"]]["pet_prices"][pet_info["rarity"]]["max"])}`;
                 };
             };
             if (this.md.has_data_tag(pet_info["pet"], "dragon_egg_pet")) {
@@ -1542,7 +1552,7 @@ class Calculator {
                 pet_profit -= pet_info["levelled_pets"] * (this.md.calculator_data[this.md.calculator_data["PET_ITEM_EXP_SHARE"]["rarity"]]["pet_item_scrub_cost"] + super_scrubber_price);
             };
         };
-        return [pet_profit, pet_prices];
+        return [pet_profit, used_pet_prices];
     };
 
     get_finite_fuel_cost(minion_amount, minion_fuel, empty_time_seconds, setup_data) {
@@ -1707,10 +1717,10 @@ class Calculator {
 
         // Attribute costs
         if (setup_data["toucan_attribute"] != 0) {
-            cost_per_part["toucan_attribute"] = this.md.calculator_data["EPIC"]["attribute_shards"][setup_data["toucan_attribute"]] * this.get_price("SHARD_TOUCAN", setup_data, "buy", "bazaar");
+            cost_per_part["toucan_attribute"] = this.md.calculator_data["EPIC"]["attribute_shards"][String(setup_data["toucan_attribute"])] * this.get_price("SHARD_TOUCAN", setup_data, "buy", "bazaar");
         };
         if (setup_data["falcon_attribute"] != 0) {
-            cost_per_part["falcon_attribute"] = this.md.calculator_data["RARE"]["attribute_shards"][setup_data["falcon_attribute"]] * this.get_price("SHARD_FALCON", setup_data, "buy", "bazaar");
+            cost_per_part["falcon_attribute"] = this.md.calculator_data["RARE"]["attribute_shards"][String(setup_data["falcon_attribute"])] * this.get_price("SHARD_FALCON", setup_data, "buy", "bazaar");
         };
 
 
@@ -1819,7 +1829,7 @@ class Calculator {
 
         // Pet leveling
         let setup_pets = this.get_pets_levelled(skill_xp, mayor, setup_data)
-        let [pet_profit, pet_prices] = this.get_pet_profit(setup_pets, setup_data);
+        let [pet_profit, used_pet_prices] = this.get_pet_profit(setup_pets, setup_data);
 
         // calculating beacon and limited fuel cost
         let [fuel_cost, needed_fuel] = this.get_finite_fuel_cost(minion_amount, minion_fuel, empty_time_seconds, setup_data);
@@ -1871,7 +1881,7 @@ class Calculator {
             "scaled_time": scaled_time_str,
             "actiontime": seconds_per_action,
             "notes": setup_notes,
-            "used_pet_prices": pet_prices,
+            "used_pet_prices": used_pet_prices,
             "optimal_tier_free_will": free_will_optimal_tier,
         });
 
@@ -2039,10 +2049,10 @@ class Calculator {
     };
 
     async update_pet_price(pet_ID, rarity) {
-        if (["NONE", "PET_CUSTOM_PET", "PET_BINGO"].includes(pet_ID)) {
+        if (this.md.has_data_tag(pet_ID, "no_ah_api")) {
             return;
         };
-        if (pet_ID in this.pet_costs.list && rarity in this.pet_costs.list[pet_ID] && Date.now() - this.pet_costs.list[pet_ID][rarity]["last_updated"] < this.pet_API_cooldown.get() * 1000) {
+        if (rarity in this.md.calculator_data[pet_ID]["pet_prices"] && Date.now() - this.md.calculator_data[pet_ID]["pet_prices"][rarity]["last_updated"] < this.pet_API_cooldown.get() * 1000) {
             console.log(`${pet_ID} ${rarity} price update is on cooldown`);
             return;
         };
@@ -2078,26 +2088,20 @@ class Calculator {
             };
             // console.log(level_type, level_range)
         };
-        if (!(pet_ID in this.pet_costs.list)) {
-            // non-zero min and max is required for new entry
+        if (!(rarity in this.md.calculator_data[pet_ID]["pet_prices"])) {
             if (results["min"] === 0 || results["max"] === 0) {
                 return;
             };
-            this.pet_costs.list[pet_ID] = {};
+            this.md.calculator_data[pet_ID]["pet_prices"][rarity] = { "min": 0, "max": 0, "last_updated": 0 };
+            this.md.instance_data[`${pet_ID}.pet_prices.${rarity}`] = null;
         };
-        if (!(rarity in this.pet_costs.list[pet_ID])) {
-            if (results["min"] === 0 || results["max"] === 0) {
-                return;
-            };
-            this.pet_costs.list[pet_ID][rarity] = { "min": 0, "max": 0, "last_updated": 0 };
-        }
         if (results["min"] != 0) {
-            this.pet_costs.list[pet_ID][rarity]["min"] = results["min"];
+            this.md.calculator_data[pet_ID]["pet_prices"][rarity]["min"] = results["min"];
         };
         if (results["max"] != 0) {
-            this.pet_costs.list[pet_ID][rarity]["max"] = results["max"];
+            this.md.calculator_data[pet_ID]["pet_prices"][rarity]["max"] = results["max"];
         };
-        this.pet_costs.list[pet_ID][rarity]["last_updated"] = Date.now();
+        this.md.calculator_data[pet_ID]["pet_prices"][rarity]["last_updated"] = Date.now();
         return;
     };
 
@@ -2126,6 +2130,14 @@ class Calculator {
     collect_addon_output(output_name, output_str) {
         this.addons_output_container.list[output_name] = output_str;
         this.addons_output_container.update_listbox();
+        return;
+    };
+
+    edit_settings(new_settings) {
+        this.gui.update_color_palette();
+    };
+
+    save_calculator_data() {
         return;
     };
 };

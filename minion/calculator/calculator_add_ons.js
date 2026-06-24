@@ -1,8 +1,13 @@
 
 class Calc_add_ons {
     constructor() {
-        this.add_ons_package = {"Minion Crafting": this.craft_material_amount, "Days to Repay Setup": this.setup_repay_time, "Basic Minion Loop": this.basic_minion_loop_inputs, "Bad Luck Inferno": this.bad_luck_inferno, "Inferno Minion Loop": this.inferno_minion_loop_inputs, "Exact Pet Levelling": this.exact_pet_levelling_inputs};
+        this.add_ons_package = {"Hero_addons__init__": this.init, "Minion Crafting": this.craft_material_amount, "Days to Repay Setup": this.setup_repay_time, "Basic Minion Loop": this.basic_minion_loop_inputs, "Bad Luck Inferno": this.bad_luck_inferno, "Inferno Minion Loop": this.inferno_minion_loop_inputs, "Exact Pet Levelling": this.exact_pet_levelling_inputs};
     };
+
+    init (calculator) {
+        calculator.gui.new_edit_vars("basic_minion_loop", {"setup_cost_limit": {"dtype": "number", "display": "Setup Cost Limit", "initial": 0, "options": null}, "markdown_output": {"dtype": "boolean", "display": "Markdown Output", "initial": true, "options": null}}, (results) => this.basic_minion_loop.bind(this)(calculator, results))
+        calculator.gui.new_edit_vars("inferno_minion_loop", {"setup_cost_limit": {"dtype": "number", "display": "Setup Cost Limit", "initial": 0, "options": null}, "amount_limit": {"dtype": "number", "display": "Minion Amount Limit", "initial": 32, "options": null}, "markdown_output": {"dtype": "boolean", "display": "Markdown Output", "initial": true, "options": null}}, (results) => this.inferno_minion_loop.bind(this)(calculator, results))
+    }
 
     craft_material_amount(calculator) {
         let setup_data = calculator.gui.get_from_GUI(["minion", "miniontier", "amount", "extracost"]);
@@ -36,13 +41,13 @@ class Calc_add_ons {
         return;
     };
 
-    async basic_minion_loop(calculator) {
+    async basic_minion_loop(calculator, results) {
         let setup_data = calculator.gui.get_from_GUI(calculator.ID_order);
-        let cost_filter = calculator.gui.edit_vars_output["setup_cost_limit"];
+        let cost_filter = results["setup_cost_limit"];
         if (cost_filter === 0) {
             cost_filter = Infinity;
         };
-        let markdown_output = calculator.gui.edit_vars_output["markdown_output"];
+        let markdown_output = results["markdown_output"];
         let calculated_setup_profits = {};
         let calculated_setup_costs = {};
         const loop_minion_options = Object.values(calculator.input_options["minion"]);
@@ -94,13 +99,18 @@ class Calc_add_ons {
             "Upgrades: ": { "": new Set(["fuel", "hopper", "upgrade1", "upgrade2", "chest", "beacon", "crystal", "postcard", "infusion", "free_will"]) },
             "Beacon Info": { "\n> ": ["scorched", "B_constant", "B_acquired"] },
             "Inferno Info": { "\n> ": ["inferno_grade", "inferno_distillate", "inferno_eyedrops", "rising_celsius_override"] },
-            "afk": { "\n> ": ["afkpet", "afkpet_rarity", "afkpet_lvl", "enchanted_clock", "special_layout", "potato_accessory"] },
+            "afk": {
+                "%\n> ": [["afkpet_rarity", "afkpet"]],
+                " lvl ": new Set(["afkpet_lvl"]),
+                "\n> ": ["enchanted_clock", "special_layout", "potato_accessory"]
+            },
             "player_harvests": { "\n> ": ["player_looting"] },
             "Wisdoms": { "\n> ": ["combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom"] },
             "mayor": null,
-            "levelingpet": {
+            "Leveling pet: ": {
+                "%": [["levelingpet_rarity", "levelingpet"]],
                 "\n> ": ["taming", "falcon_attribute", "pet_exp_boost", "beastmaster", "toucan_attribute", "expshareitem"],
-                "\n> Exp Share Pets: ": new Set(["expsharepet", "expsharepetslot2", "expsharepetslot3"])
+                "%\n> Exp Share Pets: ": [["expsharepet_rarity", "expsharepet"], ["expsharepetslot2_rarity", "expsharepetslot2"], ["expsharepetslot3_rarity", "expsharepetslot3"]]
             },
             "used_pet_prices": null,
             "": { "": ["sell_loc", "bazaar_update_txt", "bazaar_sell_type", "bazaar_buy_type", "bazaar_taxes", "bazaar_flipper", "sell_form"] },
@@ -171,22 +181,22 @@ class Calc_add_ons {
         return;
     };
 
-    async inferno_minion_loop(calculator) {
+    async inferno_minion_loop(calculator, results) {
         let setup_data = calculator.gui.get_from_GUI(calculator.ID_order);
         let calculated_setup_profits = {};
         let calculated_setup_bad_luck_profits = {};
         let calculated_setup_costs = {};
     
-        let cost_filter = calculator.gui.edit_vars_output["setup_cost_limit"];
+        let cost_filter = results["setup_cost_limit"];
         if (cost_filter === 0) {
             cost_filter = Infinity;
         };
-        let minion_amount_limit = calculator.gui.edit_vars_output["amount_limit"];
+        let minion_amount_limit = results["amount_limit"];
         if (minion_amount_limit < 1) {
             calculator.collect_addon_output("Inferno Minion Loop", "Positive minion amount limit is required");
             return;
         };
-        let markdown_output = calculator.gui.edit_vars_output["markdown_output"];
+        let markdown_output = results["markdown_output"];
         setup_data["minion"] = "INFERNO_MINION";
         setup_data["fuel"] = "INFERNO_FUEL";
         if (setup_data["inferno_grade"] === "HYPERGOLIC_GABAGOOL") {
@@ -222,13 +232,18 @@ class Calc_add_ons {
             "Upgrades: ": { "": new Set(["fuel", "hopper", "upgrade1", "upgrade2", "chest", "beacon", "crystal", "postcard", "infusion", "free_will"]) },
             "Beacon Info": { "\n> ": ["scorched", "B_constant", "B_acquired"] },
             "Inferno Info": { "\n> ": ["inferno_grade", "inferno_distillate", "inferno_eyedrops", "rising_celsius_override"] },
-            "afk": { "\n> ": ["afkpet", "afkpet_rarity", "afkpet_lvl", "enchanted_clock", "special_layout", "potato_accessory"] },
+            "afk": {
+                "%\n> ": [["afkpet_rarity", "afkpet"]],
+                " lvl ": new Set(["afkpet_lvl"]),
+                "\n> ": ["enchanted_clock", "special_layout", "potato_accessory"]
+            },
             "player_harvests": { "\n> ": ["player_looting"] },
             "Wisdoms": { "\n> ": ["combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom"] },
             "mayor": null,
-            "levelingpet": {
+            "Leveling pet: ": {
+                "%": [["levelingpet_rarity", "levelingpet"]],
                 "\n> ": ["taming", "falcon_attribute", "pet_exp_boost", "beastmaster", "toucan_attribute", "expshareitem"],
-                "\n> Exp Share Pets: ": new Set(["expsharepet", "expsharepetslot2", "expsharepetslot3"])
+                "%\n> Exp Share Pets: ": [["expsharepet_rarity", "expsharepet"], ["expsharepetslot2_rarity", "expsharepetslot2"], ["expsharepetslot3_rarity", "expsharepetslot3"]]
             },
             "used_pet_prices": null,
             "": { "": ["sell_loc", "bazaar_update_txt", "bazaar_sell_type", "bazaar_buy_type", "bazaar_taxes", "bazaar_flipper", "sell_form"] },
@@ -268,12 +283,12 @@ class Calc_add_ons {
     };
 
     basic_minion_loop_inputs(calculator) {
-        calculator.gui.edit_vars(() => this.basic_minion_loop.bind(this)(calculator), {"setup_cost_limit": {"dtype": "number", "display": "Setup Cost Limit", "initial": 0, "options": null}, "markdown_output": {"dtype": "boolean", "display": "Markdown Output", "initial": true, "options": null}}, false);
+        calculator.gui.edit_vars("basic_minion_loop");
         return;
     };
 
     inferno_minion_loop_inputs(calculator) {
-        calculator.gui.edit_vars(() => this.inferno_minion_loop.bind(this)(calculator), {"setup_cost_limit": {"dtype": "number", "display": "Setup Cost Limit", "initial": 0, "options": null}, "amount_limit": {"dtype": "number", "display": "Minion Amount Limit", "initial": 32, "options": null}, "markdown_output": {"dtype": "boolean", "display": "Markdown Output", "initial": true, "options": null}}, false);
+        calculator.gui.edit_vars("inferno_minion_loop");
         return;
     };
 
@@ -300,7 +315,7 @@ class Calc_add_ons {
     };
 
     exact_pet_levelling_inputs(calculator) {
-        let setup_data = calculator.gui.get_from_GUI(["mayor", "levelingpet", "levelingpet_rarity", "expsharepet", "expsharepetslot2", "expsharepetslot3"])
+        let setup_data = calculator.gui.get_from_GUI(["mayor", "levelingpet", "levelingpet_rarity", "expsharepet", "expsharepetslot2", "expsharepetslot3", "expsharepet_rarity", "expsharepetslot2_rarity", "expsharepetslot3_rarity"])
         if (setup_data["levelingpet"] === "NONE") {
             calculator.collect_addon_output("Exact Pet Levelling", "No pet levelling active");
             return;
@@ -316,18 +331,22 @@ class Calc_add_ons {
         for (let [pet_slot, pet_info] of Object.entries(setup_pets)) {
             input_variables[pet_slot + "_starting_pet_xp"] = {"dtype": "number", "display": calculator.md.calculator_data[pet_info["rarity"]]["display"] + " " + calculator.md.calculator_data[pet_info["pet"]]["display"] + " starting pet xp", "initial": 0, "options": null};
         };
-        calculator.gui.edit_vars((pet_data=setup_pets) => this.exact_pet_levelling.bind(this)(calculator, pet_data), input_variables, false)
+        if ("exact_pet_levelling" in calculator.gui.edit_vars_requests) {
+            calculator.gui.edit_vars_requests["exact_pet_levelling"]["frame"].remove();
+        };
+        calculator.gui.new_edit_vars("exact_pet_levelling", input_variables, (results, pet_data=setup_pets) => this.exact_pet_levelling.bind(this)(calculator, results, pet_data))
+        calculator.gui.edit_vars("exact_pet_levelling");
         return;
     };
 
-    exact_pet_levelling(calculator, setup_pets) {
+    exact_pet_levelling(calculator, results, setup_pets) {
         let setup_data = calculator.gui.get_from_GUI(["mayor", "xp", "taming", "toucan_attribute", "expshareitem", "pet_exp_boost", "beastmaster", "falcon_attribute", "bazaar_buy_type", "bazaar_sell_type", "bazaar_taxes", "bazaar_flipper"])
         let skill_xp = setup_data["xp"]
         let main_pet = setup_pets["levelingpet"]["pet"];
         let main_pet_xp = setup_pets["levelingpet"]["pet_xp"];
         let pet_xp_boost, xp_boost_pet_item, left_over_pet_xp, exp_share_pet, equiv_pet_xp_boost, equiv_xp_boost_pet_item, non_matching, dragon_xp_outputs;
         if (calculator.md.has_data_tag(main_pet, "dragon_pet")) {
-            left_over_pet_xp = calculator.gui.edit_vars_output["levelingpet_starting_pet_xp"];
+            left_over_pet_xp = results["levelingpet_starting_pet_xp"];
             for (let [skill, amount] of Object.entries(skill_xp)) {
                 [pet_xp_boost, xp_boost_pet_item] = calculator.get_pet_xp_boosts(main_pet, skill, setup_data);
                 dragon_xp_outputs = this.dragon_xp(calculator, amount, left_over_pet_xp, pet_xp_boost, xp_boost_pet_item);
@@ -351,7 +370,7 @@ class Calc_add_ons {
                 if (exp_share_boost === 0) {
                     continue;
                 };
-                left_over_pet_xp = calculator.gui.edit_vars_output[pet_slot + "_starting_pet_xp"];
+                left_over_pet_xp = results[pet_slot + "_starting_pet_xp"];
                 for (let [skill, amount] of Object.entries(main_pet_xp)) {
                     non_matching = this.get_pet_xp_boosts(exp_share_pet, skill, setup_data, true);
                     equiv_pet_xp_boost = non_matching * (exp_share_boost / 100);
@@ -376,7 +395,7 @@ class Calc_add_ons {
             } else {
                 max_lvl_pet_xp = calculator.md.calculator_data[pet_info["rarity"]]["max_lvl_pet_xp_amount"];
             };
-            pets_levelled = (calculator.gui.edit_vars_output[pet_slot + "_starting_pet_xp"] + Object.values(pet_info["pet_xp"]).reduce((partialSum, a) => partialSum + a, 0)) / max_lvl_pet_xp;
+            pets_levelled = (results[pet_slot + "_starting_pet_xp"] + Object.values(pet_info["pet_xp"]).reduce((partialSum, a) => partialSum + a, 0)) / max_lvl_pet_xp;
             pet_info["levelled_pets"] = pets_levelled;
         };
         let output_string = Array.from(Object.values(setup_pets), pet_info => `${calculator.gui.reduced_number(pet_info['levelled_pets'], 4)} ${calculator.md.calculator_data[pet_info["rarity"]]["display"]} ${calculator.md.calculator_data[pet_info["pet"]]["display"]}`).join(", ")

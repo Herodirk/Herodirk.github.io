@@ -29,10 +29,6 @@
             </div>
             <div id="controls" class="controls_frame"></div>
             <dialog id="edit_vars_dialog" class="floating_dialog">
-                <div id="edit_vars" class="small_frame">
-                    <div id="edit_vars_grid" class="edit_grid_frame"></div>
-                </div>
-                <div id="edit_vars_controls" class="controls_frame" style="position: absolute; bottom: 0;"></div>
             </dialog>
         </div>
         <br>
@@ -51,6 +47,7 @@
         <script>
             const GUI = new GUI_creator();
             const add_ons = new Calc_add_ons();
+
             const input_options_promise = GUI.call_API("./calculator_version_data/input_options.json", "Calculator Files")
             const id_order_promise = GUI.call_API("./calculator_version_data/id_order.json", "Calculator Files")
             const calculator_data_promise = GUI.call_API("./calculator_data.json", "Calculator Files")
@@ -58,10 +55,11 @@
             let MD;
             Promise.all([input_options_promise, id_order_promise, calculator_data_promise]).then((resolves) => {
                 const [input_options_json, id_order_json, calculator_data_json] = resolves;
-                MD = new H_data_M({"calculator_data": calculator_data_json});
+                MD = new H_data_M({"calculator_data": calculator_data_json}, GUI);
                 calc = new Calculator({"input_options": input_options_json, "id_order": id_order_json});
             })
-            // const MD = new H_data_M({"calculator_data": calculator_data_json});
+
+            // const MD = new H_data_M({"calculator_data": calculator_data_json}, GUI);
             // let calc = new Calculator({"input_options": input_options_json, "id_order": id_order_json});
         </script>
     </body>

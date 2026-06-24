@@ -3,7 +3,6 @@ class GUI_creator {
         this.switches = {};
         this.reduced_amounts = {0: "", 1: "k", 2: "M", 3: "B", 4: "T", 5: "Qd"};
         this.reduced_amounts_length = 6;
-        this.edit_vars_output = {};
         this.current_color_palette = "dark_red";
         this.color_palettes = {
             "dark": {
@@ -52,6 +51,7 @@ class GUI_creator {
             },
         };
         this.palette_names = {"Dark": "dark", "Dark Red": "dark_red", "Light": "light", "Gray Text": "gray_text"}
+        this.edit_vars_requests = {};
     };
 
 
@@ -183,7 +183,12 @@ class GUI_creator {
 
     // Placing Elements
     fill_list_box(id, lines=[]) {
-        let output_elem = document.getElementById(id);
+        let output_elem;
+        if (typeof id === "string") {
+            output_elem = document.getElementById(id);
+        } else {
+            output_elem = id;
+        };
         output_elem.innerHTML = "";
         for (const line of lines) {
             let list_elem = document.createElement("li");
@@ -241,10 +246,10 @@ class GUI_creator {
                 objs = [obj];
             };
             for (let widget of objs) {
-                document.getElementById(widget).hidden = true;
+                document.getElementById(widget).style.display = "none";
                 for (let suffix of ["_label", "_output_switch", "_list_box", "_filler_1", "_filler_2"]) {
                     if (document.getElementById(widget + suffix) !== null) {
-                        document.getElementById(widget + suffix).hidden = true;
+                        document.getElementById(widget + suffix).style.display = "none";
                     };
                 };
             };
@@ -272,20 +277,20 @@ class GUI_creator {
         };
         if (state === true) {
             for (let obj of objs) {
-                document.getElementById(obj).hidden = true;
+                document.getElementById(obj).style.display = "none";
                 for (let suffix of ["_label", "_output_switch", "_list_box", "_filler_1", "_filler_2"]) {
                     if (document.getElementById(obj + suffix) !== null) {
-                        document.getElementById(obj + suffix).hidden = true;
+                        document.getElementById(obj + suffix).style.display = "none";
                     };
                 };
             };
             this.switches[switch_id]["state"] = false;
         } else {
             for (let obj of objs) {
-                document.getElementById(obj).hidden = false;
+                document.getElementById(obj).style.display = "";
                 for (let suffix of ["_label", "_output_switch", "_list_box", "_filler_1", "_filler_2"]) {
                     if (document.getElementById(obj + suffix) !== null) {
-                        document.getElementById(obj + suffix).hidden = false;
+                        document.getElementById(obj + suffix).style.display = "";
                     };
                 };
             };
@@ -495,55 +500,118 @@ class GUI_creator {
         return output_string;
     };
 
-    edit_vars(exit_function, variables=[], existing_variables=true) {
+    edit_vars(request_id) {
         let dialog_elem = document.getElementById("edit_vars_dialog");
         if (dialog_elem.hasAttribute("open")) {
             return;
-        }
-        let confirm_button = document.getElementById("edit_confirm_button");
-        let grid_frame = document.getElementById("edit_vars_grid");
-        grid_frame.innerHTML = "";
-        let elements = {}
-        if (existing_variables) {
-            for (let var_key of variables) {
-                elements[var_key] = this.def_input_var(`${var_key}_edit`, this.main.var_dict[var_key].dtype, `${this.main.var_dict[var_key].get_display()}:`, this.main.var_dict[var_key].get(false), this.main.var_dict[var_key].options, null);
-            };
-        } else {
-            for (let [var_key, var_data] of Object.entries(variables)) {
-                elements[var_key] = this.def_input_var(`${var_key}_edit`, var_data["dtype"], `${var_data["display"]}:`, var_data["initial"], var_data["options"], null);
-            };
         };
-        this.fill_grid(Object.entries(elements), grid_frame);
-        
-        if (confirm_button === null) {
-            confirm_button = this.create_button("Close", null, true);
-            confirm_button.id = "edit_confirm_button";
-            document.getElementById("edit_vars_controls").appendChild(confirm_button);
+        if (!(request_id in this.edit_vars_requests)) {
+            return;
         };
-        confirm_button.onclick = () => this.edit_confirm.bind(this)(exit_function, variables, existing_variables);
         dialog_elem.show();
+        this.toggle_switch(`edit_vars_${request_id}`);
+        return;
     };
-    
-    edit_confirm(exit_function, variables=[], existing_variables=true) {
-        let dialog_elem = document.getElementById("edit_vars_dialog");
-        let inputted_value;
-        if (existing_variables) {
-            for (let var_key of variables) {
-                inputted_value = this.get_value(`${var_key}_edit`)
-                this.main.var_dict[var_key].set(inputted_value);
+
+    edit_confirm(request_id) {
+        let results = {};
+        for (let [var_key, dict] of Object.entries(this.edit_vars_requests[request_id]["variables"])) {
+            if (dict === null) {
+                results[var_key] = this.get_value(request_id + "_" + var_key);
+            } else if (dict === true) {
+                results[var_key] = this.get_value(request_id + "_" + var_key);
+                this.main.var_dict[var_key].set(this.get_value(request_id + "_" + var_key))
+            } else {
+                results[var_key] = dict;
             };
-        } else {
-            this.clear_object(this.edit_vars_output);
-            for (let var_key of Object.keys(variables)) {
-                inputted_value = this.get_value(`${var_key}_edit`)
-                this.edit_vars_output[var_key] = inputted_value;
+        };
+        this.toggle_switch(`edit_vars_${request_id}`);
+        document.getElementById("edit_vars_dialog").close();
+        if (this.edit_vars_requests[request_id]["exit_func"] !== null) {
+            this.edit_vars_requests[request_id]["exit_func"](results);
+        };
+    };
+
+    new_edit_vars(request_id, variables, exit_function, relwidth=0.2, relheight=0.3) {
+        // variables : {
+        //   var_key : {
+        //       dtype : data type,
+        //       display : str,
+        //       initial : value of dtype,
+        //       options : list
+        //   },
+        //   dict_key : {
+        //       dtype := dict,
+        //       display : str,
+        //       initial : dict
+        //   },
+        // }
+        this.edit_vars_requests[request_id] = {};
+        this.edit_vars_requests[request_id]["variables"] = {};
+        // frame : main frame
+        // exit_func : exit function
+        // variables : {
+        //   edit_var_key : null if element ID is var_key, else string with element ID
+        //   edit_dict_key : dict
+        // }
+        this.edit_vars_requests[request_id]["exit_func"] = exit_function;
+        let dialog_elem = document.getElementById("edit_vars_dialog");
+        let new_edit_vars_frame = document.createElement("div");
+        new_edit_vars_frame.id = `edit_vars_${request_id}`;
+        new_edit_vars_frame.className = "small_frame";
+        new_edit_vars_frame.style.cssText = (`min-width: ${relwidth * 100}vw; min-height: ${relheight * 100}vh;`)
+        let new_edit_vars_grid = document.createElement("div");
+        new_edit_vars_grid.id = `edit_vars_grid_${request_id}`;
+        new_edit_vars_grid.className = "edit_grid_frame";
+        dialog_elem.appendChild(new_edit_vars_frame);
+        new_edit_vars_frame.appendChild(new_edit_vars_grid);
+        this.def_switch(`edit_vars_${request_id}`, [`edit_vars_${request_id}`], null, false, false);
+
+        let widgets_dict = {};
+        let var_widget_id;
+        for (let [var_key, var_data] of Object.entries(variables)) {
+            var_widget_id = request_id + "_" + var_key;
+            this.edit_vars_requests[request_id]["variables"][var_key] = null;
+            if (var_data === null) {
+                this.edit_vars_requests[request_id]["variables"][var_key] = true;
+                widgets_dict[var_key] = this.def_input_var(var_widget_id, this.main.var_dict[var_key].dtype, `${this.main.var_dict[var_key].get_display()}:`, this.main.var_dict[var_key].get(false), this.main.var_dict[var_key].options, null);
+            } else if (var_data["dtype"] === "object") {
+                widgets_dict[var_key] = this.def_output_var(var_widget_id, "object", `${var_data['display']}:`, var_data["initial"], 35, 10);
+                this.fill_list_box(widgets_dict[var_key][1].childNodes[0], Array.from(Object.entries(var_data["initial"]), (entry) => `${entry[0]}: ${entry[1]}`));
+                widgets_dict[var_key + "_edit_key"] = this.def_input_var(var_widget_id + "_edit_key", "string", "Key:");
+                widgets_dict[var_key + "_edit_val"] = this.def_input_var(var_widget_id + "_edit_val", "string", "Value:");
+                widgets_dict[var_key + "_submit"] = [null, this.create_button("Submit", () => this.edit_dict_submit(request_id, var_key))];
+                this.edit_vars_requests[request_id]["variables"][var_key] = var_data["initial"];
+            } else {
+                widgets_dict[var_key] = this.def_input_var(var_widget_id, var_data["dtype"], `${var_data['display']}:`, var_data["initial"], var_data["options"], null);
             };
         };
         
-        dialog_elem.close()
-        if (exit_function !== null) {
-            exit_function();
+        this.fill_grid(this.create_grid(widgets_dict), new_edit_vars_grid);
+
+        let close_button = this.create_button("Close", () => this.edit_confirm.bind(this)(request_id), true);
+        close_button.style.cssText = ("position: absolute; bottom: 0;")
+        new_edit_vars_grid.appendChild(close_button);
+        this.edit_vars_requests[request_id]["frame"] = new_edit_vars_frame;
+        return;
+    };
+
+    edit_dict_submit(request_id, edit_dict_key) {
+        let dict_to_edit = this.edit_vars_requests[request_id]["variables"][edit_dict_key];
+        let edit_key = this.get_value(request_id + "_" + edit_dict_key + "_edit_key");
+        let edit_val = this.get_value(request_id + "_" + edit_dict_key + "_edit_val");
+        if (edit_key === "") {
+            return;
         };
+        if (edit_val === "") {
+            delete dict_to_edit[edit_key];
+        } else {
+            if (!(Number.isNaN(Number(edit_val)))) {
+                edit_val = Number(edit_val);
+            };
+            dict_to_edit[edit_key] = edit_val;
+        };
+        this.fill_list_box(request_id + "_" + edit_dict_key, Array.from(Object.entries(dict_to_edit), (entry) => `${entry[0]}: ${entry[1]}`));
         return;
     };
 };

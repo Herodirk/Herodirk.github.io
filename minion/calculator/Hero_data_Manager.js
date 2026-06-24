@@ -1,7 +1,7 @@
 class H_data_M {
-    constructor(json_data) {
-        this.calculator_data = json_data["calculator_data"]
-
+    constructor(json_data, huim) {
+        this.calculator_data = json_data["calculator_data"];
+        this.huim = huim;
         this.inferno_fuel_data = {
             'grades': { 'HYPERGOLIC_GABAGOOL': 20, 'HEAVY_GABAGOOL': 15, 'FUEL_GABAGOOL': 10 },
             'distilates': {
@@ -23,79 +23,78 @@ class H_data_M {
         this.standard_storage = { 1: 1, 2: 3, 3: 3, 4: 6, 5: 6, 6: 9, 7: 9, 8: 12, 9: 12, 10: 15, 11: 15, 12: 15 };
 
         this.instance_data = {
-            "custom_inputs": {
-                "CUSTOM.prices.npc": 1,
-                "CUSTOM.xp.alchemy": 0,
-                "CUSTOM.xp.combat": 1,
-                "CUSTOM.xp.farming": 0,
-                "CUSTOM.xp.fishing": 0,
-                "CUSTOM.xp.foraging": 0,
-                "CUSTOM.xp.mining": 0,
-                "CUSTOM.compacting.block.amount": 2,
-                "CUSTOM.compacting.block.per": 8,
-                "CUSTOM.compacting.compact.amount": 1,
-                "CUSTOM.compacting.compact.per": 160,
-                "CUSTOM_BLOCK.prices.npc": 4,
-                "CUSTOM_BLOCK.xp.alchemy": 0,
-                "CUSTOM_BLOCK.xp.combat": 4,
-                "CUSTOM_BLOCK.xp.farming": 0,
-                "CUSTOM_BLOCK.xp.fishing": 0,
-                "CUSTOM_BLOCK.xp.foraging": 0,
-                "CUSTOM_BLOCK.xp.mining": 0,
-                "CUSTOM_BLOCK.compacting.compact.amount": 4,
-                "CUSTOM_BLOCK.compacting.compact.per": 160,
-                "ENCHANTED_CUSTOM.prices.npc": 160,
-                "ENCHANTED_CUSTOM.xp.alchemy": 0,
-                "ENCHANTED_CUSTOM.xp.combat": 160,
-                "ENCHANTED_CUSTOM.xp.farming": 0,
-                "ENCHANTED_CUSTOM.xp.fishing": 0,
-                "ENCHANTED_CUSTOM.xp.foraging": 0,
-                "ENCHANTED_CUSTOM.xp.mining": 0,
-                "ENCHANTED_CUSTOM.compacting.compact.amount": 1,
-                "ENCHANTED_CUSTOM.compacting.compact.per": 160,
-                "ENCHANTED_CUSTOM_BLOCK.prices.npc": 25600,
-                "ENCHANTED_CUSTOM_BLOCK.xp.alchemy": 0,
-                "ENCHANTED_CUSTOM_BLOCK.xp.combat": 25600,
-                "ENCHANTED_CUSTOM_BLOCK.xp.farming": 0,
-                "ENCHANTED_CUSTOM_BLOCK.xp.fishing": 0,
-                "ENCHANTED_CUSTOM_BLOCK.xp.foraging": 0,
-                "ENCHANTED_CUSTOM_BLOCK.xp.mining": 0,
-                "CUSTOM_MINION.drops": { "CUSTOM": 1 },
-                "CUSTOM_MINION.speed.1": 1,
-                "CUSTOM_MINION.speed.2": 2,
-                "CUSTOM_MINION.speed.3": 3,
-                "CUSTOM_MINION.speed.4": 4,
-                "CUSTOM_MINION.speed.5": 5,
-                "CUSTOM_MINION.speed.6": 6,
-                "CUSTOM_MINION.speed.7": 7,
-                "CUSTOM_MINION.speed.8": 8,
-                "CUSTOM_MINION.speed.9": 9,
-                "CUSTOM_MINION.speed.10": 10,
-                "CUSTOM_MINION.speed.11": 11,
-                "CUSTOM_MINION.speed.12": 12,
-                "CUSTOM_MINION.storage.1": 15,
-                "CUSTOM_MINION.storage.2": 15,
-                "CUSTOM_MINION.storage.3": 15,
-                "CUSTOM_MINION.storage.4": 15,
-                "CUSTOM_MINION.storage.5": 15,
-                "CUSTOM_MINION.storage.6": 15,
-                "CUSTOM_MINION.storage.7": 15,
-                "CUSTOM_MINION.storage.8": 15,
-                "CUSTOM_MINION.storage.9": 15,
-                "CUSTOM_MINION.storage.10": 15,
-                "CUSTOM_MINION.storage.11": 15,
-                "CUSTOM_MINION.storage.12": 15,
-                "CUSTOM_MINION.afkcorrupt": 2,
-                "PET_CUSTOM_PET.pet_type": "farming",
-                "CUSTOM_RARITY.max_lvl_pet_xp_amount": 25353230,
-                "CUSTOM_UPGRADE.speed_boost": 0,
-                "CUSTOM_UPGRADE.drop_multiplier": 1,
-                "CUSTOM_UPGRADE.upgrade_effects.spreading": {},
-                "CUSTOM_UPGRADE.upgrade_effects.adding": {},
-                "CUSTOM_UPGRADE.upgrade_effects.cooldown.items": {},
-                "CUSTOM_UPGRADE.upgrade_effects.cooldown.online_cooldown": 60,
-                "CUSTOM_UPGRADE.upgrade_effects.cooldown.offline_cooldown": 60,
-            },
+            "CUSTOM.prices.npc": 1,
+            "CUSTOM.xp.alchemy": 0,
+            "CUSTOM.xp.combat": 1,
+            "CUSTOM.xp.farming": 0,
+            "CUSTOM.xp.fishing": 0,
+            "CUSTOM.xp.foraging": 0,
+            "CUSTOM.xp.mining": 0,
+            "CUSTOM.compacting.block.amount": 2,
+            "CUSTOM.compacting.block.per": 8,
+            "CUSTOM.compacting.compact.amount": 1,
+            "CUSTOM.compacting.compact.per": 160,
+            "CUSTOM_BLOCK.prices.npc": 4,
+            "CUSTOM_BLOCK.xp.alchemy": 0,
+            "CUSTOM_BLOCK.xp.combat": 4,
+            "CUSTOM_BLOCK.xp.farming": 0,
+            "CUSTOM_BLOCK.xp.fishing": 0,
+            "CUSTOM_BLOCK.xp.foraging": 0,
+            "CUSTOM_BLOCK.xp.mining": 0,
+            "CUSTOM_BLOCK.compacting.compact.amount": 4,
+            "CUSTOM_BLOCK.compacting.compact.per": 160,
+            "ENCHANTED_CUSTOM.prices.npc": 160,
+            "ENCHANTED_CUSTOM.xp.alchemy": 0,
+            "ENCHANTED_CUSTOM.xp.combat": 160,
+            "ENCHANTED_CUSTOM.xp.farming": 0,
+            "ENCHANTED_CUSTOM.xp.fishing": 0,
+            "ENCHANTED_CUSTOM.xp.foraging": 0,
+            "ENCHANTED_CUSTOM.xp.mining": 0,
+            "ENCHANTED_CUSTOM.compacting.compact.amount": 1,
+            "ENCHANTED_CUSTOM.compacting.compact.per": 160,
+            "ENCHANTED_CUSTOM_BLOCK.prices.npc": 25600,
+            "ENCHANTED_CUSTOM_BLOCK.xp.alchemy": 0,
+            "ENCHANTED_CUSTOM_BLOCK.xp.combat": 25600,
+            "ENCHANTED_CUSTOM_BLOCK.xp.farming": 0,
+            "ENCHANTED_CUSTOM_BLOCK.xp.fishing": 0,
+            "ENCHANTED_CUSTOM_BLOCK.xp.foraging": 0,
+            "ENCHANTED_CUSTOM_BLOCK.xp.mining": 0,
+            "CUSTOM_MINION.drops": { "CUSTOM": 1 },
+            "CUSTOM_MINION.speed.1": 1,
+            "CUSTOM_MINION.speed.2": 2,
+            "CUSTOM_MINION.speed.3": 3,
+            "CUSTOM_MINION.speed.4": 4,
+            "CUSTOM_MINION.speed.5": 5,
+            "CUSTOM_MINION.speed.6": 6,
+            "CUSTOM_MINION.speed.7": 7,
+            "CUSTOM_MINION.speed.8": 8,
+            "CUSTOM_MINION.speed.9": 9,
+            "CUSTOM_MINION.speed.10": 10,
+            "CUSTOM_MINION.speed.11": 11,
+            "CUSTOM_MINION.speed.12": 12,
+            "CUSTOM_MINION.storage.1": 15,
+            "CUSTOM_MINION.storage.2": 15,
+            "CUSTOM_MINION.storage.3": 15,
+            "CUSTOM_MINION.storage.4": 15,
+            "CUSTOM_MINION.storage.5": 15,
+            "CUSTOM_MINION.storage.6": 15,
+            "CUSTOM_MINION.storage.7": 15,
+            "CUSTOM_MINION.storage.8": 15,
+            "CUSTOM_MINION.storage.9": 15,
+            "CUSTOM_MINION.storage.10": 15,
+            "CUSTOM_MINION.storage.11": 15,
+            "CUSTOM_MINION.storage.12": 15,
+            "CUSTOM_MINION.afkcorrupt": 2,
+            "PET_CUSTOM_PET.pet_type": "farming",
+            "CUSTOM_RARITY.max_lvl_pet_xp_amount": 25353230,
+            "PET_CUSTOM_PET.pet_prices.CUSTOM_RARITY.max": 20000000,
+            "CUSTOM_UPGRADE.speed_boost": 0,
+            "CUSTOM_UPGRADE.drop_multiplier": 1,
+            "CUSTOM_UPGRADE.upgrade_effects.spreading": {},
+            "CUSTOM_UPGRADE.upgrade_effects.adding": {},
+            "CUSTOM_UPGRADE.upgrade_effects.cooldown.items": {},
+            "CUSTOM_UPGRADE.upgrade_effects.cooldown.online_cooldown": 60,
+            "CUSTOM_UPGRADE.upgrade_effects.cooldown.offline_cooldown": 60,
         };
 
         this.custom_inputs_edit_tree = {
@@ -149,9 +148,9 @@ class H_data_M {
             },
             "Custom Minion": {
                 "Cancel": "Attribute to edit",
-                // "Drops": {
-                //     "CUSTOM_MINION.drops": {}
-                // },
+                "Drops": {
+                    "CUSTOM_MINION.drops": {"dtype": "object", "display": "Minion drops"}
+                },
                 "Action Time": {
                     "CUSTOM_MINION.speed.1": {"dtype": "number", "display": "Action time (s) t1", "options": null},
                     "CUSTOM_MINION.speed.2": {"dtype": "number", "display": "Action time (s) t2", "options": null},
@@ -187,26 +186,33 @@ class H_data_M {
             "Custom Upgrade": {
                 "Cancel": "Attribute to edit",
                 "General": {
-                    "custom_upgrade_toggle": {"dtype": "boolean", "display": "Use Custom Upgrade", "options": null},
+                    "custom_upgrade_toggle": null,
                     "CUSTOM_UPGRADE.speed_boost": {"dtype": "number", "display": "Custom Upgrade Speed boost", "options": null},
                     "CUSTOM_UPGRADE.drop_multiplier": {"dtype": "number", "display": "Custom Upgrade Drop multiplier", "options": null},
                     "CUSTOM_UPGRADE.upgrade_effects.cooldown.online_cooldown": {"dtype": "number", "display": "Custom Upgrade Online Cooldown", "options": null},
                     "CUSTOM_UPGRADE.upgrade_effects.cooldown.offline_cooldown": {"dtype": "number", "display": "Custom Upgrade Offline Cooldown", "options": null},
                 },
-                // "Spreading effect": {},
-                // "Adding effect": {},
-                // "Cooldown effect": {}
+                "Spreading effect": {
+                    "CUSTOM_UPGRADE.upgrade_effects.spreading": {"dtype": "object", "display": "Spreading drops"}
+                },
+                "Adding effect": {
+                    "CUSTOM_UPGRADE.upgrade_effects.adding": {"dtype": "object", "display": "Adding drops"}
+                },
+                "Cooldown effect": {
+                    "CUSTOM_UPGRADE.upgrade_effects.cooldown.items": {"dtype": "object", "display": "Cooldown drops"}
+                }
             },
             "Custom Pet": {
                 "PET_CUSTOM_PET.pet_type": {"dtype": "string", "display": "Pet Type", "options": ["all", "alchemy", "combat", "enchanting", "farming", "fishing", "foraging", "mining"]},
                 "CUSTOM_RARITY.max_lvl_pet_xp_amount": {"dtype": "number", "display": "Custom Rarity max Pet XP", "options": null},
+                "PET_CUSTOM_PET.pet_prices.CUSTOM_RARITY.max": {"dtype": "number", "display": "Custom Pet profit per pet", "options": null}
             }
-        }
+        };
 
-        for (let file_data of Object.values(this.instance_data)) {
-            for (let [data_loc, data_val] of Object.entries(file_data)) {
-                this.set_data(data_loc, data_val); 
-            };
+        // self.huim.check_json(self.instance_data_file, self.instance_data)
+        // self.instance_data.update(self.huim.read_json(self.instance_data_file))
+        for (let [data_loc, data_val] of Object.entries(this.instance_data)) {
+            this.set_data(data_loc, data_val); 
         };
     };
 
@@ -283,31 +289,44 @@ class H_data_M {
         return;
     };
 
-    edit_custom_inputs(huim, option_tree, new_path_choice=false) {
-        if (new_path_choice) {
-            let edit_path_choice = huim.edit_vars_output["custom_input_edit_choice"];
-            if (edit_path_choice === "Cancel") {
-                return;
-            };
-            option_tree = option_tree[edit_path_choice];
-            huim.edit_vars_output["custom_input_edit_choice"] = "Cancel";
-        };
+    save_instance_data() {
+        return;
+    };
+
+    create_custom_inputs_edit_vars(option_tree, choice_layer) {
         if ("Cancel" in option_tree) {
-            huim.edit_vars(() => this.edit_custom_inputs.bind(this)(huim, option_tree, true), {"custom_input_edit_choice": {"dtype": "string", "display": option_tree["Cancel"], "initial": "Cancel", "options": Object.keys(option_tree)}}, false);
+            this.huim.new_edit_vars("custom_input_" + choice_layer, {"custom_input_edit_choice": {"dtype": "string", "display": option_tree["Cancel"], "initial": "Cancel", "options": Object.keys(option_tree)}}, (results) => this.huim.edit_vars.bind(this.huim)("custom_input_" + results["custom_input_edit_choice"]));
+            for (let next_layer of Object.keys(option_tree)) {
+                if (next_layer === "Cancel") {
+                    continue;
+                };
+                this.create_custom_inputs_edit_vars.bind(this)(option_tree[next_layer], next_layer);
+            };
             return;
         };
         let input_variables = {};
         for (let [data_loc, custom_input_options] of Object.entries(option_tree)) {
-            input_variables["custom_input_" + data_loc] = custom_input_options;
-            input_variables["custom_input_" + data_loc]["initial"] = this.get_data(data_loc);
+            input_variables[data_loc] = custom_input_options;
+            if (custom_input_options === null) {
+                continue;
+            };
+            input_variables[data_loc]["initial"] = this.get_data(data_loc);
         };
-        huim.edit_vars(() => this.set_custom_inputs.bind(this)(huim, option_tree), input_variables, false);
+        this.huim.new_edit_vars("custom_input_" + choice_layer, input_variables, (results) => this.set_custom_inputs.bind(this)(results));
         return;
     };
 
-    set_custom_inputs(huim, edited_data_locs) {
-        for (let data_loc of Object.keys(edited_data_locs)) {
-            this.set_data(data_loc, huim.edit_vars_output["custom_input_" + data_loc]);
+    set_custom_inputs(edited_data_locs) {
+        for (let [data_loc, data_value] of Object.entries(edited_data_locs)) {
+            if (data_value instanceof Object) {
+                for (let [item_id, value] of Object.entries(data_value)) {
+                    if (!(typeof value === "number") || !(item_id in this.calculator_data)) {
+                        delete data_value[item_id];
+                        this.huim.fill_list_box(data_loc + "_listbox", Array.from(Object.entries(data_value), (entry) => `${entry[0]}: ${entry[1]}`));
+                    };
+                };
+            };
+            this.set_data(data_loc, data_value);
         };
         return;
     };
