@@ -7366,8 +7366,7 @@
             "3": 4
         },
         "tags": [
-            "mob_minion",
-            "combat_minion"
+            "mob_minion"
         ],
         "minion_costs": {
             "1": {

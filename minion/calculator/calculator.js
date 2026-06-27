@@ -97,7 +97,38 @@ class Calculator {
                 "postcard": true,
                 "bazaar_sell_type": "Sell Offer",
                 "bazaar_buy_type": "Buy Order",
+                "sell_form": "Compacted"
             },
+            "Maxed Solo rdrag Levelling": {
+                "minion": "Cactus",
+                "amount": 32,
+                "fuel": "Hyper Catalyst",
+                "sell_loc": "Best (NPC/Bazaar)",
+                "upgrade1": "Super Compactor 3000",
+                "upgrade2": "Berberis Fuel Injector",
+                "chest": "XX-Large Storage",
+                "beacon": "Beacon V",
+                "beacon_fuel": "Scorched Power Crystal",
+                "infusion": true,
+                "free_will": true,
+                "postcard": true,
+                "crystal": "Cornucopia Crystal",
+                "unique_farming_minions": 1,
+                "expshareitem": true,
+                "taming": 60,
+                "pet_exp_boost": "Epic Farming Exp Boost",
+                "toucan_attribute": 10,
+                "bazaar_sell_type": "Sell Offer",
+                "bazaar_buy_type": "Buy Order",
+                "sell_form": "Compacted",
+                "farming_wisdom": 190,
+                "mayor": "Diana",
+                "levelingpet": "Rose Dragon",
+                "expsharepet": "Rose Dragon",
+                "expsharepetslot2": "Rose Dragon",
+                "expsharepetslot3": "Rose Dragon",
+                "beastmaster": 5
+            }
         };
 
         this.version = "1.2.1";
