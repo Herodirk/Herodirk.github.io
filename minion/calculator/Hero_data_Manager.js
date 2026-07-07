@@ -250,7 +250,7 @@ class H_data_M {
     minion_cost_sum(minion_type, final_tier) {
         let final_cost = {};
         for (let tier = 1; tier <= final_tier; tier++) {
-            for (let [item, amount] of Object.entries(minionCosts[minion_type][tier])) {
+            for (let [item, amount] of Object.entries(this.calculator_data[minion_type]["minion_costs"][String(tier)])) {
                 if (!(item in final_cost)) {
                     final_cost[item] = 0;
                 }

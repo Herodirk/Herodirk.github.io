@@ -1237,7 +1237,13 @@ class Calculator {
             };
             for (let [cooldown_item, cooldown_amount] of Object.entries(effect_data["items"])) {
                 if (cooldown_item === "RAW_SOULFLOW") {
-                    specific_multiplier *= this.get_drop_multiplier(minion, upgrade_ids, afk_toggle, setup_data);
+                    let no_engine_upgrade_ids = [];
+                    for (let upgrade_id of upgrade_ids) {
+                        if (!(["LESSER_SOULFLOW_ENGINE", "SOULFLOW_ENGINE"].includes(upgrade_id))) {
+                            no_engine_upgrade_ids.push(upgrade_id);
+                        };
+                    };
+                    specific_multiplier *= this.get_drop_multiplier(minion, no_engine_upgrade_ids, afk_toggle, setup_data);
                 };
                 this.add_drops(cooldown_item, specific_multiplier * cooldown_amount * empty_time_seconds / effective_cooldown, drops_list);
             };
