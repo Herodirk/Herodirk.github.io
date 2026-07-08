@@ -3303,8 +3303,12 @@
         "drop_multiplier": 1,
         "fuel_duration": 259200,
         "upgrade_effects": {
-            "spreading": {
-                "JACOBS_TICKET": 0.000222222222
+            "cooldown": {
+                "items": {
+                    "JACOBS_TICKET": 1
+                },
+                "offline_cooldown": 10800,
+                "online_cooldown": 10800
             }
         },
         "prices": {}
