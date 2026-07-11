@@ -57,7 +57,7 @@ class Calculator {
                 "afk": true,
             },
             "Solo Wisdom": {  // consists of non-random sources of wisdom that can be achieved alone on the private island, excluding pets
-                "mining_wisdom": 100.1,  // Abicase (1.5), cookie (25), god pot (20), Celestial Mason Jar (3), Refined Divine drill with Compact X (7 + 10), Dimensional Mythic armor (4 * 3), Cavern Wisdom (6.5), Blue Omelette Seasoned Mineman (15.1)
+                "mining_wisdom": 103.1,  // Abicase (1.5), cookie (25), god pot (20), Celestial Mason Jar (3), Refined Divine drill with Compact X (10 + 10), Dimensional Mythic armor (4 * 3), Cavern Wisdom (6.5), Blue Omelette Seasoned Mineman (15.1)
                 "combat_wisdom": 113.5,  // Hunter Ring (5), Abicase (1.5), Bubba Blister (2), Rift Necklace (1), cookie (25), god pot (30), Celestial Mason Jar (3), Veteran (10), unique slayer tier kills (6 + 6 + 6 + 12 + 6)
                 "farming_wisdom": 190,  // Agarimoo Artifact (1), Abicase (1.5), Lunar Legendary Pelt Belt (1 + 3), Lunar Mythic Zorro's Cape during Contest (2 * (1 + 4)), Lunar Mythic Rift Necklace (1 + 6), Lunar Mythic Gillsplash Gloves (4), Blessed Legendary Mk. III farming tool with Cultivating X (3 + 5 + 10), Mythic Sunny armor (4 * 6), cookie (25), god pot (20), Celestial Mason Jar (3), Very Moldy Bread (30 + 5), Garden Wisdom (6.5), Sowledge Chip (30), Fruit Bowl (1)
                 "fishing_wisdom": 92,  // Agarimoo Artifact (1), Chumming Talisman (1), Abicase (1.5), cookie (25), god pot (20), Celestial Mason Jar (3), Moby-Duck (30 + 1), Sea Wisdom (6.5), Ship Parts (1.5), Ship Crew (0.5), Mysterious Package (1)
