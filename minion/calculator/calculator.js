@@ -131,7 +131,7 @@ class Calculator {
             }
         };
 
-        this.version = "1.2.1";
+        this.version = "1.2.2";
         GUI.main = this;
         this.var_dict = {}
         this.gui = GUI;

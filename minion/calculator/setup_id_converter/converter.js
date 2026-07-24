@@ -10,7 +10,8 @@ class converter {
 
         this.version_options = [
             "1.2.0",
-            "1.2.1"
+            "1.2.1",
+            "1.2.2"
         ];
         this.load_id = new Hvar({"huim": this.huim, "key": "load_id", "vtype": "input", "dtype": "string", "frame": "inputs_grid", "display": "Initial ID", "initial": ""});
         this.output_version = new Hvar({"huim": this.huim, "key": "output_version", "vtype": "input", "dtype": "string", "display": "Convert to", "frame": "inputs_grid", "initial": "1.2.1", "options": this.version_options});
