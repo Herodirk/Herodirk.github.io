@@ -3350,6 +3350,7 @@
         "display": "Custom Upgrade",
         "speed_boost": 0,
         "drop_multiplier": 1,
+        "xp_multiplier": 1,
         "upgrade_effects": {
             "spreading": {},
             "adding": {},

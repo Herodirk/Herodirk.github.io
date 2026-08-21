@@ -648,7 +648,7 @@ class Calculator {
         } else if (var_key === "special_layout" && "Special Layout" in calculation_data["notes"]) {
             data = calculation_data["notes"]["Special Layout"];
         } else if (var_key === "custom_upgrade_toggle" && calculation_data[var_key]) {
-            data = `Speed boost: ${this.md.calculator_data["CUSTOM_UPGRADE"]["speed_boost"]}, Drop multiplier: ${this.md.calculator_data["CUSTOM_UPGRADE"]["drop_multiplier"]}`
+            data = `Speed boost: ${this.md.calculator_data["CUSTOM_UPGRADE"]["speed_boost"]}, Drop multiplier: ${this.md.calculator_data["CUSTOM_UPGRADE"]["drop_multiplier"]}, XP multiplier: ${this.md.calculator_data["CUSTOM_UPGRADE"]["xp_multiplier"]}`
         } else if (this.var_dict[var_key].dtype === "object") {
             data = calculation_data[var_key];
         } else if (this.var_dict[var_key].dtype === "number") {
@@ -1430,6 +1430,9 @@ class Calculator {
             };
         };
         this.gui.deepmultiply(skill_xp, this.md.calculator_data[mayor]["xp_multiplier"]);
+        if (setup_data["custom_upgrade_toggle"]) {
+            this.gui.deepmultiply(skill_xp, this.md.calculator_data["CUSTOM_UPGRADE"]["xp_multiplier"]);
+        };
         if (afk_toggle && setup_data["player_harvests"] && "combat" in skill_xp) {
             delete skill_xp["combat"];
         };
