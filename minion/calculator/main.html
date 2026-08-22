@@ -34,17 +34,15 @@
         <br>
         <div style="display: flex; justify-content: center;">
             <div id="add_ons_menu" class="add_ons">
-                <div id="addons_buttons" class="add_ons_frame">
-                    <div id="addons_buttons_grid" class="add_ons_input_grid_frame"></div>
-                </div><div id="addons_output" class="add_ons_frame">
-                    <div id="addons_output_grid" class="add_ons_output_grid_frame"></div>
+                <div id="add_ons_buttons" class="add_ons_frame">
+                    <div id="add_ons_buttons_grid" class="add_ons_input_grid_frame"></div>
+                </div><div id="add_ons_output" class="add_ons_frame">
+                    <div id="add_ons_output_grid" class="add_ons_output_grid_frame"></div>
                 </div>
             </div>
         </div>
         <script>
             const GUI = new GUI_creator();
-            const add_ons = new Calc_add_ons();
-
             const input_options_promise = GUI.call_API("./calculator_version_data/input_options.json", "Calculator Files")
             const id_order_promise = GUI.call_API("./calculator_version_data/id_order.json", "Calculator Files")
             const calculator_data_promise = GUI.call_API("./calculator_data.json", "Calculator Files")

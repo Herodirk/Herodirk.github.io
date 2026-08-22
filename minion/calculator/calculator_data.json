@@ -3093,6 +3093,57 @@
         },
         "compact_tier": 1
     },
+    "WOOD_PICKAXE": {
+        "display": "Wooden Pickaxe",
+        "prices": {
+            "custom": 5
+        }
+    },
+    "WOOD_SPADE": {
+        "display": "Wooden Shovel",
+        "prices": {
+            "custom": 5
+        }
+    },
+    "WOOD_HOE": {
+        "display": "Wooden Hoe",
+        "prices": {
+            "custom": 5
+        }
+    },
+    "WOOD_SWORD": {
+        "display": "Wooden Sword",
+        "prices": {
+            "custom": 5
+        }
+    },
+    "WOOD_AXE": {
+        "display": "Wooden Hoe",
+        "prices": {
+            "custom": 5
+        }
+    },
+    "FISHING_ROD": {
+        "display": "Fishing Rod",
+        "prices": {},
+        "recipe": {
+            "STRING": 2
+        }
+    },
+    "COIN": {
+        "display": "Coins",
+        "prices": {
+            "npc": 1,
+            "custom": 1
+        }
+    },
+    "COPPER": {
+        "display": "Copper",
+        "prices": {
+            "npc": 0,
+            "custom": 1
+        }
+    },
     "REFINED_MITHRIL": {
         "display": "Refined Mithril",
         "prices": {}
@@ -3170,6 +3221,13 @@
     },
     "PLANTBOY_ADVANCE": {
         "display": "PlantBoy Advance",
+        "prices": {}
+    },
+    "CHARCOAL": {
+        "display": "Charcoal",
+        "speed_boost": 5,
+        "drop_multiplier": 1,
+        "fuel_duration": 1800,
         "prices": {}
     },
     "ENCHANTED_CHARCOAL": {
@@ -4200,6 +4258,74 @@
         "display": "Cornucopia",
         "prices": {}
     },
+    "CONDENSED_HELIANTHUS": {
+        "display": "Condensed Helianthus",
+        "prices": {}
+    },
+    "GLASSCORN": {
+        "display": "Glasscorn",
+        "prices": {}
+    },
+    "DEVOURER": {
+        "display": "Devourer",
+        "prices": {}
+    },
+    "ALL_IN_ALOE": {
+        "display": "All-in Aloe",
+        "prices": {}
+    },
+    "PHANTOMLEAF": {
+        "display": "Phantomleaf",
+        "prices": {}
+    },
+    "TIMESTALK": {
+        "display": "Timestalk",
+        "prices": {}
+    },
+    "ZOMBUD": {
+        "display": "Zombud",
+        "prices": {}
+    },
+    "FLESHTRAP": {
+        "display": "Fleshtrap",
+        "prices": {}
+    },
+    "STARLYN_PRIZE": {
+        "display": "Agatha's Prize",
+        "prices": {}
+    },
+    "FIGSTONE": {
+        "display": "Figstone",
+        "prices": {}
+    },
+    "MANGCORE": {
+        "display": "Mangcore",
+        "prices": {}
+    },
+    "HELIXIS": {
+        "display": "Helixis",
+        "prices": {}
+    },
+    "PERFECT_AMETHYST_GEM": {
+        "display": "Perfect Amethyst Gemstone",
+        "prices": {}
+    },
+    "PERFECT_JADE_GEM": {
+        "display": "Perfect Jade Gemstone",
+        "prices": {}
+    },
+    "PERFECT_SAPPHIRE_GEM": {
+        "display": "Perfect Sapphire Gemstone",
+        "prices": {}
+    },
+    "PERFECT_AMBER_GEM": {
+        "display": "Perfect Amber Gemstone",
+        "prices": {}
+    },
+    "PERFECT_TOPAZ_GEM": {
+        "display": "Perfect Topaz Gemstone",
+        "prices": {}
+    },
     "PET_ITEM_MINING_SKILL_BOOST_COMMON": {
         "display": "Common Mining Exp Boost",
         "rarity": "COMMON",
@@ -4444,7 +4570,8 @@
         },
         "minion_costs": {
             "1": {
-                "CUSTOM": 80
+                "CUSTOM": 80,
+                "WOOD_PICKAXE": 1
             },
             "2": {
                 "CUSTOM": 160
@@ -4459,7 +4586,8 @@
                 "ENCHANTED_CUSTOM": 8
             },
             "6": {
-                "ENCHANTED_CUSTOM": 16
+                "ENCHANTED_CUSTOM": 16,
+                "TESTING": 2
             },
             "7": {
                 "ENCHANTED_CUSTOM": 32
@@ -4477,15 +4605,8 @@
                 "ENCHANTED_CUSTOM": 512
             },
             "12": {
-                "ENCHANTED_CUSTOM": 1024
-            }
-        },
-        "extra_minion_costs": {
-            "6": {
-                "TESTING": 2
-            },
-            "12": {
-                "COINS": 1,
+                "ENCHANTED_CUSTOM": 1024,
+                "COIN": 1,
                 "NON_EXISTENT": 1,
                 "TEST": 2
             }
@@ -4518,7 +4639,8 @@
         ],
         "minion_costs": {
             "1": {
-                "COBBLESTONE": 80
+                "COBBLESTONE": 80,
+                "WOOD_PICKAXE": 1
             },
             "2": {
                 "COBBLESTONE": 160
@@ -4551,12 +4673,8 @@
                 "ENCHANTED_COBBLESTONE": 512
             },
             "12": {
-                "ENCHANTED_COBBLESTONE": 1024
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000
+                "ENCHANTED_COBBLESTONE": 1024,
+                "COIN": 2000000
             }
         }
     },
@@ -4584,7 +4702,8 @@
         ],
         "minion_costs": {
             "1": {
-                "OBSIDIAN": 80
+                "OBSIDIAN": 80,
+                "WOOD_PICKAXE": 1
             },
             "2": {
                 "OBSIDIAN": 160
@@ -4617,12 +4736,8 @@
                 "ENCHANTED_OBSIDIAN": 512
             },
             "12": {
-                "ENCHANTED_OBSIDIAN": 1024
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000
+                "ENCHANTED_OBSIDIAN": 1024,
+                "COIN": 2000000
             }
         }
     },
@@ -4650,7 +4765,8 @@
         ],
         "minion_costs": {
             "1": {
-                "GLOWSTONE_DUST": 128
+                "GLOWSTONE_DUST": 128,
+                "WOOD_PICKAXE": 1
             },
             "2": {
                 "GLOWSTONE_DUST": 256
@@ -4683,12 +4799,8 @@
                 "ENCHANTED_GLOWSTONE": 16
             },
             "12": {
-                "ENCHANTED_GLOWSTONE": 32
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000
+                "ENCHANTED_GLOWSTONE": 32,
+                "COIN": 2000000
             }
         }
     },
@@ -4724,7 +4836,8 @@
         ],
         "minion_costs": {
             "1": {
-                "GRAVEL": 80
+                "GRAVEL": 80,
+                "WOOD_SPADE": 1
             },
             "2": {
                 "GRAVEL": 160
@@ -4784,7 +4897,8 @@
         ],
         "minion_costs": {
             "1": {
-                "SAND": 80
+                "SAND": 80,
+                "WOOD_SPADE": 1
             },
             "2": {
                 "SAND": 160
@@ -4859,7 +4973,8 @@
         ],
         "minion_costs": {
             "1": {
-                "SAND:1": 80
+                "SAND:1": 80,
+                "WOOD_SPADE": 1
             },
             "2": {
                 "SAND:1": 256
@@ -4892,12 +5007,8 @@
                 "ENCHANTED_RED_SAND_CUBE": 16
             },
             "12": {
-                "ENCHANTED_RED_SAND_CUBE": 32
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000
+                "ENCHANTED_RED_SAND_CUBE": 32,
+                "COIN": 2000000
             }
         }
     },
@@ -4942,7 +5053,8 @@
         ],
         "minion_costs": {
             "1": {
-                "MYCEL": 80
+                "MYCEL": 80,
+                "WOOD_SPADE": 1
             },
             "2": {
                 "MYCEL": 256
@@ -4975,12 +5087,8 @@
                 "ENCHANTED_MYCELIUM_CUBE": 16
             },
             "12": {
-                "ENCHANTED_MYCELIUM_CUBE": 32
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000
+                "ENCHANTED_MYCELIUM_CUBE": 32,
+                "COIN": 2000000
             }
         }
     },
@@ -5005,7 +5113,8 @@
         },
         "minion_costs": {
             "1": {
-                "CLAY_BALL": 80
+                "CLAY_BALL": 80,
+                "WOOD_SPADE": 1
             },
             "2": {
                 "CLAY_BALL": 160
@@ -5038,12 +5147,8 @@
                 "ENCHANTED_CLAY_BALL": 512
             },
             "12": {
-                "ENCHANTED_CLAY_BLOCK": 8
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000,
+                "ENCHANTED_CLAY_BLOCK": 8,
+                "COIN": 2000000,
                 "FISHY_TREAT": 256
             }
         }
@@ -5076,7 +5181,8 @@
         ],
         "minion_costs": {
             "1": {
-                "ICE": 80
+                "ICE": 80,
+                "WOOD_PICKAXE": 1
             },
             "2": {
                 "ICE": 160
@@ -5109,12 +5215,8 @@
                 "ENCHANTED_ICE": 512
             },
             "12": {
-                "ENCHANTED_ICE": 1024
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 1000000,
+                "ENCHANTED_ICE": 1024,
+                "COIN": 1000000,
                 "NORTH_STARS": 300
             }
         }
@@ -5143,7 +5245,9 @@
             "winter_minion"
         ],
         "minion_costs": {
-            "1": {},
+            "1": {
+                "DROP_FROM_GIFTS": 1
+            },
             "2": {
                 "SNOW_BLOCK": 32
             },
@@ -5175,12 +5279,8 @@
                 "ENCHANTED_SNOW_BLOCK": 128
             },
             "12": {
-                "ENCHANTED_SNOW_BLOCK": 1024
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000,
+                "ENCHANTED_SNOW_BLOCK": 1024,
+                "COIN": 2000000,
                 "NORTH_STARS": 500
             }
         }
@@ -5209,7 +5309,8 @@
         ],
         "minion_costs": {
             "1": {
-                "COAL": 80
+                "COAL": 80,
+                "WOOD_PICKAXE": 1
             },
             "2": {
                 "COAL": 160
@@ -5242,12 +5343,8 @@
                 "ENCHANTED_COAL_BLOCK": 8
             },
             "12": {
-                "ENCHANTED_COAL_BLOCK": 16
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000
+                "ENCHANTED_COAL_BLOCK": 16,
+                "COIN": 2000000
             }
         }
     },
@@ -5275,7 +5372,8 @@
         ],
         "minion_costs": {
             "1": {
-                "IRON_INGOT": 80
+                "IRON_INGOT": 80,
+                "WOOD_PICKAXE": 1
             },
             "2": {
                 "IRON_INGOT": 160
@@ -5308,12 +5406,8 @@
                 "ENCHANTED_IRON_BLOCK": 8
             },
             "12": {
-                "ENCHANTED_IRON_BLOCK": 16
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000
+                "ENCHANTED_IRON_BLOCK": 16,
+                "COIN": 2000000
             }
         }
     },
@@ -5341,7 +5435,8 @@
         ],
         "minion_costs": {
             "1": {
-                "GOLD_INGOT": 80
+                "GOLD_INGOT": 80,
+                "WOOD_PICKAXE": 1
             },
             "2": {
                 "GOLD_INGOT": 160
@@ -5374,12 +5469,8 @@
                 "ENCHANTED_GOLD_BLOCK": 8
             },
             "12": {
-                "ENCHANTED_GOLD_BLOCK": 16
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000
+                "ENCHANTED_GOLD_BLOCK": 16,
+                "COIN": 2000000
             }
         }
     },
@@ -5407,7 +5498,8 @@
         ],
         "minion_costs": {
             "1": {
-                "DIAMOND": 80
+                "DIAMOND": 80,
+                "WOOD_PICKAXE": 1
             },
             "2": {
                 "DIAMOND": 160
@@ -5440,12 +5532,8 @@
                 "ENCHANTED_DIAMOND_BLOCK": 8
             },
             "12": {
-                "ENCHANTED_DIAMOND_BLOCK": 16
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000
+                "ENCHANTED_DIAMOND_BLOCK": 16,
+                "COIN": 2000000
             }
         }
     },
@@ -5473,7 +5561,8 @@
         ],
         "minion_costs": {
             "1": {
-                "INK_SACK:4": 256
+                "INK_SACK:4": 256,
+                "WOOD_PICKAXE": 1
             },
             "2": {
                 "INK_SACK:4": 512
@@ -5506,12 +5595,8 @@
                 "ENCHANTED_LAPIS_LAZULI_BLOCK": 32
             },
             "12": {
-                "ENCHANTED_LAPIS_LAZULI_BLOCK": 64
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000
+                "ENCHANTED_LAPIS_LAZULI_BLOCK": 64,
+                "COIN": 2000000
             }
         }
     },
@@ -5539,7 +5624,8 @@
         ],
         "minion_costs": {
             "1": {
-                "REDSTONE": 128
+                "REDSTONE": 128,
+                "WOOD_PICKAXE": 1
             },
             "2": {
                 "REDSTONE": 256
@@ -5572,12 +5658,8 @@
                 "ENCHANTED_REDSTONE_BLOCK": 16
             },
             "12": {
-                "ENCHANTED_REDSTONE_BLOCK": 32
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000
+                "ENCHANTED_REDSTONE_BLOCK": 32,
+                "COIN": 2000000
             }
         }
     },
@@ -5605,7 +5687,8 @@
         ],
         "minion_costs": {
             "1": {
-                "EMERALD": 80
+                "EMERALD": 80,
+                "WOOD_PICKAXE": 1
             },
             "2": {
                 "EMERALD": 160
@@ -5638,12 +5721,8 @@
                 "ENCHANTED_EMERALD_BLOCK": 8
             },
             "12": {
-                "ENCHANTED_EMERALD_BLOCK": 16
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000
+                "ENCHANTED_EMERALD_BLOCK": 16,
+                "COIN": 2000000
             }
         }
     },
@@ -5671,7 +5750,8 @@
         ],
         "minion_costs": {
             "1": {
-                "QUARTZ": 80
+                "QUARTZ": 80,
+                "WOOD_PICKAXE": 1
             },
             "2": {
                 "QUARTZ": 160
@@ -5704,12 +5784,8 @@
                 "ENCHANTED_QUARTZ_BLOCK": 8
             },
             "12": {
-                "ENCHANTED_QUARTZ_BLOCK": 16
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000
+                "ENCHANTED_QUARTZ_BLOCK": 16,
+                "COIN": 2000000
             }
         }
     },
@@ -5736,7 +5812,8 @@
         ],
         "minion_costs": {
             "1": {
-                "ENDER_STONE": 80
+                "ENDER_STONE": 80,
+                "WOOD_PICKAXE": 1
             },
             "2": {
                 "ENDER_STONE": 160
@@ -5794,7 +5871,8 @@
         ],
         "minion_costs": {
             "1": {
-                "MITHRIL_ORE": 80
+                "MITHRIL_ORE": 80,
+                "WOOD_PICKAXE": 1
             },
             "2": {
                 "MITHRIL_ORE": 160
@@ -5827,12 +5905,8 @@
                 "REFINED_MITHRIL": 8
             },
             "12": {
-                "REFINED_MITHRIL": 16
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000
+                "REFINED_MITHRIL": 16,
+                "COIN": 2000000
             }
         }
     },
@@ -5860,7 +5934,8 @@
         ],
         "minion_costs": {
             "1": {
-                "HARD_STONE": 256
+                "HARD_STONE": 256,
+                "WOOD_PICKAXE": 1
             },
             "2": {
                 "HARD_STONE": 512
@@ -5893,12 +5968,8 @@
                 "CONCENTRATED_STONE": 8
             },
             "12": {
-                "CONCENTRATED_STONE": 16
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000
+                "CONCENTRATED_STONE": 16,
+                "COIN": 2000000
             }
         }
     },
@@ -5935,7 +6006,8 @@
         ],
         "minion_costs": {
             "1": {
-                "WHEAT": 80
+                "WHEAT": 80,
+                "WOOD_HOE": 1
             },
             "2": {
                 "WHEAT": 160
@@ -5968,11 +6040,7 @@
                 "ENCHANTED_WHEAT": 512
             },
             "12": {
-                "ENCHANTED_WHEAT": 1024
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
+                "ENCHANTED_WHEAT": 1024,
                 "PELTS": 75
             }
         }
@@ -6004,7 +6072,8 @@
         ],
         "minion_costs": {
             "1": {
-                "MELON": 256
+                "MELON": 256,
+                "WOOD_HOE": 1
             },
             "2": {
                 "MELON": 512
@@ -6037,11 +6106,7 @@
                 "ENCHANTED_MELON_BLOCK": 16
             },
             "12": {
-                "ENCHANTED_MELON_BLOCK": 32
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
+                "ENCHANTED_MELON_BLOCK": 32,
                 "PELTS": 75
             }
         }
@@ -6073,7 +6138,8 @@
         ],
         "minion_costs": {
             "1": {
-                "PUMPKIN": 80
+                "PUMPKIN": 80,
+                "WOOD_HOE": 1
             },
             "2": {
                 "PUMPKIN": 160
@@ -6106,11 +6172,7 @@
                 "ENCHANTED_PUMPKIN": 512
             },
             "12": {
-                "ENCHANTED_PUMPKIN": 1024
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
+                "ENCHANTED_PUMPKIN": 1024,
                 "PELTS": 75
             }
         }
@@ -6139,7 +6201,8 @@
         ],
         "minion_costs": {
             "1": {
-                "CARROT_ITEM": 128
+                "CARROT_ITEM": 128,
+                "WOOD_HOE": 1
             },
             "2": {
                 "CARROT_ITEM": 256
@@ -6172,11 +6235,7 @@
                 "ENCHANTED_GOLDEN_CARROT": 16
             },
             "12": {
-                "ENCHANTED_GOLDEN_CARROT": 32
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
+                "ENCHANTED_GOLDEN_CARROT": 32,
                 "PELTS": 75
             }
         }
@@ -6205,7 +6264,8 @@
         ],
         "minion_costs": {
             "1": {
-                "POTATO_ITEM": 128
+                "POTATO_ITEM": 128,
+                "WOOD_HOE": 1
             },
             "2": {
                 "POTATO_ITEM": 256
@@ -6238,11 +6298,7 @@
                 "ENCHANTED_BAKED_POTATO": 16
             },
             "12": {
-                "ENCHANTED_BAKED_POTATO": 32
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
+                "ENCHANTED_BAKED_POTATO": 32,
                 "PELTS": 75
             }
         }
@@ -6277,7 +6333,8 @@
         ],
         "minion_costs": {
             "1": {
-                "RED_MUSHROOM": 80
+                "RED_MUSHROOM": 80,
+                "WOOD_HOE": 1
             },
             "2": {
                 "RED_MUSHROOM": 160
@@ -6311,11 +6368,7 @@
             },
             "12": {
                 "ENCHANTED_RED_MUSHROOM": 512,
-                "ENCHANTED_BROWN_MUSHROOM": 512
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
+                "ENCHANTED_BROWN_MUSHROOM": 512,
                 "PELTS": 75
             }
         }
@@ -6347,7 +6400,8 @@
         ],
         "minion_costs": {
             "1": {
-                "CACTUS": 128
+                "CACTUS": 128,
+                "WOOD_HOE": 1
             },
             "2": {
                 "CACTUS": 256
@@ -6380,11 +6434,7 @@
                 "ENCHANTED_CACTUS": 16
             },
             "12": {
-                "ENCHANTED_CACTUS": 32
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
+                "ENCHANTED_CACTUS": 32,
                 "PELTS": 75
             }
         }
@@ -6413,7 +6463,8 @@
         ],
         "minion_costs": {
             "1": {
-                "INK_SACK:3": 80
+                "INK_SACK:3": 80,
+                "WOOD_HOE": 1
             },
             "2": {
                 "INK_SACK:3": 160
@@ -6446,11 +6497,7 @@
                 "ENCHANTED_COOKIE": 8
             },
             "12": {
-                "ENCHANTED_COOKIE": 16
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
+                "ENCHANTED_COOKIE": 16,
                 "PELTS": 75
             }
         }
@@ -6482,7 +6529,8 @@
         ],
         "minion_costs": {
             "1": {
-                "SUGAR_CANE": 128
+                "SUGAR_CANE": 128,
+                "WOOD_HOE": 1
             },
             "2": {
                 "SUGAR_CANE": 256
@@ -6515,11 +6563,7 @@
                 "ENCHANTED_SUGAR_CANE": 16
             },
             "12": {
-                "ENCHANTED_SUGAR_CANE": 32
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
+                "ENCHANTED_SUGAR_CANE": 32,
                 "PELTS": 75
             }
         }
@@ -6548,7 +6592,8 @@
         ],
         "minion_costs": {
             "1": {
-                "NETHER_STALK": 80
+                "NETHER_STALK": 80,
+                "WOOD_HOE": 1
             },
             "2": {
                 "NETHER_STALK": 160
@@ -6581,11 +6626,7 @@
                 "ENCHANTED_NETHER_STALK": 512
             },
             "12": {
-                "ENCHANTED_NETHER_STALK": 1024
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
+                "ENCHANTED_NETHER_STALK": 1024,
                 "PELTS": 75
             }
         }
@@ -6642,7 +6683,9 @@
             "foraging_minion"
         ],
         "minion_costs": {
-            "1": {},
+            "1": {
+                "T1_FROM_DARK_AUCTION": 1
+            },
             "2": {
                 "YELLOW_FLOWER": 160
             },
@@ -6675,11 +6718,6 @@
             },
             "12": {
                 "ENCHANTED_POPPY": 16
-            }
-        },
-        "extra_minion_costs": {
-            "1": {
-                "T1_FROM_DARK_AUCTION": 1
             }
         }
     },
@@ -6722,7 +6760,8 @@
         ],
         "minion_costs": {
             "1": {
-                "DOUBLE_PLANT": 128
+                "DOUBLE_PLANT": 128,
+                "WOOD_HOE": 1
             },
             "2": {
                 "DOUBLE_PLANT": 160
@@ -6802,7 +6841,8 @@
         },
         "minion_costs": {
             "1": {
-                "RAW_FISH": 64
+                "RAW_FISH": 64,
+                "FISHING_ROD": 1
             },
             "2": {
                 "RAW_FISH": 128
@@ -6835,12 +6875,8 @@
                 "ENCHANTED_COOKED_FISH": 8
             },
             "12": {
-                "ENCHANTED_COOKED_FISH": 16
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000,
+                "ENCHANTED_COOKED_FISH": 16,
+                "COIN": 2000000,
                 "FISHY_TREAT": 256
             }
         }
@@ -6866,7 +6902,8 @@
         },
         "minion_costs": {
             "1": {
-                "WATER_LILY": 64
+                "WATER_LILY": 64,
+                "FISHING_ROD": 1
             },
             "2": {
                 "WATER_LILY": 128
@@ -6930,7 +6967,8 @@
         ],
         "minion_costs": {
             "1": {
-                "ROTTEN_FLESH": 80
+                "ROTTEN_FLESH": 80,
+                "WOOD_SWORD": 1
             },
             "2": {
                 "ROTTEN_FLESH": 160
@@ -7000,57 +7038,63 @@
             },
             "2": {
                 "REVENANT_FLESH": 140,
-                "ROTTEN_FLESH": 80
+                "ROTTEN_FLESH": 80,
+                "WOOD_SWORD": 1
             },
             "3": {
                 "REVENANT_FLESH": 280,
-                "ROTTEN_FLESH": 240
+                "ROTTEN_FLESH": 240,
+                "WOOD_SWORD": 1
             },
             "4": {
                 "REVENANT_FLESH": 448,
-                "ROTTEN_FLESH": 560
+                "ROTTEN_FLESH": 560,
+                "WOOD_SWORD": 1
             },
             "5": {
                 "REVENANT_VISCERA": 7,
-                "ROTTEN_FLESH": 1072
+                "ROTTEN_FLESH": 1072,
+                "WOOD_SWORD": 1
             },
             "6": {
                 "REVENANT_VISCERA": 14,
                 "ROTTEN_FLESH": 1072,
-                "ENCHANTED_ROTTEN_FLESH": 8
+                "ENCHANTED_ROTTEN_FLESH": 8,
+                "WOOD_SWORD": 1
             },
             "7": {
                 "REVENANT_VISCERA": 28,
                 "ROTTEN_FLESH": 1072,
-                "ENCHANTED_ROTTEN_FLESH": 24
+                "ENCHANTED_ROTTEN_FLESH": 24,
+                "WOOD_SWORD": 1
             },
             "8": {
                 "REVENANT_VISCERA": 56,
                 "ROTTEN_FLESH": 1072,
-                "ENCHANTED_ROTTEN_FLESH": 56
+                "ENCHANTED_ROTTEN_FLESH": 56,
+                "WOOD_SWORD": 1
             },
             "9": {
                 "REVENANT_VISCERA": 112,
                 "ROTTEN_FLESH": 1072,
-                "ENCHANTED_ROTTEN_FLESH": 120
+                "ENCHANTED_ROTTEN_FLESH": 120,
+                "WOOD_SWORD": 1
             },
             "10": {
                 "REVENANT_VISCERA": 224,
                 "ROTTEN_FLESH": 1072,
-                "ENCHANTED_ROTTEN_FLESH": 248
+                "ENCHANTED_ROTTEN_FLESH": 248,
+                "WOOD_SWORD": 1
             },
             "11": {
                 "REVENANT_VISCERA": 448,
                 "ROTTEN_FLESH": 1072,
-                "ENCHANTED_ROTTEN_FLESH": 504
+                "ENCHANTED_ROTTEN_FLESH": 504,
+                "WOOD_SWORD": 1
             },
             "12": {
-                "REVENANT_VISCERA": 64
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000
+                "REVENANT_VISCERA": 64,
+                "COIN": 2000000
             }
         }
     },
@@ -7085,56 +7129,67 @@
         "minion_costs": {
             "1": {
                 "NULL_SPHERE": 80,
-                "ENDER_PEARL": 64
+                "ENDER_PEARL": 64,
+                "WOOD_SWORD": 1
             },
             "2": {
                 "NULL_SPHERE": 140,
-                "OBSIDIAN": 80
+                "OBSIDIAN": 80,
+                "WOOD_PICKAXE": 1
             },
             "3": {
                 "NULL_SPHERE": 280,
-                "ENDER_PEARL": 192
+                "ENDER_PEARL": 192,
+                "WOOD_SWORD": 1
             },
             "4": {
                 "NULL_SPHERE": 448,
-                "OBSIDIAN": 560
+                "OBSIDIAN": 560,
+                "WOOD_PICKAXE": 1
             },
             "5": {
                 "NULL_OVOID": 7,
                 "ENDER_PEARL": 192,
-                "ENCHANTED_ENDER_PEARL": 32
+                "ENCHANTED_ENDER_PEARL": 32,
+                "WOOD_SWORD": 1
             },
             "6": {
                 "NULL_OVOID": 14,
                 "OBSIDIAN": 1072,
-                "ENCHANTED_OBSIDIAN": 8
+                "ENCHANTED_OBSIDIAN": 8,
+                "WOOD_PICKAXE": 1
             },
             "7": {
                 "NULL_OVOID": 28,
                 "ENDER_PEARL": 192,
-                "ENCHANTED_ENDER_PEARL": 176
+                "ENCHANTED_ENDER_PEARL": 176,
+                "WOOD_SWORD": 1
             },
             "8": {
                 "NULL_OVOID": 56,
                 "OBSIDIAN": 1072,
-                "ENCHANTED_OBSIDIAN": 56
+                "ENCHANTED_OBSIDIAN": 56,
+                "WOOD_PICKAXE": 1
             },
             "9": {
                 "NULL_OVOID": 112,
                 "ENDER_PEARL": 192,
                 "ENCHANTED_ENDER_PEARL": 176,
-                "ENCHANTED_EYE_OF_ENDER": 32
+                "ENCHANTED_EYE_OF_ENDER": 32,
+                "WOOD_SWORD": 1
             },
             "10": {
                 "NULL_OVOID": 224,
                 "OBSIDIAN": 1072,
-                "ENCHANTED_OBSIDIAN": 248
+                "ENCHANTED_OBSIDIAN": 248,
+                "WOOD_PICKAXE": 1
             },
             "11": {
                 "NULL_OVOID": 448,
                 "ENDER_PEARL": 192,
                 "ENCHANTED_ENDER_PEARL": 176,
-                "ENCHANTED_EYE_OF_ENDER": 176
+                "ENCHANTED_EYE_OF_ENDER": 176,
+                "WOOD_SWORD": 1
             }
         }
     },
@@ -7168,7 +7223,8 @@
         "minion_costs": {
             "1": {
                 "DERELICT_ASHE": 80,
-                "BLAZE_ROD": 80
+                "BLAZE_ROD": 80,
+                "WOOD_SWORD": 1
             },
             "2": {
                 "DERELICT_ASHE": 320
@@ -7204,7 +7260,8 @@
                 "INFERNO_APEX": 1,
                 "DERELICT_ASHE": 400,
                 "BLAZE_ROD": 80,
-                "MOLTEN_POWDER": 760
+                "MOLTEN_POWDER": 760,
+                "WOOD_SWORD": 1
             }
         }
     },
@@ -7232,7 +7289,9 @@
         ],
         "minion_costs": {
             "1": {
-                "HEMOVIBE": 80
+                "HEMOVIBE": 80,
+                "PURPLE_CANDY": 64,
+                "SPOOKY_SHARD": 5
             },
             "2": {
                 "HEMOVIBE": 160
@@ -7264,11 +7323,6 @@
             "11": {
                 "HEMOGLASS": 512
             }
-        },
-        "extra_minion_costs": {
-            "1": {
-                "BAT_PERSON_HELMET": 1
-            }
         }
     },
     "SKELETON_MINION": {
@@ -7299,7 +7353,8 @@
         ],
         "minion_costs": {
             "1": {
-                "BONE": 80
+                "BONE": 80,
+                "WOOD_SWORD": 1
             },
             "2": {
                 "BONE": 160
@@ -7357,7 +7412,8 @@
         ],
         "minion_costs": {
             "1": {
-                "SULPHUR": 80
+                "SULPHUR": 80,
+                "WOOD_SWORD": 1
             },
             "2": {
                 "SULPHUR": 160
@@ -7420,7 +7476,8 @@
         ],
         "minion_costs": {
             "1": {
-                "STRING": 80
+                "STRING": 80,
+                "WOOD_SWORD": 1
             },
             "2": {
                 "STRING": 160
@@ -7490,57 +7547,63 @@
             },
             "2": {
                 "TARANTULA_WEB": 140,
-                "STRING": 80
+                "STRING": 80,
+                "WOOD_SWORD": 1
             },
             "3": {
                 "TARANTULA_WEB": 280,
-                "STRING": 240
+                "STRING": 240,
+                "WOOD_SWORD": 1
             },
             "4": {
                 "TARANTULA_WEB": 448,
-                "STRING": 560
+                "STRING": 560,
+                "WOOD_SWORD": 1
             },
             "5": {
                 "TARANTULA_SILK": 7,
-                "STRING": 1072
+                "STRING": 1072,
+                "WOOD_SWORD": 1
             },
             "6": {
                 "TARANTULA_SILK": 14,
                 "STRING": 1072,
-                "ENCHANTED_STRING": 8
+                "ENCHANTED_STRING": 8,
+                "WOOD_SWORD": 1
             },
             "7": {
                 "TARANTULA_SILK": 28,
                 "STRING": 1072,
-                "ENCHANTED_STRING": 24
+                "ENCHANTED_STRING": 24,
+                "WOOD_SWORD": 1
             },
             "8": {
                 "TARANTULA_SILK": 56,
                 "STRING": 1072,
-                "ENCHANTED_STRING": 56
+                "ENCHANTED_STRING": 56,
+                "WOOD_SWORD": 1
             },
             "9": {
                 "TARANTULA_SILK": 112,
                 "STRING": 1072,
-                "ENCHANTED_STRING": 120
+                "ENCHANTED_STRING": 120,
+                "WOOD_SWORD": 1
             },
             "10": {
                 "TARANTULA_SILK": 224,
                 "STRING": 1072,
-                "ENCHANTED_STRING": 248
+                "ENCHANTED_STRING": 248,
+                "WOOD_SWORD": 1
             },
             "11": {
                 "TARANTULA_SILK": 448,
                 "STRING": 1072,
-                "ENCHANTED_STRING": 504
+                "ENCHANTED_STRING": 504,
+                "WOOD_SWORD": 1
             },
             "12": {
-                "TARANTULA_SILK": 64
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000
+                "TARANTULA_SILK": 64,
+                "COIN": 2000000
             }
         }
     },
@@ -7574,7 +7637,8 @@
         ],
         "minion_costs": {
             "1": {
-                "SPIDER_EYE": 80
+                "SPIDER_EYE": 80,
+                "WOOD_SWORD": 1
             },
             "2": {
                 "SPIDER_EYE": 160
@@ -7633,7 +7697,8 @@
         ],
         "minion_costs": {
             "1": {
-                "BLAZE_ROD": 80
+                "BLAZE_ROD": 80,
+                "WOOD_SWORD": 1
             },
             "2": {
                 "BLAZE_ROD": 160
@@ -7666,12 +7731,8 @@
                 "ENCHANTED_BLAZE_ROD": 8
             },
             "12": {
-                "ENCHANTED_BLAZE_ROD": 16
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000
+                "ENCHANTED_BLAZE_ROD": 16,
+                "COIN": 2000000
             }
         }
     },
@@ -7704,7 +7765,8 @@
         ],
         "minion_costs": {
             "1": {
-                "MAGMA_CREAM": 80
+                "MAGMA_CREAM": 80,
+                "WOOD_SWORD": 1
             },
             "2": {
                 "MAGMA_CREAM": 160
@@ -7737,12 +7799,8 @@
                 "ENCHANTED_MAGMA_CREAM": 512
             },
             "12": {
-                "ENCHANTED_MAGMA_CREAM": 1024
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000
+                "ENCHANTED_MAGMA_CREAM": 1024,
+                "COIN": 2000000
             }
         }
     },
@@ -7770,7 +7828,8 @@
         ],
         "minion_costs": {
             "1": {
-                "ENDER_PEARL": 64
+                "ENDER_PEARL": 64,
+                "WOOD_SWORD": 1
             },
             "2": {
                 "ENDER_PEARL": 128
@@ -7829,7 +7888,8 @@
         ],
         "minion_costs": {
             "1": {
-                "GHAST_TEAR": 64
+                "GHAST_TEAR": 64,
+                "WOOD_SWORD": 1
             },
             "2": {
                 "GHAST_TEAR": 128
@@ -7862,12 +7922,8 @@
                 "SILVER_FANG": 512
             },
             "12": {
-                "SILVER_FANG": 1024
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
-                "COINS": 2000000
+                "SILVER_FANG": 1024,
+                "COIN": 2000000
             }
         }
     },
@@ -7899,7 +7955,8 @@
         ],
         "minion_costs": {
             "1": {
-                "SLIME_BALL": 80
+                "SLIME_BALL": 80,
+                "WOOD_SWORD": 1
             },
             "2": {
                 "SLIME_BALL": 160
@@ -7964,7 +8021,8 @@
         ],
         "minion_costs": {
             "1": {
-                "RAW_BEEF": 64
+                "RAW_BEEF": 64,
+                "WOOD_SWORD": 1
             },
             "2": {
                 "RAW_BEEF": 128
@@ -7997,11 +8055,7 @@
                 "ENCHANTED_LEATHER": 512
             },
             "12": {
-                "ENCHANTED_LEATHER": 1024
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
+                "ENCHANTED_LEATHER": 1024,
                 "PELTS": 75
             }
         }
@@ -8031,7 +8085,8 @@
         ],
         "minion_costs": {
             "1": {
-                "PORK": 64
+                "PORK": 64,
+                "WOOD_SWORD": 1
             },
             "2": {
                 "PORK": 128
@@ -8064,11 +8119,7 @@
                 "ENCHANTED_GRILLED_PORK": 8
             },
             "12": {
-                "ENCHANTED_GRILLED_PORK": 16
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
+                "ENCHANTED_GRILLED_PORK": 16,
                 "PELTS": 75
             }
         }
@@ -8106,7 +8157,8 @@
         ],
         "minion_costs": {
             "1": {
-                "RAW_CHICKEN": 64
+                "RAW_CHICKEN": 64,
+                "WOOD_SWORD": 1
             },
             "2": {
                 "RAW_CHICKEN": 128
@@ -8139,11 +8191,7 @@
                 "ENCHANTED_RAW_CHICKEN": 512
             },
             "12": {
-                "ENCHANTED_RAW_CHICKEN": 1024
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
+                "ENCHANTED_RAW_CHICKEN": 1024,
                 "PELTS": 75
             }
         }
@@ -8179,7 +8227,8 @@
         ],
         "minion_costs": {
             "1": {
-                "MUTTON": 64
+                "MUTTON": 64,
+                "WOOD_SWORD": 1
             },
             "2": {
                 "MUTTON": 128
@@ -8212,11 +8261,7 @@
                 "ENCHANTED_COOKED_MUTTON": 8
             },
             "12": {
-                "ENCHANTED_COOKED_MUTTON": 16
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
+                "ENCHANTED_COOKED_MUTTON": 16,
                 "PELTS": 75
             }
         }
@@ -8255,7 +8300,8 @@
         ],
         "minion_costs": {
             "1": {
-                "RABBIT": 64
+                "RABBIT": 64,
+                "WOOD_SWORD": 1
             },
             "2": {
                 "RABBIT": 128
@@ -8288,11 +8334,7 @@
                 "ENCHANTED_COOKED_RABBIT": 8
             },
             "12": {
-                "ENCHANTED_COOKED_RABBIT": 16
-            }
-        },
-        "extra_minion_costs": {
-            "12": {
+                "ENCHANTED_COOKED_RABBIT": 16,
                 "PELTS": 75
             }
         }
@@ -8325,7 +8367,8 @@
         ],
         "minion_costs": {
             "1": {
-                "LOG": 80
+                "LOG": 80,
+                "WOOD_AXE": 1
             },
             "2": {
                 "LOG": 160
@@ -8391,7 +8434,8 @@
         ],
         "minion_costs": {
             "1": {
-                "LOG:1": 80
+                "LOG:1": 80,
+                "WOOD_AXE": 1
             },
             "2": {
                 "LOG:1": 160
@@ -8457,7 +8501,8 @@
         ],
         "minion_costs": {
             "1": {
-                "LOG:2": 80
+                "LOG:2": 80,
+                "WOOD_AXE": 1
             },
             "2": {
                 "LOG:2": 160
@@ -8523,7 +8568,8 @@
         ],
         "minion_costs": {
             "1": {
-                "LOG_2:1": 80
+                "LOG_2:1": 80,
+                "WOOD_AXE": 1
             },
             "2": {
                 "LOG_2:1": 160
@@ -8589,7 +8635,8 @@
         ],
         "minion_costs": {
             "1": {
-                "LOG_2": 80
+                "LOG_2": 80,
+                "WOOD_AXE": 1
             },
             "2": {
                 "LOG_2": 160
@@ -8655,7 +8702,8 @@
         ],
         "minion_costs": {
             "1": {
-                "LOG:3": 80
+                "LOG:3": 80,
+                "WOOD_AXE": 1
             },
             "2": {
                 "LOG:3": 160
@@ -9182,6 +9230,12 @@
         ],
         "pet_prices": {}
     },
+    "PET_ORCHID_MANTIS": {
+        "display": "Orchid Mantis",
+        "pet_type": "farming",
+        "pet_rarities": ["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY"],
+        "pet_prices": {}
+    },
     "PET_OWL": {
         "display": "Owl",
         "pet_type": "taming",
@@ -9355,6 +9409,12 @@
         "pet_rarities": ["LEGENDARY"],
         "pet_prices": {}
     },
+    "PET_SLOTH": {
+        "display": "Sloth",
+        "pet_type": "foraging",
+        "pet_rarities": ["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY"],
+        "pet_prices": {}
+    },
     "PET_SLUG": {
         "display": "Slug",
         "pet_type": "farming",
@@ -9485,6 +9545,30 @@
         "pet_rarities": ["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY"],
         "pet_prices": {}
     },
+    "PET_DROPLET_WISP": {
+        "display": "Droplet Wisp",
+        "pet_type": "gabagool",
+        "pet_rarities": ["UNCOMMON"],
+        "pet_prices": {}
+    },
+    "PET_FROST_WISP": {
+        "display": "Frost Wisp",
+        "pet_type": "gabagool",
+        "pet_rarities": ["RARE"],
+        "pet_prices": {}
+    },
+    "PET_GLACIAL_WISP": {
+        "display": "Glacial Wisp",
+        "pet_type": "gabagool",
+        "pet_rarities": ["EPIC"],
+        "pet_prices": {}
+    },
+    "PET_SUBZERO_WISP": {
+        "display": "Subzero Wisp",
+        "pet_type": "gabagool",
+        "pet_rarities": ["LEGENDARY"],
+        "pet_prices": {}
+    },
     "COMMON": {
         "display": "Common",
         "pet_item_scrub_cost": 25000,
@@ -9527,7 +9611,7 @@
     },
     "DRAGON": {
         "display": "Dragon",
-        "max_lvl_pet_xp_amount": 210255385
+        "max_lvl_pet_xp_amount": 214023230
     },
     "CUSTOM_RARITY": {
         "display": "Custom",

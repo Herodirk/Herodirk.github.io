@@ -604,7 +604,9 @@ class GUI_creator {
             return;
         };
         if (edit_val === "") {
-            delete dict_to_edit[edit_key];
+            if (edit_key in dict_to_edit) {
+                delete dict_to_edit[edit_key];
+            };
         } else {
             if (!(Number.isNaN(Number(edit_val)))) {
                 edit_val = Number(edit_val);
