@@ -918,6 +918,7 @@ class Calculator {
             for (let backup_price_point of ["sellPrice", "buyPrice", "ah", "custom", "npc", "warn"]) {
                 if (backup_price_point in this.md.calculator_data[item_ID]["prices"]) {
                     price = this.md.calculator_data[item_ID]["prices"][backup_price_point];
+                    price_point = backup_price_point;
                     break;
                 };
                 if (backup_price_point === "warn") {
@@ -926,11 +927,11 @@ class Calculator {
             };
         };
 
-        if (location === "bazaar" && action === "sell") {
+        if (["sellPrice", "buyPrice"].includes(price_point) && action === "sell") {
             price = this.apply_bazaar_tax(price, setup_data);
-        } else if (location === "ah" && action === "sell") {
+        } else if (price_point === "ah" && action === "sell") {
             price = this.apply_ah_tax(price, setup_data);
-        } else if (location === "npc" && action === "buy") {
+        } else if (price_point === "npc" && action === "buy") {
             price = 2 * price;
         };
         return price;
@@ -957,7 +958,10 @@ class Calculator {
         } else {
             starting_fee_tax = 0.01;
         };
-        return Math.max(1000000, price * 0.99) - price * starting_fee_tax;
+        if (price > 1000000) {
+            price = Math.max(1000000, price * 0.99);
+        };
+        return price * (1 - starting_fee_tax);
     };
 
     get_speed_boosts(minion, upgrade_ids, upgrade_effects, afk_toggle, clock_override, setup_data) {
@@ -1846,9 +1850,6 @@ class Calculator {
             for (const pet_slot of ["levelingpet", "expsharepet", "expsharepetslot2", "expsharepetslot3"]) {
                 await this.update_pet_price(setup_data[pet_slot], setup_data[pet_slot + "_rarity"]);
             };
-            if (this.md.has_data_tag(setup_data["pet_exp_boost"], "auction_price_upon_request")) {
-                await this.update_auction_price(setup_data["pet_exp_boost"])
-            };
         };
 
 
@@ -2042,21 +2043,18 @@ class Calculator {
                 this.recipe_items.push(item_id);
             } else if (this.md.has_data_tag(item_id, "auction_price")) {
                 this.AH_items.push(item_id);
-            } else if (this.md.has_data_tag(item_id, "auction_price_upon_request")) {
-                this.md.calculator_data[item_id]["price_last_updated"] = 0;
             };
         };
         await this.update_prices(false, true);
     };
 
-    async call_bazaar() {
+    async update_bazaar_prices() {
         this.bazaar_update_txt.set("Loading...");
         let raw_bazaar_data = await this.gui.call_API("https://api.hypixel.net/v2/skyblock/bazaar", "Hypixel Bazaar API");
         if (!("success" in raw_bazaar_data) || raw_bazaar_data["success"] === false) {
             console.log("ERROR: Hypixel Bazaar API call was unsuccessful");
             return;
         };
-        this.API_timer = raw_bazaar_data["lastUpdated"];
         let top_percent = 0.1;
         for (const item_id of this.bazaar_items) {
             if (!(item_id in raw_bazaar_data["products"])) {
@@ -2096,12 +2094,7 @@ class Calculator {
                 };
             };
         };
-        this.bazaar_update_txt.set(this.gui.format_date(this.API_timer));
-    };
-
-    async call_auction_house(item_id) {
-        let raw_auction_data = await this.gui.call_API("https://sky.coflnet.com/api/item/price/" + item_id + "/bin", `SkyCofl AH BIN API: ${item_id}`)
-        return (raw_auction_data["lowest"] + raw_auction_data["secondLowest"]) / 2;
+        this.bazaar_update_txt.set(this.gui.format_date(raw_bazaar_data["lastUpdated"]));
     };
 
     update_recipe_price(item_id) {
@@ -2127,11 +2120,19 @@ class Calculator {
         return;
     };
 
-    async update_auction_price(item_id) {
-        if (Date.now() - this.md.calculator_data[item_id]["price_last_updated"] > this.API_cooldown.get() * 1000) {
-            this.md.calculator_data[item_id]["prices"]["ah"] = await this.call_auction_house(item_id);
-            this.md.calculator_data[item_id]["price_last_updated"] = Date.now();
+    async update_auction_prices() {
+        let raw_auction_data = await this.gui.call_API("https://sky.coflnet.com/api/prices/neu", "SkyCofl AH API");
+        for (const item_id of this.AH_items) {
+            let price = 0;
+            if (item_id in raw_auction_data) {
+                price = raw_auction_data[item_id];
+            } else {
+                let raw_auction_bin_data = await this.gui.call_API("https://sky.coflnet.com/api/item/price/" + item_id + "/bin", `SkyCofl AH BIN API: ${item_id}`);
+                price = (raw_auction_bin_data["lowest"] + raw_auction_bin_data["secondLowest"]) / 2;
+            };
+            this.md.calculator_data[item_id]["prices"]["ah"] = price;
         };
+        return;
     };
 
     async update_prices(cooldown_warning=true, in_gui=true) {
@@ -2141,17 +2142,16 @@ class Calculator {
             };
             return;
         };
+        this.API_timer = Date.now();  // milliseconds
         console.log("API: Updating Bazaar prices");
         let background_color_storage;
         if (in_gui) {
             background_color_storage = this.statusC.style.background;
             this.statusC.style.background = "aqua";
         };
-        await this.call_bazaar();
+        await this.update_bazaar_prices();
         console.log("API: Updating Auction House prices");
-        for (const item_id of this.AH_items) {
-            this.md.calculator_data[item_id]["prices"]["ah"] = await this.call_auction_house(item_id);
-        };
+        await this.update_auction_prices();
         console.log("API: Updating Recipe prices");
         for (const item_id of this.recipe_items) {
             this.update_recipe_price(item_id);
