@@ -129,7 +129,7 @@ class Calc_add_ons {
         for (let [mutation, base_copper] of Object.entries({ "ALL_IN_ALOE": 2300, "PHANTOMLEAF": 1500, "ZOMBUD": 500, "FLESHTRAP": 180 })) {
             coins_per_copper.push((this.calc.get_price(mutation, setup_data, "buy", "bazaar") + base_copper * 2000) / (base_copper * 1.6));
         };
-        this.calc.md.calculator_data["COPPER"]["prices"]["custom"] = Math.min(coins_per_copper);
+        this.calc.md.calculator_data["COPPER"]["prices"]["custom"] = Math.min(...coins_per_copper);
 
         let updated_pets = [];
         for (let pet_slot of ["levelingpet", "expsharepet", "expsharepetslot2", "expsharepetslot3"]) {

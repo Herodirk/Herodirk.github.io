@@ -1652,11 +1652,11 @@ class Calculator {
             };
             let pet_price_max = pet_prices_data[pet_info["rarity"]]["max"];
             let pet_price_min = pet_prices_data[pet_info["rarity"]]["min"];
-            if (pet_price_min === 0 || pet_price_max === 0) {
+            if (pet_info["rarity"] != "CUSTOM_RARITY" && (pet_price_min === 0 || pet_price_max === 0)) {
                 if (!(combined_pet_id in used_pet_prices)) {
                     used_pet_prices[combined_pet_id] = "Price not found";
-                    continue;
                 };
+                continue;
             };
             pet_profit += pet_info["levelled_pets"] * (this.apply_ah_tax(pet_price_max, setup_data) - pet_price_min);
             if (!(combined_pet_id in used_pet_prices)) {
