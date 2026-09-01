@@ -1092,13 +1092,8 @@ class Calculator {
             };
         } else if (minion == "GRAVEL_MINION") {
             if (!(afk_toggle)) {
-                // vanilla minecraft chance for gravel to become flint
+                // vanilla minecraft chance for gravel to become flint does not happen offline
                 this.add_replacing_effect(upgrade_effects["replacing"], {"FLINT": {"GRAVEL": 1}}, true);
-            };
-        } else if (minion == "PUMPKIN_MINION") {
-            if (!(afk_toggle)) {
-                // it just does this, idk, ask Hypixel
-                this.add_replacing_effect(upgrade_effects["replacing"], {"PUMPKIN": {"PUMPKIN": 3}}, true)
             };
         } else if (minion == "SHEEP_MINION") {
             if (upgrade_ids.includes("ENCHANTED_SHEARS")) {
