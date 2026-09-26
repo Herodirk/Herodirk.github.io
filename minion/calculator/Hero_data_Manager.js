@@ -1,6 +1,5 @@
 class H_data_M {
     constructor(json_data, huim) {
-        this.calculator_data = json_data["calculator_data"];
         this.huim = huim;
         this.inferno_fuel_data = {
             'grades': { 'HYPERGOLIC_GABAGOOL': 20, 'HEAVY_GABAGOOL': 15, 'FUEL_GABAGOOL': 10 },
@@ -213,6 +212,41 @@ class H_data_M {
 
         // self.huim.check_json(self.instance_data_file, self.instance_data)
         // self.instance_data.update(self.huim.read_json(self.instance_data_file))
+        this.calculator_data = json_data["calculator_data"];  // outside of init_calculator_data against possible async issues
+        this.init_calculator_data()
+    };
+    
+    async init_calculator_data() {
+        // calls to Hypixel's Item API,
+        // uses that data to get NPC prices and XP amounts
+        
+        let raw_item_data = await this.huim.call_API("https://api.hypixel.net/resources/skyblock/items", "Hypixel Item API");
+        if (!("success" in raw_item_data) || raw_item_data["success"] === false) {
+            console.log("ERROR: Hypixel Item API call was unsuccessful");
+            return;
+        };
+        let dict_item_data = {};
+        for (let item_data of raw_item_data["items"]) {
+            dict_item_data[item_data["id"]] = item_data;
+        };
+        for (let item_id of Object.keys(this.calculator_data)) {
+            if (!(item_id in dict_item_data)) {
+                continue;
+            };
+            if ("npc_sell_price" in dict_item_data[item_id]) {
+                this.set_data(item_id + ".prices.npc", dict_item_data[item_id]["npc_sell_price"]);
+            } else {
+                this.set_data(item_id + ".prices.npc", 0);
+            };
+            if (!("experience" in dict_item_data[item_id])) {
+                continue;
+            };
+            for (let [skill, xp_data] of Object.entries(dict_item_data[item_id]["experience"])) {
+                if ("MINION_STORAGE" in xp_data) {
+                    this.set_data(item_id + ".xp." + skill, xp_data["MINION_STORAGE"]);
+                };
+            };
+        };
         for (let [data_loc, data_val] of Object.entries(this.instance_data)) {
             this.set_data(data_loc, data_val); 
         };
@@ -262,16 +296,28 @@ class H_data_M {
         return JSON.parse(JSON.stringify(final_cost));
     };
 
-    get_data(data_location) {
+    get_data(data_location, fallback=null) {
         let data_pointer = this.calculator_data;
         let data_location_keys = data_location.split(".");
         for (let key of data_location_keys) {
             if (!(key in data_pointer)) {
-                return null;
+                return fallback;
             };
             data_pointer = data_pointer[key];
         };
         return data_pointer;
+    };
+
+    check_data(data_location) {
+        let data_pointer = this.calculator_data;
+        let data_location_keys = data_location.split(".");
+        for (let key of data_location_keys) {
+            if (!(key in data_pointer)) {
+                return false;
+            };
+            data_pointer = data_pointer[key];
+        };
+        return true;
     };
 
     set_data(data_location, data_value) {

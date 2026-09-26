@@ -237,7 +237,7 @@ class Calc_add_ons {
         Object.assign(setup_data, this.calc.decode_id(outputs["calculated_ID"]));
         Object.assign(setup_data, outputs);
         setup_data["bazaar_update_txt"] = this.calc.bazaar_update_txt.get();
-        let output_str = this.calc.text_output(setup_data, {}, {
+        let text_output_order = {
             "amount": null,
             "Upgrades: ": { "": new Set(["fuel", "hopper", "upgrade1", "upgrade2", "chest", "beacon", "crystal", "postcard", "infusion", "free_will"]) },
             "Beacon Info": { "\n> ": ["scorched", "B_constant", "B_acquired"] },
@@ -257,7 +257,14 @@ class Calc_add_ons {
             },
             "used_pet_prices": null,
             "": { "": ["sell_loc", "bazaar_update_txt", "bazaar_sell_type", "bazaar_buy_type", "bazaar_taxes", "bazaar_flipper", "sell_form"] },
-        }, markdown_output, false);
+        };
+        if (auto_crystal) {
+            text_output_order["Upgrades: "][""].delete("crystal");
+        };
+        if (auto_afkpet) {
+            text_output_order["afk"]["%\n> "][0].splice(1, 1);
+        };
+        let output_str = this.calc.text_output(setup_data, {}, text_output_order, markdown_output, false);
         if (markdown_output) {
             if (auto_crystal) {
                 output_str += "\nAutomatic Crystal: `True`";
@@ -604,7 +611,7 @@ class Calc_add_ons {
                 setup_data["amount"] = loop_amount;
                 outputs = await this.calc.calculate(false, setup_data, true);
                 let cost = outputs["setupcost"];
-                let needed_time_scaling = 20000 / outputs["items"]["CHILI_PEPPER"];
+                let needed_time_scaling = 10000 / outputs["items"]["CHILI_PEPPER"];
                 let needed_time = setup_data["empty_time_amount"] * needed_time_scaling;
                 if (cost < cost_filter && needed_time < time_filter) {
                     calculated_setup_costs[`${loop_tier}, ${loop_amount}`] = cost;

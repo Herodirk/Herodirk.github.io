@@ -1356,7 +1356,7 @@ class Calculator {
         for (let [component_ID, amount] of Object.entries(infernofuel_components)) {
             costPerInfernofuel += amount * this.get_price(component_ID, setup_data, "buy", "bazaar");
         };
-        this.md.calculator_data["INFERNO_FUEL"]["prices"]["custom"] = costPerInfernofuel;
+        this.md.set_data("INFERNO_FUEL.prices.custom", costPerInfernofuel);
         // the fuel cost is put into the item data to be used later in the general fuel cost calculator
         return;
     };
@@ -2013,25 +2013,7 @@ class Calculator {
             return;
         };
 
-        let raw_item_data = await this.gui.call_API("https://api.hypixel.net/resources/skyblock/items", "Hypixel Item API");
-        if (!("success" in raw_bazaar_data) || raw_bazaar_data["success"] === false) {
-            console.log("ERROR: Hypixel Item API call was unsuccessful");
-            return;
-        };
-        let dict_item_data = {};
-        for (let item_data of raw_item_data["items"]) {
-            dict_item_data[item_data["id"]] = item_data;
-        };
-
         for (let item_id in this.md.calculator_data) {
-            if (!("prices" in this.md.calculator_data[item_id])) {
-                continue;
-            };
-            if (item_id in dict_item_data && "npc_sell_price" in dict_item_data[item_id]) {
-                this.md.calculator_data[item_id]["prices"]["npc"] = dict_item_data[item_id]["npc_sell_price"];
-            } else if (!("npc" in this.md.calculator_data[item_id]["prices"])) {
-                this.md.calculator_data[item_id]["prices"]["npc"] = 0;
-            };
             if (item_id in raw_bazaar_data["products"]) {
                 this.bazaar_items.push(item_id);
             } else if ("recipe" in this.md.calculator_data[item_id]) {
@@ -2058,7 +2040,7 @@ class Calculator {
             for (let action of ["buy", "sell"]) {
                 let top_amount = top_percent * raw_bazaar_data["products"][item_id][`${action}_summary`].map(x => x["amount"]).reduce((partialSum, a) => partialSum + a, 0);
                 if (top_amount === 0) {
-                    this.md.calculator_data[item_id]["prices"][`${action}Price`] = 0;
+                    this.md.set_data(item_id + `.prices.${action}Price`, 0);
                     if (!("npc" in this.md.calculator_data[item_id]["prices"])) {
                         console.log(`BAZAAR: no ${action} supply for ${item_id}`);
                     };
@@ -2082,10 +2064,10 @@ class Calculator {
                 let top_percent_avg_price = top_sum / top_amount;
                 let top_price = raw_bazaar_data["products"][item_id][`${action}_summary`][0]["pricePerUnit"];
                 if (top_price / top_percent_avg_price >= 2.5) {
-                    this.md.calculator_data[item_id]["prices"][`${action}Price`] = top_price;
+                    this.md.set_data(`${item_id}.prices.${action}Price`, top_price);
                     console.log(`BAZAAR: bottom heavy ${action} supply for ${item_id}, taking top order price`);
                 } else {
-                    this.md.calculator_data[item_id]["prices"][`${action}Price`] = top_percent_avg_price;
+                    this.md.set_data(`${item_id}.prices.${action}Price`, top_percent_avg_price);
                 };
             };
         };
@@ -2101,8 +2083,8 @@ class Calculator {
             console.log(`ERROR: ${item_id} is not a recipe item`);
             return;
         };
-        this.md.calculator_data[item_id]["prices"]["buyPrice"] = 0;
-        this.md.calculator_data[item_id]["prices"]["sellPrice"] = 0;
+        this.md.set_data(item_id + ".prices.buyPrice", 0);
+        this.md.set_data(item_id + ".prices.sellPrice", 0);
         for (let [material_id, amount] of Object.entries(this.md.calculator_data[item_id]["recipe"])) {
             if (this.md.has_data_tag(material_id, "auction_price")) {
                 this.md.calculator_data[item_id]["prices"]["buyPrice"] += amount * this.md.calculator_data[material_id]["prices"]["ah"];
@@ -2125,7 +2107,7 @@ class Calculator {
                 let raw_auction_bin_data = await this.gui.call_API("https://sky.coflnet.com/api/item/price/" + item_id + "/bin", `SkyCofl AH BIN API: ${item_id}`);
                 price = (raw_auction_bin_data["lowest"] + raw_auction_bin_data["secondLowest"]) / 2;
             };
-            this.md.calculator_data[item_id]["prices"]["ah"] = price;
+            this.md.set_data(item_id + ".prices.ah", price);
         };
         return;
     };
@@ -2241,6 +2223,14 @@ class Calculator {
 
     edit_settings(new_settings) {
         this.gui.update_color_palette();
+        if (new_settings["API_cooldown"] < 60) {
+            console.log("WARNING: API Cooldown may not be lower than 60 seconds");
+            this.API_cooldown.set(60);
+        };
+        if (new_settings["pet_API_cooldown"] < 60) {
+            this.pet_API_cooldown.set(60);
+            console.log("WARNING: Pet API Cooldown may not be lower than 60 seconds");
+        };
     };
 
     save_calculator_data() {
