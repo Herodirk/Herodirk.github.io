@@ -47,13 +47,13 @@
             let calc;
             let MD;
             version_ranges_promise.then((resolve) => {
-                const input_options_promise = GUI.call_API(`./versions_api/${resolve["latest"]}/input_options.json`, "Calculator Files")
-                const id_order_promise = GUI.call_API(`./versions_api/${resolve["latest"]}/id_order.json`, "Calculator Files")
-                const calculator_data_promise = GUI.call_API(`./versions_api/${resolve["latest"]}/calculator_data.json`, "Calculator Files")
+                const input_options_promise = GUI.call_API(`./versions_api/${resolve["latest"]}/input_options.json`, "Herodirk Github Input Options")
+                const id_order_promise = GUI.call_API(`./versions_api/${resolve["latest"]}/id_order.json`, "Herodirk Github ID Order")
+                const calculator_data_promise = GUI.call_API(`./versions_api/${resolve["latest"]}/calculator_data.json`, "Herodirk Github Calculator Data")
                 Promise.all([input_options_promise, id_order_promise, calculator_data_promise]).then((resolves) => {
                     const [input_options_json, id_order_json, calculator_data_json] = resolves;
                     MD = new H_data_M({"calculator_data": calculator_data_json}, GUI);
-                    calc = new Calculator({"input_options": input_options_json, "id_order": id_order_json});
+                    calc = new Calculator({"input_options": input_options_json, "id_order": id_order_json, "data_version": resolve["latest"]});
                 })
             })
         </script>

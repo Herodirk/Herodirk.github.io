@@ -147,7 +147,7 @@ class Calculator {
 
         this.ID_order = json_data["id_order"];
         this.input_options = json_data["input_options"];
-        this.data_version = new Hvar({"huim": this.gui, "key": "data_version", "vtype": "storage", "dtype": "number", "display": "Data Version", "initial": 2});
+        this.data_version = new Hvar({"huim": this.gui, "key": "data_version", "vtype": "storage", "dtype": "number", "display": "Data Version", "initial": json_data["data_version"]});
         this.API_auto_update = new Hvar({"huim": this.gui, "key": "API_auto_update", "vtype": "storage", "dtype": "boolean", "display": "API Auto Update", "initial": true});
         this.API_cooldown = new Hvar({"huim": this.gui, "key": "API_cooldown", "vtype": "storage", "dtype": "number", "display": "API Cooldown (s)", "initial": 120});
         this.pet_API_cooldown = new Hvar({"huim": this.gui, "key": "pet_API_cooldown", "vtype": "storage", "dtype": "number", "display": "Pet API Cooldown (s)", "initial": 1800});
