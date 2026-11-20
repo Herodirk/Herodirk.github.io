@@ -29,7 +29,7 @@
         </div>
         <script>
             const GUI = new GUI_creator();
-            const version_ranges_promise = GUI.call_API("https://herodirk.github.io/minion/calculator/version_api/ranges.json", "Herodirk Github Data Version Ranges")
+            const version_ranges_promise = GUI.call_API("https://herodirk.github.io/minion/calculator/versions_api/ranges.json", "Herodirk Github Data Version Ranges")
             let conv;
             let MD;
             Promise.all([version_ranges_promise]).then((resolves) => {
