@@ -7,7 +7,7 @@
         "boosting_pet": { "COMMON": [0, 0], "UNCOMMON": [0, 0], "RARE": [0, 0], "EPIC": [0, 0], "LEGENDARY": [0, 0], "MYTHIC": [0, 0] },
         "hopper_selling_rate": 1,
         "storage_slots": 0,
-        "exp_boost_type": "combat",
+        "exp_boost_type": "all",
         "exp_boost_amount": 0,
         "speed_boost": 0,
         "drop_multiplier": 1,
@@ -5823,9 +5823,9 @@
         "display": "Zombie",
         "drops": {
             "ROTTEN_FLESH": 1,
-            "CARROT_ITEM": 0.01,
-            "POTATO_ITEM": 0.01,
-            "POISONOUS_POTATO": 0.02
+            "CARROT_ITEM": 0.025,
+            "POTATO_ITEM": 0.025,
+            "POISONOUS_POTATO": 0.05
         },
         "speed": {
             "1": 26,
@@ -6207,7 +6207,7 @@
     "SKELETON_MINION": {
         "display": "Skeleton",
         "drops": {
-            "BONE": 1.5
+            "BONE": 1
         },
         "speed": {
             "1": 26,
@@ -6222,7 +6222,6 @@
             "10": 17,
             "11": 13
         },
-        "afkcorrupt": 1.5,
         "notes": {
             "AFK": "multiple corrupt drops"
         },
@@ -6330,7 +6329,7 @@
         "display": "Spider",
         "drops": {
             "STRING": 1,
-            "SPIDER_EYE": 0.5
+            "SPIDER_EYE": 1
         },
         "speed": {
             "1": 26,
@@ -6489,7 +6488,7 @@
     "CAVE_SPIDER_MINION": {
         "display": "Cave Spider",
         "drops": {
-            "STRING": 0.5,
+            "STRING": 1,
             "SPIDER_EYE": 1
         },
         "speed": {

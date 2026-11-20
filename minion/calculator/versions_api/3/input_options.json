@@ -203,15 +203,6 @@
     },
     "enchanted_clock": "boolean",
     "special_layout": "boolean",
-    "player_harvests": "boolean",
-    "player_looting": [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5
-    ],
     "potato_accessory": {
         "None": "NONE",
         "Potato Talisman": "POTATO_TALISMAN",
