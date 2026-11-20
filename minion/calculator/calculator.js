@@ -181,8 +181,6 @@ class Calculator {
         this.afkpet_lvl = new Hvar({"huim": this.gui, "key": "afkpet_lvl", "vtype": "input", "dtype": "number", "display": "AFK Pet level", "frame": "inputs_player_grid", "initial": 0.0});
         this.enchanted_clock = new Hvar({"huim": this.gui, "key": "enchanted_clock", "vtype": "input", "dtype": "boolean", "display": "Enchanted Clock", "frame": "inputs_player_grid", "initial": false});
         this.special_layout = new Hvar({"huim": this.gui, "key": "special_layout", "vtype": "input", "dtype": "boolean", "display": "Special Layout", "frame": "inputs_player_grid", "initial": false});
-        this.player_harvests = new Hvar({"huim": this.gui, "key": "player_harvests", "vtype": "input", "dtype": "boolean", "display": "Player Harvests", "frame": "inputs_player_grid", "initial": false});
-        this.player_looting = new Hvar({"huim": this.gui, "key": "player_looting", "vtype": "input", "dtype": "number", "display": "Looting", "frame": "inputs_player_grid", "initial": 0, "options": this.input_options["player_looting"]});
         this.potato_accessory = new Hvar({"huim": this.gui, "key": "potato_accessory", "vtype": "input", "dtype": "string", "display": "Potato Accessory", "frame": "inputs_player_grid", "initial": "None", "options": this.input_options["potato_accessory"]});
         this.combat_wisdom = new Hvar({"huim": this.gui, "key": "combat_wisdom", "vtype": "input", "dtype": "number", "display": "Combat wisdom", "fancy_display": "Combat", "frame": "inputs_player_grid", "initial": 0.0});
         this.mining_wisdom = new Hvar({"huim": this.gui, "key": "mining_wisdom", "vtype": "input", "dtype": "number", "display": "Mining wisdom", "fancy_display": "Mining", "frame": "inputs_player_grid", "initial": 0.0});
@@ -335,8 +333,6 @@ class Calculator {
                 "afkpet_lvl": null,
                 "enchanted_clock": null,
                 "special_layout": null,
-                "player_harvests": null,
-                "player_looting": null,
                 "potato_accessory": null,
                 "wisdom_label": [wisdomLB, this.gui.create_show_hide_toggle("wisdom_inputs")],
                 "combat_wisdom": null,
@@ -453,7 +449,7 @@ class Calculator {
         this.gui.def_switch("beacon", ["beacon_fuel", "free_fuel_beacon"], "None", true, false);
         this.gui.def_switch("potato_accessory_switch", ["potato_accessory"], "Potatotrue", false, false);
         this.gui.def_switch("bazaar_tax", ["bazaar_flipper"], true, false, true);
-        this.gui.def_switch("afking", ["afkpet", "afkpet_rarity", "afkpet_lvl", "enchanted_clock", "special_layout", "player_harvests", "player_looting"], true, false, false);
+        this.gui.def_switch("afking", ["afkpet", "afkpet_rarity", "afkpet_lvl", "enchanted_clock", "special_layout"], true, false, false);
         this.gui.def_switch("fuel_amount", ["fuelamount"], -1, true, false);
         this.gui.def_switch("scaled_time_switch", ["scaled_time_amount", "scaled_time_unit", "scaled_time"], true, false, false);
         this.gui.def_switch("optimal_free_will", ["optimal_tier_free_will"], true, false, false);
@@ -463,7 +459,6 @@ class Calculator {
         this.dependent_variables = {
             "afkpet_rarity": "afkpet",
             "afkpet_lvl": "afkpet",
-            "player_harvests": "afk",
             "empty_time": "scale_time",
             "optimal_tier_free_will": "free_will",
             "expshareitem": "expsharepet",
@@ -493,7 +488,6 @@ class Calculator {
                 " lvl ": new Set(["afkpet_lvl"]),
                 "\n> ": ["enchanted_clock", "special_layout", "potato_accessory"]
             },
-            "playerHarvests": { "\n> ": ["player_looting"] },
             "Wisdoms": {"\n> ": ["combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom"]},
             "mayor": null,
             "Leveling pet: ": {
@@ -1012,14 +1006,8 @@ class Calculator {
     };
 
     
-    get_drop_multiplier(minion, upgrade_ids, afk_toggle, setup_data) {
+    get_drop_multiplier(minion, upgrade_ids, afk_toggle, mayor) {
         let drop_multiplier = 1;
-        if (afk_toggle && setup_data["player_harvests"] && !(["FISHING_MINION", "PUMPKIN_MINION", "MELON_MINION"].includes(minion))) {
-            if (this.md.has_data_tag(minion, "mob_minion")) {
-                drop_multiplier *= 1 + 15 * setup_data["player_looting"] / 100;
-            };
-            return drop_multiplier;
-        };
         for (let upgrade of upgrade_ids) {
             drop_multiplier *= this.md.calculator_data[upgrade]["drop_multiplier"];
             if (afk_toggle && drop_multiplier > 1) {
@@ -1027,13 +1015,13 @@ class Calculator {
                 drop_multiplier = Math.floor(drop_multiplier);
             };
         };
-        if (this.md.has_data_tag(minion, this.md.calculator_data[setup_data["mayor"]]["affected_minions"])) {
-            drop_multiplier *= this.md.calculator_data[setup_data["mayor"]]["drop_multiplier"];
+        if (this.md.has_data_tag(minion, this.md.calculator_data[mayor]["affected_minions"])) {
+            drop_multiplier *= this.md.calculator_data[mayor]["drop_multiplier"];
         };
         return drop_multiplier;
     };
     
-    get_actions_per_harvest(minion, upgrade_ids, upgrade_effects, afk_toggle, setup_data, setup_notes) {
+    get_actions_per_harvest(minion, upgrade_ids, afk_toggle, setup_data) {
         let actions_per_harvest = 2;
         if (minion === "FISHING_MINION") {
             // only has harvests actions
@@ -1044,20 +1032,7 @@ class Calculator {
                 // pumpkins and melons are forced to regrow for minion to harvest
                 actions_per_harvest = 1;
             };
-            if (setup_data["player_harvests"]) {
-                if (["FISHING_MINION", "PUMPKIN_MINION", "MELON_MINION"].includes(minion)) {
-                    setup_notes["Player Harvests"] = "Player Harvesting does not work with this minion";
-                } else {
-                    actions_per_harvest = 1;
-                    if (minion === "GRAVEL_MINION") {
-                        this.add_replacing_effect(upgrade_effects["replacing"], {"GRAVEL": { "FLINT": 1 }}, true);
-                        setup_notes["Player Tools"] = "Assuming Player is using Flint Shovel";
-                    };
-                    if (minion === "ICE_MINION") {
-                        setup_notes["Player Tools"] = "Assuming Player is using Silk Touch";
-                    };
-                };
-            } else if (setup_data["special_layout"]) {
+            if (setup_data["special_layout"]) {
                 if (["COBBLESTONE_MINION", "MYCELIUM_MINION", "ICE_MINION"].includes(minion)) {
                     // cobblestone generator, regrowing mycelium, freezing water
                     actions_per_harvest = 1;
@@ -1306,7 +1281,7 @@ class Calculator {
                             no_engine_upgrade_ids.push(upgrade_id);
                         };
                     };
-                    specific_multiplier *= this.get_drop_multiplier(minion, no_engine_upgrade_ids, afk_toggle, setup_data);
+                    specific_multiplier *= this.get_drop_multiplier(minion, no_engine_upgrade_ids, afk_toggle, setup_data["mayor"]);
                 };
                 this.add_drops(cooldown_item, specific_multiplier * cooldown_amount * empty_time_seconds / effective_cooldown, drops_list);
             };
@@ -1479,7 +1454,7 @@ class Calculator {
         return [item_profit, per_item_profit, per_item_sell_location];
     };
     
-    get_skill_xp(afk_toggle, mayor, drops_list, setup_data) {
+    get_skill_xp(mayor, drops_list, setup_data) {
         let skill_xp = {};
         for (let [itemtype, amount] of Object.entries(drops_list)) {
             if (!("xp" in this.md.calculator_data[itemtype])) {
@@ -1498,9 +1473,6 @@ class Calculator {
         this.gui.deepmultiply(skill_xp, this.md.calculator_data[mayor]["xp_multiplier"]);
         if (setup_data["custom_upgrade_toggle"]) {
             this.gui.deepmultiply(skill_xp, this.md.calculator_data["CUSTOM_UPGRADE"]["xp_multiplier"]);
-        };
-        if (afk_toggle && setup_data["player_harvests"] && "combat" in skill_xp) {
-            delete skill_xp["combat"];
         };
         return skill_xp;
     };
@@ -1879,10 +1851,10 @@ class Calculator {
         let speed_boost = this.get_speed_boosts(minion_type, upgrades, upgrade_effects, afk_toggle, clock_override, setup_data);
 
         // multiply up minion drop bonus
-        let drop_multiplier = this.get_drop_multiplier(minion_type, upgrades, afk_toggle, setup_data);
+        let drop_multiplier = this.get_drop_multiplier(minion_type, upgrades, afk_toggle, mayor);
 
-        // AFKing, Special Layouts and Player Harvests influences
-        let actions_per_harvest = this.get_actions_per_harvest(minion_type, upgrades, upgrade_effects, afk_toggle, setup_data, setup_notes);
+        // AFKing and Special Layouts influences
+        let actions_per_harvest = this.get_actions_per_harvest(minion_type, upgrades, afk_toggle, setup_data);
 
         // AFK loot table changes
         this.update_loot_table(minion_type, upgrades, upgrade_effects, afk_toggle, setup_data);
@@ -1925,7 +1897,7 @@ class Calculator {
         // Coins
         let [item_profit, per_item_profit, per_item_sell_location] = this.get_item_profit(sell_location, hopper_multiplier, drops_list, setup_data);
         // XP
-        let skill_xp = this.get_skill_xp(afk_toggle, mayor, drops_list, setup_data);
+        let skill_xp = this.get_skill_xp(mayor, drops_list, setup_data);
 
         // Check for over-compacting
         this.get_over_compacting(sell_location, compacted_items, per_item_sell_location, setup_notes, setup_data);

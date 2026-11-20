@@ -12,6 +12,7 @@ class Calc_add_ons {
         this.calc.gui.new_edit_vars("inferno_minion_loop", {"setup_cost_limit": {"dtype": "number", "display": "Setup Cost Limit", "initial": 0, "options": null}, "amount_limit": {"dtype": "number", "display": "Minion Amount Limit", "initial": 32, "options": null}, "markdown_output": {"dtype": "boolean", "display": "Markdown Output", "initial": true, "options": null}}, (results) => this.inferno_minion_loop.bind(this)(results));
         this.calc.gui.new_edit_vars("collection_maxing", {"sort_by": {"dtype": "string", "display": "Sort By", "initial": "Fastest Time", "options": ["Fastest Time", "Lowest Setup Cost", "Lowest Total Cost"]}, "time_limit": {"dtype": "number", "display": "Time Limit", "initial": 0, "options": null}, "setup_cost_limit": {"dtype": "number", "display": "Setup Cost Limit", "initial": 0, "options": null}, "amount_limit": {"dtype": "number", "display": "Minion Amount Limit", "initial": 32, "options": null}, "markdown_output": {"dtype": "boolean", "display": "Markdown Output", "initial": true, "options": null}}, (results) => this.collection_maxing.bind(this)(results));
         this.calc.gui.new_edit_vars("partial_setup_cost", Object.fromEntries(Array.from(Object.entries({"minion": "Minion", "fuel": "Fuel", "hopper": "Hopper", "upgrade1": "Upgrade 1", "upgrade2": "Upgrade 2", "infusion": "Infusion", "free_will": "Free Will", "chest": "Chest", "beacon": "Beacon", "crystal": "Crystal", "postcard": "Postcard", "potato_accessory": "Potato Accessory","pet_exp_boost": "Pet EXP Boost","expshareitem": "EXP Share Item","toucan_attribute": "Toucan Shards","falcon_attribute": "Falcon Shards"}), entry => [entry[0], {"dtype": "boolean", "display": entry[1], "initial": true, "options": null}])), (results) => this.partial_setup_cost.bind(this)(results));
+        this.calc.gui.new_edit_vars("manual_harvesting", {"magic_find": {"dtype": "number", "display": "Magic Find", "initial": 0, "options": null}}, (results) => this.manual_harvesting.bind(this)(results))
 
         this.reverse_affected_minions = {
             "afkpet": {},
@@ -47,6 +48,7 @@ class Calc_add_ons {
             "Inferno Minion Loop": {"function": this.inferno_minion_loop_inputs.bind(this), "auto_run": "post"},
             "Exact Pet Levelling": {"function": this.exact_pet_levelling_inputs.bind(this), "auto_run": "post"},
             "Chili Pepper Collection": {"function": this.collection_maxing_inputs.bind(this), "auto_run": "post"},
+            // "Manual Harvesting": {"function": this.manual_harvesting_inputs, "auto_run": "post"},
         };
     };
 
@@ -247,7 +249,6 @@ class Calc_add_ons {
                 " lvl ": new Set(["afkpet_lvl"]),
                 "\n> ": ["enchanted_clock", "special_layout", "potato_accessory"]
             },
-            "player_harvests": { "\n> ": ["player_looting"] },
             "Wisdoms": { "\n> ": ["combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom"] },
             "mayor": null,
             "Leveling pet: ": {
@@ -399,7 +400,6 @@ class Calc_add_ons {
                 " lvl ": new Set(["afkpet_lvl"]),
                 "\n> ": ["enchanted_clock", "special_layout", "potato_accessory"]
             },
-            "player_harvests": { "\n> ": ["player_looting"] },
             "Wisdoms": { "\n> ": ["combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom"] },
             "mayor": null,
             "Leveling pet: ": {
@@ -637,7 +637,6 @@ class Calc_add_ons {
                 " lvl ": new Set(["afkpet_lvl"]),
                 "\n> ": ["enchanted_clock", "special_layout", "potato_accessory"]
             },
-            "player_harvests": { "\n> ": ["player_looting"] },
             "Wisdoms": { "\n> ": ["combat_wisdom", "mining_wisdom", "farming_wisdom", "fishing_wisdom", "foraging_wisdom", "alchemy_wisdom"] },
             "mayor": null,
             "Leveling pet: ": {
@@ -706,4 +705,146 @@ class Calc_add_ons {
         this.calc.collect_add_on_output("Partial Setup Cost", this.calc.gui.reduced_number(partial_cost) + " for " + used_parts.join(", "));
         return;
     };
+
+    manual_harvesting_inputs() {
+        this.calc.gui.edit_vars("manual_harvesting");
+        return;
+    };
+    /*
+    manual_harvesting(results) {
+        let magic_find = results["magic_find"];
+        let setup_data = self.calc.huim.mass_get(this.calc.md.id_order, false, true);
+        
+        minion_type = setup_data["minion"]
+        minion_tier = setup_data["miniontier"]
+        minion_amount = setup_data["amount"]
+        minion_fuel = setup_data["fuel"]
+        mayor = setup_data["mayor"]
+        afk_toggle = True
+        setup_data["afk"] = True
+        clock_override = False
+        setup_data["enchanted_clock"] = False
+        
+        if minion_type == "FISHING_MINION":
+        self.calc.collect_add_on_output("Manual Harvesting", "Cannot manually harvest Fishing Minion")
+        return
+        
+        # create shared lists
+        manual_harvesting_notes = [f"Magic Find: {magic_find}"]
+        setup_notes = {}
+        drops_list = {}
+        
+        if setup_data["custom_upgrade_toggle"]:
+        setup_notes["Custom Inputs"] = "Custom Upgrade is active"
+        
+        # get upgrade info
+        upgrades, upgrade_effects = self.calc.get_upgrade_info(minion_fuel, drops_list, setup_data)
+        
+        # adding up minion speed bonus
+        speed_boost = self.calc.get_speed_boosts(minion_type, upgrades, upgrade_effects, afk_toggle, clock_override, setup_data)
+        
+        # multiply up minion drop bonus
+        drop_multiplier = 1
+        if self.calc.md.has_data_tag(minion_type, "mob_minion"):
+        drop_multiplier *= 1 + magic_find / 100
+        
+        # AFKing, Special Layouts and Player Harvests influences
+        actions_per_harvest = 1
+        if minion_type in ["GRAVEL_MINION"]:
+        self.calc.add_replacing_effect(upgrade_effects["replacing"], {"GRAVEL": { "FLINT": 1 }}, True)
+        manual_harvesting_notes.append("assuming Player is using Flint Shovel")
+        if minion_type in ["ICE_MINION"]:
+        manual_harvesting_notes.append("assuming Player is using Silk Touch")
+        
+        # AFK loot table changes
+        self.calc.update_loot_table(minion_type, upgrades, upgrade_effects, afk_toggle, setup_data)
+        
+        # calculate final minion speed
+        seconds_per_action = self.calc.get_seconds_per_action(minion_type, minion_tier, minion_fuel, speed_boost, setup_data)
+        
+        # time calculations
+        empty_time_seconds, timeratio, empty_time_str, scaled_time_str = self.calc.get_time_constants(seconds_per_action, actions_per_harvest, setup_data)
+        
+        # harvests per time
+        harvests_per_time, drop_multiplier = self.calc.get_harvests_per_time(empty_time_seconds, actions_per_harvest, seconds_per_action, afk_toggle, drop_multiplier, setup_data)
+        
+        # base drops
+        self.calc.get_base_drops(drops_list, upgrade_effects, minion_type, harvests_per_time, drop_multiplier)
+        
+        # Inferno minion fuel drops  # TODO: confirm that it doesnt apply
+        # self.get_inferno_drops(drops_list, upgrade_effects, minion_type, minion_tier, minion_fuel, drop_multiplier, harvests_per_time, empty_time_seconds, afk_toggle, setup_data)
+        
+        # multiply drops by minion amount
+        # all processes as calculated above should be linear with minion amount
+        self.calc.huim.deepmultiply(drops_list, minion_amount)
+        
+        sell_location, hopper_multiplier = self.calc.get_sell_location(setup_data)
+        # Coins
+        item_profit, per_item_profit, per_item_sell_location = self.calc.get_item_profit(sell_location, hopper_multiplier, drops_list, setup_data)
+        # XP
+        skill_xp = self.calc.get_skill_xp(mayor, drops_list, setup_data)
+        if "combat" in skill_xp:
+        delete skill_xp["combat"]
+        
+        # Pet leveling
+        setup_pets = self.calc.get_pets_levelled(skill_xp, mayor, setup_data)
+        pet_profit, pet_cost, used_pet_prices = self.calc.get_pet_profit(setup_pets, setup_data)
+        
+        # calculating beacon and limited fuel cost
+        fuel_cost, needed_fuel = self.calc.get_finite_fuel_cost(minion_amount, minion_fuel, empty_time_seconds, setup_data)
+        
+        # total profit
+        total_profit = item_profit + pet_profit - pet_cost - fuel_cost
+        
+        # Setup cost
+        total_cost, extra_cost, free_will_optimal_tier, cost_per_part = self.calc.get_setup_cost(minion_type, minion_tier, minion_amount, minion_fuel, setup_pets, setup_data)
+        
+        # Construct ID
+        setup_ID = self.calc.construct_id(setup_data)
+        
+        # Get minion notes
+        if "notes" in self.calc.md.calculator_data[minion_type]:
+        setup_notes.update(self.calc.md.calculator_data[minion_type]["notes"])
+        
+        # collect outputs
+        outputs = {
+            "pet_profit": pet_profit,
+            "pet_cost": pet_cost,
+            "harvests": minion_amount * harvests_per_time,
+            "itemtype_profit": per_item_profit,
+            "items": drops_list,
+            "item_profit": item_profit,
+            "xp": skill_xp,
+            "fuelcost": fuel_cost,
+            "total_profit": total_profit,
+            "fuelamount": needed_fuel,
+            "pets_levelled": {pet_slot: setup_pets[pet_slot]["levelled_pets"] for pet_slot in setup_pets.keys()},
+            "time_seconds": empty_time_seconds
+        }
+        
+        self.calc.huim.deepmultiply(outputs, timeratio)
+        outputs["fuelamount"] = math.ceil(outputs["fuelamount"] / minion_amount) * minion_amount
+        outputs.update({
+            "available_storage": 0,
+            "item_sell_loc": per_item_sell_location,
+            "ID_container": [setup_ID],
+            "calculated_ID": setup_ID,
+            "extracost": extra_cost,
+            "setupcost": total_cost,
+            "setupcost_breakdown": cost_per_part,
+            "filltime": 0,
+            "used_storage": 0,
+            "empty_time": empty_time_str,
+            "scaled_time": scaled_time_str,
+            "actiontime": seconds_per_action,
+            "notes": setup_notes,
+            "used_pet_prices": used_pet_prices,
+            "optimal_tier_free_will": free_will_optimal_tier,
+        })
+        self.calc.huim.mass_set(outputs, False, True)
+        self.calc.update_listboxes()
+        self.calc.collect_add_on_output("Manual Harvesting", ", ".join(manual_harvesting_notes))
+        return
+    };
+    */
 };
