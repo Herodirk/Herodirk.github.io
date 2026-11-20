@@ -8183,8 +8183,8 @@
     },
     "PET_PRECURSOR_DRONE": {
         "display": "Precursor Drone",
-        "pet_type": "combat",
-        "pet_rarities": ["COMMON"],
+        "pet_type": "all",
+        "pet_rarities": ["LEGENDARY"],
         "pet_prices": {}
     },
     "PET_RABBIT": {
