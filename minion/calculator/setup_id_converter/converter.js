@@ -10,7 +10,7 @@ class converter {
 
         this.version_options = json_data["version_ranges"]["available"];
         this.load_id = new Hvar({"huim": this.huim, "key": "load_id", "vtype": "input", "dtype": "string", "frame": "inputs_grid", "display": "Initial ID", "initial": ""});
-        this.output_version = new Hvar({"huim": this.huim, "key": "output_version", "vtype": "input", "dtype": "string", "display": "Convert to", "frame": "inputs_grid", "initial": "1.2.1", "options": this.version_options});
+        this.output_version = new Hvar({"huim": this.huim, "key": "output_version", "vtype": "input", "dtype": "string", "display": "Convert to", "frame": "inputs_grid", "initial": json_data["version_ranges"]["latest"], "options": this.version_options});
         this.converted_id = new Hvar({"huim": this.huim, "key": "converted_id", "vtype": "output", "dtype": "string", "display": "Converted ID", "frame": "outputs_grid", "initial": ""});
         this.id_container = new Hvar({"huim": this.huim, "key": "id_container", "vtype": "output", "dtype": "object", "display": "ID", "frame": "outputs_grid", "widget_width": 35, "widget_height": 1, "initial": []});
         this.id_differences = new Hvar({"huim": this.huim, "key": "id_differences", "vtype": "output", "dtype": "object", "display": "Differences", "frame": "outputs_grid", "widget_width": 35, "widget_height": 10, "initial": {}})
@@ -120,8 +120,8 @@ class converter {
         if (version in this.loaded_version_data) {
             return this.loaded_version_data[version];
         };
-        let id_order = await this.huim.call_API(`https://herodirk.github.io/minion/calculator/version_api/${version}/id_order.json`, "Herodirk Github ID Order");
-        let input_options = await this.huim.call_API(`https://herodirk.github.io/minion/calculator/version_api/${version}/input_options.json`, "Herodirk Github Input Options");
+        let id_order = await this.huim.call_API(`https://herodirk.github.io/minion/calculator/versions_api/${version}/id_order.json`, "Herodirk Github ID Order");
+        let input_options = await this.huim.call_API(`https://herodirk.github.io/minion/calculator/versions_api/${version}/input_options.json`, "Herodirk Github Input Options");
         this.loaded_version_data[version] = {};
         this.loaded_version_data[version]["id_order"] = id_order;
         this.loaded_version_data[version]["input_options"] = input_options;
